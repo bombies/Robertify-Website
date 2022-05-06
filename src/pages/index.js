@@ -1,49 +1,15 @@
-import React, { useEffect } from 'react';
-import './styles.css';
+import React from 'react';
+import Layout from '../components/Layout';
+import { Router, Link } from '@reach/router';
+import Commands from './commands';
 
-export default function App() {
-
-    // Mobile Navigation Hamburger Click Event
-    useEffect(() => {
-        const menu = document.getElementById('nav--items-mobile');
-        const menuLinks = document.getElementById('nav--items-desktop-list');
-
-        const clickFun = () => {
-            menu.classList.toggle('is-active');
-            menuLinks.classList.toggle('active');
-        }
-
-        menu.addEventListener('click', clickFun)
-
-        return () => {
-            menu.removeEventListener('click', clickFun)
-        }
-    }, []);
-
+export default function Home() {
     return (
-        <main>
-            <nav>
-                <div className='nav--brand'>
-                    <img className='nav--brand-logo' src='https://i.robertify.me/images/0bspn.png' alt='Logo'/>
-                    <h1 className='nav--brand-title'>Robertify</h1>
-                </div>
-                <div className='nav--items'>
-                    <div className='nav--items-desktop'>
-                        <ul className='nav--items-desktop-list' id='nav--items-desktop-list'>
-                            <li><a href="#">Commands</a></li>
-                            <li><a href="#">Vote</a></li>
-                            <li><a href="#">Terms of Service</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                        </ul>
-                    </div>
-                    <div className='nav--items-mobile' id='nav--items-mobile'>
-                        <span className='nav--mobile-bar'></span>
-                        <span className='nav--mobile-bar'></span>
-                        <span className='nav--mobile-bar'></span>
-                    </div>
-                </div>
-                
-            </nav>
+        <Layout>
+            {/* Setup routes */}
+            <Router basepath='/commands'><Commands path='/commands'/></Router>
+
+
             <div className='hero'>
                 <h1 className='hero--title'>Robertify</h1>
                 <h3 className='hero--subtitle'>A discord music bot with a multitude of features that will fit your liking!</h3>
@@ -112,6 +78,6 @@ export default function App() {
                     <a className='footer--link-discord' href='https://robertify.me/invite' target={'_blank'} rel={'noreferrer'}><img src='https://i.robertify.me/images/2n1nb.png' alt='Discord'/></a>    
                 </div>
             </footer>
-        </main>
+        </Layout>
     )
 }
