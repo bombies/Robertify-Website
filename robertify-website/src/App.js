@@ -22,10 +22,13 @@ export default function App() {
             <div className='hero'>
                 <h1 className='hero--title'>Robertify</h1>
                 <h3 className='hero--subtitle'>A discord music bot with a multitude of features that will fit your liking!</h3>
-                <button className='hero--button'>Learn More</button>
+                <div className='hero--buttons'>
+                    <a className='hero--button' href='https://robertify.me/invite'>Invite</a>
+                    <a className='hero--button' href='#aboutUs'>Learn More</a>
+                </div>
             </div>
             <div className='mainContent'>
-                <div className='aboutUs'>
+                <div className='aboutUs' id='aboutUs'>
                     <img className='aboutUs--img' src='https://i.robertify.me/images/vnjjd.png' alt='Logo' />
                     <div className='aboutUs--desc'>
                         <h2 className='aboutUs--desc-title'>About Us</h2>
@@ -41,13 +44,21 @@ export default function App() {
                     </div>
                     <div className='features--desc'>
                         <h3>Features</h3>
-                        <p className='features--desc-body'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam rhoncus quam sed finibus tincidunt. Praesent sit amet turpis maximus, dignissim lorem in, maximus felis. Etiam placerat convallis lorem, a mollis elit ornare eu. Suspendisse dolor ex, hendrerit eu quam ut, blandit mollis neque. Aenean ipsum sem, aliquam et nisi sit amet, lacinia tincidunt lectus. Aliquam porta sed lectus feugiat lacinia. Suspendisse euismod bibendum pretium. v</p>
+                        <p className='features--desc-body'>There are so many features and command jam-packed into Robertify. All of the features provided have been virgoursly tested to ensure the best quality of service for you, our client. Some of these awesome features include:</p>
                         <ul>
-                            <li>Feature 1</li>
-                            <li>Feature 2</li>
-                            <li>Feature 3</li>
-                            <li>Feature 4</li>
-                            <li>Feature 5</li>
+                            <li>Requests Channels</li>
+                            <li>Feature Toggles</li>
+                            <li>An amazing queue system</li>
+                            <li>Restricted Channels</li>
+                            <li>Vote Skipping</li>
+                            <li>Auto Play</li>
+                            <li>Favourite Tracks</li>
+                            <li>Auto Play</li>
+                            <li>High Quality, No-Lag Playback</li>
+                            <li>Search For Music</li>
+                            <li>Precise Lyrics</li>
+                            <li>Spotify, Deezer, YouTube and so many more sources</li>
+                            <li><a href='#'>And so much more...</a></li>
                         </ul>
                     </div>
                 </div>
@@ -61,10 +72,20 @@ export default function App() {
                     </div>
                 </div>
             </div>
+            <div className='invite'>
+                <img className='invite--icon' src='https://i.robertify.me/images/bwl3q.png' />
+                <h1 className='invite--title'>Ready To Invite Us?</h1>
+                <p className='invite--body'>Invite Robertify in seconds by simply clicking on the button below. You're only one step away from the best listening experience on Discord.</p>
+                <a className='hero--button' href='https://robertify.me/invite'>Invite</a>
+            </div>
             <footer>
                 <img className='footer--logo' src='https://i.robertify.me/images/0bspn.png' alt='Footer Logo' />
                 <h1 className='footer--logo-text'>Robertify</h1>
                 <p className='footer--copyright'>Copyright ©️ Robertify 2022</p>
+                <div className='footer--links'>
+                    <a className='footer--link-github' href='https://github.com/bombies/Robertify-Bot' target={'_blank'}><img src='https://i.robertify.me/images/3ythy.png' alt='Discord'/></a>    
+                    <a className='footer--link-discord' href='https://robertify.me/invite' target={'_blank'}><img src='https://i.robertify.me/images/2n1nb.png' alt='Discord'/></a>    
+                </div>
             </footer>
         </main>
     )

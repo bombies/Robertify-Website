@@ -10,13 +10,17 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     color: #FFFFFF;
 }
 
 a {
-    color: #009706;
+    color: #2fe435;
 }
 
 nav {
@@ -26,27 +30,6 @@ nav {
     background: #181818;
     padding: 1rem 5.5rem 1rem 5.6rem;
     align-items: center;
-}
-
-button {
-    width: 27.3125rem;
-    height: 6.3125rem;
-
-    background: linear-gradient(90deg, #039400 0%, #04C800 111.1%);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.25);
-    border-radius: 20px;
-
-    cursor: pointer;
-
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 3rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-
-    color: #FFFFFF;
 }
 
 .nav--brand {
@@ -78,8 +61,13 @@ button {
 }
 
 .nav--items a {
-    color: #A8EE8F !important;
+    color: #A8EE8F;
     text-decoration: none !important;
+    transition: all .55s ease;
+}
+
+.nav--items a:hover {
+    color: #51ff11;
 }
 
 .nav--items li {
@@ -90,31 +78,73 @@ button {
 }
 
 .hero {
+    padding-bottom: 9.4375rem;
     background: linear-gradient(180deg, #1F1F1F 0%, #00FF47 104.36%);
     text-align: center;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
 .hero--title {
     padding-top: 9.875rem;
 
     text-transform: uppercase;
+    transition: all 2s ease;
     font-weight: 700;
-    font-size: 8rem;
-    line-height: 12rem;
+    font-size: 6rem;
+    line-height: 7.5rem;
     text-shadow: 0px 0px 30px rgba(0, 0, 0, 0.25);
 }
 
+.hero--title:hover {
+    background: linear-gradient(-45deg, #39a329, #36a32a, #3ee882, #3ee888);
+    background-size: 100%;
+
+    background-clip: text;
+    -webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
 .hero--subtitle {
-    max-width: 76.125rem;
+    max-width: 42.625rem;
     margin: auto;
+    margin-bottom: 3.25rem;
     
     font-weight: 300;
-    font-size: 4rem;
-    line-height: 6rem;
+    font-size: 2.25rem;
+    line-height: 3.375rem;
+}
+
+.hero--buttons {
+    display: flex;
+    justify-content: center;
+    gap: 2.8125rem;
 }
 
 .hero--button {
-    margin: 1.1875rem 0px 2.375rem 0;
+    padding: 0.625rem 2.25rem;
+
+    background: linear-gradient(90deg, #039400 0%, #04C800 111.1%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+    
+
+    cursor: pointer;
+
+    font-family: 'Poppins';
+    text-decoration: none;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 1s ease;
+
+    color: #FFFFFF;
+}
+
+.hero--button:hover {
+    transform: scale(1.25);
 }
 
 .aboutUs {
@@ -175,7 +205,11 @@ button {
 .features--images > img {
     position: relative;
 
-    animation: imgHoverOff 0.15s forwards;
+    width: 17.75rem;
+    height: 17.75rem;
+    z-index: 0;
+    transition: all .75s ease;
+    /* animation: imgHoverOff 0.15s forwards; */
 
     box-shadow: 0px 4px 20px 10px rgba(0, 0, 0, 0.25);
     border-radius: 15px;
@@ -185,55 +219,8 @@ button {
 }
 
 .features--images > img:hover {
-    /* width: 30rem;
-    height: 30rem; */
-    animation: imgHoverOn 0.25s forwards;
-}
-
-@keyframes imgHoverOn {
-    0% {
-        width: 17.75rem;
-        height: 17.75rem;
-    }
-    25% {
-        width: 20.75rem;
-        height: 20.75rem;
-    }
-    50% {
-        width: 25.75rem;
-        height: 25.75rem;
-    }
-    75% {
-        width: 27.75rem;
-        height: 27.75rem;
-    }
-    100%{
-        width: 30rem;
-        height: 30rem;
-    }
-}
-
-@keyframes imgHoverOff {
-    100% {
-        width: 17.75rem;
-        height: 17.75rem;
-    }
-    75% {
-        width: 20.75rem;
-        height: 20.75rem;
-    }
-    50% {
-        width: 25.75rem;
-        height: 25.75rem;
-    }
-    25% {
-        width: 27.75rem;
-        height: 27.75rem;
-    }
-    0%{
-        width: 30rem;
-        height: 30rem;
-    }
+    z-index: 1;
+    transform: scale(1.75);
 }
 
 .features--desc {
@@ -263,7 +250,7 @@ button {
 .features--desc ul {
     margin-top: 2.125rem;
     margin-left: 5rem;
-    max-height: 13rem;
+    max-height: 27.75rem;
     max-width: 17.75rem;
 
     font-weight: 300;
@@ -274,8 +261,8 @@ button {
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
-    row-gap: 3.125rem;
-    column-gap: 7.75rem;
+    row-gap: 1.125rem;
+    column-gap: 1.75rem;
 }
 
 .features--desc li::marker {
@@ -294,6 +281,7 @@ button {
 
 .support--items {
     display: flex;
+    overflow: hidden;
     padding: 11.5rem 5.0625rem 13rem 23rem;
 
     backdrop-filter: blur(15px);
@@ -325,17 +313,51 @@ button {
     border-radius: 15px;
 }
 
+.invite {
+    padding: 7.4375rem;
+    text-align: center;
+
+    background: #383838;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.invite--icon {
+    width: 10rem;
+    filter: drop-shadow(0px 4px 25px rgba(0, 0, 0, 0.55));
+}
+
+.invite--title {
+    font-weight: 500;
+    font-size: 4.375rem;
+    line-height: 6.5625rem;
+    text-transform: uppercase;
+    color: #70FF6D;
+    text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.45);
+}
+
+.invite--body {
+    font-weight: 300;
+    font-size: 1.5rem;
+    line-height: 2.25rem;
+
+    max-width: 41.40875rem;
+    max-height: 6.915625rem;
+
+    margin: auto;
+    margin-bottom: 1.5rem;
+}
+
 footer {
-    padding-top: 8rem;
-    padding-bottom: 8rem;
+    padding-top: 5.625rem;
+    padding-bottom: 5rem;
     background-color: black;
     text-align: center;
     width: 100%;
 }
 
 .footer--logo {
-    width: 22.25rem;
-    height: 22.25rem;
+    width: 7.25rem;
+    height: 7.25rem;
 }
 
 .footer--logo-text {
@@ -351,8 +373,32 @@ footer {
     background-clip: text;
 }
 
+.footer--links {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 1.1875rem;
+}
+
+.footer--links img {
+    width: 1.3125rem;
+}
+
 .footer--copyright {
-    font-size: 2.25rem;
-    line-height: 3.375rem;
+    font-size: 1.25rem;
+    line-height: 1.875rem;
     text-align: center;
+}
+
+::-webkit-scrollbar {
+    width: 0.5rem;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #039400;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #292929;
 }
