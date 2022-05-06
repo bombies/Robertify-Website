@@ -1,13 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Layout from '../components/Layout';
 import { Router, Link } from '@reach/router';
 import Commands from './commands';
+import TermsOfService from './tos';
+import PrivacyPolicy from './privacy-policy';
+import Vote from './vote';
+import Callback from './callback';
+import { createClient } from 'redis';
 
+// export const redisClient = Redis.createClient();
 export default function Home() {
+
+    const [ userDiscordInfo, setUserDiscordInfo ] = useState({hi: 1});
+
     return (
-        <Layout>
+        <Layout discordInfo={userDiscordInfo} >
             {/* Setup routes */}
             <Router basepath='/commands'><Commands path='/commands'/></Router>
+            <Router basepath='/vote'><Vote path='/vote'/></Router>
+            <Router basepath='/tos'><TermsOfService path='/tos'/></Router>
+            <Router basepath='/privacy-policy'><PrivacyPolicy path='/privacy-policy'/></Router>
+
+            <Router basepath='/callback'><Callback path='/callback'/></Router>
+
 
 
             <div className='hero'>

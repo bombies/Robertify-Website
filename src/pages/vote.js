@@ -1,11 +1,11 @@
 import React from 'react';
 import Layout from '../components/Layout';
 
-export default function Commands() {
+export default function Vote() {
     return (
         <Layout>
             <main>
-                This is the command page
+                This is the vote page
             </main>
         </Layout>
     )
