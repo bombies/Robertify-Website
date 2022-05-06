@@ -1,0 +1,358 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap');
+
+:root {
+    --main-content-padding-left: 20rem;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #FFFFFF;
+}
+
+a {
+    color: #009706;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+
+    background: #181818;
+    padding: 1rem 5.5rem 1rem 5.6rem;
+    align-items: center;
+}
+
+button {
+    width: 27.3125rem;
+    height: 6.3125rem;
+
+    background: linear-gradient(90deg, #039400 0%, #04C800 111.1%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+
+    cursor: pointer;
+
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 3rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+
+    color: #FFFFFF;
+}
+
+.nav--brand {
+    display: flex;
+}
+
+.nav--brand-logo {
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-right: 1rem;
+
+    align-self: center;
+}
+
+.nav--brand-title {
+    font-weight: 500;
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+    letter-spacing: 0.3rem;
+
+    text-transform: uppercase;
+    align-self: center;
+
+    color: white;
+}
+
+.nav--items {
+    display: flex;
+}
+
+.nav--items a {
+    color: #A8EE8F !important;
+    text-decoration: none !important;
+}
+
+.nav--items li {
+    display: inline;
+    margin-right: 5rem;
+    text-transform: uppercase;
+    list-style-type: none;
+}
+
+.hero {
+    background: linear-gradient(180deg, #1F1F1F 0%, #00FF47 104.36%);
+    text-align: center;
+}
+
+.hero--title {
+    padding-top: 9.875rem;
+
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 8rem;
+    line-height: 12rem;
+    text-shadow: 0px 0px 30px rgba(0, 0, 0, 0.25);
+}
+
+.hero--subtitle {
+    max-width: 76.125rem;
+    margin: auto;
+    
+    font-weight: 300;
+    font-size: 4rem;
+    line-height: 6rem;
+}
+
+.hero--button {
+    margin: 1.1875rem 0px 2.375rem 0;
+}
+
+.aboutUs {
+    background: #3F3F3F;
+    padding: 5rem 12.6475rem 15rem var(--main-content-padding-left);
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+    display: flex;
+    overflow: hidden;
+}
+
+.aboutUs--img {
+    width: 20rem;
+    height: 20rem;
+    margin-right: 6.125rem;
+    filter: drop-shadow(0px 4px 25px rgba(0, 0, 0, 0.55));
+}
+
+.aboutUs--desc {
+    overflow: auto;
+}
+
+.aboutUs--desc-title {
+    font-weight: 500;
+    font-size: 4rem;
+    line-height: 6rem;
+    text-transform: uppercase;
+    color: #70FF6D;
+    text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.45);
+}
+
+.aboutUs--desc-body {
+    font-weight: 300;
+    font-size: 1.5rem;
+    line-height: 2.25rem;
+}
+
+.features {
+    padding: 8.0625rem 12.6475rem 15rem var(--main-content-padding-left);
+    
+    display: flex;
+    overflow: hidden;
+
+    background: #383838;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.features--images {
+    position: absolute;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+
+    gap: 3.75rem;
+}
+
+.features--images > img {
+    position: relative;
+
+    animation: imgHoverOff 0.15s forwards;
+
+    box-shadow: 0px 4px 20px 10px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+
+    object-fit: cover;
+    object-position: 10%;
+}
+
+.features--images > img:hover {
+    /* width: 30rem;
+    height: 30rem; */
+    animation: imgHoverOn 0.25s forwards;
+}
+
+@keyframes imgHoverOn {
+    0% {
+        width: 17.75rem;
+        height: 17.75rem;
+    }
+    25% {
+        width: 20.75rem;
+        height: 20.75rem;
+    }
+    50% {
+        width: 25.75rem;
+        height: 25.75rem;
+    }
+    75% {
+        width: 27.75rem;
+        height: 27.75rem;
+    }
+    100%{
+        width: 30rem;
+        height: 30rem;
+    }
+}
+
+@keyframes imgHoverOff {
+    100% {
+        width: 17.75rem;
+        height: 17.75rem;
+    }
+    75% {
+        width: 20.75rem;
+        height: 20.75rem;
+    }
+    50% {
+        width: 25.75rem;
+        height: 25.75rem;
+    }
+    25% {
+        width: 27.75rem;
+        height: 27.75rem;
+    }
+    0%{
+        width: 30rem;
+        height: 30rem;
+    }
+}
+
+.features--desc {
+    position:relative;
+
+    margin-left: 45.75rem;
+    max-width: 41.0625rem;
+
+    z-index: -1;
+}
+
+.features--desc h3 {
+    font-weight: 500;
+    font-size: 4rem;
+    line-height: 6rem;
+    text-transform: uppercase;
+    color: #70FF6D;
+    text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.45);
+}
+
+.features--desc p {
+    font-weight: 300;
+    font-size: 1.5rem;
+    line-height: 2.25rem;
+}
+
+.features--desc ul {
+    margin-top: 2.125rem;
+    margin-left: 5rem;
+    max-height: 13rem;
+    max-width: 17.75rem;
+
+    font-weight: 300;
+    font-size: 1.5rem;
+    line-height: 2.25rem;
+    letter-spacing: 0.05em;
+
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    row-gap: 3.125rem;
+    column-gap: 7.75rem;
+}
+
+.features--desc li::marker {
+    color: #05FF00;;
+}
+
+.support {
+    background-image: url('https://i.robertify.me/images/qfyvl.png');
+    background-color: #565656;
+    background-repeat: no-repeat;
+    background-size: 75%;
+    background-position: 50%;
+    background-position-x: 100%;
+    background-blend-mode: soft-light;
+}
+
+.support--items {
+    display: flex;
+    padding: 11.5rem 5.0625rem 13rem 23rem;
+
+    backdrop-filter: blur(15px);
+}
+
+.support--desc {
+    margin-right: 2.375rem;
+    max-width: 41.0625rem;
+    max-height: 38.4375rem;
+}
+
+.support--desc-title {
+    font-weight: 500;
+    font-size: 4rem;
+    line-height: 6rem;
+    text-transform: uppercase;
+    color: #70FF6D;
+    text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.45);
+}
+
+.support--desc-body {
+    font-weight: 300;
+    font-size: 1.5rem;
+    line-height: 2.25rem;
+}
+
+.support img {
+    box-shadow: 0px 4px 20px 10px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+}
+
+footer {
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+    background-color: black;
+    text-align: center;
+    width: 100%;
+}
+
+.footer--logo {
+    width: 22.25rem;
+    height: 22.25rem;
+}
+
+.footer--logo-text {
+    font-weight: 700;
+    font-size: 4rem;
+    line-height: 6rem;
+
+    text-transform: uppercase;
+
+    background: linear-gradient(270deg, #70FF6D 0%, #04CD00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.footer--copyright {
+    font-size: 2.25rem;
+    line-height: 3.375rem;
+    text-align: center;
+}
