@@ -1,7 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './styles.css';
 
 export default function App() {
+
+    // Mobile Navigation Hamburger Click Event
+    useEffect(() => {
+        const menu = document.getElementById('nav--items-mobile');
+        const menuLinks = document.getElementById('nav--items-desktop-list');
+
+        const clickFun = () => {
+            menu.classList.toggle('is-active');
+            menuLinks.classList.toggle('active');
+        }
+
+        menu.addEventListener('click', clickFun)
+
+        return () => {
+            menu.removeEventListener('click', clickFun)
+        }
+    }, []);
+
     return (
         <main>
             <nav>
@@ -10,12 +28,19 @@ export default function App() {
                     <h1 className='nav--brand-title'>Robertify</h1>
                 </div>
                 <div className='nav--items'>
-                    <ul>
-                        <li><a href="#">Commands</a></li>
-                        <li><a href="#">Vote</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                    </ul>
+                    <div className='nav--items-desktop'>
+                        <ul className='nav--items-desktop-list' id='nav--items-desktop-list'>
+                            <li><a href="#">Commands</a></li>
+                            <li><a href="#">Vote</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                    <div className='nav--items-mobile' id='nav--items-mobile'>
+                        <span className='nav--mobile-bar'></span>
+                        <span className='nav--mobile-bar'></span>
+                        <span className='nav--mobile-bar'></span>
+                    </div>
                 </div>
                 
             </nav>
@@ -73,7 +98,7 @@ export default function App() {
                 </div>
             </div>
             <div className='invite'>
-                <img className='invite--icon' src='https://i.robertify.me/images/bwl3q.png' />
+                <img className='invite--icon' src='https://i.robertify.me/images/bwl3q.png' alt='Invite Icon' />
                 <h1 className='invite--title'>Ready To Invite Us?</h1>
                 <p className='invite--body'>Invite Robertify in seconds by simply clicking on the button below. You're only one step away from the best listening experience on Discord.</p>
                 <a className='hero--button' href='https://robertify.me/invite'>Invite</a>
@@ -83,8 +108,8 @@ export default function App() {
                 <h1 className='footer--logo-text'>Robertify</h1>
                 <p className='footer--copyright'>Copyright ©️ Robertify 2022</p>
                 <div className='footer--links'>
-                    <a className='footer--link-github' href='https://github.com/bombies/Robertify-Bot' target={'_blank'}><img src='https://i.robertify.me/images/3ythy.png' alt='Discord'/></a>    
-                    <a className='footer--link-discord' href='https://robertify.me/invite' target={'_blank'}><img src='https://i.robertify.me/images/2n1nb.png' alt='Discord'/></a>    
+                    <a className='footer--link-github' href='https://github.com/bombies/Robertify-Bot' target={'_blank'} rel={'noreferrer'}><img src='https://i.robertify.me/images/3ythy.png' alt='Discord'/></a>    
+                    <a className='footer--link-discord' href='https://robertify.me/invite' target={'_blank'} rel={'noreferrer'}><img src='https://i.robertify.me/images/2n1nb.png' alt='Discord'/></a>    
                 </div>
             </footer>
         </main>

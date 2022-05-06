@@ -2,6 +2,8 @@
 
 :root {
     --main-content-padding-left: 20rem;
+    --main-content-padding-left-2: 15rem;
+    --green: #70FF6D;
 }
 
 * {
@@ -26,6 +28,7 @@ a {
 nav {
     display: flex;
     justify-content: space-between;
+    overflow-y: visible;
 
     background: #181818;
     padding: 1rem 5.5rem 1rem 5.6rem;
@@ -77,10 +80,19 @@ nav {
     list-style-type: none;
 }
 
+.nav--items-mobile .nav--mobile-bar {
+    width: 1.5625rem;
+    height: 0.1875rem;
+    margin: 0.3125 auto;
+    transition: all 0.3s ease-in-out;
+    background: white;
+}
+
 .hero {
     padding-bottom: 9.4375rem;
     background: linear-gradient(180deg, #1F1F1F 0%, #00FF47 104.36%);
     text-align: center;
+    overflow: hidden;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
@@ -172,7 +184,7 @@ nav {
     font-size: 4rem;
     line-height: 6rem;
     text-transform: uppercase;
-    color: #70FF6D;
+    color: var(--green);
     text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.45);
 }
 
@@ -183,7 +195,7 @@ nav {
 }
 
 .features {
-    padding: 8.0625rem 12.6475rem 15rem var(--main-content-padding-left);
+    padding: 8.0625rem 2rem 15rem var(--main-content-padding-left);
     
     display: flex;
     overflow: hidden;
@@ -209,7 +221,6 @@ nav {
     height: 17.75rem;
     z-index: 0;
     transition: all .75s ease;
-    /* animation: imgHoverOff 0.15s forwards; */
 
     box-shadow: 0px 4px 20px 10px rgba(0, 0, 0, 0.25);
     border-radius: 15px;
@@ -237,7 +248,7 @@ nav {
     font-size: 4rem;
     line-height: 6rem;
     text-transform: uppercase;
-    color: #70FF6D;
+    color: var(--green);
     text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.45);
 }
 
@@ -249,7 +260,7 @@ nav {
 
 .features--desc ul {
     margin-top: 2.125rem;
-    margin-left: 5rem;
+    margin-left: -3.5rem;
     max-height: 27.75rem;
     max-width: 17.75rem;
 
@@ -262,11 +273,11 @@ nav {
     flex-wrap: wrap;
     flex-direction: column;
     row-gap: 1.125rem;
-    column-gap: 1.75rem;
+    column-gap: 0.5rem;
 }
 
 .features--desc li::marker {
-    color: #05FF00;;
+    color: #05FF00;
 }
 
 .support {
@@ -298,7 +309,7 @@ nav {
     font-size: 4rem;
     line-height: 6rem;
     text-transform: uppercase;
-    color: #70FF6D;
+    color: var(--green);
     text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.45);
 }
 
@@ -316,6 +327,7 @@ nav {
 .invite {
     padding: 7.4375rem;
     text-align: center;
+    overflow: hidden;
 
     background: #383838;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
@@ -331,7 +343,7 @@ nav {
     font-size: 4.375rem;
     line-height: 6.5625rem;
     text-transform: uppercase;
-    color: #70FF6D;
+    color: var(--green);
     text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.45);
 }
 
@@ -352,6 +364,7 @@ footer {
     padding-bottom: 5rem;
     background-color: black;
     text-align: center;
+    overflow: hidden;
     width: 100%;
 }
 
@@ -401,4 +414,393 @@ footer {
 
 ::-webkit-scrollbar-track {
     background: #292929;
+}
+
+@media (min-width: 1700px) {
+    .features--desc ul {
+        margin-left: 3rem;
+    }
+}
+
+@media (max-width: 1699px) {
+    .features--desc ul {
+        margin-left: 1rem;
+        max-height: 25rem;
+        max-width: 16rem;
+
+        font-size: 1.25rem;
+        line-height: 1.5rem;
+    }
+}
+
+@media (max-width: 1535px) {
+    .hero {
+        padding-bottom: 7rem;
+    }
+
+    .hero--title {
+        font-size: 4.5rem;
+        line-height: 4.5rem;
+    }
+
+    .hero--subtitle {
+        max-width: 35.625rem;
+        margin-bottom: 2rem;
+        
+        font-size: 1.75rem;
+        line-height: 2.15rem;
+    }
+
+    .aboutUs {
+        padding: 5rem 2rem 15rem var(--main-content-padding-left-2);
+    }
+
+    .features {
+        padding: 8.0625rem 2rem 15rem 10rem;
+        overflow: auto;
+    }
+
+    .features--desc ul {
+        margin-left: 0;
+        max-height: 15rem;
+        max-width: 14.5rem;
+
+        font-size: 1.05rem;
+        line-height: 1rem;
+    }
+
+    .features--desc {
+        max-width: 50rem;
+    }
+
+    .support--items {
+        padding: 11.5rem 5.0625rem 13rem 3rem;
+    }
+
+    .support--desc-body {
+        max-width: 43rem;
+    }
+
+    .support img {
+        width: 45rem;
+    }
+}
+
+@media (max-width: 1280px) {
+    nav {
+        padding: 1rem 0.5rem 1rem 2.5rem;
+    }
+
+    .hero--title {
+        font-size: 3.5rem;
+        line-height: 3.5rem;
+    }
+
+    .hero--button {
+        padding: 0.625rem 1.25rem;
+    }
+
+    .aboutUs {
+        padding: 5rem 2rem 15rem 5rem;
+    }
+
+    .features {
+        padding: 8.0625rem 2rem 15rem 5rem;
+    }
+
+    .features--images {
+        gap: 2.5rem
+    }
+
+    .features--desc {
+        margin-left: 41rem;
+    }
+
+    .features--desc ul {
+        max-height: 20rem;
+        max-width: 15rem;
+
+        font-size: 1rem;
+        line-height: 1.5rem;
+
+        row-gap: 0.5rem;
+        column-gap: 1rem;
+    }
+}
+
+@media (max-width: 1025px) {
+    nav {
+        position: relative;
+    }
+
+    .nav--items {
+        text-align: center;
+    }
+
+    .nav--items-desktop-list {
+        margin: 0;
+        display: grid;
+        grid-template-columns: auto;
+        background-color: #292929;
+        position: absolute;
+        top: 5.25rem;
+        left: 0vw;
+        width: 100vw;
+        opacity: 0;
+        transition: all 0.5s ease;
+
+        z-index: 1;
+    }
+
+    .nav--items-desktop-list.active {
+        background: #292929;
+        opacity: 1;
+        transition: all 0.5s ease;
+    }
+
+    .nav--items-desktop-list li {
+        display: table;
+        line-height: 3.75rem;
+        width: 100vw;
+        color: white;
+    }
+
+    .nav--items-desktop-list a {
+        display: table;
+        width: 100vw;
+    }
+
+    .nav--items-desktop-list a:hover {
+        background-color: #1F1F1F;
+        transition: all 0.4s ease-out;
+    }
+
+    .nav--items-mobile {
+        position: absolute;
+        top: 2.25rem;
+        right: 2rem;
+    }
+
+    .nav--items-mobile .nav--mobile-bar {
+        display: block;
+    }
+
+    .nav--mobile-bar {
+        margin-bottom: 0.25rem;
+    }
+
+    .nav--items-mobile:hover {
+        cursor: pointer;
+    }
+
+    .nav--items-mobile.is-active .nav--mobile-bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    .nav--items-mobile.is-active .nav--mobile-bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    .nav--items-mobile.is-active .nav--mobile-bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+
+    .hero--button {
+        padding: 0.625rem 1.15rem;
+        border-radius: 9px;
+    }
+
+    .aboutUs {
+        display: block;
+        text-align: center;
+    }
+
+    .aboutUs--img {
+        margin: auto;
+        width: 15rem;
+        height: 15rem;
+    }
+    
+    .features {
+        padding: 8.0625rem 2rem 15rem 5rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .features--images {
+        position: relative;
+    }
+
+    .features--images > img {
+        position: relative;
+    }
+
+    .features--images > img:hover {
+        transform: scale(1.45);
+    }
+
+    .features--desc {
+        margin: auto;
+        margin-top: 1rem;
+        max-width: fit-content;
+    }
+
+    .features--desc ul {
+        max-width: 20rem;
+        max-height: 27rem;
+
+        font-size: 1.75rem;
+        line-height: 1.85rem;
+
+        column-gap: 3.25rem;
+        row-gap: 1rem;
+    }
+
+    .support--items {
+        display: block;
+    }
+
+    .support--items img {
+        margin: auto;
+    }
+
+    .support--desc {
+        margin: auto;
+        margin-bottom: 2.5rem;
+    }
+
+    @media (max-width: 615px) {
+        .hero {
+            padding-left: 2rem;
+            padding-right: 2rem;
+            padding-bottom: 4rem;
+        }
+
+        .hero--title {
+            font-size: 2.5rem;
+            line-height: 2.5rem;
+        }
+        
+        .hero--subtitle {
+            max-width: 35.625rem;
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+            
+            font-size: 1.5rem;
+            line-height: 2.15rem;
+        }
+
+        .hero--buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: auto;
+        
+            width: 50vw;
+        }
+
+        .hero--button {
+            padding: 0.425rem 1.15rem 0.1rem;
+
+            font-size: 1rem;
+            border-radius: 9px;
+        }
+
+        .aboutUs {
+            padding: 2.5rem;
+        }
+        
+        .aboutUs--desc-title {
+            font-size: 2.5rem;
+            line-height: 5.5rem;
+            text-align: left;
+
+        }
+
+        .aboutUs--desc-body {
+            font-size: 1rem;
+            text-align: left;
+        }
+
+        .features {
+            padding: 2.5rem;
+        }
+
+        .features--images > img {
+            width: 8.5rem;
+            height: 8.5rem;
+        }
+        
+        .features--desc > h3 {
+            font-size: 2.5rem;
+            line-height: 4rem;
+        }
+
+        .features--desc ul {
+            font-size: 1.15rem;
+            line-height: 1.15rem;
+
+            row-gap: 0.5rem;
+        }
+
+        .support--items {
+            padding: 2rem;
+        }
+
+        .support--desc-title {
+            font-size: 2.5rem;
+            line-height: 4rem;
+        }
+
+        .support--desc-body {
+            font-size: 1rem;
+            line-height: 1.75rem;
+        }
+
+        .support img {
+            width: 22.5rem;
+        }
+
+        .invite {
+            padding: 2rem;
+        }
+        
+        .invite--icon {
+            width: 8rem;
+        }
+        
+        .invite--title {
+            margin-top: 1rem;
+            font-size: 2.15rem;
+            line-height: 2.75rem;
+        }
+
+        .invite--body {
+            font-size: 1rem;
+            line-height: 1.75rem;
+        }
+
+        footer {
+            padding: 2rem;
+        }
+
+        .footer--logo {
+            width: 5rem;
+            height: 5rem;
+        }
+
+        .footer--logo-text {
+            font-size: 2rem;
+            line-height: 2rem;
+        }
+
+        .footer--copyright {
+            font-size: 1rem;
+            line-height: 1.25rem;
+        }
+
+        .footer--links {
+            margin-top: 0.5rem;
+        }
+    }
 }
