@@ -6,7 +6,7 @@ export default function Vote({ token, discordInfo }) {
     return (
         <Layout token={token} discordInfo={discordInfo} title='Robertify - Vote'>
             <Hero
-                title='Terms of Service'
+                title='Vote'
                 subTitle='Thank you for taking an interest in supporting us!'
             />
         </Layout>
