@@ -63,11 +63,11 @@ export default function Layout({ token, discordInfo, title, showLogin = true, sh
                 <div className='nav--items'>
                     <ul className='nav--items-desktop-list' id='nav--items-desktop-list'>
                         {/* <li><Link href='/'>Home</Link></li> */}
+                        <li><a href='/invite'>Invite</a></li>
                         <li><a href='https://buy.robertify.me'>Store</a></li>
                         <li><Link href='/commands'>Commands</Link></li>
                         <li><Link href='/vote'>Vote</Link></li>
-                        <li><Link href='/tos'>Terms of Service</Link></li>
-                        <li><Link href='/privacy-policy'>Privacy Policy</Link></li>
+                        <li><Link href='/support'>Support</Link></li>
                         {
                             discordInfoObj ?
                                 !Object.keys(discordInfoObj).length ? 
@@ -114,12 +114,23 @@ export default function Layout({ token, discordInfo, title, showLogin = true, sh
             </main> 
             {showFooter &&
                 <footer>
-                    <img className='footer--logo' src='https://i.robertify.me/images/0bspn.png' alt='Footer Logo' />
-                    <h1 className='footer--logo-text'>Robertify</h1>
-                    <p className='footer--copyright'>Copyright ©️ Robertify 2022</p>
-                    <div className='footer--links'>
-                        <a className='footer--link-github' href='https://github.com/bombies/Robertify-Bot' target={'_blank'} rel={'noreferrer'}><img src='https://i.robertify.me/images/3ythy.png' alt='Discord'/></a>    
-                        <a className='footer--link-discord' href='https://robertify.me/invite' target={'_blank'} rel={'noreferrer'}><img src='https://i.robertify.me/images/2n1nb.png' alt='Discord'/></a>    
+                    <div className='footer-brand'>
+                        <img className='footer--logo' src='https://i.robertify.me/images/0bspn.png' alt='Footer Logo' />
+                        <h1 className='footer--logo-text'>Robertify</h1>
+                        <p className='footer--copyright'>Copyright ©️ Robertify 2022</p>
+                        <div className='footer--links'>
+                            <a className='footer--link-github' href='https://github.com/bombies/Robertify-Bot' target={'_blank'} rel={'noreferrer'}><img src='https://i.robertify.me/images/3ythy.png' alt='Discord'/></a>    
+                            <a className='footer--link-discord' href='https://robertify.me/invite' target={'_blank'} rel={'noreferrer'}><img src='https://i.robertify.me/images/2n1nb.png' alt='Discord'/></a>    
+                        </div>
+                    </div>
+                    <div className='footer-info'>
+                        <div className='footer-info--resources'>
+                            <h3 className='footer-info--resources-heading'>Resouces</h3>
+                            <ul className='footer--info--resources-list'>
+                                <li><Link href='/tos'>Terms of Service</Link></li>
+                                <li><Link href='/privacy-policy'>Privacy Policy</Link></li>
+                            </ul>
+                        </div>
                     </div>
                 </footer>
             }

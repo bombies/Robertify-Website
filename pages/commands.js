@@ -22,7 +22,6 @@ function groupCommands(commands, max) {
 const MAX_COMMANDS = 15;
 
 export default function Commands({ commands, token, discordInfo }) {
-
     const commandsCpy = [...commands].sort((a,b) => a.name.localeCompare(b.name));
     const allCommandsParsed = commandsCpy.map(command => <CommandsTableRow key={command.id} id={command.id} name={command.name} description={command.description} category={command.category} />)    
     const commandsParsed = groupCommands(allCommandsParsed, MAX_COMMANDS)

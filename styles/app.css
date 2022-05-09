@@ -575,12 +575,32 @@ nav {
 }
 
 footer {
-    padding-top: 5.625rem;
-    padding-bottom: 5rem;
     background-color: black;
-    text-align: center;
     overflow: hidden;
     width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    padding: 5.625rem 7rem;
+}
+
+.footer-brand {
+    text-align: center;
+}
+
+.footer--info--resources-list li {
+    list-style-type: none;
+}
+
+.footer--info--resources-list a {
+    text-decoration: none;
+    transition: all .1s ease-in-out;
+}
+
+.footer--info--resources-list a:hover {
+    color: #93ff93;
+    transition: all .1s ease-in-out;
+
 }
 
 .footer--logo {
@@ -603,8 +623,6 @@ footer {
 
 .footer--links {
     margin-top: 1rem;
-    display: flex;
-    justify-content: center;
     gap: 1.1875rem;
 }
 
@@ -621,7 +639,6 @@ footer {
 .footer--copyright {
     font-size: 1.25rem;
     line-height: 1.875rem;
-    text-align: center;
 }
 
 ::-webkit-scrollbar {
