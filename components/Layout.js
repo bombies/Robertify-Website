@@ -40,7 +40,6 @@ export default function Layout({ token, discordInfo, title, showLogin = true, sh
     }
 
     const logOut = () => {
-        console.log('Logging out');
         jsCookie.remove('login-token');
         setLayoutInfo({
             userPopoutShown: false,

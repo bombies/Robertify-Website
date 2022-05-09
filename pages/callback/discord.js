@@ -17,8 +17,10 @@ export default function Callback(props) {
     }
 
     useEffect(() => {
-        if (!code)
+        if (!code) {
+            router.push('/')
             return;
+        }
 
         const config = {
             headers: {
