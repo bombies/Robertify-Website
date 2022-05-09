@@ -10,7 +10,7 @@ export default function Home({ token, discordInfo }) {
                 <h1 className='hero--title'>Robertify</h1>
                 <h3 className='hero--subtitle'>A discord music bot with a multitude of features that will fit your liking!</h3>
                 <div className='hero--buttons'>
-                    <a className='hero--button' href='https://robertify.me/invite'>Invite</a>
+                    <Link href='/invite'><span className='hero--button'>Invite</span></Link>
                     <a className='hero--button' href='#aboutUs'>Learn More</a>
                 </div>
             </div>
@@ -63,7 +63,7 @@ export default function Home({ token, discordInfo }) {
                 <img className='invite--icon' src='https://i.robertify.me/images/bwl3q.png' alt='Invite Icon' />
                 <h1 className='invite--title'>Ready To Invite Us?</h1>
                 <p className='invite--body'>Invite Robertify in seconds by simply clicking on the button below. You're only one step away from the best listening experience on Discord.</p>
-                <a className='hero--button' href='https://robertify.me/invite'>Invite</a>
+                <Link className='invite--button' href='/invite'>Invite</Link>
             </div>
     </Layout>
   );

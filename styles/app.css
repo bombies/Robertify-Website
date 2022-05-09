@@ -295,20 +295,19 @@ nav {
 .hero--button {
     padding: 0.625rem 2.25rem;
 
-    background: linear-gradient(90deg, #039400 0%, #04C800 111.1%);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.25);
+    background: linear-gradient(0deg, #039400 0%, #04C800 111.1%);
+    border: 3.5px solid rgb(0, 121, 6);
+    box-shadow: 0px 5px 10px 2px rgba(0, 0, 0, 0.25);
     border-radius: 20px;
-    
 
     cursor: pointer;
 
     font-family: 'Poppins';
     text-decoration: none;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 500;
     font-size: 1.75rem;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
     transition: all 1s ease;
 
@@ -316,7 +315,37 @@ nav {
 }
 
 .hero--button:hover {
+    border: 3.5px solid rgb(192, 255, 195);
     transform: scale(1.25);
+}
+
+.hero--img-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5rem;
+}
+
+.hero--img-button {
+    display: flex;
+    flex-direction: column;
+    color: white;
+    text-decoration: none;
+    gap: 1rem;
+
+    font-size: 2rem;
+}
+
+.hero--img-button img {
+    width: 16.5rem;
+    border-radius: 15px;
+    filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.45));
+    transition: all 1s ease-in-out;
+}
+
+.hero--img-button img:hover {
+    transform: scale(1.1);
+    transition: all 1s ease;
 }
 
 .aboutUs {
@@ -519,6 +548,32 @@ nav {
     margin-bottom: 1.5rem;
 }
 
+.invite a {
+    padding: 0.625rem 2.25rem;
+
+    background: linear-gradient(0deg, #039400 0%, #04C800 111.1%);
+    border: 3.5px solid rgb(0, 121, 6);
+    box-shadow: 0px 5px 10px 2px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+
+    cursor: pointer;
+
+    font-family: 'Poppins';
+    text-decoration: none;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 1.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: all 1s ease;
+
+    color: #FFFFFF;
+}
+
+.invite a:hover {
+    border: 3.5px solid rgb(192, 255, 195);
+}
+
 footer {
     padding-top: 5.625rem;
     padding-bottom: 5rem;
@@ -627,6 +682,152 @@ footer {
     line-height: 2.1875rem;
     width: 95%;
     padding-bottom: 2rem;
+}
+
+/* Commands */
+.commands--about {
+    display: flex;
+    padding: 1.7rem 0 3.3rem 10rem;
+    background-color: #242424;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.commands--about-images {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+}
+
+.commands--about-images img {
+    width: 17rem;
+    height: 17rem;
+
+    object-fit: cover;
+    transition: all 1.5s ease-in-out;
+
+    filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.35));
+    border-radius: 25px;
+}
+
+.commands--about-images img:hover {
+    transform: scale(1.35);
+    transition: all 1.5s ease;
+    z-index: 2;
+}
+
+.commands--about-desc {
+    width: 40.125rem;
+    margin-left: 5.5rem;
+}
+
+.commands--about-desc-title {
+    margin-top: 5rem;
+    font-weight: 700;
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+    text-transform: uppercase;
+    color: #70FF6D;
+}
+
+.commands--about-desc-body {
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+    margin-top: 2rem;
+}
+
+.commands {
+    display: flex;
+    flex-direction: column;
+
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://i.robertify.me/images/s4o7q.png);
+    background-size: cover;
+
+    padding: 14rem;
+}
+
+.commands_table {
+    table-layout: fixed;
+    border: 1px solid black;
+    border-collapse: collapse;
+
+    background: rgba(23, 23, 23, 0.5);
+    box-shadow: 0px 0px 30px 20px rgba(0, 0, 0, 0.25);
+}
+
+.commands_table--heading {
+    width: 25%;
+    text-align: center;
+    text-transform: uppercase;
+    padding: 1rem;
+
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 2.5rem;
+}
+
+.commands_table--row--data, .commands_table--heading {
+    border: 1px solid black;
+    border-collapse: collapse;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, .35);
+}
+
+.commands_table--row--data {
+    padding: 1rem .5rem 1rem .5rem;
+}
+
+.commands-page-controllers, .commands-filter-controllers {
+    display: flex;
+    gap: .25rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.commands-filter-controllers select {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: white;
+    background-color: #353535;
+    border: none;
+}
+
+.commands-filter-controllers input[type=text] {
+    padding-left: .5rem;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: white;
+    background-color: #353535;
+    border: none;
+}
+
+.commands-filter-controllers input[type=text]:focus, .commands-filter-controllers select:focus {
+    outline: none;
+}
+
+.command-page-btn {
+    padding: .15rem 1rem;
+    border: none;
+    transition: all .2s ease-in-out;
+    cursor: pointer;
+
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    background-color: #353535;
+}
+
+.command-page-btn.selected {
+    background-color: #3c6b23;
+}
+
+.command-page-btn.selected:hover {
+    background-color: rgb(88, 133, 64);
+    transition: all .2s ease-in-out;
+}
+
+.command-page-btn:hover {
+    background-color: #1e3611;
+    transition: all .2s ease-in-out;
 }
 
 @media (min-width: 1700px) {
