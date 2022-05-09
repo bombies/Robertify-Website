@@ -157,8 +157,8 @@ export async function getServerSideProps({ req, res }) {
     return {
         props: {
             commands: commands,
-            token: realProps.props.token,
-            discordInfo: realProps.props.discordInfo
+            token: realProps.props.token || null,
+            discordInfo: realProps.props.discordInfo || null
         }
     }
 }

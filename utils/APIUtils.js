@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export async function fetchDiscordUserInfo(req) {
-    const token = req.cookies ? req.cookies['login-token'] : null;
+    const token = req.cookies['login-token'];
     const discordKey = token;
         
     if (!token)

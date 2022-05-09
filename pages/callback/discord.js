@@ -6,7 +6,15 @@ import { useEffect } from 'react';
 
 export default function Callback(props) {
     const router = useRouter();
-    const { code } = router.query;
+    const { code, error } = router.query;
+
+    if (error) {
+        router.push('/')
+        return (
+            <main>
+            </main>
+        )
+    }
 
     useEffect(() => {
         if (!code)
