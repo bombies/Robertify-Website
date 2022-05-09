@@ -4,7 +4,7 @@ import Link from 'next/link';
 import NextNProgress from 'nextjs-progressbar';
 import { useState, useEffect } from 'react';
 
-export default function Layout({ token, discordInfo, title, children }) {
+export default function Layout({ token, discordInfo, title, showLogin = true, children }) {
     const [ layoutInfo, setLayoutInfo ] = useState({
         discordInfo: {...discordInfo},
         userPopoutShown: false,
@@ -30,7 +30,7 @@ export default function Layout({ token, discordInfo, title, children }) {
     }, [])
 
     const discordAvatar = discordInfoObj ? Object.keys(discordInfoObj).length ? `https://cdn.discordapp.com/avatars/${discordInfoObj.id}/${discordInfoObj.avatar}.${discordInfoObj.avatar.charAt(0) === 'a' ? 'gif' : 'png'}?size=512` : null : null;
-    const loginButton = <li><a className='nav--login-btn' id='login-btn' href='https://discord.com/api/oauth2/authorize?client_id=893558050504466482&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fcallback%2Fdiscord&response_type=code&scope=identify%20guilds'><img src='https://i.robertify.me/images/c2n9x.png' alt='Login' /><span>Login</span></a></li>;
+    const loginButton = showLogin ? <li><a className='nav--login-btn' id='login-btn' href='https://discord.com/api/oauth2/authorize?client_id=893558050504466482&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fcallback%2Fdiscord&response_type=code&scope=identify%20guilds'><img src='https://i.robertify.me/images/c2n9x.png' alt='Login' /><span>Login</span></a></li> : '';
     
     const toggleUserPopout = () => {
         setLayoutInfo(oldLayoutInfo => ({
