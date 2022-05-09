@@ -43,7 +43,11 @@ export default function Callback(props) {
                 return {id: id, data: {...res.data}}
             })
             .then(data => {
-                axios.post('http://localhost:3000/api/discord', data)
+                axios.post('http://localhost:3000/api/discord', data, {
+                    headers: {
+                        'master-password': props.discordClientSecret
+                    }
+                })
                     .then(res => res.data)
                     .then(router.push('/', undefined, { shallow: false }))
                     .catch(err => console.log(err))

@@ -893,6 +893,157 @@ footer {
     text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
 }
 
+/* Dashboard */
+.guildCards--body {
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://i.robertify.me/images/s4o7q.png);
+    background-size: cover;
+    padding: 5rem 0 14rem;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.guildCards--search {
+    width: 50%;
+    height: 4rem;
+    align-self: center;
+    margin-bottom: 2.5rem;
+    padding: 1rem 1.5rem;
+
+    font-size: 1.5rem;
+    color: #ffffff;
+
+    outline: none;
+    background-color: #313131;
+    border-radius: 10px;
+    border: none;
+
+    transition: all .25s ease-in-out;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, .35);
+}
+
+.guildCards--search:focus {
+    transition: all .25s ease-in;
+    outline: #027400 solid 1px;
+}
+
+.guildCards {
+    display: grid;
+    justify-content: center;
+    max-width: 100%;
+
+    overflow: hidden;
+
+    grid-template-columns: repeat(4, .22fr);
+    gap: 1.5rem;
+}
+
+.guildCard {
+    display: flex;
+    overflow: hidden;
+
+    width: 100%;
+    height: 10rem;
+    background: #303030;
+    border-radius: 20px;
+    border: rgba(0, 0, 0, 0) 0px solid;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, .35);
+
+    transition: all .05s ease-in-out;
+}
+
+.guildCard:hover {
+    transition: all .05s ease-in-out;
+    border: rgba(178, 255, 177, 0.103) 1.5px solid;
+}
+
+.guildCard--banner {
+    position: relative;
+}
+
+.guildCard--owner-container {
+    position: absolute;
+    top: 5%;
+    left: 10%;
+}
+
+.guildCard--owner-tooltip {
+    position: absolute;
+    opacity: 0;
+    background-color: #000000;
+    border-radius: 9px;
+    margin: .5rem;
+    padding: .5rem;
+    z-index: 2;
+    pointer-events: none;
+
+    transition: all .3s ease-in-out;
+}
+
+.guildCard--owner-container:hover .guildCard--owner-tooltip {
+    opacity: 1;
+    transition: all .3s ease;
+}
+
+.guildCard--owner-glyph {
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+    z-index: 1;
+}
+
+.guildCard--icon {
+    /* width: 100%; */
+    height: 100%;
+    object-fit: cover;
+    border: rgba(0, 0, 0, 0.355) 1px solid;
+
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, .35);
+}
+
+.guildCard--text {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-left: .5rem;
+
+    width: 100%;
+}
+
+.guildCard--name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 2rem;
+    margin: 2rem 0 0;
+
+    pointer-events: none;
+    font-size: 1rem;
+}
+
+.guildCard--text a {
+    text-decoration: none;
+    color: white;
+    background-color: #039400;
+    padding: .5rem;
+    margin: 1rem auto 0;
+    border-radius: 9px;
+    width: 50%;
+    box-shadow: 0px 0px 35px 5px rgba(0, 0, 0, .35);
+    transition: all .1s ease-in-out;
+}
+
+.guildCard--text a:hover {
+    transform: scale(1.05);
+    transition: all .1s ease-in;
+}
+
 @media (min-width: 1700px) {
     .features--desc ul {
         margin-left: 3rem;
@@ -907,6 +1058,19 @@ footer {
 
         font-size: 1.25rem;
         line-height: 1.5rem;
+    }
+
+    .guildCards {
+        grid-template-columns: repeat(4, .21fr);
+        gap: 1.3rem;
+    }
+    
+    .guildCard--text {
+        margin-left: 0rem;
+    }
+
+    .guildCard--text a {
+        margin: 1rem auto 0;
     }
 }
 
@@ -987,6 +1151,12 @@ footer {
 
     .plain_text p, li {
         font-size: 1.25rem;
+    }
+
+    .guildCards {
+        width: 100%;
+        grid-template-columns: repeat(3, .5fr);
+        gap: 1rem;
     }
 }
 
@@ -1259,6 +1429,37 @@ footer {
     .commands {    
         padding: 7rem;
     }
+
+    .guildCards--search {
+        width: 70%;
+    }
+
+    .guildCard--icon {
+        width: 100%;
+        /* height: 50%; */
+        object-fit: cover;
+    }
+
+    .guildCard--name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 0 .5rem;
+        margin: 2rem 0 0;
+    
+        pointer-events: none;
+        font-size: 1rem;
+    }
+    
+    .guildCard--text a {
+        width: 80%;
+    }
+
+    .guildCards {
+        width: 100%;
+        grid-template-columns: repeat(2, .5fr);
+        gap: 1rem;
+    }
 }
 
 @media (max-width: 615px) {
@@ -1471,5 +1672,86 @@ footer {
         
         .commands-filter-controllers input[type=text] {
             width: 7.5rem;
+        }
+
+        .guildCard {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .guildCard--banner {
+            height: 45%;
+        }
+
+        .guildCard--icon {
+            /* width: 100%; */
+            /* height: 35%; */
+            object-fit: cover;
+            border: rgba(0, 0, 0, 0.355) 1px solid;
+        
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            border-bottom-left-radius: 0px;
+        
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, .35);
+        }
+        
+        .guildCard--text {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-left: .5rem;
+        
+            width: 100%;
+        }
+        
+        .guildCard--text {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-left: .1rem;
+        
+            width: 100%;
+        }
+
+        .guildCard--name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0 2rem;
+            margin: .5rem 0 0;
+        
+            pointer-events: none;
+            font-size: 1rem;
+        }
+        
+        .guildCard--text a {
+            text-decoration: none;
+            color: white;
+            background-color: #039400;
+            margin: auto;
+            padding: .5rem ;
+            font-size: .8rem;
+            border-radius: 9px;
+            width: 50%;
+            box-shadow: 0px 0px 35px 5px rgba(0, 0, 0, .35);
+            transition: all .1s ease-in-out;
+        }
+        
+        .guildCard--text a:hover {
+            transform: scale(1.05);
+            transition: all .1s ease-in;
+        }
+
+        .guildCards {
+            width: 100%;
+            grid-template-columns: repeat(1, .75fr);
+            gap: 1rem;
         }
 }

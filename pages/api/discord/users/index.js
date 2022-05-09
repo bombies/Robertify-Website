@@ -40,6 +40,6 @@ export default function handler(req, res) {
         res.status(200).json({ success: true })
     } catch (ex) {
         console.error(ex);
-        res.status(500).json({ error: 'An internal error occured' })
+        res.status(500).json({ error: 'An internal error occured' });
     }
 }

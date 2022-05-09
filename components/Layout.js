@@ -15,10 +15,12 @@ export default function Layout({ token, discordInfo, title, showLogin = true, sh
 
     if (!Object.keys(layoutInfo.discordInfo).length) {
         if (discordInfo) {
-            setLayoutInfo(oldLayoutInfo => ({
-                ...oldLayoutInfo,
-                discordInfo: {...discordInfo}
-            }));
+            if (Object.keys(discordInfo).length) {
+                setLayoutInfo(oldLayoutInfo => ({
+                    ...oldLayoutInfo,
+                    discordInfo: {...discordInfo}
+                }));
+            }
         }
     }
 
@@ -40,7 +42,7 @@ export default function Layout({ token, discordInfo, title, showLogin = true, sh
         return () => menu.removeEventListener('click', clickFun)
     }, [])
 
-    const discordAvatar = discordInfoObj ? Object.keys(discordInfoObj).length ? `https://cdn.discordapp.com/avatars/${discordInfoObj.id}/${discordInfoObj.avatar}.${discordInfoObj.avatar.charAt(0) === 'a' ? 'gif' : 'png'}?size=512` : null : null;
+    const discordAvatar = discordInfoObj ? Object.keys(discordInfoObj).length ? `https://cdn.discordapp.com/avatars/${discordInfoObj.id}/${discordInfoObj.avatar}.${discordInfoObj.avatar.startsWith('a_') ? 'gif' : 'png'}?size=512` : null : null;
     const loginButton = showLogin ? <li><a className='nav--login-btn' id='login-btn' href='https://discord.com/api/oauth2/authorize?client_id=893558050504466482&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fcallback%2Fdiscord&response_type=code&scope=identify%20guilds'><img src='https://i.robertify.me/images/c2n9x.png' alt='Login' /><span>Login</span></a></li> : '';
     
     const toggleUserPopout = () => {
