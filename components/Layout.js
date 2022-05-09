@@ -1,10 +1,13 @@
 import jsCookie from 'js-cookie';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import NextNProgress from 'nextjs-progressbar';
 import { useState, useEffect } from 'react';
 
 export default function Layout({ token, discordInfo, title, showLogin = true, showFooter = true, children }) {
+    const router = useRouter();
+    
     const [ layoutInfo, setLayoutInfo ] = useState({
         discordInfo: {...discordInfo},
         userPopoutShown: false,
@@ -46,6 +49,7 @@ export default function Layout({ token, discordInfo, title, showLogin = true, sh
             discordInfo: {},
             loggedOut: true
         })
+        router.reload(window.location.pathname)
     }
 
     return (
