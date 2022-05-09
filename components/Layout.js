@@ -4,7 +4,7 @@ import Link from 'next/link';
 import NextNProgress from 'nextjs-progressbar';
 import { useState, useEffect } from 'react';
 
-export default function Layout({ token, discordInfo, title, showLogin = true, children }) {
+export default function Layout({ token, discordInfo, title, showLogin = true, showFooter = true, children }) {
     const [ layoutInfo, setLayoutInfo ] = useState({
         discordInfo: {...discordInfo},
         userPopoutShown: false,
@@ -112,15 +112,17 @@ export default function Layout({ token, discordInfo, title, showLogin = true, ch
             <main>
                 {children}
             </main> 
-            <footer>
-                <img className='footer--logo' src='https://i.robertify.me/images/0bspn.png' alt='Footer Logo' />
-                <h1 className='footer--logo-text'>Robertify</h1>
-                <p className='footer--copyright'>Copyright ©️ Robertify 2022</p>
-                <div className='footer--links'>
-                    <a className='footer--link-github' href='https://github.com/bombies/Robertify-Bot' target={'_blank'} rel={'noreferrer'}><img src='https://i.robertify.me/images/3ythy.png' alt='Discord'/></a>    
-                    <a className='footer--link-discord' href='https://robertify.me/invite' target={'_blank'} rel={'noreferrer'}><img src='https://i.robertify.me/images/2n1nb.png' alt='Discord'/></a>    
-                </div>
-            </footer>
+            {showFooter &&
+                <footer>
+                    <img className='footer--logo' src='https://i.robertify.me/images/0bspn.png' alt='Footer Logo' />
+                    <h1 className='footer--logo-text'>Robertify</h1>
+                    <p className='footer--copyright'>Copyright ©️ Robertify 2022</p>
+                    <div className='footer--links'>
+                        <a className='footer--link-github' href='https://github.com/bombies/Robertify-Bot' target={'_blank'} rel={'noreferrer'}><img src='https://i.robertify.me/images/3ythy.png' alt='Discord'/></a>    
+                        <a className='footer--link-discord' href='https://robertify.me/invite' target={'_blank'} rel={'noreferrer'}><img src='https://i.robertify.me/images/2n1nb.png' alt='Discord'/></a>    
+                    </div>
+                </footer>
+            }
         </>
     )
 }
