@@ -623,6 +623,8 @@ footer {
 
 .footer--links {
     margin-top: 1rem;
+    display: flex;
+    justify-content: center;
     gap: 1.1875rem;
 }
 
