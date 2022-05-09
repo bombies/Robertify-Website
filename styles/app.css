@@ -1199,7 +1199,44 @@ footer {
         margin-bottom: 2.5rem;
     }
 
-    @media (max-width: 615px) {
+    .commands--about {
+        padding: 1.7rem 0 3.3rem 1.5rem;
+    }
+
+    .commands--about-images {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .commands--about-images img {
+        width: 10rem;
+        height: 10rem;
+    
+        object-fit: cover;
+        transition: all 1.5s ease-in-out;
+    
+        filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.35));
+        border-radius: 25px;
+    }
+    
+    .commands--about-images img:hover {
+        transform: scale(1.35);
+        transition: all 1.5s ease;
+        z-index: 2;
+    }
+
+    .commands--about-desc {
+        width: 40.125rem;
+        margin-left: 2rem;
+    }
+
+    .commands {    
+        padding: 7rem;
+    }
+}
+
+@media (max-width: 615px) {
         .nav--brand-title {
             font-size: 1rem;
             line-height: 1.15rem;
@@ -1364,5 +1401,50 @@ footer {
         .plain_text p, .plain_text li {
             font-size: 1rem;
         }
-    }
+
+        .commands--about-desc-title {
+            margin-top: 1rem;
+            font-size: 1.5rem;
+            line-height: 2rem;
+        }
+        
+        .commands--about-desc-body {
+            font-size: 1rem;
+            line-height: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .commands {
+            padding: 2rem 1rem;
+        }
+        
+        .commands_table {
+            table-layout: fixed;
+            border: 1px solid black;
+            border-collapse: collapse;
+        
+            background: rgba(23, 23, 23, 0.5);
+            box-shadow: 0px 0px 30px 20px rgba(0, 0, 0, 0.25);
+        }
+        
+        .commands_table--heading {
+            padding: .5rem;
+        
+            font-weight: 700;
+            font-size: .75rem;
+            line-height: 1.5rem;
+        }
+        
+        .commands_table--row--data {
+            padding: .25rem .5rem .25rem .5rem;
+            font-size: .75rem;
+        }
+
+        .commands-filter-controllers select {
+            width: 8rem;
+        }
+        
+        .commands-filter-controllers input[type=text] {
+            width: 7.5rem;
+        }
 }
