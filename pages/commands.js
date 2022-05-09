@@ -63,7 +63,7 @@ export default function Commands({ commands, token, discordInfo }) {
 
     const updateSearchText = (event) => {
         const { name, value } = event.target;
-        const pageItems = groupCommands(allCommandsParsed.filter(item => item.props.name.toLowerCase().startsWith(value.trim().toLowerCase())), 10);
+        const pageItems = groupCommands(allCommandsParsed.filter(item => item.props.name.toLowerCase().includes(value.trim().toLowerCase())), 10);
 
         setTableInfo(({
             selectedButton: 0,
