@@ -4,10 +4,8 @@ import { fetchDiscordUserInfo } from '../utils/APIUtils';
 import { useState } from 'react';
 
 export default function Home({ token, discordInfo }) {
-    const [ discordInfoState, setDiscordInfoState ] = useState(discordInfo);
-
     return (
-        <Layout token={token} discordInfo={discordInfoState} title='Robertify - Home Page'>
+        <Layout token={token} discordInfo={discordInfo} title='Robertify - Home Page'>
                 <div className='hero'>
                     <h1 className='hero--title'>Robertify</h1>
                     <h3 className='hero--subtitle'>A discord music bot with a multitude of features that will fit your liking!</h3>

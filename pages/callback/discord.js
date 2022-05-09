@@ -45,7 +45,7 @@ export default function Callback(props) {
             .then(data => {
                 axios.post('http://localhost:3000/api/discord', data)
                     .then(res => res.data)
-                    .then(router.push('/'))
+                    .then(router.push('/', undefined, { shallow: false }))
                     .catch(err => console.log(err))
             })
             .catch(err => console.log(err))

@@ -7,12 +7,20 @@ import { useState, useEffect } from 'react';
 
 export default function Layout({ token, discordInfo, title, showLogin = true, showFooter = true, children }) {
     const router = useRouter();
-    
     const [ layoutInfo, setLayoutInfo ] = useState({
         discordInfo: {...discordInfo},
         userPopoutShown: false,
         loggedOut: true
     });
+
+    if (!Object.keys(layoutInfo.discordInfo).length) {
+        if (discordInfo) {
+            setLayoutInfo(oldLayoutInfo => ({
+                ...oldLayoutInfo,
+                discordInfo: {...discordInfo}
+            }));
+        }
+    }
 
     const discordInfoObj = layoutInfo.discordInfo;
     const userPopoutShown = layoutInfo.userPopoutShown;
