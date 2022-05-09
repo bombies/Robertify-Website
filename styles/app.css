@@ -608,8 +608,14 @@ footer {
     gap: 1.1875rem;
 }
 
+.footer--links img:hover {
+    transition: all .5s ease;
+    filter: brightness(200%);
+}
+
 .footer--links img {
-    width: 2.5rem;
+    width: 2rem;
+    transition: all .2s ease-in-out;
 }
 
 .footer--copyright {
