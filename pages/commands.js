@@ -13,17 +13,19 @@ function groupCommands(commands, max) {
         const obj = { id: id++, rows: []}
         const chunk = commands.slice(i, i + max);
         obj.rows.push(chunk)
-
         arr.push(obj)
     }
 
     return arr;
 }
 
+const MAX_COMMANDS = 15;
+
 export default function Commands({ commands, token, discordInfo }) {
+
     const commandsCpy = [...commands].sort((a,b) => a.name.localeCompare(b.name));
     const allCommandsParsed = commandsCpy.map(command => <CommandsTableRow key={command.id} id={command.id} name={command.name} description={command.description} category={command.category} />)    
-    const commandsParsed = groupCommands(allCommandsParsed, 10)
+    const commandsParsed = groupCommands(allCommandsParsed, MAX_COMMANDS)
 
     const [ tableInfo, setTableInfo ] = useState({
         pageItems: [...commandsParsed],
@@ -63,7 +65,7 @@ export default function Commands({ commands, token, discordInfo }) {
 
     const updateSearchText = (event) => {
         const { name, value } = event.target;
-        const pageItems = groupCommands(allCommandsParsed.filter(item => item.props.name.toLowerCase().includes(value.trim().toLowerCase())), 10);
+        const pageItems = groupCommands(allCommandsParsed.filter(item => item.props.name.toLowerCase().includes(value.trim().toLowerCase())), MAX_COMMANDS);
 
         setTableInfo(({
             selectedButton: 0,
@@ -75,7 +77,7 @@ export default function Commands({ commands, token, discordInfo }) {
 
     const updateSearchCategory = (event) => {
         const { value } = event.target;
-        const pageItems = groupCommands(allCommandsParsed.filter(item => item.props.category.toLowerCase().startsWith(value.toLowerCase())), 10);
+        const pageItems = groupCommands(allCommandsParsed.filter(item => item.props.category.toLowerCase().startsWith(value.toLowerCase())), MAX_COMMANDS);
 
         setTableInfo(({
             selectedButton: 0,
