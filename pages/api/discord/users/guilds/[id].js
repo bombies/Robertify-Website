@@ -12,7 +12,7 @@ export default async function handler(req, res) {
             return res.status(400).json(verifyPassword);    
 
         const { id } = req.query;
-        const dataString = await redis.getex(`${GUILD_HASH}${id}`);
+        const dataString = await redis.get(`${GUILD_HASH}${id}`);
         if (!dataString)
             return res.status(404).json({ message: `There was no guild information for user with id ${id}`})
         return res.status(200).json(JSON.parse(dataString));
