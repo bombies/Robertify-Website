@@ -66,6 +66,7 @@ export default function Layout({ token, discordInfo, title, showLogin = true, sh
         <>
             <Head>
                 <title>{title ?? 'React App'}</title>
+                <link rel='robertify icon' href='/favicon.ico' />
             </Head>
             <NextNProgress color='#15ff00'/>
            <nav>

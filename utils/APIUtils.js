@@ -275,7 +275,7 @@ export async function fetchAllDiscordUserInfo(req) {
                 }
             })
         } catch (ex) {
-            console.log(ex)
+            // console.log(ex)
         } 
 
         return { 

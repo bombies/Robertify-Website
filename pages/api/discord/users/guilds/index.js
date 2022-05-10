@@ -33,7 +33,6 @@ export default async function handler(req, res) {
             return res.status(400).json({ success: false, message: error.details[0].message })
 
         const { user_id, guilds } = req.body;
-        console.log(`DATA FOR ${user_id} CACHED`)
         const result = await redis.setex(`${GUILD_HASH}${user_id}`, 3600, JSON.stringify(guilds));
         res.status(200).json({ success: true, result: result })
     } catch (ex) {
