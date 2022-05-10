@@ -70,7 +70,7 @@ export default function Layout({ token, discordInfo, title, showLogin = true, sh
             <NextNProgress color='#15ff00'/>
            <nav>
                 <div className='nav--brand'>
-                    <img className='nav--brand-logo' src='https://i.robertify.me/images/0bspn.png' alt='Logo'/>
+                    <Link href='/'><img className='nav--brand-logo' src='https://i.robertify.me/images/0bspn.png' alt='Logo'/></Link>
                     <h1 className='nav--brand-title'><Link href='/'>Robertify</Link></h1>
                 </div>
                 <div className='nav--items'>

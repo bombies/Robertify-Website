@@ -49,6 +49,13 @@ nav {
     margin-right: 1rem;
 
     align-self: center;
+    cursor: pointer;
+    transition: all 1s ease-in-out;
+}
+
+.nav--brand-logo:hover {
+    transition: all 1s ease;
+    transform: scale(1.3);
 }
 
 .nav--brand-title {
