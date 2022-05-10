@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import GuildCard from '../../components/dashboard/GuildCard';
 import Layout from '../../components/Layout';
-import { fetchAllDiscordUserInfo, fetchDiscordUserGuildInfo, fetchDiscordUserInfo } from '../../utils/APIUtils';
+import { fetchAllDiscordUserInfo } from '../../utils/APIUtils';
 
 function sortGuilds(guildInfo) {
     const alphabeticalSort = [...guildInfo].sort((a,b) => {
@@ -63,7 +63,7 @@ export default function Dashboard({ token, discordInfo, guildsInfo }) {
 
     const updateSearchText = (event) => {
         const { value } = event.target;
-        const newGuildItems = pageState.guildsInfo.filter(guildObj => guildObj.props.guildName.includes(value))
+        const newGuildItems = guildInfoParsed.filter(guildObj => guildObj.props.guildName.toLowerCase().includes(value.toLowerCase()))
         setPageState(oldPageState => ({
             ...oldPageState,
             guildsInfo: value ? [...newGuildItems] : guildInfoParsed, 
@@ -89,7 +89,7 @@ export default function Dashboard({ token, discordInfo, guildsInfo }) {
                     type='text'
                     placeholder='Search...'
                     value={pageState.searchText}
-                    onChange={updateSearchText}
+                    onInput={updateSearchText}
                 />
                 <div className='guildCards'>
                     {pageState.guildsInfo}
