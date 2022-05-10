@@ -21,7 +21,6 @@ export default function Vote({ token, discordInfo }) {
     return (
         <Layout token={token} discordInfo={discordInfo} title='Robertify - Vote'>
             <Hero
-                className='vote-hero'
                 title='Vote'
                 subTitle='Thank you for taking an interest in supporting us!'
                 imageButons={buttons}
