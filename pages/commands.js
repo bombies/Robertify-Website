@@ -145,15 +145,14 @@ export default function Commands({ commands, token, discordInfo }) {
 }
 
 export async function getServerSideProps({ req, res }) {
-    await robertifyAPI.setAccessToken()
-    
-    let commands = [];
+    let commands = [], realProps;
     try {
-        commands = await robertifyAPI.getCommandInfo()
+        await robertifyAPI.setAccessToken()
+        commands = await robertifyAPI.getCommandInfo();
+        realProps = await fetchDiscordUserInfo(req);
     } catch (ex) {
         console.log(ex);
     }
-    const realProps = await fetchDiscordUserInfo(req);
     
     return {
         props: {

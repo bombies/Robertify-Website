@@ -36,7 +36,7 @@ export default function Callback(props) {
             'client_secret': props.discordClientSecret,
             'grant_type': 'authorization_code',
             'code': code,
-            'redirect_uri': 'http://localhost:3000/callback/discord'
+            'redirect_uri': `${props.localAPIHostname}/callback/discord`
         }
 
         axios.post('https://discord.com/api/v9/oauth2/token', new URLSearchParams(data), config)
@@ -46,7 +46,7 @@ export default function Callback(props) {
                 return {id: id, data: {...res.data}}
             })
             .then(data => {
-                axios.post('http://localhost:3000/api/discord', data, {
+                axios.post(`${props.localAPIHostname}/api/discord`, data, {
                     headers: {
                         'master-password': props.discordClientSecret
                     }
@@ -69,7 +69,8 @@ export async function getStaticProps() {
     return { 
         props: { 
             discordClientID: process.env.DISCORD_CLIENT_ID,
-            discordClientSecret: process.env.DISCORD_CLIENT_SECRET
+            discordClientSecret: process.env.DISCORD_CLIENT_SECRET,
+            localAPIHostname: process.env.LOCAL_API_HOSTNAME
         }
     }
 }

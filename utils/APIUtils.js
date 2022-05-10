@@ -9,7 +9,7 @@ export async function fetchDiscordUserInfo(req) {
             props: {}
         }
 
-    const res = await axios.get('http://localhost:3000/api/discord', {
+    const res = await axios.get(`${process.env.LOCAL_API_HOSTNAME}/api/discord`, {
         headers: {
             'master-password': process.env.DISCORD_CLIENT_SECRET
         }, 
@@ -31,7 +31,7 @@ export async function fetchDiscordUserInfo(req) {
     
     try {
         // Checking cache first
-        const cachedData = await axios.get(`http://localhost:3000/api/discord/users/${discordKey}`, {
+        const cachedData = await axios.get(`${process.env.LOCAL_API_HOSTNAME}/api/discord/users/${discordKey}`, {
             headers: {
                 'master-password': process.env.DISCORD_CLIENT_SECRET
             }
@@ -58,7 +58,7 @@ export async function fetchDiscordUserInfo(req) {
         const discordUserData = discordData.data;
 
         // Posting to cache
-        axios.post(`http://localhost:3000/api/discord/users/`, {
+        axios.post(`${process.env.LOCAL_API_HOSTNAME}/api/discord/users/`, {
             id: discordKey,
             user_info: {...discordUserData}
         }, {
@@ -94,7 +94,7 @@ export async function fetchDiscordUserGuildInfo(req) {
         }
 
     try {
-        const res = await axios.get('http://localhost:3000/api/discord', {
+        const res = await axios.get(`${process.env.LOCAL_API_HOSTNAME}/api/discord`, {
             headers: {
                 'master-password': process.env.DISCORD_CLIENT_SECRET
             }, 
@@ -126,7 +126,7 @@ export async function fetchDiscordUserGuildInfo(req) {
         
         let cachedData;
         try {
-            cachedData = await axios.get(`http://localhost:3000/api/discord/users/guilds/${userData.props.discordInfo.id}`, {
+            cachedData = await axios.get(`${process.env.LOCAL_API_HOSTNAME}/api/discord/users/guilds/${userData.props.discordInfo.id}`, {
                 headers: {
                     'master-password': process.env.DISCORD_CLIENT_SECRET
                 }}
@@ -156,7 +156,7 @@ export async function fetchDiscordUserGuildInfo(req) {
         });
 
         // Post guild data to cache
-        axios.post('http://localhost:3000/api/discord/users/guilds', {
+        axios.post(`${process.env.LOCAL_API_HOSTNAME}/api/discord/users/guilds`, {
             user_id: userData.props.discordInfo.id,
             guilds: [...discordData.data]
         }, {
@@ -192,7 +192,7 @@ export async function fetchAllDiscordUserInfo(req) {
         }
 
     try {
-        const res = await axios.get('http://localhost:3000/api/discord', {
+        const res = await axios.get(`${process.env.LOCAL_API_HOSTNAME}/api/discord`, {
             headers: {
                 'master-password': process.env.DISCORD_CLIENT_SECRET
             }, 
@@ -225,7 +225,7 @@ export async function fetchAllDiscordUserInfo(req) {
         // Checking cache first
         let cachedData;
         try {
-            cachedData = await axios.get(`http://localhost:3000/api/discord/users/guilds/${userData.props.discordInfo.id}`, {
+            cachedData = await axios.get(`${process.env.LOCAL_API_HOSTNAME}/api/discord/users/guilds/${userData.props.discordInfo.id}`, {
                 headers: {
                     'master-password': process.env.DISCORD_CLIENT_SECRET
                 }}
@@ -266,7 +266,7 @@ export async function fetchAllDiscordUserInfo(req) {
                 permissions: dataObj.permissions
             }))
 
-            await axios.post('http://localhost:3000/api/discord/users/guilds', {
+            await axios.post(`${process.env.LOCAL_API_HOSTNAME}/api/discord/users/guilds`, {
                 user_id: userData.props.discordInfo.id,
                 guilds: [...dataToPost]
             }, {
