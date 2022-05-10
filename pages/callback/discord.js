@@ -8,18 +8,21 @@ export default function Callback(props) {
     const router = useRouter();
     const { code, error } = router.query;
 
-    if (error) {
-        router.push('/')
-        return (
-            <main>
-            </main>
-        )
-    }
-
     useEffect(() => {
+        if (error) {
+            router.push('/')
+            return (
+                <main>
+                </main>
+            )
+        }
+
         if (!code) {
             router.push('/')
-            return;
+            return (
+                <main>
+                </main>
+            );
         }
 
         const config = {
@@ -54,7 +57,7 @@ export default function Callback(props) {
             })
             .catch(err => console.log(err))
 
-    }, [code]);
+    }, [code, props.discordClientID, props.discordClientSecret]);
 
     return (
         <main>

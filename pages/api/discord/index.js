@@ -1,7 +1,7 @@
 import { redis } from "../../../utils/RedisClient"
 import { verifyMasterPassword } from "./users";
 
-export default async(req, res) => {
+export default async function handler(req, res) {
     const hashName = 'discordDataHash';
 
     try {

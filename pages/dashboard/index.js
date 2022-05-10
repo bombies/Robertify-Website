@@ -42,7 +42,8 @@ export default function Dashboard({ token, discordInfo, guildsInfo }) {
     if (guildsInfo) {
         // console.log(guildsInfo);
         guildInfoParsed = sortGuilds(guildsInfo);
-        guildInfoParsed = guildInfoParsed.map(guildObj => <GuildCard 
+        guildInfoParsed = guildInfoParsed.map(guildObj => <GuildCard
+            key={guildObj.id} 
             guildID={guildObj.id}
             guildIcon={guildObj.icon}
             guildName={guildObj.name}

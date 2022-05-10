@@ -19,7 +19,7 @@ export default function Home({ token, discordInfo }) {
                         <img className='aboutUs--img' src='https://i.robertify.me/images/vnjjd.png' alt='Logo' />
                         <div className='aboutUs--desc'>
                             <h2 className='aboutUs--desc-title'>About Us</h2>
-                            <p className='aboutUs--desc-body'>Robertify is a music bot programmed completely in Java using JDA. The name "Robertify" originated from the simple fact that a friend of bombies (main Developer) named Robert wanted a music bot, so he made one for him. Eventually, Robertify became his own project to him and he's been putting in most of his efforts into it ever since.</p>
+                            <p className='aboutUs--desc-body'>Robertify is a music bot programmed completely in Java using JDA. The name &quot;Robertify&quot; originated from the simple fact that a friend of bombies (main Developer) named Robert wanted a music bot, so he made one for him. Eventually, Robertify became his own project to him and he&apos;s been putting in most of his efforts into it ever since.</p>
                         </div>
                     </div>
                     <div className='features'>
@@ -53,7 +53,7 @@ export default function Home({ token, discordInfo }) {
                         <div className='support--items'>
                             <div className='support--desc'>
                                 <h3 className='support--desc-title'>Support</h3>
-                                <p className='support--desc-body'>You can always join our <a href='https://robertify.me/support'>support server</a> to ask us questions about anything. You can also suggest new features, report bugs, talk about music and so much more. Don't be afraid to reach out, we'd love to help you!</p>
+                                <p className='support--desc-body'>You can always join our <a href='https://robertify.me/support'>support server</a> to ask us questions about anything. You can also suggest new features, report bugs, talk about music and so much more. Don&apos;t be afraid to reach out, we&apos;d love to help you!</p>
                             </div>
                             <img src='https://i.robertify.me/images/o5zcy.png' alt='Support' />
                         </div>
@@ -62,7 +62,7 @@ export default function Home({ token, discordInfo }) {
                 <div className='invite'>
                     <img className='invite--icon' src='https://i.robertify.me/images/bwl3q.png' alt='Invite Icon' />
                     <h1 className='invite--title'>Ready To Invite Us?</h1>
-                    <p className='invite--body'>Invite Robertify in seconds by simply clicking on the button below. You're only one step away from the best listening experience on Discord.</p>
+                    <p className='invite--body'>Invite Robertify in seconds by simply clicking on the button below. You&apos;re only one step away from the best listening experience on Discord.</p>
                     <Link className='invite--button' href='/invite'>Invite</Link>
                 </div>
         </Layout>

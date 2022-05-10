@@ -1,13 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
+module.exports = {
   images: {
     domains: ['i.robertify.me']
-  }
-}
-
-module.exports = nextConfig
-module.exports = {
+  },
   async redirects() {
     return [
       {
