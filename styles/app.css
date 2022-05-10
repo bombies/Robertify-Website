@@ -269,6 +269,16 @@ nav {
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
+.vote-hero {
+    position: relative;
+    padding-top: 9.875rem;
+    padding-bottom: 9.4375rem;
+    background: linear-gradient(180deg, #1F1F1F 0%, #00FF47 104.36%);
+    text-align: center;
+    overflow: hidden;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
 .hero--title {
     text-transform: uppercase;
     transition: all 1s ease-in-out;
@@ -1105,6 +1115,10 @@ footer {
         padding-bottom: 7rem;
     }
 
+    .vote-hero {
+        padding-bottom: 7rem;
+    }
+
     .hero--title {
         font-size: 4.5rem;
         line-height: 4.5rem;
@@ -1496,6 +1510,12 @@ footer {
             padding-bottom: 4rem;
         }
 
+        .vote-hero {
+            padding-left: 2rem;
+            padding-right: 2rem;
+            padding-bottom: 10rem;
+        }
+
         .hero--title {
             font-size: 2.5rem;
             line-height: 2.5rem;
@@ -1524,6 +1544,12 @@ footer {
 
             font-size: 1rem;
             border-radius: 9px;
+            border: 2px solid rgb(0, 121, 6);
+        }
+        
+        .hero--button:hover {
+            border: 2px solid rgb(192, 255, 195);
+            transform: scale(1.25);
         }
 
         .aboutUs {
@@ -1556,11 +1582,13 @@ footer {
             line-height: 4rem;
         }
 
-        .features--desc ul {
-            font-size: 1.15rem;
-            line-height: 1.15rem;
+        .features--desc > p {
+            font-size: 1rem;
+        }
 
-            row-gap: 0.5rem;
+        .features--desc li {
+            font-size: .75rem;
+            line-height: .75rem;
         }
 
         .support--items {
@@ -1600,27 +1628,46 @@ footer {
             line-height: 1.75rem;
         }
 
+        .invite a {
+            padding: .75rem 2rem;
+            font-size: 1rem;
+            border: 2px solid rgb(0, 121, 6);
+        }
+
+        .invite a:hover {
+            border: 2px solid rgb(192, 255, 195);
+        }
+
         footer {
             padding: 2rem;
         }
 
         .footer--logo {
-            width: 5rem;
-            height: 5rem;
+            width: 3rem;
+            height: 3rem;
         }
 
         .footer--logo-text {
-            font-size: 2rem;
-            line-height: 2rem;
+            font-size: 1.5rem;
+            line-height: 1rem;
         }
 
         .footer--copyright {
-            font-size: 1rem;
+            font-size: .55rem;
             line-height: 1.25rem;
         }
 
         .footer--links {
             margin-top: 0.5rem;
+        }
+
+        .footer--links img {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
+        .footer--info--resources-list a {
+            font-size: .75rem;
         }
 
         .plain_text {
@@ -1679,6 +1726,15 @@ footer {
         
         .commands-filter-controllers input[type=text] {
             width: 7.5rem;
+        }
+
+        .vote-hero img {
+            width: 7.5rem;
+            height: 7.5rem;
+        }
+
+        .vote-hero .hero--img-button {
+            font-size: 1rem;
         }
 
         .guildCard {
