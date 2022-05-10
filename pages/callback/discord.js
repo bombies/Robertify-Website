@@ -9,21 +9,11 @@ export default function Callback(props) {
     const { code, error } = router.query;
 
     useEffect(() => {
-        if (error) {
-            router.push('/')
-            return (
-                <main>
-                </main>
-            )
-        }
+        if (error)
+            router.push('/');
 
-        if (!code) {
-            router.push('/')
-            return (
-                <main>
-                </main>
-            );
-        }
+        if (!code)
+            router.push('/');
 
         const config = {
             headers: {
