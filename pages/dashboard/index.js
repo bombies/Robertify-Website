@@ -1,4 +1,5 @@
 
+import jsCookie from 'js-cookie';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -37,10 +38,18 @@ function sortGuilds(guildInfo) {
 }
 
 export default function Dashboard({ token, discordInfo, guildsInfo }) {
+    const router = useRouter();
 
     let guildInfoParsed;
     if (guildsInfo) {
-        // console.log(guildsInfo);
+        if (!Object.keys(guildsInfo).length) {
+            jsCookie.remove('login-token');
+            useEffect(() => {
+                router.push('/')
+            }, [])
+            return;
+        }
+
         guildInfoParsed = sortGuilds(guildsInfo);
         guildInfoParsed = guildInfoParsed.map(guildObj => <GuildCard
             key={guildObj.id} 
@@ -52,7 +61,6 @@ export default function Dashboard({ token, discordInfo, guildsInfo }) {
         />)
     }
 
-    const router = useRouter();
     const [ pageState, setPageState ] = useState({
         discordInfo: discordInfo,
         guildsInfo: guildInfoParsed,
@@ -73,10 +81,11 @@ export default function Dashboard({ token, discordInfo, guildsInfo }) {
 
     useEffect(() => {
         if (!discordInfoState) {
+            jsCookie.remove('login-token');
             router.push('/');
             return;
         }
-    }, [discordInfoState]);
+    }, [discordInfoState, pageState.guildsInfo]);
 
     return (
         <Layout token={token} discordInfo={discordInfoState}>

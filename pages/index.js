@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { fetchDiscordUserInfo } from '../utils/APIUtils';
 import { useState } from 'react';
 
-export default function Home({ token, discordInfo }) {
+export default function Home({ token, discordInfo, discordLoginLink }) {
     return (
-        <Layout token={token} discordInfo={discordInfo} title='Robertify - Home Page'>
+        <Layout token={token} discordInfo={discordInfo} discordLoginLink={discordLoginLink} title='Robertify - Home Page'>
                 <div className='hero'>
                     <h1 className='hero--title'>Robertify</h1>
                     <h3 className='hero--subtitle'>A discord music bot with a multitude of features that will fit your liking!</h3>
@@ -70,5 +70,13 @@ export default function Home({ token, discordInfo }) {
 }
 
 export async function getServerSideProps({ req, res }) {
-    return fetchDiscordUserInfo(req);
+    const data = await fetchDiscordUserInfo(req);
+
+    return {
+        props: {
+            token: data.props.token || null,
+            discordInfo: data.props.discordInfo || null,
+            discordLoginLink: process.env.DISCORD_LOGIN_LINK
+        }
+    }
 }
