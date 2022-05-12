@@ -192,8 +192,8 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
         if (!hasPerms) return;
     }
     
-    const logToggles = Object.keys(togglesState.log_toggles).map(key => <Toggle label={key.replaceAll('_', ' ')} isActive={togglesState.log_toggles[key]} setActive={() => toggleInnerState('log_toggles', key)} />)
-    const djToggles = Object.keys(togglesState.dj_toggles).map(key => <Toggle label={key.replaceAll('_', ' ')} isActive={togglesState.dj_toggles[key]} setActive={() => toggleInnerState('dj_toggles', key)} />)
+    const logToggles = Object.keys(togglesState.log_toggles).map(key => <Toggle key={key} label={key.replaceAll('_', ' ')} isActive={togglesState.log_toggles[key]} setActive={() => toggleInnerState('log_toggles', key)} />)
+    const djToggles = Object.keys(togglesState.dj_toggles).map(key => <Toggle key={key} label={key.replaceAll('_', ' ')} isActive={togglesState.dj_toggles[key]} setActive={() => toggleInnerState('dj_toggles', key)} />)
 
     return (
         <Layout token={token} discordInfo={discordInfoState.userInfo} title={`Robertify - ${guild.name}`} >

@@ -22,7 +22,7 @@ export default function SelectMenu({
     }
 
     const options = menuOptions.map(option =>
-        <div className={`${className} option`} onClick={() => setSelectValues(option)}>
+        <div key={option} className={`${className} option`} onClick={() => setSelectValues(option)}>
             <p>{option}</p>
             {multiSelect && <div key={nanoid(8)} className={`${className} option-checkbox ${selectValues.includes(option) && 'active'}`}></div>}
         </div> 

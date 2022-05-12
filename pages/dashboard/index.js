@@ -40,16 +40,17 @@ function sortGuilds(guildInfo) {
 export default function Dashboard({ token, discordInfo, guildsInfo }) {
     const router = useRouter();
 
+    useEffect(() => {
+        if (guildsInfo) {
+            if (!Object.keys(guildsInfo).length) {
+                jsCookie.remove('login-token');
+                router.push('/')
+            }
+        }
+    }, [])
+
     let guildInfoParsed;
     if (guildsInfo) {
-        if (!Object.keys(guildsInfo).length) {
-            jsCookie.remove('login-token');
-            useEffect(() => {
-                router.push('/')
-            }, [])
-            return;
-        }
-
         guildInfoParsed = sortGuilds(guildsInfo);
         guildInfoParsed = guildInfoParsed.map(guildObj => <GuildCard
             key={guildObj.id} 
@@ -83,7 +84,6 @@ export default function Dashboard({ token, discordInfo, guildsInfo }) {
         if (!discordInfoState) {
             jsCookie.remove('login-token');
             router.push('/');
-            return;
         }
     }, [discordInfoState, pageState.guildsInfo]);
 
@@ -94,7 +94,7 @@ export default function Dashboard({ token, discordInfo, guildsInfo }) {
             </Head>
             <main className='guildCards--body'>
                 <h1 className='guildCards--heading'>Your Servers</h1>
-                <h2 className='guildCards--subheading'>Configure any one to your heart's desire...</h2>
+                <h2 className='guildCards--subheading'>Configure any one to your heart&apos;s desire...</h2>
                 <input 
                     className='guildCards--search'
                     type='text'
