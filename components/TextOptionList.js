@@ -1,12 +1,17 @@
 import { useState} from 'react';
 
-export default function TextOptionList({ options, addOption, removeOption, placeholder, inputValue, setInputValue }) {
+export default function TextOptionList({ options, addOption, removeOption, placeholder, inputValue, setInputValue, noResponsesMsg }) {
     const [ error, setError ] = useState(null);
     const className='textOption';
 
     const addNewOption = (option) => {
+        if (!option) {
+            setError('The value cannot be blank');
+            return;
+        }
+
         if (options.map(option => option.toLowerCase()).includes(option.toLowerCase())) {
-            setError('This response already exists');
+            setError('This value already exists');
             return;
         }
 
@@ -24,11 +29,11 @@ export default function TextOptionList({ options, addOption, removeOption, place
     return (
         <div className={className}>
             <div className={`${className} optionsContainer`}>
-                {parsedOptions.length ? parsedOptions : <p className={`${className} noResponses`}>You have no responses...</p>}
+                {parsedOptions.length ? parsedOptions : <p className={`${className} noResponses`}>{noResponsesMsg}</p>}
             </div>
             <div className={`${className} optionSubmitters`}>
                 <input type='text' placeholder={placeholder} value={inputValue} onChange={(event) => { setError(null); setInputValue(event.target.value) }} />
-                <img src='https://i.robertify.me/images/58t86.png' alt='Add Option' onClick={() => { setError(null); addNewOption(inputValue) }} />
+                <img src='https://i.robertify.me/images/t7mco.png' alt='Add Option' onClick={() => { setError(null); addNewOption(inputValue) }} />
             </div>
             { error && <p className={`${className} error`}>{`Error: ${error}`}</p> }
         </div>

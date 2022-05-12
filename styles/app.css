@@ -1365,8 +1365,6 @@ footer {
     border-radius: 5px;
 }
 
-
-
 .serverDash--unsaved-buttons {
     display: flex;
     gap: 1rem;
@@ -1516,6 +1514,7 @@ footer {
 .textOption.optionSubmitters img {
     width: 2rem;
     height: 2rem;
+    filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, .35));
 
     align-self: center;
 }
@@ -1598,16 +1597,24 @@ footer {
 
 .inactive {
     opacity: 0;
+    pointer-events: none;
     transition: all .1s ease-in-out;
 }
 
 .active {
     opacity: 1;
+    pointer-events: all;
     transition: all .1s ease-in-out;
 }
 
 .circle {
     border-radius: 50%;
+    align-self: center;
+}
+
+.img-tiny {
+    width: 2.5rem;
+    height: 2.5rem;
 }
 
 @media (min-width: 1700px) {

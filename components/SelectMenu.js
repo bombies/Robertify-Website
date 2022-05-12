@@ -3,7 +3,7 @@ import { nanoid } from "nanoid";
 export default function SelectMenu({ 
         className = 'selectMenu', title, subTitle = null, menuOptions, multiSelect = false, placeHolder,
         selectValues, setSelectValues, optionsVisible, setOptionsVisible, searchText, setSearchText,
-        isChannelMenu = false, isVoiceMenu = false  
+        isChannelMenu = false, isVoiceMenu = false 
     }) {
         
     const search = (event) => {
@@ -11,10 +11,8 @@ export default function SelectMenu({
         setSearchText(value);
     }
 
-    console.log();
-
     const options = !isChannelMenu ? menuOptions.map(option =>
-        <div key={option.id} className={`${className} option`} onClick={() => setSelectValues(optionsVisible, option)}>
+        <div key={option.id} className={`${className} option`} style={!multiSelect ? { justifyContent: 'normal', gap: '1.5rem' } : {}} onClick={() => setSelectValues(optionsVisible, option)}>
             {option.icon || false}
             <p>{option.name}</p>
             {multiSelect && <div key={nanoid(8)} className={`${className} option-checkbox ${selectValues.includes(option) && 'active'}`}></div>}

@@ -22,17 +22,190 @@ function sortChannelsByCategory(categories, channels) {
     return channelsSorted;
 }
 
+function getChannel(textChannelList, voiceChannelList, channelID) {
+    let newItems = textChannelList.map(categoryObj => {
+        const channelsArr = categoryObj[Object.keys(categoryObj)[0]].channels;
+        const channelsArrFiltered = channelsArr.filter(channelObj => channelObj.id === channelID);
+
+        if (channelsArrFiltered) {
+            if (channelsArrFiltered.length)
+                return channelsArrFiltered
+        }
+        return null;
+    }).filter(obj => obj);
+
+    if (newItems)
+        return newItems[0];
+    
+    newItems = voiceChannelList.map(categoryObj => {
+        const channelsArr = categoryObj[Object.keys(categoryObj)[0]].channels;
+        const channelsArrFiltered = channelsArr.filter(channelObj => channelObj.id === channelID);
+    
+        if (channelsArrFiltered) {
+            if (channelsArrFiltered.length)
+                return channelsArrFiltered
+        }
+        return null;
+    }).filter(obj => obj);
+
+    return newItems;
+}
+
+function getOriginalDataObject(dbGuildInfo, fullGuildInfo) {
+    function getRoleByID(id) {
+        return fullGuildInfo.roles.filter(roleObj => roleObj.id === id)[0];
+    }
+
+    function getTextChannelByID(id) {
+        const channelObj = textChannelsSorted.filter(obj => obj[Object.keys(obj)[0]].channels.filter(channelObj => channelObj.id === id)[0])[0];
+        channelObj[Object.keys(channelObj)[0]].channels = channelObj[Object.keys(channelObj)[0]].channels.filter(channelObj => channelObj.id === id);
+
+        return channelObj;
+    }
+
+    function getVoiceChannelByID(id) {
+
+    }
+
+    // DJ Roles Obj
+    const djRoles = dbGuildInfo.permissions['1'].map(roleID => {
+        const roleObj = getRoleByID(roleID)
+        return ({
+            name: roleObj.name,
+            id: roleObj.id,
+            icon: <div className="circle" style={{ backgroundColor: `#${parseInt(roleObj.color || 10592673, 10).toString(16).padStart(6, '0')}`, width: '1rem', height: '1rem' }}></div> 
+        })
+    });
+    //
+
+    // Channels
+    const categories = fullGuildInfo.channels.filter(channelObj => channelObj.type === 4);
+    const textChannels = fullGuildInfo.channels.filter(channelObj => channelObj.type === 0);
+    const voiceChannels = fullGuildInfo.channels.filter(channelObj => channelObj.type === 2);
+    const textChannelsSorted = sortChannelsByCategory(categories, textChannels);
+    const voiceChannelsSorted = sortChannelsByCategory(categories, voiceChannels);
+
+    // Restricted Voice Channels Obj
+    const restrictedVoiceChannels = voiceChannelsSorted.map(categoryObj => {
+        const catObj = categoryObj[Object.keys(categoryObj)[0]];
+        const channelsArr = categoryObj[Object.keys(categoryObj)[0]].channels;
+        const channelsArrFiltered = [];
+        
+        dbGuildInfo.restricted_channels.voice_channels.map(channelID => channelsArrFiltered.push(channelsArr.filter(channelObj => channelObj.id === channelID)[0]))
+
+        if (channelsArrFiltered) {
+            if (channelsArrFiltered.length)
+                return { 
+                    [Object.keys(categoryObj)[0]]: {
+                        channels: channelsArrFiltered,
+                        category_name:  catObj.category_name 
+                    }
+                }
+        }
+        return null;
+    }).filter(obj => obj[Object.keys(obj)[0]].channels[0]);
+    //
+
+    // Restricted Text Channels Obj
+    const restrictedTextChannels = textChannelsSorted.map(categoryObj => {
+        const catObj = categoryObj[Object.keys(categoryObj)[0]];
+        const channelsArr = categoryObj[Object.keys(categoryObj)[0]].channels;
+        const channelsArrFiltered = [];
+        
+        dbGuildInfo.restricted_channels.text_channels.map(channelID => channelsArrFiltered.push(channelsArr.filter(channelObj => channelObj.id === channelID)[0]))
+
+        if (channelsArrFiltered) {
+            if (channelsArrFiltered.length)
+                return { 
+                    [Object.keys(categoryObj)[0]]: {
+                        channels: channelsArrFiltered,
+                        category_name:  catObj.category_name 
+                    }
+                }
+        }
+        return null;
+    }).filter(obj => obj[Object.keys(obj)[0]].channels[0]);
+    //
+
+    const logChannelObj = getTextChannelByID(dbGuildInfo.log_channel);
+    console.log(logChannelObj);
+}
+
 export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, fullGuildInfo, hasAccess, localHostName }) {
     const router = useRouter();
     
+    getOriginalDataObject(dbGuildInfo, fullGuildInfo)
+
     useEffect(() => {
         if (!hasAccess)
             router.push(`https://discord.com/oauth2/authorize?client_id=893558050504466482&permissions=524023090512&redirect_uri=${encodeURI(`${localHostName}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot&guild_id=${guildInfo.id}&disable_guild_select=true`)
     }, []);
 
+    const originalValues = {
+
+    }
+
     const categories = fullGuildInfo.channels.filter(channelObj => channelObj.type === 4);
     const textChannels = fullGuildInfo.channels.filter(channelObj => channelObj.type === 0);
     const voiceChannels = fullGuildInfo.channels.filter(channelObj => channelObj.type === 2);
+    
+    const themes = [
+        {
+            id: 'ROBERTIFY_THEME_GREEN',
+            name: 'Green',
+            icon: <div className="circle" style={{ backgroundColor: `#00ff1e`, width: '1rem', height: '1rem' }}></div> 
+        },
+        {
+            id: 'ROBERTIFY_THEME_GOLD',
+            name: 'Gold',
+            icon: <div className="circle" style={{ backgroundColor: `#ffa600`, width: '1rem', height: '1rem' }}></div> 
+        },
+        {
+            id: 'ROBERTIFY_THEME_RED',
+            name: 'Red',
+            icon: <div className="circle" style={{ backgroundColor: `#ff0000`, width: '1rem', height: '1rem' }}></div> 
+        },
+        {
+            id: 'ROBERTIFY_THEME_PINK',
+            name: 'Pink',
+            icon: <div className="circle" style={{ backgroundColor: `#ff00ee`, width: '1rem', height: '1rem' }}></div> 
+        },
+        {
+            id: 'ROBERTIFY_THEME_PURPLE',
+            name: 'Purple',
+            icon: <div className="circle" style={{ backgroundColor: `#8000ff`, width: '1rem', height: '1rem' }}></div> 
+        },
+        {
+            id: 'ROBERTIFY_THEME_BLUE',
+            name: 'Blue',
+            icon: <div className="circle" style={{ backgroundColor: `#0077ff`, width: '1rem', height: '1rem' }}></div> 
+        },
+        {
+            id: 'ROBERTIFY_THEME_LIGHT_BLUE',
+            name: 'Light Blue',
+            icon: <div className="circle" style={{ backgroundColor: `#00e1ff`, width: '1rem', height: '1rem' }}></div> 
+        },
+        {
+            id: 'ROBERTIFY_THEME_ORANGE',
+            name: 'Orange',
+            icon: <div className="circle" style={{ backgroundColor: `#ff4d00`, width: '1rem', height: '1rem' }}></div> 
+        },
+        {
+            id: 'ROBERTIFY_THEME_YELLOW',
+            name: 'Yellow',
+            icon: <div className="circle" style={{ backgroundColor: `#ffea00`, width: '1rem', height: '1rem' }}></div> 
+        },
+        {
+            id: 'ROBERTIFY_THEME_DARK',
+            name: 'Dark',
+            icon: <div className="circle" style={{ backgroundColor: `#000000`, width: '1rem', height: '1rem' }}></div> 
+        },
+        {
+            id: 'ROBERTIFY_THEME_Light',
+            name: 'Light',
+            icon: <div className="circle" style={{ backgroundColor: `#ffffff`, width: '1rem', height: '1rem' }}></div> 
+        }
+    ]
 
     const roleNamesSorted = fullGuildInfo.roles.map(roleObj => (
         {
@@ -48,7 +221,7 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
     let hasPerms = guildInfo.owner ? false : (Number(guildInfo.permissions) & (1 << 5)) === (1 << 5);
     hasPerms ||= (Number(guildInfo.permissions) & (1 << 3)) == (1 << 3);
     hasPerms = !Number(guildInfo.permissions) ? false : hasPerms;
-
+    
     const [ changeMade, setChangeMade ] = useState(false);
     const [ togglesState, setTogglesState ] = useState(dbGuildInfo.toggles);
     
@@ -166,6 +339,31 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
         updateMenuChannelSearchText(textChannelsSorted, setLcSelectObj, value);
     }
 
+    const [ themeSelectObj, setThemeSelectObj ] = useState({
+        optionsVisible: false,
+        selectValues: [],
+        shownOptions: [...themes],
+        searchText: ''
+    })
+
+    const toggleThemeOptionsVisible = () => {
+        toggleMenuVisibility(setThemeSelectObj);
+    }
+
+    const updateThemeSelectValues = (isActive, value) => {
+        updateMenuSelectedValues(isActive, setThemeSelectObj, value, false, false);
+    }
+
+    const updateThemeSearchText = (value) => {
+        if (!hasPerms) return;
+
+        setThemeSelectObj(oldObj => ({
+            ...oldObj,
+            searchText: value,
+            shownOptions: themes.filter(val => val.name.toLowerCase().includes(value.toLowerCase()))
+        }))
+    }
+
     const toggleMenuVisibility = (setterFunction) => {
         if (!hasPerms) return;
 
@@ -175,13 +373,13 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
         }));
     }
 
-    const updateMenuSelectedValues = (isActive, setterFunction, value, multiSelect = false) => {
+    const updateMenuSelectedValues = (isActive, setterFunction, value, multiSelect = false, enableDeselect = true) => {
         if (!hasPerms) return;
         if (!isActive) return;
 
         setterFunction(oldObj => ({
             ...oldObj,
-            selectValues: oldObj.selectValues.includes(value) ? multiSelect ? oldObj.selectValues.filter(val => val !== value) : [] : multiSelect ? [...oldObj.selectValues, value] : [value]
+            selectValues: multiSelect ? ((oldObj.selectValues.includes(value)) ? ([...oldObj.selectValues.filter(val => value !== val)]): ([...oldObj.selectValues, value])) : (enableDeselect ? ((oldObj.selectValues.includes(value)) ? ([]) : ([value])) : ([value]))
         }));
     }
 
@@ -247,6 +445,10 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
     }
 
     const reset = () => {
+        if (!hasPerms) return;
+    }
+
+    const save = () => {
         if (!hasPerms) return;
     }
     
@@ -325,6 +527,19 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
                                 setSearchText={updateLcSearchText}
                                 isChannelMenu={true}
                             />
+                            <SelectMenu
+                                title='Theme'
+                                subTitle='Set the color theme for Roberify'
+                                menuOptions={themeSelectObj.shownOptions}
+                                multiSelect={false}
+                                placeHolder='Select a channel'
+                                selectValues={themeSelectObj.selectValues}
+                                setSelectValues={updateThemeSelectValues}
+                                optionsVisible={themeSelectObj.optionsVisible}
+                                setOptionsVisible={toggleThemeOptionsVisible}
+                                searchText={themeSelectObj.searchText}
+                                setSearchText={updateThemeSearchText}
+                            />
                         </div>
                         <hr className='serverDash--divider' />
                         <h2 className='serverDash--controlPanel-title'>Toggles</h2>
@@ -358,6 +573,7 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
                                 inputValue={eightBallInput}
                                 setInputValue={setEightBallInput}
                                 placeholder='Add an 8ball response...'
+                                noResponsesMsg='You have no custom responses...'
                             />
                         </div>
                         <hr className='serverDash--divider' />
@@ -367,11 +583,11 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
                         </div>
                     </div>
                 </div>
-                <div className='banner-lg bg-dark sticky-bottom active'>
+                <div className={`banner-lg bg-dark sticky-bottom ${changeMade ? 'active' : 'inactive'}`}>
                     <p>Careful - You have unsaved changes!</p>
                     <div className='serverDash--unsaved-buttons'>
-                        <button className='button-md secondary'><img src='https://i.robertify.me/images/pup8a.png' alt='Discard Button'/>Discard</button>
-                        <button className='button-md primary'><img src='https://i.robertify.me/images/htbv7.png' alt='Save Button' />Save</button>
+                        <button className='button-md secondary'><img src='https://i.robertify.me/images/pup8a.png' alt='Discard Button' onClick={discard}/>Discard</button>
+                        <button className='button-md primary'><img src='https://i.robertify.me/images/htbv7.png' alt='Save Button' onClick={save}/>Save</button>
                     </div>
                 </div>
             </main>
@@ -457,7 +673,24 @@ export async function getServerSideProps(context) {
                 },
                 eight_ball : [
                     'Testing', 'Test again', 'Blessed again 🙏🏾'
-                ]
+                ],
+                theme: 'green',
+                permissions: {
+                    '0': [],
+                    '1': ['500070942618157056'],
+                    '2': [],
+                    '3': [],
+                    '4': [],
+                    '5': [],
+                    users: {
+                        '274681651945144321': [1]
+                    }
+                },
+                restricted_channels: {
+                    voice_channels: ['915480301617164318'],
+                    text_channels: ['842795162513965066']
+                },
+                log_channel: '953840220783136809'
             },
             fullGuildInfo: access ? null : guildInfo,
             hasAccess: access === false ? false : true,
