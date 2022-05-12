@@ -96,7 +96,7 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
     }
 
     const updateDjSelectValues = (isActive, value) => {
-        updateMenuSelectedValues(isActive, setDjSelectObj, value);
+        updateMenuSelectedValues(isActive, setDjSelectObj, value, true);
     }
 
     const updateDjSearchText = (value) => {
@@ -121,7 +121,7 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
     }
 
     const updateVcSelectValues = (isActive, value) => {
-        updateMenuSelectedValues(isActive, setVcSelectObj, value);
+        updateMenuSelectedValues(isActive, setVcSelectObj, value, true);
     }
 
     const updateVcSearchText = (value) => {
@@ -140,7 +140,7 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
     }
 
     const updateTcSelectValues = (isActive, value) => {
-        updateMenuSelectedValues(isActive, setTcSelectObj, value);
+        updateMenuSelectedValues(isActive, setTcSelectObj, value, true);
     }
 
     const updateTcSearchText = (value) => {
@@ -181,7 +181,7 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
 
         setterFunction(oldObj => ({
             ...oldObj,
-            selectValues: multiSelect ? oldObj.selectValues.includes(value) ? oldObj.selectValues.filter(val => val !== value) : [...oldObj.selectValues, value] : [value]
+            selectValues: oldObj.selectValues.includes(value) ? multiSelect ? oldObj.selectValues.filter(val => val !== value) : [] : multiSelect ? [...oldObj.selectValues, value] : [value]
         }));
     }
 
