@@ -296,3 +296,86 @@ export async function fetchAllDiscordUserInfo(req) {
         }
     }
 }
+
+export async function fetchDiscordGuildInfo(req, guildId) {
+    const token = req.cookies['login-token'];
+    const discordKey = token;
+        
+    if (!token)
+        return {
+            props: {}
+        }
+
+    try {
+        const res = await axios.get(`${process.env.LOCAL_API_HOSTNAME}/api/discord`, {
+            headers: {
+                'master-password': process.env.DISCORD_CLIENT_SECRET
+            }, 
+            params: {
+                id: discordKey
+            }
+        });
+        
+        const data = res.data;
+
+        if (!data)
+            return {
+                props: {
+                    token: token,
+                    guildInfo: {}
+                }
+            }
+        
+        // Try checking cache first
+        let cachedData;
+        try {
+            cachedData = await axios.get(`${process.env.LOCAL_API_HOSTNAME}/api/discord/guilds/${guildId}`, {
+                headers: {
+                    'master-password': process.env.DISCORD_CLIENT_SECRET
+                }
+            })
+        } catch (ex) {
+            if (ex.response.status !== 404)
+                throw ex
+        }
+
+        if (cachedData && cachedData.status !== 404)
+            if (cachedData.data)
+                // Cache hit
+                return cachedData.data
+
+        // Cache miss
+        let discordData;
+        let discordChannelData;
+        try {
+            discordData = await axios.get(`https://discord.com/api/v9/guilds/${guildId}`, {
+                        headers: {
+                            'Authorization': `Bot ${process.env.DISCORD_BOT_TOKEN}`
+                        }
+            });
+
+            discordChannelData = await axios.get(`https://discord.com/api/v9/guilds/${guildId}/channels`, {
+                        headers: {
+                            'Authorization': `Bot ${process.env.DISCORD_BOT_TOKEN}`
+                        }
+            });
+        } catch (ex) {
+            if (ex.response.data.code === 50001)
+                return { access: false }
+            else throw ex;
+        }
+        
+        axios.post(`${process.env.LOCAL_API_HOSTNAME}/api/discord/guilds`, {
+            ...discordData.data,
+            channels: [...discordChannelData.data]
+        }, {
+            headers: {
+                'master-password': process.env.DISCORD_CLIENT_SECRET
+            }
+        }).catch(err => console.log(err));
+        
+        return {...discordData.data, channels: [...discordChannelData.data]};
+    } catch (ex) {
+        console.log(ex)
+    }
+}

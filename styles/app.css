@@ -4,6 +4,7 @@
     --main-content-padding-left: 20rem;
     --main-content-padding-left-2: 15rem;
     --green: #70FF6D;
+    --toggle-transition-time: .2s
 }
 
 * {
@@ -1079,6 +1080,410 @@ footer {
 .guildCard--text a:hover {
     transform: scale(1.05);
     transition: all .1s ease-in;
+}
+
+.serverDash {
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://i.robertify.me/images/s4o7q.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.serverDash--optionsContainer {
+    margin: 3rem 0;
+    width: 80%;
+
+}
+
+.serverDash--optionsContainer a {
+    font-size: 1.5rem;
+    text-decoration: none;
+    transition: all 1s ease-in-out;
+}
+
+.serverDash--optionsContainer a:hover {
+    color: #87ffa9;
+    font-size: 1.55rem;
+    transition: all 1s ease;
+}
+
+.serverDash--guildBanner {
+    display: flex;
+    background-color: #2e2e2e;
+    border-radius: 5px;
+    height: 10%;
+    margin: 1rem 0;
+    padding: 1rem 0;
+    box-shadow: 0px 0px 35px 5px rgba(0, 0, 0, .25);
+
+}
+
+.serverDash--guildBanner img {
+    width: 7.5rem;
+    margin-left: 2rem;
+    align-self: center;
+
+    border-radius: 50%;
+    border: 3px solid green;
+    box-shadow: 0px 0px 35px 5px rgba(0, 0, 0, .55);
+}
+
+.serverDash--guildBanner h1 {
+    align-self: center;
+    margin-left: 2rem;
+
+    font-size: 3rem;
+    pointer-events: none;
+}
+
+.serverDash--controlPanel {
+    position: relative;
+    background-color: #2e2e2e;
+    padding: 2rem 2.5rem;
+    border-radius: 5px;
+    box-shadow: 0px 0px 35px 5px rgba(0, 0, 0, .25);
+}
+
+.serverDash--divider {
+    width: 100%;
+    margin: 1rem auto;
+    border: 1px solid #1f1f1f;
+    box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, .15);
+}
+
+.serverDash--controlPanel-title {
+    color: var(--green);
+    filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, .25));
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+.serverDash--controlPanel-toggles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(auto, 1fr);
+    row-gap: 1rem;
+    column-gap: 3%;
+
+    margin-bottom: 3rem;
+}
+
+.serverDash--controlPanel-mangement {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 5%;
+    margin-bottom: 2rem;
+}
+
+.selectMenu {
+    position: relative;
+    transition: all var(--toggle-transition-time) ease-in-out;
+}
+
+.selectMenu.title {
+    text-transform: uppercase;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.selectMenu.subTitle {
+    color: #8a8a8a;
+}
+
+.selectMenu.menu {
+    display: flex;
+    justify-content: space-between;
+
+    background: #181818;
+    width: 80%;
+    padding: .75rem 1rem;
+    margin: .5rem 0 .5rem;
+    border-radius: 10px;
+    cursor: pointer;
+
+    filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, .25));
+}
+
+.selectMenu.menu-selected {
+    color: #aeaeae;
+}
+
+.selectMenu.menu img  {
+    width: 1rem;
+    height: 1rem;
+    align-self: center;
+}
+
+.selectMenu.selectMenu.menu-optionsContainer {
+    z-index: 1;
+
+    opacity: 0;
+    pointer-events: none;
+    transition: all var(--toggle-transition-time) ease-in-out;
+}
+
+.selectMenu.menu-optionsContainer.active {
+    opacity: 1;
+    pointer-events: all;
+    transition: all var(--toggle-transition-time) ease-in-out;
+}
+
+.selectMenu.menu-options-search {
+    position: absolute;
+    z-index: 1;
+    background: #181818;
+    border: none;
+    width: 80%;
+    border-radius: 10px;
+    padding: .75rem 1rem;
+    margin: 0 0 .5rem;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: white;
+    filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, .25));
+}
+
+.selectMenu.menu-options {
+    position: absolute;
+    margin-top: 4rem;
+    z-index: 1;
+
+    background: #181818;
+    width: 80%;
+    max-height: 15rem;
+    overflow: auto;
+    border-radius: 10px;
+    filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, .25));
+    transition: all var(--toggle-transition-time) ease-in-out;
+}
+
+.selectMenu.menu-options::-webkit-scrollbar {
+    width: 0.25rem;
+}
+
+.selectMenu.menu-options::-webkit-scrollbar-thumb {
+    background: #a9ffba;
+    border-radius: 10px;
+}
+
+.selectMenu.menu-options::-webkit-scrollbar-track {
+    background: #292929;
+}
+
+.selectMenu.option:hover {
+    background: #3b5c3728;
+    transition: all var(--toggle-transition-time) ease-in-out;
+}
+
+.selectMenu.option {
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+}
+
+.selectMenu.option-checkbox {
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid white;
+    border-radius: 5px;
+    background-color: none;
+    align-self: center;
+}
+
+.selectMenu.option-checkbox.active {
+    border: 1px solid var(--green);
+    background-color: var(--green);
+    filter: drop-shadow(0px 0px 3px rgba(75, 255, 55, 0.5));
+}
+
+.serverDash--noPermsOverlay-bg {
+    position: absolute;
+    z-index: 1;
+    opacity: 0.75;
+    background-color: #181818;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    margin: -2rem -2.5rem;
+}
+
+.serverDash--noPermsOverlay span {
+    pointer-events: none;
+    position: absolute;
+    z-index: 2;
+    
+    color: white;
+    background-color: rgb(54, 54, 54);
+    padding: 2rem;
+    width: 80%;
+    border-radius: 10px;
+    opacity: 1;
+    box-shadow: 0px 0px 20px 15px rgba(0, 0, 0, 0.25);
+}
+
+.serverDash--footer-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.serverDash--noPermsOverlay span .noPerms-permission {
+    background-color: rgb(0, 0, 0);
+    font-weight: 400;
+    letter-spacing: .15rem;
+    padding: .3rem;
+    border-radius: 5px;
+}
+
+
+
+.serverDash--unsaved-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.toggleComponentContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.toggleComponent.toggleDesc {
+    display: block;
+    width: 70%;
+}
+
+.toggleComponent.toggleDesc-label { 
+    text-transform: uppercase;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.toggleComponent.toggleDesc-subTitle { 
+    color: #8a8a8a;
+}
+
+.toggle {
+    width: 4rem;
+    height: 2rem;
+    background: #181818;
+    border: 3px solid #181818;
+    border-radius: 2rem;
+    filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, .25));
+    transition: all var(--toggle-transition-time) ease-in-out;
+    cursor: pointer;
+}
+
+.toggle-knob {
+    width: 50%;
+    height: 100%;
+    border-radius: 50%;
+    background: rgb(197, 197, 197);
+    transition: all var(--toggle-transition-time) ease-in-out;
+    cursor: pointer;
+}
+
+.toggle.active {
+    width: 4rem;
+    height: 2rem;
+    background: var(--green);
+    border: 3px solid var(--green);
+    border-radius: 2rem;
+    transition: all var(--toggle-transition-time) ease-in-out;
+}
+
+.toggle-knob.active {
+    width: 50%;
+    height: 100%;
+    margin-left: 50%;
+    border-radius: 50%;
+    background: rgb(43, 43, 43);
+    transition: all var(--toggle-transition-time) ease-in-out;
+}
+
+.button-md {
+    display: flex;
+    justify-content: space-evenly;
+    border: none;
+    padding: .45rem 1rem;
+    width: 9.5rem;
+    border-radius: 10px;
+
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 500;
+    transition: all .2s ease-in-out;
+    filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, .35));
+}
+
+.button-md img {
+    width: 1.25rem;
+    height: 1.25rem;
+
+    align-self: center;
+    align-content: center;
+    align-items: center;
+}
+
+.button-md:hover {
+    transform: scale(1.1);
+    transition: all .2s ease-in-out;
+}
+
+.danger {
+    background-color: #ff5050;
+    color: white;
+}
+
+.primary {
+    background-color: #3c9a33;
+    color: white;
+}
+
+.secondary {
+    background-color: #494949;
+    color: white;
+}
+
+.cursor-notAllowed {
+    cursor: not-allowed;
+}
+
+.banner-lg {
+    display: flex;
+    padding: 1rem;
+    justify-content: space-between;
+    width: 80%;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px 10px rgba(0, 0, 0, 0.25);
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+
+.banner-lg p {
+    align-self: center;
+}
+
+.bg-dark {
+    background-color: #181818;
+}
+
+.sticky-bottom {
+    position: fixed;
+    bottom: 0;
+}
+
+.inactive {
+    opacity: 0;
+    transition: all .1s ease-in-out;
+}
+
+.active {
+    opacity: 1;
+    transition: all .1s ease-in-out;
 }
 
 @media (min-width: 1700px) {
