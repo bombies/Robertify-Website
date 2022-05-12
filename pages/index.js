@@ -1,7 +1,6 @@
 import Layout from '../components/Layout';
 import Link from 'next/link';
 import { fetchDiscordUserInfo } from '../utils/APIUtils';
-import { useState } from 'react';
 
 export default function Home({ token, discordInfo, discordLoginLink }) {
     return (

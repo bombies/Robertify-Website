@@ -5,6 +5,22 @@ import { fetchAllDiscordUserInfo, fetchDiscordGuildInfo } from '../../../utils/A
 import Link from 'next/link';
 import Toggle from "../../../components/Toggle";
 import SelectMenu from "../../../components/SelectMenu";
+import TextOptionList from "../../../components/TextOptionList";
+
+function sortChannelsByCategory(categories, channels) {
+    const channelsSorted = categories.map(categoryObj => {
+        const channelArr = channels.filter(channelObj => channelObj.parent_id === categoryObj.id);
+        if (!channelArr.length)
+            return;
+        return {
+            [categoryObj.id]: { channels: [...channels.filter(channelObj => channelObj.parent_id === categoryObj.id)], category_name: categoryObj.name }
+        }   
+    }).filter(obj => obj);
+    const channelsWithoutCategory = channels.filter(channelObj => !channelObj.parent_id);
+    if (channelsWithoutCategory.length)
+        channelsSorted.push({ noCategory: { channels: [...channelsWithoutCategory], category_name: 'No Category'} })
+    return channelsSorted;
+}
 
 export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, fullGuildInfo, hasAccess, localHostName }) {
     const router = useRouter();
@@ -12,19 +28,22 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
     useEffect(() => {
         if (!hasAccess)
             router.push(`https://discord.com/oauth2/authorize?client_id=893558050504466482&permissions=524023090512&redirect_uri=${encodeURI(`${localHostName}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot&guild_id=${guildInfo.id}&disable_guild_select=true`)
-    }, [])
-    
-    console.log(fullGuildInfo);
-    const options = {
-        dj: ['option', 'option2', 'option3', 'option2', 'option3', 'option2', 'option3'],
-        vc: ['option', 'option2', 'option3'],
-        tc: ['option', 'option2', 'option3']
-    }
+    }, []);
 
+    const categories = fullGuildInfo.channels.filter(channelObj => channelObj.type === 4);
     const textChannels = fullGuildInfo.channels.filter(channelObj => channelObj.type === 0);
     const voiceChannels = fullGuildInfo.channels.filter(channelObj => channelObj.type === 2);
 
-    const roleNamesSorted = fullGuildInfo.roles.map(roleObj => roleObj.name).sort((a, b) => a.localeCompare(b));
+    const roleNamesSorted = fullGuildInfo.roles.map(roleObj => (
+        {
+            name: roleObj.name,
+            id: roleObj.id,
+            icon: <div className="circle" style={{ backgroundColor: `#${parseInt(roleObj.color || 10592673, 10).toString(16).padStart(6, '0')}`, width: '1rem', height: '1rem' }}></div> 
+        }
+    )).sort((a, b) => a.name.localeCompare(b.name));
+
+    const textChannelsSorted = sortChannelsByCategory(categories, textChannels);
+    const voiceChannelsSorted = sortChannelsByCategory(categories, voiceChannels);
 
     let hasPerms = guildInfo.owner ? false : (Number(guildInfo.permissions) & (1 << 5)) === (1 << 5);
     hasPerms ||= (Number(guildInfo.permissions) & (1 << 3)) == (1 << 3);
@@ -32,15 +51,14 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
 
     const [ changeMade, setChangeMade ] = useState(false);
     const [ togglesState, setTogglesState ] = useState(dbGuildInfo.toggles);
-    // const [ selectOptions, setSelectOptions ]
-
+    
     const toggleState = (stateName) => {
         if (!hasPerms) return;
 
         setTogglesState(oldState => ({
             ...oldState,
             [stateName]: !oldState[stateName]
-        }))
+        }));
     }
 
     const toggleInnerState = (objectName, stateName) => {
@@ -77,13 +95,8 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
         }));
     }
 
-    const updateDjSelectValues = (value) => {
-        if (!hasPerms) return;
-
-        setDjSelectObj(oldObj => ({
-            ...oldObj,
-            selectValues: oldObj.selectValues.includes(value) ? oldObj.selectValues.filter(val => val !== value) : [...oldObj.selectValues, value]
-        }));
+    const updateDjSelectValues = (isActive, value) => {
+        updateMenuSelectedValues(isActive, setDjSelectObj, value);
     }
 
     const updateDjSearchText = (value) => {
@@ -93,77 +106,122 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
             ...oldObj,
             searchText: value,
             shownOptions: roleNamesSorted.filter(val => val.toLowerCase().includes(value.toLowerCase()))
-        }))
+        }));
     }
 
     const [ vcSelectObj, setVcSelectObj ] = useState({
         optionsVisible: false,
         selectValues: [],
-        shownOptions: [...options.vc],
+        shownOptions: [...voiceChannelsSorted],
         searchText: ''
     });
 
     const toggleVcOptionsVisible = () => {
-        if (!hasPerms) return;
-
-        setVcSelectObj(oldObj => ({
-            ...oldObj,
-            optionsVisible: !oldObj.optionsVisible
-        }));
+        toggleMenuVisibility(setVcSelectObj);
     }
 
-    const updateVcSelectValues = (value) => {
-        if (!hasPerms) return;
-
-        setVcSelectObj(oldObj => ({
-            ...oldObj,
-            selectValues: oldObj.selectValues.includes(value) ? oldObj.selectValues.filter(val => val !== value) : [...oldObj.selectValues, value]
-        }));
+    const updateVcSelectValues = (isActive, value) => {
+        updateMenuSelectedValues(isActive, setVcSelectObj, value);
     }
 
     const updateVcSearchText = (value) => {
-        if (!hasPerms) return;
-
-        setVcSelectObj(oldObj => ({
-            ...oldObj,
-            searchText: value,
-            shownOptions: options.vc.filter(val => val.toLowerCase().includes(value.toLowerCase()))
-        }))
+        updateMenuChannelSearchText(voiceChannelsSorted, setVcSelectObj, value);
     }
 
     const [ tcSelectObj, setTcSelectObj ] = useState({
         optionsVisible: false,
         selectValues: [],
-        shownOptions: [...options.tc],
+        shownOptions: [...textChannelsSorted],
         searchText: ''
     });
 
     const toggleTcOptionsVisible = () => {
+        toggleMenuVisibility(setTcSelectObj);
+    }
+
+    const updateTcSelectValues = (isActive, value) => {
+        updateMenuSelectedValues(isActive, setTcSelectObj, value);
+    }
+
+    const updateTcSearchText = (value) => {
+        updateMenuChannelSearchText(textChannelsSorted, setTcSelectObj, value);
+    }
+
+    const [ lcSelectObj, setLcSelectObj ] = useState({
+        optionsVisible: false,
+        selectValues: [],
+        shownOptions: [...textChannelsSorted],
+        searchText: ''
+    });
+
+    const toggleLcOptionsVisible = () => {
+        toggleMenuVisibility(setLcSelectObj);
+    }
+
+    const updateLcSelectValues = (isActive, value) => {
+        updateMenuSelectedValues(isActive, setLcSelectObj, value);
+    }
+
+    const updateLcSearchText = (value) => {
+        updateMenuChannelSearchText(textChannelsSorted, setLcSelectObj, value);
+    }
+
+    const toggleMenuVisibility = (setterFunction) => {
         if (!hasPerms) return;
 
-        setTcSelectObj(oldObj => ({
+        setterFunction(oldObj => ({
             ...oldObj,
             optionsVisible: !oldObj.optionsVisible
         }));
     }
 
-    const updateTcSelectValues = (value) => {
+    const updateMenuSelectedValues = (isActive, setterFunction, value, multiSelect = false) => {
         if (!hasPerms) return;
+        if (!isActive) return;
 
-        setTcSelectObj(oldObj => ({
+        setterFunction(oldObj => ({
             ...oldObj,
-            selectValues: oldObj.selectValues.includes(value) ? oldObj.selectValues.filter(val => val !== value) : [...oldObj.selectValues, value]
+            selectValues: multiSelect ? oldObj.selectValues.includes(value) ? oldObj.selectValues.filter(val => val !== value) : [...oldObj.selectValues, value] : [value]
         }));
     }
 
-    const updateTcSearchText = (value) => {
+    const updateMenuChannelSearchText = (dataList, setterFunction, value) => {
         if (!hasPerms) return;
 
-        setTcSelectObj(oldObj => ({
+        const newItems = dataList.map(categoryObj => {
+            const catObj = categoryObj[Object.keys(categoryObj)[0]];
+            const channelsArr = categoryObj[Object.keys(categoryObj)[0]].channels;
+            const channelsArrFiltered = channelsArr.filter(channelObj => channelObj.name.toLowerCase().includes(value.toLowerCase()));
+
+            if (channelsArrFiltered) {
+                if (channelsArrFiltered.length)
+                    return { 
+                        [Object.keys(categoryObj)[0]]: {
+                            channels: channelsArrFiltered,
+                            category_name:  catObj.category_name 
+                        }
+                    }
+            }
+            return null;
+        }).filter(obj => obj);
+
+        setterFunction(oldObj => ({
             ...oldObj,
             searchText: value,
-            shownOptions: options.tc.filter(val => val.toLowerCase().includes(value.toLowerCase()))
+            shownOptions: [...newItems]
         }))
+    }
+
+    const [ eightBallResponses, setEightBallResponses ] = useState(dbGuildInfo.eight_ball);
+    const [ eightBallInput, setEightBallInput ] = useState('');
+
+    const addEightBallResponse = (response) => {
+        setEightBallResponses(oldResponses => [...oldResponses, response]);
+        setEightBallInput('');
+    }
+
+    const removeEightBallResponse = (response) => {
+        setEightBallResponses(oldResponses => [...oldResponses.filter(oldResponse => oldResponse != response)])
     }
 
     useEffect(() => {
@@ -236,6 +294,8 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
                                 setOptionsVisible={toggleVcOptionsVisible}
                                 searchText={vcSelectObj.searchText}
                                 setSearchText={updateVcSearchText}
+                                isChannelMenu={true}
+                                isVoiceMenu={true}
                             />
                             <SelectMenu
                                 title='Restricted Text Channels'
@@ -249,26 +309,28 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
                                 setOptionsVisible={toggleTcOptionsVisible}
                                 searchText={tcSelectObj.searchText}
                                 setSearchText={updateTcSearchText}
+                                isChannelMenu={true}
                             />
                             <SelectMenu
                                 title='Log Channel'
                                 subTitle='Set the channel for Robertify logs to be sent'
-                                menuOptions={tcSelectObj.shownOptions}
+                                menuOptions={lcSelectObj.shownOptions}
                                 multiSelect={false}
                                 placeHolder='Select a channel'
-                                selectValues={tcSelectObj.selectValues}
-                                setSelectValues={updateTcSelectValues}
-                                optionsVisible={tcSelectObj.optionsVisible}
-                                setOptionsVisible={toggleTcOptionsVisible}
-                                searchText={tcSelectObj.searchText}
-                                setSearchText={updateTcSearchText}
+                                selectValues={lcSelectObj.selectValues}
+                                setSelectValues={updateLcSelectValues}
+                                optionsVisible={lcSelectObj.optionsVisible}
+                                setOptionsVisible={toggleLcOptionsVisible}
+                                searchText={lcSelectObj.searchText}
+                                setSearchText={updateLcSearchText}
+                                isChannelMenu={true}
                             />
                         </div>
                         <hr className='serverDash--divider' />
                         <h2 className='serverDash--controlPanel-title'>Toggles</h2>
                         <div className='serverDash--controlPanel-toggles'>
                             <Toggle label='Restricted Voice Channels' subTitle='Should Robertify only be allowed to play in specific voice channels?' isActive={togglesState.restricted_voice_channels} setActive={() => toggleState('restricted_voice_channels')} />
-                            <Toggle label='Restricted Text Channels' subTitle='Should Robertify commands only be allowed to be used in a specific channel?' isActive={togglesState.restricted_voice_channels} setActive={() => toggleState('restricted_text_channels')}/>
+                            <Toggle label='Restricted Text Channels' subTitle='Should Robertify commands only be allowed to be used in a specific channel?' isActive={togglesState.restricted_text_channels} setActive={() => toggleState('restricted_text_channels')}/>
                             <Toggle label='Show Requester' subTitle='Toggle if you want the song requester to be visible in now playing messages' isActive={togglesState.show_requester} setActive={() => toggleState('show_requester')}/>
                             <Toggle label='8ball' subTitle='Toggle if you want the 8ball module to be enabled in this server' isActive={togglesState['8ball']} setActive={() => toggleState('8ball')}/>
                             <Toggle label='Polls' subTitle='Toggle if you want polls to be enabled in this server' isActive={togglesState.polls} setActive={() => toggleState('polls')}/>
@@ -285,6 +347,18 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
                         <h2 className='serverDash--controlPanel-title'>Log Toggles</h2>
                         <div className='serverDash--controlPanel-toggles'>
                             {logToggles}
+                        </div>
+                        <hr className='serverDash--divider' />
+                        <h2 className='serverDash--controlPanel-title'>8ball</h2>
+                        <div className='serverDash--controlPanel-8ball'>
+                            <TextOptionList
+                                options={eightBallResponses}
+                                addOption={addEightBallResponse}
+                                removeOption={removeEightBallResponse}
+                                inputValue={eightBallInput}
+                                setInputValue={setEightBallInput}
+                                placeholder='Add an 8ball response...'
+                            />
                         </div>
                         <hr className='serverDash--divider' />
                         <div className='serverDash--footer-buttons'>
@@ -381,6 +455,9 @@ export async function getServerSideProps(context) {
                         "track_jump": true
                     }
                 },
+                eight_ball : [
+                    'Testing', 'Test again', 'Blessed again 🙏🏾'
+                ]
             },
             fullGuildInfo: access ? null : guildInfo,
             hasAccess: access === false ? false : true,
