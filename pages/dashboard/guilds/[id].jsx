@@ -7,6 +7,10 @@ import Toggle from "../../../components/Toggle";
 import SelectMenu from "../../../components/SelectMenu";
 import TextOptionList from "../../../components/TextOptionList";
 
+Array.prototype.test = () => {
+    console.log('test');
+}
+
 function sortChannelsByCategory(categories, channels) {
     const channelsSorted = categories.map(categoryObj => {
         const channelArr = channels.filter(channelObj => channelObj.parent_id === categoryObj.id);
@@ -197,23 +201,66 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo) {
     }
 }
 
-function compare(o1, o2) {
-    const o1Keys = Object.keys(o1);
-    const o2Keys = Object.keys(o2);
-
-    if (o1Keys.length !== o2Keys.length)
-        return false;
-
-    for (let key in o1Keys) {
-        const o1KeysInner = Object.keys(o1[o1Keys[key]]);
-        if (o1KeysInner.length) {
-            for (let innerKey in Object.keys(o1[o1Keys[key]]))
-                if (o1[o1Keys[key]][o1KeysInner[innerKey]] !== o2[o1Keys[key]][o1KeysInner[innerKey]])
-                    return false;
-        } else if (o1[o1Keys[key]] !== o2[o1Keys[key]])
+function compare(object1, object2) {
+    for (let propName in object1) {
+        if (object1.hasOwnProperty(propName) != object2.hasOwnProperty(propName)) {
             return false;
+        } else if (typeof object1[propName] != typeof object2[propName]) {
+            return false;
+        }
     }
 
+    for(let propName in object2) { 
+        if (object1.hasOwnProperty(propName) != object2.hasOwnProperty(propName)) {
+            return false;
+        } else if (typeof object1[propName] != typeof object2[propName]) {
+            return false;
+        }
+
+        if(!object1.hasOwnProperty(propName))
+          continue;
+
+        if (object1[propName] instanceof Array && object2[propName] instanceof Array) {
+           if (!arrayCompare(object1[propName], object2[propName]))
+                        return false;
+        }
+
+        else if (object1[propName] instanceof Object && object2[propName] instanceof Object) {
+           if (!compare(object1[propName], object2[propName]))
+                        return false;
+        }
+
+        else if(object1[propName] != object2[propName]) {
+           return false;
+        }
+    }
+    return true;
+}
+
+function arrayCompare(arr1, arr2) {
+
+    if (!arr1)
+        return false;
+    if (!arr2)
+        return false;
+
+    if (!arr1 instanceof Array || !arr2 instanceof Array )
+        throw new TypeError();
+
+    if (arr1.length != arr2.length)
+        return false;
+
+    for (var i = 0, l=arr1.length; i < l; i++) {
+        if (arr1[i] instanceof Array && arr2[i] instanceof Array) {
+            if (!arrayCompare(arr1[i], arr2[i]))
+                return false;       
+        } else if (arr1[i] instanceof Object && arr2[i] instanceof Object) {
+            if (!compare(arr1[i], arr2[i]))
+                return false;
+        } else if (arr1[i] != arr2[i]) {
+            return false;   
+        }           
+    }       
     return true;
 }
 
@@ -342,14 +389,12 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
                 ...oldState,
                 [stateName]: !oldState[stateName]
             };  
-        
-            if (!compare(originalData.toggles, newState)) {
-                console.log('Change made : true')
-                setChangeMade(true);
-            } else {
-                console.log('Change made : false')
-                setChangeMade(false);
-            }
+            
+            setChangeMade(!compareAllStates(
+                djSelectObj.selectValues, vcSelectObj.selectValues,
+                tcSelectObj.selectValues, lcSelectObj.selectValues[0],
+                themeSelectObj.selectValues[0], newState
+            ))
             return newState;
         });
     }
@@ -369,7 +414,7 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
             if (!compare(originalData.toggles, newState)) {
                 console.log('Change made : true')
                 setChangeMade(true);
-            } else {
+            } else if (changeMade && compare(originalData.toggles, newState)) {
                 console.log('Change made : false')
                 setChangeMade(false);
             }
@@ -395,7 +440,12 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
     }
 
     const updateDjSelectValues = (isActive, value) => {
-        updateMenuSelectedValuesByID(isActive, setDjSelectObj, value, true);
+        updateMenuSelectedValuesByID(isActive, setDjSelectObj, value, true, true, (newObj) => {
+            setChangeMade(!compareAllStates(
+                newObj.selectValues, vcSelectObj.selectValues,
+                tcSelectObj.selectValues, lcSelectObj.selectValues[0],
+                themeSelectObj.selectValues[0], togglesState
+            ))});
     }
 
     const updateDjSearchText = (value) => {
@@ -420,7 +470,12 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
     }
 
     const updateVcSelectValues = (isActive, value) => {
-        updateMenuSelectedValues(isActive, setVcSelectObj, value, true);
+        updateMenuSelectedValues(isActive, setVcSelectObj, value, true, true, (newObj) => {
+            setChangeMade(!compareAllStates(
+                djSelectObj.selectValues, newObj.selectValues,
+                tcSelectObj.selectValues, lcSelectObj.selectValues[0],
+                themeSelectObj.selectValues[0], togglesState
+            ))});
     }
 
     const updateVcSearchText = (value) => {
@@ -439,7 +494,12 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
     }
 
     const updateTcSelectValues = (isActive, value) => {
-        updateMenuSelectedValues(isActive, setTcSelectObj, value, true);
+        updateMenuSelectedValues(isActive, setTcSelectObj, value, true, true, (newObj) => {
+            setChangeMade(!compareAllStates(
+                djSelectObj.selectValues, vcSelectObj.selectValues,
+                newObj.selectValues, lcSelectObj.selectValues[0],
+                themeSelectObj.selectValues[0], togglesState
+            ))});
     }
 
     const updateTcSearchText = (value) => {
@@ -458,7 +518,12 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
     }
 
     const updateLcSelectValues = (isActive, value) => {
-        updateMenuSelectedValuesByID(isActive, setLcSelectObj, value);
+        updateMenuSelectedValuesByID(isActive, setLcSelectObj, value, false, true, (newObj) => {
+            setChangeMade(!compareAllStates(
+                djSelectObj.selectValues, vcSelectObj.selectValues,
+                tcSelectObj.selectValues, newObj.selectValues[0],
+                themeSelectObj.selectValues[0], togglesState
+            ))});
     }
 
     const updateLcSearchText = (value) => {
@@ -477,7 +542,12 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
     }
 
     const updateThemeSelectValues = (isActive, value) => {
-        updateMenuSelectedValues(isActive, setThemeSelectObj, value, false, false);
+        updateMenuSelectedValues(isActive, setThemeSelectObj, value, false, false, (newObj) => {
+            setChangeMade(!compareAllStates(
+                djSelectObj.selectValues, vcSelectObj.selectValues,
+                tcSelectObj.selectValues, lcSelectObj.selectValues[0],
+                newObj.selectValues[0], togglesState
+            ))});
     }
 
     const updateThemeSearchText = (value) => {
@@ -499,24 +569,40 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
         }));
     }
 
-    const updateMenuSelectedValues = (isActive, setterFunction, value, multiSelect = false, enableDeselect = true) => {
+    const updateMenuSelectedValues = (isActive, setterFunction, value,
+        multiSelect = false, enableDeselect = true, changeCheck = function(newObj) {}
+    ) => {
         if (!hasPerms) return;
         if (!isActive) return;
 
-        setterFunction(oldObj => ({
-            ...oldObj,
-            selectValues: multiSelect ? ((oldObj.selectValues.includes(value)) ? ([...oldObj.selectValues.filter(val => value !== val)]): ([...oldObj.selectValues, value])) : (enableDeselect ? ((oldObj.selectValues.includes(value)) ? ([]) : ([value])) : ([value]))
-        }));
+        setterFunction(oldObj => {
+            const newItem = {
+                ...oldObj,
+                selectValues: multiSelect ? ((oldObj.selectValues.includes(value)) ? ([...oldObj.selectValues.filter(val => value !== val)]): ([...oldObj.selectValues, value])) : (enableDeselect ? ((oldObj.selectValues.includes(value)) ? ([]) : ([value])) : ([value]))
+            }
+
+            changeCheck(newItem);
+
+            return newItem;
+        });
     }
 
-    const updateMenuSelectedValuesByID = (isActive, setterFunction, value, multiSelect = false, enableDeselect = true) => {
+    const updateMenuSelectedValuesByID = (isActive, setterFunction, value,
+        multiSelect = false, enableDeselect = true, changeCheck = function() {}
+    ) => {
         if (!hasPerms) return;
         if (!isActive) return;
 
-        setterFunction(oldObj => ({
-            ...oldObj,
-            selectValues: multiSelect ? ((oldObj.selectValues.some(obj => obj.id == value.id)) ? ([...oldObj.selectValues.filter(val => value.id !== val.id)]): ([...oldObj.selectValues, value])) : (enableDeselect ? ((oldObj.selectValues.some(obj => obj.id == value.id)) ? ([]) : ([value])) : ([value]))
-        }));
+        setterFunction(oldObj => {
+            const newItem = {
+                ...oldObj,
+                selectValues: multiSelect ? ((oldObj.selectValues.some(obj => obj.id == value.id)) ? ([...oldObj.selectValues.filter(val => value.id !== val.id)]): ([...oldObj.selectValues, value])) : (enableDeselect ? ((oldObj.selectValues.some(obj => obj.id == value.id)) ? ([]) : ([value])) : ([value]))
+            }
+
+            changeCheck(newItem);
+
+            return newItem;
+        });
     }
 
     const updateMenuChannelSearchText = (dataList, setterFunction, value) => {
@@ -540,9 +626,9 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
         }).filter(obj => obj);
 
         setterFunction(oldObj => ({
-            ...oldObj,
-            searchText: value,
-            shownOptions: [...newItems]
+                ...oldObj,
+                searchText: value,
+                shownOptions: [...newItems]
         }))
     }
 
@@ -550,12 +636,59 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
     const [ eightBallInput, setEightBallInput ] = useState('');
 
     const addEightBallResponse = (response) => {
-        setEightBallResponses(oldResponses => [...oldResponses, response]);
+        setEightBallResponses(oldResponses => {
+            const newItem = [...oldResponses, response]
+
+            setChangeMade(!compareAllStates(
+                djSelectObj.selectValues, vcSelectObj.selectValues,
+                tcSelectObj.selectValues, lcSelectObj.selectValues[0],
+                themeSelectObj.selectValues[0], togglesState, newItem
+            ))
+
+            return newItem;
+        });
         setEightBallInput('');
     }
 
     const removeEightBallResponse = (response) => {
-        setEightBallResponses(oldResponses => [...oldResponses.filter(oldResponse => oldResponse != response)])
+        setEightBallResponses(oldResponses => {
+            const newItem = [...oldResponses.filter(oldResponse => oldResponse != response)]
+
+            setChangeMade(!compareAllStates(
+                djSelectObj.selectValues, vcSelectObj.selectValues,
+                tcSelectObj.selectValues, lcSelectObj.selectValues[0],
+                themeSelectObj.selectValues[0], togglesState, newItem
+            ))
+
+            return newItem;
+        })
+    }
+
+    const compareAllStates = (djRolesSelected, rvcSelected, rtcSelected,
+        logChannelSelected, themeSelected, togglesState, eightBallState = eightBallResponses
+    ) => {
+        if (!arrayCompare(originalData.djRoles.map(obj => ({ name: obj.name, id: obj.id })), djRolesSelected.map(obj => ({ name: obj.name, id: obj.id })))) {
+            console.log('DJ Mismatch');
+            return false;
+        } if (!arrayCompare(originalData.restricted_text_channels.sort((a,b) => a.id.localeCompare(b.id)), rtcSelected.sort((a,b) => a.id.localeCompare(b.id)))) {
+            console.log('RTC Mismatch');
+            return false;
+        } if (!arrayCompare(originalData.restricted_voice_channels.sort((a,b) => a.id.localeCompare(b.id)), rvcSelected.sort((a,b) => a.id.localeCompare(b.id)))) {
+            return false;
+        } if (!compare(originalData.log_channel, logChannelSelected)) {
+            console.log('Log Channel Mismatch');
+            return false;
+        } if (themeSelected.name !== originalData.theme.name) {
+            console.log('Theme Mismatch');
+            return false;
+        } if (!compare(originalData.toggles, togglesState)) {
+            console.log('Toggles Mismatch');
+            return false;
+        } if (!arrayCompare(originalData.eight_ball.sort((a,b) => a.localeCompare(b)), eightBallState.sort((a,b) => a.localeCompare(b)))) {
+            console.log('8Ball Mismatch');
+            return false;
+        }
+        return true;
     }
 
     const guildIcon = guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.${guild.icon.startsWith('a_') ? 'gif' : 'png'}?size=512` : 'https://i.robertify.me/images/rykx6.png';
