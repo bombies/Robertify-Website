@@ -11,13 +11,13 @@ export default function SelectMenu({
         setSearchText(value);
     }
 
-    const options = !isChannelMenu ? menuOptions.map(option =>
-        <div key={option.id} className={`${className} option`} style={!multiSelect ? { justifyContent: 'normal', gap: '1.5rem' } : {}} onClick={() => setSelectValues(optionsVisible, option)}>
+    const options = !isChannelMenu ? menuOptions.map(option => {
+        return <div key={option.id} className={`${className} option`} style={!multiSelect ? { justifyContent: 'normal', gap: '1.5rem' } : {}} onClick={() => setSelectValues(optionsVisible, option)}>
             {option.icon || false}
             <p>{option.name}</p>
-            {multiSelect && <div key={nanoid(8)} className={`${className} option-checkbox ${selectValues.includes(option) && 'active'}`}></div>}
+            {multiSelect && <div className={`${className} option-checkbox ${selectValues.some(obj => obj.id === option.id) && 'active'}`}></div>}
         </div> 
-    ) : menuOptions.map(obj => {
+    }) : menuOptions.map(obj => {
         const categoryObj = obj[Object.keys(obj)[0]];
         return <div key={Object.keys(obj)[0]} className={`${className} optionCategory`}>
             <h3>{categoryObj.category_name}</h3>

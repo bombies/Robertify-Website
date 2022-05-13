@@ -22,128 +22,237 @@ function sortChannelsByCategory(categories, channels) {
     return channelsSorted;
 }
 
-function getChannel(textChannelList, voiceChannelList, channelID) {
-    let newItems = textChannelList.map(categoryObj => {
-        const channelsArr = categoryObj[Object.keys(categoryObj)[0]].channels;
-        const channelsArrFiltered = channelsArr.filter(channelObj => channelObj.id === channelID);
-
-        if (channelsArrFiltered) {
-            if (channelsArrFiltered.length)
-                return channelsArrFiltered
-        }
-        return null;
-    }).filter(obj => obj);
-
-    if (newItems)
-        return newItems[0];
-    
-    newItems = voiceChannelList.map(categoryObj => {
-        const channelsArr = categoryObj[Object.keys(categoryObj)[0]].channels;
-        const channelsArrFiltered = channelsArr.filter(channelObj => channelObj.id === channelID);
-    
-        if (channelsArrFiltered) {
-            if (channelsArrFiltered.length)
-                return channelsArrFiltered
-        }
-        return null;
-    }).filter(obj => obj);
-
-    return newItems;
-}
-
 function getOriginalDataObject(dbGuildInfo, fullGuildInfo) {
     function getRoleByID(id) {
         return fullGuildInfo.roles.filter(roleObj => roleObj.id === id)[0];
     }
 
     function getTextChannelByID(id) {
-        const channelObj = textChannelsSorted.filter(obj => obj[Object.keys(obj)[0]].channels.filter(channelObj => channelObj.id === id)[0])[0];
-        channelObj[Object.keys(channelObj)[0]].channels = channelObj[Object.keys(channelObj)[0]].channels.filter(channelObj => channelObj.id === id);
-
-        return channelObj;
-    }
-
-    function getVoiceChannelByID(id) {
-
+        try {
+            const channelObj = textChannelsSorted.filter(obj => obj[Object.keys(obj)[0]].channels.filter(channelObj => channelObj.id === id)[0])[0];
+            channelObj[Object.keys(channelObj)[0]].channels = channelObj[Object.keys(channelObj)[0]].channels.filter(channelObj => channelObj.id === id);
+            return channelObj[Object.keys(channelObj)[0]].channels[0];
+        } catch (ex) {
+            return {};
+        }
     }
 
     // DJ Roles Obj
     const djRoles = dbGuildInfo.permissions['1'].map(roleID => {
-        const roleObj = getRoleByID(roleID)
-        return ({
-            name: roleObj.name,
-            id: roleObj.id,
-            icon: <div className="circle" style={{ backgroundColor: `#${parseInt(roleObj.color || 10592673, 10).toString(16).padStart(6, '0')}`, width: '1rem', height: '1rem' }}></div> 
-        })
+        try {
+            const roleObj = getRoleByID(roleID)
+            return ({
+                name: roleObj.name,
+                id: roleObj.id,
+                icon: <div className="circle" style={{ backgroundColor: `#${parseInt(roleObj.color || 10592673, 10).toString(16).padStart(6, '0')}`, width: '1rem', height: '1rem' }}></div> 
+            })
+        } catch (ex) {
+            return {};
+        }
     });
     //
 
     // Channels
-    const categories = fullGuildInfo.channels.filter(channelObj => channelObj.type === 4);
-    const textChannels = fullGuildInfo.channels.filter(channelObj => channelObj.type === 0);
-    const voiceChannels = fullGuildInfo.channels.filter(channelObj => channelObj.type === 2);
+    const categories = fullGuildInfo.channels ? fullGuildInfo.channels.filter(channelObj => channelObj.type === 4) : [];
+    const textChannels = fullGuildInfo.channels ? fullGuildInfo.channels.filter(channelObj => channelObj.type === 0) : [];
+    const voiceChannels = fullGuildInfo.channels ? fullGuildInfo.channels.filter(channelObj => channelObj.type === 2) : [];
     const textChannelsSorted = sortChannelsByCategory(categories, textChannels);
     const voiceChannelsSorted = sortChannelsByCategory(categories, voiceChannels);
 
     // Restricted Voice Channels Obj
-    const restrictedVoiceChannels = voiceChannelsSorted.map(categoryObj => {
-        const catObj = categoryObj[Object.keys(categoryObj)[0]];
-        const channelsArr = categoryObj[Object.keys(categoryObj)[0]].channels;
-        const channelsArrFiltered = [];
-        
-        dbGuildInfo.restricted_channels.voice_channels.map(channelID => channelsArrFiltered.push(channelsArr.filter(channelObj => channelObj.id === channelID)[0]))
-
-        if (channelsArrFiltered) {
-            if (channelsArrFiltered.length)
-                return { 
-                    [Object.keys(categoryObj)[0]]: {
-                        channels: channelsArrFiltered,
-                        category_name:  catObj.category_name 
-                    }
-                }
-        }
-        return null;
-    }).filter(obj => obj[Object.keys(obj)[0]].channels[0]);
+    let restrictedVoiceChannels;
+    try {
+        restrictedVoiceChannels = dbGuildInfo.restricted_channels.voice_channels.map(channelID => {
+            return voiceChannelsSorted.map(categoryObj => {
+                const channelsArr = categoryObj[Object.keys(categoryObj)[0]].channels;
+                return channelsArr.filter(channelObj => channelObj.id === channelID);
+            })
+        }).map(arr => arr.filter(innerArr => innerArr.length)).map(([[ arr ]]) => arr);
+    } catch (ex) {
+        restrictedVoiceChannels = [];
+    }
     //
 
     // Restricted Text Channels Obj
-    const restrictedTextChannels = textChannelsSorted.map(categoryObj => {
-        const catObj = categoryObj[Object.keys(categoryObj)[0]];
-        const channelsArr = categoryObj[Object.keys(categoryObj)[0]].channels;
-        const channelsArrFiltered = [];
-        
-        dbGuildInfo.restricted_channels.text_channels.map(channelID => channelsArrFiltered.push(channelsArr.filter(channelObj => channelObj.id === channelID)[0]))
-
-        if (channelsArrFiltered) {
-            if (channelsArrFiltered.length)
-                return { 
-                    [Object.keys(categoryObj)[0]]: {
-                        channels: channelsArrFiltered,
-                        category_name:  catObj.category_name 
-                    }
-                }
-        }
-        return null;
-    }).filter(obj => obj[Object.keys(obj)[0]].channels[0]);
+    let restrictedTextChannels;
+    try {
+        restrictedTextChannels = dbGuildInfo.restricted_channels.text_channels.map(channelID => {
+            return textChannelsSorted.map(categoryObj => {
+                const channelsArr = categoryObj[Object.keys(categoryObj)[0]].channels;
+                return channelsArr.filter(channelObj => channelObj.id === channelID);
+            })
+        }).map(arr => arr.filter(innerArr => innerArr.length)).map(([[ arr ]]) => arr);
+    } catch (ex) {
+        restrictedTextChannels = [];
+    }
     //
 
+    // Log Channel Obj
     const logChannelObj = getTextChannelByID(dbGuildInfo.log_channel);
-    console.log(logChannelObj);
+    //
+
+    // Themes
+    let themeObj;
+    switch(dbGuildInfo.theme.toLowerCase()) {
+        case 'green': {
+            themeObj = {
+                id: 'ROBERTIFY_THEME_GREEN',
+                name: 'Green',
+                icon: <div className="circle" style={{ backgroundColor: `#00ff1e`, width: '1rem', height: '1rem' }}></div> 
+            }
+            break;
+        }
+        case 'gold': {
+            themeObj = {
+                id: 'ROBERTIFY_THEME_GOLD',
+                name: 'Gold',
+                icon: <div className="circle" style={{ backgroundColor: `#ffa600`, width: '1rem', height: '1rem' }}></div> 
+            }
+            break;
+        }
+        case 'red': {
+            themeObj = {
+                id: 'ROBERTIFY_THEME_RED',
+                name: 'Red',
+                icon: <div className="circle" style={{ backgroundColor: `#ff0000`, width: '1rem', height: '1rem' }}></div> 
+            }
+            break;
+        }
+        case 'pink': {
+            themeObj = {
+                id: 'ROBERTIFY_THEME_PINK',
+                name: 'Pink',
+                icon: <div className="circle" style={{ backgroundColor: `#ff00ee`, width: '1rem', height: '1rem' }}></div> 
+            }
+            break;
+        }
+        case 'purple': {
+            themeObj = {
+                id: 'ROBERTIFY_THEME_PURPLE',
+                name: 'Purple',
+                icon: <div className="circle" style={{ backgroundColor: `#8000ff`, width: '1rem', height: '1rem' }}></div> 
+            }
+            break;
+        }
+        case 'blue': {
+            themeObj = {
+                id: 'ROBERTIFY_THEME_BLUE',
+                name: 'Blue',
+                icon: <div className="circle" style={{ backgroundColor: `#0077ff`, width: '1rem', height: '1rem' }}></div> 
+            }
+            break;
+        }
+        case 'light_blue': {
+            themeObj = {
+                id: 'ROBERTIFY_THEME_LIGHT_BLUE',
+                name: 'Light Blue',
+                icon: <div className="circle" style={{ backgroundColor: `#00e1ff`, width: '1rem', height: '1rem' }}></div> 
+            }
+            break;
+        }
+        case 'orange': {
+            themeObj = {
+                id: 'ROBERTIFY_THEME_ORANGE',
+                name: 'Orange',
+                icon: <div className="circle" style={{ backgroundColor: `#ff4d00`, width: '1rem', height: '1rem' }}></div> 
+            }
+            break;
+        }
+        case 'yellow': {
+            themeObj = {
+                id: 'ROBERTIFY_THEME_YELLOW',
+                name: 'Yellow',
+                icon: <div className="circle" style={{ backgroundColor: `#ffea00`, width: '1rem', height: '1rem' }}></div> 
+            }
+            break;
+        }
+        case 'dark': {
+            themeObj = {
+                id: 'ROBERTIFY_THEME_DARK',
+                name: 'Dark',
+                icon: <div className="circle" style={{ backgroundColor: `#000000`, width: '1rem', height: '1rem' }}></div> 
+            }
+            break;
+        }
+        case 'light': {
+            themeObj = {
+                id: 'ROBERTIFY_THEME_Light',
+                name: 'Light',
+                icon: <div className="circle" style={{ backgroundColor: `#ffffff`, width: '1rem', height: '1rem' }}></div> 
+            }
+            break;
+        }
+        default: throw new Error('Invalid Robertify theme passed. Got ' + dbGuildInfo.theme);
+    }
+    //
+
+    return {
+        djRoles: [...djRoles.filter(roleObj => Object.keys(roleObj).length)],
+        restricted_text_channels: [...restrictedTextChannels],
+        restricted_voice_channels: [...restrictedVoiceChannels],
+        log_channel: {...logChannelObj},
+        theme: {...themeObj},
+        toggles: {...dbGuildInfo.toggles},
+        eight_ball: [...dbGuildInfo.eight_ball]
+    }
+}
+
+function compare(o1, o2) {
+    const o1Keys = Object.keys(o1);
+    const o2Keys = Object.keys(o2);
+
+    if (o1Keys.length !== o2Keys.length)
+        return false;
+
+    for (let key in o1Keys) {
+        const o1KeysInner = Object.keys(o1[o1Keys[key]]);
+        if (o1KeysInner.length) {
+            for (let innerKey in Object.keys(o1[o1Keys[key]]))
+                if (o1[o1Keys[key]][o1KeysInner[innerKey]] !== o2[o1Keys[key]][o1KeysInner[innerKey]])
+                    return false;
+        } else if (o1[o1Keys[key]] !== o2[o1Keys[key]])
+            return false;
+    }
+
+    return true;
 }
 
 export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, fullGuildInfo, hasAccess, localHostName }) {
     const router = useRouter();
-    
-    getOriginalDataObject(dbGuildInfo, fullGuildInfo)
+    const originalData = getOriginalDataObject(dbGuildInfo, fullGuildInfo)
 
     useEffect(() => {
         if (!hasAccess)
             router.push(`https://discord.com/oauth2/authorize?client_id=893558050504466482&permissions=524023090512&redirect_uri=${encodeURI(`${localHostName}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot&guild_id=${guildInfo.id}&disable_guild_select=true`)
     }, []);
 
-    const originalValues = {
+    const [ discordInfoState ] = useState({
+        userInfo: userInfo,
+        guildInfo: guildInfo
+    });
+    const guild = discordInfoState.guildInfo;
 
-    }
+    useEffect(() => {
+        if (!discordInfoState.userInfo) {
+            router.push('/');
+            return;
+        }
+
+        if (!discordInfoState.guildInfo) {
+            router.push('/');
+            return;
+        }
+
+        if (!dbGuildInfo) {
+            router.push(`https://discord.com/oauth2/authorize?client_id=893558050504466482&permissions=524023090512&redirect_uri=${encodeURI(`${localHostName}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot&guild_id=${guildInfo.id}&disable_guild_select=true`)
+            return;
+        }
+
+        if (!fullGuildInfo) {
+            router.push('/dashboard');
+            return;
+        }
+    }, [discordInfoState]);
 
     const categories = fullGuildInfo.channels.filter(channelObj => channelObj.type === 4);
     const textChannels = fullGuildInfo.channels.filter(channelObj => channelObj.type === 0);
@@ -223,38 +332,55 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
     hasPerms = !Number(guildInfo.permissions) ? false : hasPerms;
     
     const [ changeMade, setChangeMade ] = useState(false);
-    const [ togglesState, setTogglesState ] = useState(dbGuildInfo.toggles);
+    const [ togglesState, setTogglesState ] = useState(originalData.toggles);
     
     const toggleState = (stateName) => {
         if (!hasPerms) return;
 
-        setTogglesState(oldState => ({
-            ...oldState,
-            [stateName]: !oldState[stateName]
-        }));
+        setTogglesState(oldState => {
+            const newState = {
+                ...oldState,
+                [stateName]: !oldState[stateName]
+            };  
+        
+            if (!compare(originalData.toggles, newState)) {
+                console.log('Change made : true')
+                setChangeMade(true);
+            } else {
+                console.log('Change made : false')
+                setChangeMade(false);
+            }
+            return newState;
+        });
     }
 
     const toggleInnerState = (objectName, stateName) => {
         if (!hasPerms) return;
 
-        setTogglesState(oldState => ({
-            ...oldState,
-            [objectName]: {
-                ...oldState[objectName],
-                [stateName]: !oldState[objectName][stateName]
+        setTogglesState(oldState => {
+            const newState ={
+                ...oldState,
+                [objectName]: {
+                    ...oldState[objectName],
+                    [stateName]: !oldState[objectName][stateName]
+                }
             }
-        }));
-    }
 
-    const [ discordInfoState ] = useState({
-        userInfo: userInfo,
-        guildInfo: guildInfo
-    });
-    const guild = discordInfoState.guildInfo;
+            if (!compare(originalData.toggles, newState)) {
+                console.log('Change made : true')
+                setChangeMade(true);
+            } else {
+                console.log('Change made : false')
+                setChangeMade(false);
+            }
+
+            return newState;
+        });
+    }
 
     const [ djSelectObj, setDjSelectObj ] = useState({
         optionsVisible: false,
-        selectValues: [],
+        selectValues: [...originalData.djRoles],
         shownOptions: [...roleNamesSorted],
         searchText: ''
     });
@@ -269,7 +395,7 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
     }
 
     const updateDjSelectValues = (isActive, value) => {
-        updateMenuSelectedValues(isActive, setDjSelectObj, value, true);
+        updateMenuSelectedValuesByID(isActive, setDjSelectObj, value, true);
     }
 
     const updateDjSearchText = (value) => {
@@ -284,7 +410,7 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
 
     const [ vcSelectObj, setVcSelectObj ] = useState({
         optionsVisible: false,
-        selectValues: [],
+        selectValues: [...originalData.restricted_voice_channels],
         shownOptions: [...voiceChannelsSorted],
         searchText: ''
     });
@@ -303,7 +429,7 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
 
     const [ tcSelectObj, setTcSelectObj ] = useState({
         optionsVisible: false,
-        selectValues: [],
+        selectValues: [...originalData.restricted_text_channels],
         shownOptions: [...textChannelsSorted],
         searchText: ''
     });
@@ -322,7 +448,7 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
 
     const [ lcSelectObj, setLcSelectObj ] = useState({
         optionsVisible: false,
-        selectValues: [],
+        selectValues: Object.keys(originalData.log_channel).length ? [originalData.log_channel] : [],
         shownOptions: [...textChannelsSorted],
         searchText: ''
     });
@@ -332,7 +458,7 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
     }
 
     const updateLcSelectValues = (isActive, value) => {
-        updateMenuSelectedValues(isActive, setLcSelectObj, value);
+        updateMenuSelectedValuesByID(isActive, setLcSelectObj, value);
     }
 
     const updateLcSearchText = (value) => {
@@ -341,7 +467,7 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
 
     const [ themeSelectObj, setThemeSelectObj ] = useState({
         optionsVisible: false,
-        selectValues: [],
+        selectValues: [{...originalData.theme}],
         shownOptions: [...themes],
         searchText: ''
     })
@@ -383,6 +509,16 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
         }));
     }
 
+    const updateMenuSelectedValuesByID = (isActive, setterFunction, value, multiSelect = false, enableDeselect = true) => {
+        if (!hasPerms) return;
+        if (!isActive) return;
+
+        setterFunction(oldObj => ({
+            ...oldObj,
+            selectValues: multiSelect ? ((oldObj.selectValues.some(obj => obj.id == value.id)) ? ([...oldObj.selectValues.filter(val => value.id !== val.id)]): ([...oldObj.selectValues, value])) : (enableDeselect ? ((oldObj.selectValues.some(obj => obj.id == value.id)) ? ([]) : ([value])) : ([value]))
+        }));
+    }
+
     const updateMenuChannelSearchText = (dataList, setterFunction, value) => {
         if (!hasPerms) return;
 
@@ -410,7 +546,7 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
         }))
     }
 
-    const [ eightBallResponses, setEightBallResponses ] = useState(dbGuildInfo.eight_ball);
+    const [ eightBallResponses, setEightBallResponses ] = useState(originalData.eight_ball);
     const [ eightBallInput, setEightBallInput ] = useState('');
 
     const addEightBallResponse = (response) => {
@@ -421,18 +557,6 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
     const removeEightBallResponse = (response) => {
         setEightBallResponses(oldResponses => [...oldResponses.filter(oldResponse => oldResponse != response)])
     }
-
-    useEffect(() => {
-        if (!discordInfoState.userInfo) {
-            router.push('/');
-            return;
-        }
-
-        if (!discordInfoState.guildInfo) {
-            router.push('/');
-            return;
-        }
-    }, [discordInfoState]);
 
     const guildIcon = guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.${guild.icon.startsWith('a_') ? 'gif' : 'png'}?size=512` : 'https://i.robertify.me/images/rykx6.png';
 
@@ -687,10 +811,11 @@ export async function getServerSideProps(context) {
                     }
                 },
                 restricted_channels: {
-                    voice_channels: ['915480301617164318'],
-                    text_channels: ['842795162513965066']
+                    voice_channels: ['915480301617164318', '412292759278321674'],
+                    text_channels: ['842795162513965066', '867063130445185065']
                 },
-                log_channel: '953840220783136809'
+                log_channel: '953840220783136809',
+                theme: 'green'
             },
             fullGuildInfo: access ? null : guildInfo,
             hasAccess: access === false ? false : true,
