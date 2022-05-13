@@ -668,26 +668,33 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
         logChannelSelected, themeSelected, togglesState, eightBallState = eightBallResponses
     ) => {
         if (!arrayCompare(originalData.djRoles.map(obj => ({ name: obj.name, id: obj.id })), djRolesSelected.map(obj => ({ name: obj.name, id: obj.id })))) {
-            console.log('DJ Mismatch');
-            return false;
-        } if (!arrayCompare(originalData.restricted_text_channels.sort((a,b) => a.id.localeCompare(b.id)), rtcSelected.sort((a,b) => a.id.localeCompare(b.id)))) {
-            console.log('RTC Mismatch');
-            return false;
-        } if (!arrayCompare(originalData.restricted_voice_channels.sort((a,b) => a.id.localeCompare(b.id)), rvcSelected.sort((a,b) => a.id.localeCompare(b.id)))) {
-            return false;
-        } if (!compare(originalData.log_channel, logChannelSelected)) {
-            console.log('Log Channel Mismatch');
-            return false;
-        } if (themeSelected.name !== originalData.theme.name) {
-            console.log('Theme Mismatch');
-            return false;
-        } if (!compare(originalData.toggles, togglesState)) {
-            console.log('Toggles Mismatch');
-            return false;
-        } if (!arrayCompare(originalData.eight_ball.sort((a,b) => a.localeCompare(b)), eightBallState.sort((a,b) => a.localeCompare(b)))) {
-            console.log('8Ball Mismatch');
             return false;
         }
+        
+        if (!arrayCompare(originalData.restricted_text_channels.sort((a,b) => a.id.localeCompare(b.id)), rtcSelected.sort((a,b) => a.id.localeCompare(b.id)))) {
+            return false;
+        }
+        
+        if (!arrayCompare(originalData.restricted_voice_channels.sort((a,b) => a.id.localeCompare(b.id)), rvcSelected.sort((a,b) => a.id.localeCompare(b.id)))) {
+            return false;
+        }
+        
+        if (!compare(originalData.log_channel, logChannelSelected)) {
+            return false;
+        }
+        
+        if (themeSelected.name !== originalData.theme.name) {
+            return false;
+        }
+        
+        if (!compare(originalData.toggles, togglesState)) {
+            return false;
+        }
+        
+        if (!arrayCompare(originalData.eight_ball.sort((a,b) => a.localeCompare(b)), eightBallState.sort((a,b) => a.localeCompare(b)))) {
+            return false;
+        }
+        
         return true;
     }
 
