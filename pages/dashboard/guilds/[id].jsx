@@ -7,10 +7,6 @@ import Toggle from "../../../components/Toggle";
 import SelectMenu from "../../../components/SelectMenu";
 import TextOptionList from "../../../components/TextOptionList";
 
-Array.prototype.test = () => {
-    console.log('test');
-}
-
 function sortChannelsByCategory(categories, channels) {
     const channelsSorted = categories.map(categoryObj => {
         const channelArr = channels.filter(channelObj => channelObj.parent_id === categoryObj.id);
@@ -266,7 +262,7 @@ function arrayCompare(arr1, arr2) {
 
 export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, fullGuildInfo, hasAccess, localHostName }) {
     const router = useRouter();
-    const originalData = getOriginalDataObject(dbGuildInfo, fullGuildInfo)
+    const [ originalData, setOriginalData ] = useState(getOriginalDataObject(dbGuildInfo, fullGuildInfo));
 
     useEffect(() => {
         if (!hasAccess)
@@ -694,7 +690,7 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
         if (!arrayCompare(originalData.eight_ball.sort((a,b) => a.localeCompare(b)), eightBallState.sort((a,b) => a.localeCompare(b)))) {
             return false;
         }
-        
+
         return true;
     }
 
@@ -706,6 +702,7 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
 
     const discard = () => {
         if (!hasPerms) return;
+        if (!changeMade) return;
     }
 
     const reset = () => {
@@ -714,6 +711,18 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
 
     const save = () => {
         if (!hasPerms) return;
+        if (!changeMade) return;
+
+        setOriginalData({
+            djRoles: [...djSelectObj.selectValues],
+            restricted_text_channels: [...tcSelectObj.selectValues],
+            restricted_voice_channels: [...vcSelectObj.selectValues],
+            log_channel: {...lcSelectObj.selectValues.at(0)},
+            theme: {...themeSelectObj.selectValues.at(0)},
+            toggles: {...togglesState},
+            eight_ball: [...eightBallResponses]
+        });
+        setChangeMade(false);
     }
     
     const logToggles = Object.keys(togglesState.log_toggles).map(key => <Toggle key={key} label={key.replaceAll('_', ' ')} isActive={togglesState.log_toggles[key]} setActive={() => toggleInnerState('log_toggles', key)} />)
@@ -850,8 +859,8 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
                 <div className={`banner-lg bg-dark sticky-bottom ${changeMade ? 'active' : 'inactive'}`}>
                     <p>Careful - You have unsaved changes!</p>
                     <div className='serverDash--unsaved-buttons'>
-                        <button className='button-md secondary'><img src='https://i.robertify.me/images/pup8a.png' alt='Discard Button' onClick={discard}/>Discard</button>
-                        <button className='button-md primary'><img src='https://i.robertify.me/images/htbv7.png' alt='Save Button' onClick={save}/>Save</button>
+                        <button className='button-md secondary' onClick={discard}><img src='https://i.robertify.me/images/pup8a.png' alt='Discard Button'/>Discard</button>
+                        <button className='button-md primary' onClick={save}><img src='https://i.robertify.me/images/htbv7.png' alt='Save Button'/>Save</button>
                     </div>
                 </div>
             </main>
