@@ -197,6 +197,95 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo) {
     }
 }
 
+function getDefaultGuildInfo(fullGuildInfo) {
+    const defaultObj = {
+        toggles: {
+            restricted_voice_channels: false,
+            restricted_text_channels: false,
+            '8ball': true,
+            show_requester: true,
+            announce_messages: true,
+            polls: true,
+            tips: true,
+            vote_skips: false,
+            "dj_toggles": {
+                "247": false,
+                "play": false,
+                "disconnect": false,
+                "favouritetracks": false,
+                "skip": false,
+                "seek": false,
+                "remove": false,
+                "karaoke": false,
+                "tremolo": false,
+                "search": false,
+                "loop": false,
+                "nightcore": false,
+                "join": false,
+                "lyrics": false,
+                "jump": false,
+                "vibrato": false,
+                "resume": false,
+                "move": false,
+                "nowplaying": false,
+                "previous": false,
+                "clear": false,
+                "skipto": false,
+                "8d": false,
+                "pause": false,
+                "autoplay": false,
+                "volume": false,
+                "lofi": false,
+                "rewind": false,
+                "stop": false,
+                "shuffleplay": false,
+                "shuffle": false,
+                "queue": false
+            },
+            "log_toggles": {
+                "queue_add": true,
+                "track_move": true,
+                "track_loop": true,
+                "player_pause": true,
+                "track_vote_skip": true,
+                "queue_shuffle": true,
+                "player_resume": true,
+                "volume_change": true,
+                "track_seek": true,
+                "track_previous": true,
+                "track_skip": true,
+                "track_rewind": true,
+                "bot_disconnected": true,
+                "queue_remove": true,
+                "filter_toggle": true,
+                "player_stop": true,
+                "queue_loop": true,
+                "queue_clear": true,
+                "track_jump": true
+            }
+        },
+        eight_ball : [],
+        theme: 'green',
+        permissions: {
+            '0': [],
+            '1': [],
+            '2': [],
+            '3': [],
+            '4': [],
+            '5': [],
+            users: {}
+        },
+        restricted_channels: {
+            voice_channels: [],
+            text_channels: []
+        },
+        log_channel: '-1',
+        theme: 'green'
+    }
+
+    return getOriginalDataObject(defaultObj, fullGuildInfo);
+}
+
 function compare(object1, object2) {
     for (let propName in object1) {
         if (object1.hasOwnProperty(propName) != object2.hasOwnProperty(propName)) {
@@ -296,6 +385,8 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
             return;
         }
     }, [discordInfoState]);
+
+    if (!hasAccess) return <div></div>
 
     const categories = fullGuildInfo.channels.filter(channelObj => channelObj.type === 4);
     const textChannels = fullGuildInfo.channels.filter(channelObj => channelObj.type === 0);
@@ -696,17 +787,107 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
 
     const guildIcon = guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.${guild.icon.startsWith('a_') ? 'gif' : 'png'}?size=512` : 'https://i.robertify.me/images/rykx6.png';
 
+    const [ refreshAllowed,  setRefreshAllowed ] = useState(true);
+
     const refresh = () => {
         if (!hasPerms) return;
+        if (!refreshAllowed) return;
+        router.replace(router.asPath);
+
+        setRefreshAllowed(false);
+        setTimeout(() => setRefreshAllowed(true), 20 * 1000);
     }
 
     const discard = () => {
         if (!hasPerms) return;
         if (!changeMade) return;
+
+        setDjSelectObj({
+            optionsVisible: false,
+            selectValues: [...originalData.djRoles],
+            shownOptions: [...roleNamesSorted],
+            searchText: ''
+        });
+
+        setVcSelectObj({
+            optionsVisible: false,
+            selectValues: [...originalData.restricted_voice_channels],
+            shownOptions: [...voiceChannelsSorted],
+            searchText: ''
+        });
+
+        setTcSelectObj({
+            optionsVisible: false,
+            selectValues: [...originalData.restricted_text_channels],
+            shownOptions: [...textChannelsSorted],
+            searchText: ''
+        });
+
+        setLcSelectObj({
+            optionsVisible: false,
+            selectValues: Object.keys(originalData.log_channel).length ? [originalData.log_channel] : [],
+            shownOptions: [...textChannelsSorted],
+            searchText: ''
+        });
+
+        setThemeSelectObj({
+            optionsVisible: false,
+            selectValues: [{...originalData.theme}],
+            shownOptions: [...themes],
+            searchText: ''
+        });
+
+        setTogglesState(originalData.toggles);
+
+        setEightBallResponses(originalData.eight_ball);
+        setEightBallInput('');
+        setChangeMade(false);
     }
 
     const reset = () => {
         if (!hasPerms) return;
+
+        const defaultObj = getDefaultGuildInfo(fullGuildInfo);
+
+        setDjSelectObj({
+            optionsVisible: false,
+            selectValues: [...defaultObj.djRoles],
+            shownOptions: [...roleNamesSorted],
+            searchText: ''
+        });
+
+        setVcSelectObj({
+            optionsVisible: false,
+            selectValues: [...defaultObj.restricted_voice_channels],
+            shownOptions: [...voiceChannelsSorted],
+            searchText: ''
+        });
+
+        setTcSelectObj({
+            optionsVisible: false,
+            selectValues: [...defaultObj.restricted_text_channels],
+            shownOptions: [...textChannelsSorted],
+            searchText: ''
+        });
+
+        setLcSelectObj({
+            optionsVisible: false,
+            selectValues: Object.keys(defaultObj.log_channel).length ? [defaultObj.log_channel] : [],
+            shownOptions: [...textChannelsSorted],
+            searchText: ''
+        });
+
+        setThemeSelectObj({
+            optionsVisible: false,
+            selectValues: [{...defaultObj.theme}],
+            shownOptions: [...themes],
+            searchText: ''
+        });
+
+        setTogglesState(defaultObj.toggles);
+
+        setEightBallResponses(defaultObj.eight_ball);
+        setChangeMade(true);
     }
 
     const save = () => {
@@ -739,7 +920,7 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
                     </div>
                     <div className='serverDash--controlPanel'>
                         {hasPerms || <div className='serverDash--noPermsOverlay'>
-                            <span>You must have either the <strong className='noPerms-permission'>MANAGE SERVER</strong> or <strong className='noPerms-permission'>ADMINISTRATOR</strong> permission to configure this guild!</span>
+                            <span>You must have either the <strong className='noPerms-permission'>MANAGE SERVER</strong> or <strong className='noPerms-permission'>ADMINISTRATOR</strong> permission to configure this server!</span>
                             <div className='serverDash--noPermsOverlay-bg'></div>
                         </div>}
                         <h2 className='serverDash--controlPanel-title'>Management</h2>
@@ -852,7 +1033,7 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
                         <hr className='serverDash--divider' />
                         <div className='serverDash--footer-buttons'>
                             <button className='button-md danger' onClick={reset}><img src='https://i.robertify.me/images/pup8a.png' alt='Reset Button'/>Reset</button>
-                            <button className='button-md primary' onClick={refresh}><img src='https://i.robertify.me/images/v1u8p.png' alt='Refresh Button'/>Refresh</button>
+                            <button className={`button-md primary ${!refreshAllowed && 'cursor-notAllowed'}`} onClick={refresh}><img src='https://i.robertify.me/images/v1u8p.png' alt='Refresh Button'/>Refresh</button>
                         </div>
                     </div>
                 </div>

@@ -1411,19 +1411,13 @@ footer {
 }
 
 .toggle.active {
-    width: 4rem;
-    height: 2rem;
     background: var(--green);
     border: 3px solid var(--green);
-    border-radius: 2rem;
     transition: all var(--toggle-transition-time) ease-in-out;
 }
 
 .toggle-knob.active {
-    width: 50%;
-    height: 100%;
     margin-left: 50%;
-    border-radius: 50%;
     background: rgb(43, 43, 43);
     transition: all var(--toggle-transition-time) ease-in-out;
 }
@@ -1569,6 +1563,7 @@ footer {
 
 .cursor-notAllowed {
     cursor: not-allowed;
+    filter: brightness(50%);
 }
 
 .banner-lg {
