@@ -3,7 +3,7 @@ import { robertifyAPI } from "../../../../utils/RobertifyAPI";
 
 const HASH_NAME = "ROBERTIFY_GUILD";
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
     const verifyPassword = verifyMasterPassword(req);
     if (verifyPassword)
         return res.status(400).json(verifyPassword); 

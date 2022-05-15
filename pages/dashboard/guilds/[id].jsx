@@ -10,6 +10,9 @@ import { robertifyAPI } from "../../../utils/RobertifyAPI";
 import axios from "axios";
 
 function sortChannelsByCategory(categories, channels) {
+    if (!categories) return null;
+    if (!channels) return null;
+
     const channelsSorted = categories.map(categoryObj => {
         const channelArr = channels.filter(channelObj => channelObj.parent_id === categoryObj.id);
         if (!channelArr.length)
@@ -25,6 +28,9 @@ function sortChannelsByCategory(categories, channels) {
 }
 
 function getOriginalDataObject(dbGuildInfo, fullGuildInfo) {
+    if (!dbGuildInfo) return null;
+    if (!fullGuildInfo) return null;
+
     function getRoleByID(id) {
         return fullGuildInfo.roles.filter(roleObj => roleObj.id === id)[0];
     }
@@ -357,13 +363,13 @@ function arrayCompare(arr1, arr2) {
 
 export default function GuildPage({ token, userInfo, guildInfo,
     dbGuildInfo, fullGuildInfo, hasAccess,
-    localHostName, hostedHostName, hostedMasterPassword
+    localHostName, hostedHostName, hostedMasterPassword, botID
 }) {
     const router = useRouter();
 
     useEffect(() => {
         if (!hasAccess)
-            router.push(`https://discord.com/oauth2/authorize?client_id=893558050504466482&permissions=524023090512&redirect_uri=${encodeURI(`${localHostName}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot&guild_id=${guildInfo.id}&disable_guild_select=true`)
+            router.push(`https://discord.com/oauth2/authorize?client_id=${botID}&permissions=524023090512&redirect_uri=${encodeURI(`${localHostName}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot&guild_id=${guildInfo.id}&disable_guild_select=true`)
     }, []);
 
     const [ discordInfoState ] = useState({
@@ -380,6 +386,8 @@ export default function GuildPage({ token, userInfo, guildInfo,
     }, [token, userInfo, guildInfo, dbGuildInfo, fullGuildInfo, hasAccess, localHostName])
 
     useEffect(() => {
+        if (!hasAccess)
+            return;
         if (isRefreshing)
             return;
 
@@ -429,7 +437,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
         }
 
         if (!dbGuildInfo) {
-            router.push(`https://discord.com/oauth2/authorize?client_id=893558050504466482&permissions=524023090512&redirect_uri=${encodeURI(`${localHostName}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot&guild_id=${guildInfo.id}&disable_guild_select=true`)
+            router.push(`https://discord.com/oauth2/authorize?client_id=${botID}&permissions=524023090512&redirect_uri=${encodeURI(`${localHostName}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot&guild_id=${guildInfo.id}&disable_guild_select=true`)
             return;
         }
 
@@ -439,11 +447,9 @@ export default function GuildPage({ token, userInfo, guildInfo,
         }
     }, [discordInfoState]);
 
-    if (!hasAccess) return <div></div>
-
-    const categories = fullGuildInfo.channels.filter(channelObj => channelObj.type === 4);
-    const textChannels = fullGuildInfo.channels.filter(channelObj => channelObj.type === 0);
-    const voiceChannels = fullGuildInfo.channels.filter(channelObj => channelObj.type === 2);
+    const categories = fullGuildInfo ? fullGuildInfo.channels.filter(channelObj => channelObj.type === 4) : null;
+    const textChannels = fullGuildInfo ? fullGuildInfo.channels.filter(channelObj => channelObj.type === 0) : null;
+    const voiceChannels = fullGuildInfo ? fullGuildInfo.channels.filter(channelObj => channelObj.type === 2) : null;
     
     const themes = [
         {
@@ -503,13 +509,13 @@ export default function GuildPage({ token, userInfo, guildInfo,
         }
     ]
 
-    const roleNamesSorted = fullGuildInfo.roles.map(roleObj => (
+    const roleNamesSorted = fullGuildInfo ? fullGuildInfo.roles.map(roleObj => (
         {
             name: roleObj.name,
             id: roleObj.id,
             icon: <div className="circle" style={{ backgroundColor: `#${parseInt(roleObj.color || 10592673, 10).toString(16).padStart(6, '0')}`, width: '1rem', height: '1rem' }}></div> 
         }
-    )).sort((a, b) => a.name.localeCompare(b.name));
+    )).sort((a, b) => a.name.localeCompare(b.name)) : null;
 
     const textChannelsSorted = sortChannelsByCategory(categories, textChannels);
     const voiceChannelsSorted = sortChannelsByCategory(categories, voiceChannels);
@@ -520,7 +526,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
     
     const [ originalData, setOriginalData ] = useState(getOriginalDataObject(dbGuildInfo, fullGuildInfo));
     const [ changeMade, setChangeMade ] = useState(false);
-    const [ togglesState, setTogglesState ] = useState(originalData.toggles);
+    const [ togglesState, setTogglesState ] = useState(originalData ? originalData.toggles : null);
     
     const toggleState = (stateName) => {
         if (!hasPerms) return;
@@ -566,8 +572,8 @@ export default function GuildPage({ token, userInfo, guildInfo,
 
     const [ djSelectObj, setDjSelectObj ] = useState({
         optionsVisible: false,
-        selectValues: [...originalData.djRoles],
-        shownOptions: [...roleNamesSorted],
+        selectValues: originalData ? [...originalData.djRoles] : [],
+        shownOptions: roleNamesSorted ? [...roleNamesSorted] : [],
         searchText: ''
     });
 
@@ -601,8 +607,8 @@ export default function GuildPage({ token, userInfo, guildInfo,
 
     const [ vcSelectObj, setVcSelectObj ] = useState({
         optionsVisible: false,
-        selectValues: [...originalData.restricted_voice_channels],
-        shownOptions: [...voiceChannelsSorted],
+        selectValues: originalData ? [...originalData.restricted_voice_channels] : [],
+        shownOptions: voiceChannelsSorted ? [...voiceChannelsSorted] : [],
         searchText: ''
     });
 
@@ -625,8 +631,8 @@ export default function GuildPage({ token, userInfo, guildInfo,
 
     const [ tcSelectObj, setTcSelectObj ] = useState({
         optionsVisible: false,
-        selectValues: [...originalData.restricted_text_channels],
-        shownOptions: [...textChannelsSorted],
+        selectValues: originalData ? [...originalData.restricted_text_channels] : [],
+        shownOptions: textChannelsSorted ? [...textChannelsSorted] : [],
         searchText: ''
     });
 
@@ -649,8 +655,8 @@ export default function GuildPage({ token, userInfo, guildInfo,
 
     const [ lcSelectObj, setLcSelectObj ] = useState({
         optionsVisible: false,
-        selectValues: Object.keys(originalData.log_channel).length ? [originalData.log_channel] : [],
-        shownOptions: [...textChannelsSorted],
+        selectValues: originalData ? Object.keys(originalData.log_channel).length ? [originalData.log_channel] : [] : [],
+        shownOptions: textChannelsSorted ? [...textChannelsSorted] : [],
         searchText: ''
     });
 
@@ -673,8 +679,8 @@ export default function GuildPage({ token, userInfo, guildInfo,
 
     const [ themeSelectObj, setThemeSelectObj ] = useState({
         optionsVisible: false,
-        selectValues: [{...originalData.theme}],
-        shownOptions: [...themes],
+        selectValues: originalData ? [{...originalData.theme}] : [{}],
+        shownOptions: themes ? [...themes] : [],
         searchText: ''
     })
 
@@ -773,7 +779,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
         }))
     }
 
-    const [ eightBallResponses, setEightBallResponses ] = useState(originalData.eight_ball);
+    const [ eightBallResponses, setEightBallResponses ] = useState(originalData ? originalData.eight_ball : []);
     const [ eightBallInput, setEightBallInput ] = useState('');
 
     const addEightBallResponse = (response) => {
@@ -987,8 +993,10 @@ export default function GuildPage({ token, userInfo, guildInfo,
         setDoSaveState(true);
     }
     
-    const logToggles = Object.keys(togglesState.log_toggles).map(key => <Toggle key={key} label={key.replaceAll('_', ' ')} isActive={togglesState.log_toggles[key]} setActive={() => toggleInnerState('log_toggles', key)} />)
-    const djToggles = Object.keys(togglesState.dj_toggles).map(key => <Toggle key={key} label={key.replaceAll('_', ' ')} isActive={togglesState.dj_toggles[key]} setActive={() => toggleInnerState('dj_toggles', key)} />)
+    const logToggles = togglesState ? Object.keys(togglesState.log_toggles).map(key => <Toggle key={key} label={key.replaceAll('_', ' ')} isActive={togglesState.log_toggles[key]} setActive={() => toggleInnerState('log_toggles', key)} />) : null;
+    const djToggles = togglesState ? Object.keys(togglesState.dj_toggles).map(key => <Toggle key={key} label={key.replaceAll('_', ' ')} isActive={togglesState.dj_toggles[key]} setActive={() => toggleInnerState('dj_toggles', key)} />) : null;
+
+    if (!hasAccess) return <div></div>
 
     return (
         <Layout token={token} discordInfo={discordInfoState.userInfo} title={`Robertify - ${guild.name}`} >
@@ -1139,6 +1147,8 @@ export async function getServerSideProps(context) {
         const dbGuildInfo = await robertifyAPI.getGuildInfo(context.params.id)
         const { access } = guildInfo;
 
+        console.log(atob(process.env.DISCORD_BOT_TOKEN.split('.')[0]))
+
         return {
             props: {
                 token: info.props.token || null,
@@ -1149,7 +1159,8 @@ export async function getServerSideProps(context) {
                 hasAccess: access === false ? false : true,
                 localHostName: process.env.LOCAL_API_HOSTNAME,
                 hostedHostName: process.env.HOSTED_API_HOSTNAME,
-                hostedMasterPassword: process.env.API_MASTER_PASSWORD
+                hostedMasterPassword: process.env.API_MASTER_PASSWORD,
+                botID: atob(process.env.DISCORD_BOT_TOKEN.split('.')[0])
             }
         }
     } catch (ex) {
@@ -1163,7 +1174,9 @@ export async function getServerSideProps(context) {
                     fullGuildInfo: null,
                     hasAccess: false,
                     localHostName: process.env.LOCAL_API_HOSTNAME,
-                    hostedHostName: process.env.HOSTED_API_HOSTNAME
+                    hostedHostName: process.env.HOSTED_API_HOSTNAME,
+                    hostedMasterPassword: process.env.API_MASTER_PASSWORD,
+                    botID: atob(process.env.DISCORD_BOT_TOKEN.split('.')[0])
                 }
             }
         else console.log(ex);
