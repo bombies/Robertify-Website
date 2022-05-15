@@ -250,7 +250,7 @@ export async function fetchAllDiscordUserInfo(req) {
         }
 
         // Cache miss
-        const discordData = await axios.get('https://discord.com/api/10/users/@me/guilds', {
+        const discordData = await axios.get('https://discord.com/api/v10/users/@me/guilds', {
                     headers: {
                         'Authorization': `Bearer ${data.access_token}`
                     }
