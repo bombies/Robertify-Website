@@ -16,7 +16,7 @@ export function verifyMasterPassword(req) {
         if (!master_password)
             return { message: 'Invalid authorization' };
 
-        if (master_password !== process.env.DISCORD_CLIENT_SECRET)
+        if (master_password !== process.env.API_MASTER_PASSWORD)
             return { message: 'Invalid authorization' };
         return null;
 }

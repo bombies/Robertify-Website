@@ -9,11 +9,15 @@ export default function Callback(props) {
     const { code, error } = router.query;
 
     useEffect(() => {
-        if (error)
+        if (error) {
             router.push('/');
+            return;
+        }
 
-        if (!code)
+        if (!code) {
             router.push('/');
+            return;
+        }
 
         const config = {
             headers: {
@@ -29,7 +33,7 @@ export default function Callback(props) {
             'redirect_uri': `${props.localAPIHostname}/callback/discord`
         }
 
-        axios.post('https://discord.com/api/v9/oauth2/token', new URLSearchParams(data), config)
+        axios.post('https://discord.com/api/v10/oauth2/token', new URLSearchParams(data), config)
             .then(res => {
                 const id = nanoid(8);
                 jsCookie.set('login-token', id)
@@ -38,16 +42,16 @@ export default function Callback(props) {
             .then(data => {
                 axios.post(`${props.localAPIHostname}/api/discord`, data, {
                     headers: {
-                        'master-password': props.discordClientSecret
+                        'master-password': props.apiMasterPassword
                     }
                 })
                     .then(res => res.data)
-                    .then(router.push('/', undefined, { shallow: false }))
+                    .then(router.push('/'))
                     .catch(err => console.log(err))
             })
             .catch(err => console.log(err))
 
-    }, [code, props.discordClientID, props.discordClientSecret]);
+    }, [code, props.discordClientID, props.discordClientSecret, props.apiMasterPassword]);
 
     return (
         <main>
@@ -60,6 +64,7 @@ export async function getStaticProps() {
         props: { 
             discordClientID: process.env.DISCORD_CLIENT_ID,
             discordClientSecret: process.env.DISCORD_CLIENT_SECRET,
+            apiMasterPassword: process.env.API_MASTER_PASSWORD,
             localAPIHostname: process.env.LOCAL_API_HOSTNAME
         }
     }

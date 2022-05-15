@@ -11,7 +11,7 @@ export async function fetchDiscordUserInfo(req) {
 
     const res = await axios.get(`${process.env.LOCAL_API_HOSTNAME}/api/discord`, {
         headers: {
-            'master-password': process.env.DISCORD_CLIENT_SECRET
+            'master-password': process.env.API_MASTER_PASSWORD
         }, 
         params: {
             id: discordKey
@@ -33,7 +33,7 @@ export async function fetchDiscordUserInfo(req) {
         // Checking cache first
         const cachedData = await axios.get(`${process.env.LOCAL_API_HOSTNAME}/api/discord/users/${discordKey}`, {
             headers: {
-                'master-password': process.env.DISCORD_CLIENT_SECRET
+                'master-password': process.env.API_MASTER_PASSWORD
             }
         });
 
@@ -49,7 +49,7 @@ export async function fetchDiscordUserInfo(req) {
         }
 
         // Cache miss
-        const discordData = await axios.get('https://discord.com/api/v9/users/@me', {
+        const discordData = await axios.get('https://discord.com/api/v10/users/@me', {
                     headers: {
                         'Authorization': `Bearer ${data.access_token}`
                     }
@@ -63,7 +63,7 @@ export async function fetchDiscordUserInfo(req) {
             user_info: {...discordUserData}
         }, {
             headers: {
-                'master-password': process.env.DISCORD_CLIENT_SECRET
+                'master-password': process.env.API_MASTER_PASSWORD
             }
         })
 
@@ -96,7 +96,7 @@ export async function fetchDiscordUserGuildInfo(req) {
     try {
         const res = await axios.get(`${process.env.LOCAL_API_HOSTNAME}/api/discord`, {
             headers: {
-                'master-password': process.env.DISCORD_CLIENT_SECRET
+                'master-password': process.env.API_MASTER_PASSWORD
             }, 
             params: {
                 id: discordKey
@@ -128,7 +128,7 @@ export async function fetchDiscordUserGuildInfo(req) {
         try {
             cachedData = await axios.get(`${process.env.LOCAL_API_HOSTNAME}/api/discord/users/guilds/${userData.props.discordInfo.id}`, {
                 headers: {
-                    'master-password': process.env.DISCORD_CLIENT_SECRET
+                    'master-password': process.env.API_MASTER_PASSWORD
                 }}
             );
         } catch (ex) {
@@ -149,7 +149,7 @@ export async function fetchDiscordUserGuildInfo(req) {
             }
         }
         // Cache miss
-        const discordData = await axios.get('https://discord.com/api/v9/users/@me/guilds', {
+        const discordData = await axios.get('https://discord.com/api/v10/users/@me/guilds', {
                     headers: {
                         'Authorization': `Bearer ${data.access_token}`
                     }
@@ -161,7 +161,7 @@ export async function fetchDiscordUserGuildInfo(req) {
             guilds: [...discordData.data]
         }, {
             headers: {
-                'master-password': process.env.DISCORD_CLIENT_SECRET
+                'master-password': process.env.API_MASTER_PASSWORD
             }
         })
 
@@ -194,7 +194,7 @@ export async function fetchAllDiscordUserInfo(req) {
     try {
         const res = await axios.get(`${process.env.LOCAL_API_HOSTNAME}/api/discord`, {
             headers: {
-                'master-password': process.env.DISCORD_CLIENT_SECRET
+                'master-password': process.env.API_MASTER_PASSWORD
             }, 
             params: {
                 id: discordKey
@@ -227,7 +227,7 @@ export async function fetchAllDiscordUserInfo(req) {
         try {
             cachedData = await axios.get(`${process.env.LOCAL_API_HOSTNAME}/api/discord/users/guilds/${userData.props.discordInfo.id}`, {
                 headers: {
-                    'master-password': process.env.DISCORD_CLIENT_SECRET
+                    'master-password': process.env.API_MASTER_PASSWORD
                 }}
             );
         } catch (ex) {
@@ -250,7 +250,7 @@ export async function fetchAllDiscordUserInfo(req) {
         }
 
         // Cache miss
-        const discordData = await axios.get('https://discord.com/api/v9/users/@me/guilds', {
+        const discordData = await axios.get('https://discord.com/api/10/users/@me/guilds', {
                     headers: {
                         'Authorization': `Bearer ${data.access_token}`
                     }
@@ -271,7 +271,7 @@ export async function fetchAllDiscordUserInfo(req) {
                 guilds: [...dataToPost]
             }, {
                 headers: {
-                    'master-password': process.env.DISCORD_CLIENT_SECRET
+                    'master-password': process.env.API_MASTER_PASSWORD
                 }
             })
         } catch (ex) {
@@ -309,7 +309,7 @@ export async function fetchDiscordGuildInfo(req, guildId) {
     try {
         const res = await axios.get(`${process.env.LOCAL_API_HOSTNAME}/api/discord`, {
             headers: {
-                'master-password': process.env.DISCORD_CLIENT_SECRET
+                'master-password': process.env.API_MASTER_PASSWORD
             }, 
             params: {
                 id: discordKey
@@ -331,7 +331,7 @@ export async function fetchDiscordGuildInfo(req, guildId) {
         try {
             cachedData = await axios.get(`${process.env.LOCAL_API_HOSTNAME}/api/discord/guilds/${guildId}`, {
                 headers: {
-                    'master-password': process.env.DISCORD_CLIENT_SECRET
+                    'master-password': process.env.API_MASTER_PASSWORD
                 }
             })
         } catch (ex) {
@@ -348,13 +348,13 @@ export async function fetchDiscordGuildInfo(req, guildId) {
         let discordData;
         let discordChannelData;
         try {
-            discordData = await axios.get(`https://discord.com/api/v9/guilds/${guildId}`, {
+            discordData = await axios.get(`https://discord.com/api/v10/guilds/${guildId}`, {
                         headers: {
                             'Authorization': `Bot ${process.env.DISCORD_BOT_TOKEN}`
                         }
             });
 
-            discordChannelData = await axios.get(`https://discord.com/api/v9/guilds/${guildId}/channels`, {
+            discordChannelData = await axios.get(`https://discord.com/api/v10/guilds/${guildId}/channels`, {
                         headers: {
                             'Authorization': `Bot ${process.env.DISCORD_BOT_TOKEN}`
                         }
@@ -370,7 +370,7 @@ export async function fetchDiscordGuildInfo(req, guildId) {
             channels: [...discordChannelData.data]
         }, {
             headers: {
-                'master-password': process.env.DISCORD_CLIENT_SECRET
+                'master-password': process.env.API_MASTER_PASSWORD
             }
         }).catch(err => console.log(err));
         
