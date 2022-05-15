@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import NextNProgress from 'nextjs-progressbar';
 import { useState, useEffect } from 'react';
 
-export default function Layout({ token, discordInfo, title, showLogin = true, showFooter = true, discordLoginLink = process.env.DISCORD_LOGIN_LINK, children }) {
+export default function Layout({ token, discordInfo, title, showLogin = true, showFooter = true, discordLoginLink = `https://discord.com/api/oauth2/authorize?client_id=${atob(process.env.DISCORD_BOT_TOKEN.split('.')[0])}&redirect_uri=${encodeURI(process.env.LOCAL_API_HOSTNAME + '/callback/discord')}&response_type=code&scope=identify%20guilds`, children }) {
     const router = useRouter();
     const [ layoutInfo, setLayoutInfo ] = useState({
         discordInfo: {...discordInfo},
@@ -43,7 +43,7 @@ export default function Layout({ token, discordInfo, title, showLogin = true, sh
     }, [])
 
     const discordAvatar = discordInfoObj ? Object.keys(discordInfoObj).length ? `https://cdn.discordapp.com/avatars/${discordInfoObj.id}/${discordInfoObj.avatar}.${discordInfoObj.avatar.startsWith('a_') ? 'gif' : 'png'}?size=512` : null : null;
-    const loginButton = showLogin ? <li><a className='nav--login-btn' id='login-btn' href={discordLoginLink || process.env.DISCORD_LOGIN_LINK}><img src='https://i.robertify.me/images/c2n9x.png' alt='Login' /><span>Login</span></a></li> : '';
+    const loginButton = showLogin ? <li><a className='nav--login-btn' id='login-btn' href={discordLoginLink}><img src='https://i.robertify.me/images/c2n9x.png' alt='Login' /><span>Login</span></a></li> : '';
     
     const toggleUserPopout = () => {
         setLayoutInfo(oldLayoutInfo => ({
