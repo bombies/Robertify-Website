@@ -6,6 +6,8 @@ import Link from 'next/link';
 import Toggle from "../../../components/Toggle";
 import SelectMenu from "../../../components/SelectMenu";
 import TextOptionList from "../../../components/TextOptionList";
+import { robertifyAPI } from "../../../utils/RobertifyAPI";
+import axios from "axios";
 
 function sortChannelsByCategory(categories, channels) {
     const channelsSorted = categories.map(categoryObj => {
@@ -287,6 +289,11 @@ function getDefaultGuildInfo(fullGuildInfo) {
 }
 
 function compare(object1, object2) {
+    if (!object1)
+        return false;
+    if (!object2)
+        return false;
+
     for (let propName in object1) {
         if (object1.hasOwnProperty(propName) != object2.hasOwnProperty(propName)) {
             return false;
@@ -323,7 +330,6 @@ function compare(object1, object2) {
 }
 
 function arrayCompare(arr1, arr2) {
-
     if (!arr1)
         return false;
     if (!arr2)
@@ -349,9 +355,11 @@ function arrayCompare(arr1, arr2) {
     return true;
 }
 
-export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, fullGuildInfo, hasAccess, localHostName }) {
+export default function GuildPage({ token, userInfo, guildInfo,
+    dbGuildInfo, fullGuildInfo, hasAccess,
+    localHostName, hostedHostName, hostedMasterPassword
+}) {
     const router = useRouter();
-    const [ originalData, setOriginalData ] = useState(getOriginalDataObject(dbGuildInfo, fullGuildInfo));
 
     useEffect(() => {
         if (!hasAccess)
@@ -361,8 +369,53 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
     const [ discordInfoState ] = useState({
         userInfo: userInfo,
         guildInfo: guildInfo
-    });
+    }, []);
     const guild = discordInfoState.guildInfo;
+
+    const [ isRefreshing, setIsRefreshing ] = useState(false);
+
+    useEffect(() => {
+        setIsRefreshing(false);
+        setOriginalData(getOriginalDataObject(dbGuildInfo, fullGuildInfo));
+    }, [token, userInfo, guildInfo, dbGuildInfo, fullGuildInfo, hasAccess, localHostName])
+
+    useEffect(() => {
+        if (isRefreshing)
+            return;
+
+        setTogglesState(originalData.toggles);
+        setEightBallResponses(originalData.eight_ball);
+        setDjSelectObj({
+            optionsVisible: false,
+            selectValues: [...originalData.djRoles],
+            shownOptions: [...roleNamesSorted],
+            searchText: ''
+        });
+        setVcSelectObj({
+            optionsVisible: false,
+            selectValues: [...originalData.restricted_voice_channels],
+            shownOptions: [...voiceChannelsSorted],
+            searchText: ''
+        });
+        setTcSelectObj({
+            optionsVisible: false,
+            selectValues: [...originalData.restricted_text_channels],
+            shownOptions: [...textChannelsSorted],
+            searchText: ''
+        });
+        setLcSelectObj({
+            optionsVisible: false,
+            selectValues: Object.keys(originalData.log_channel).length ? [originalData.log_channel] : [],
+            shownOptions: [...textChannelsSorted],
+            searchText: ''
+        });
+        setThemeSelectObj({
+            optionsVisible: false,
+            selectValues: [{...originalData.theme}],
+            shownOptions: [...themes],
+            searchText: ''
+        });
+    }, [isRefreshing]);
 
     useEffect(() => {
         if (!discordInfoState.userInfo) {
@@ -465,6 +518,7 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
     hasPerms ||= (Number(guildInfo.permissions) & (1 << 3)) == (1 << 3);
     hasPerms = !Number(guildInfo.permissions) ? false : hasPerms;
     
+    const [ originalData, setOriginalData ] = useState(getOriginalDataObject(dbGuildInfo, fullGuildInfo));
     const [ changeMade, setChangeMade ] = useState(false);
     const [ togglesState, setTogglesState ] = useState(originalData.toggles);
     
@@ -796,6 +850,8 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
 
         setRefreshAllowed(false);
         setTimeout(() => setRefreshAllowed(true), 20 * 1000);
+
+        setIsRefreshing(true)
     }
 
     const discard = () => {
@@ -890,6 +946,30 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
         setChangeMade(true);
     }
 
+    const [ doSave, setDoSaveState ] = useState(false);
+
+    useEffect(() => {
+        if (doSave) {
+            robertifyAPI.setAccessTokenWithParams(hostedHostName, hostedMasterPassword)
+                .then(accessToken => robertifyAPI.updateGuildInfo(hostedHostName, accessToken, dbGuildInfo.server_id, {
+                    toggles: togglesState,
+                    eight_ball: eightBallResponses,
+                    theme: themeSelectObj.selectValues[0].name.toLowerCase(),
+                    log_channel: lcSelectObj.selectValues[0] ? lcSelectObj.selectValues[0] : '-1',
+                    restricted_channels: {
+                        text_channels: tcSelectObj.selectValues.map(obj => obj.id),
+                        voice_channels: vcSelectObj.selectValues.map(obj => obj.id)
+                    },
+                    permissions: {
+                        ...dbGuildInfo.permissions,
+                        '1': djSelectObj.selectValues.map(obj => obj.id)
+                    }
+                }))
+                .then(setDoSaveState(false))
+                .catch(err => console.log(err));
+        }
+    }, [doSave])
+
     const save = () => {
         if (!hasPerms) return;
         if (!changeMade) return;
@@ -904,6 +984,7 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
             eight_ball: [...eightBallResponses]
         });
         setChangeMade(false);
+        setDoSaveState(true);
     }
     
     const logToggles = Object.keys(togglesState.log_toggles).map(key => <Toggle key={key} label={key.replaceAll('_', ' ')} isActive={togglesState.log_toggles[key]} setActive={() => toggleInnerState('log_toggles', key)} />)
@@ -1051,105 +1132,40 @@ export default function GuildPage({ token, userInfo, guildInfo, dbGuildInfo, ful
 
 export async function getServerSideProps(context) {
     const info = await fetchAllDiscordUserInfo(context.req);
-    const guildInfo = await fetchDiscordGuildInfo(context.req, context.params.id)
-    const { access } = guildInfo;
+    try {
+        const guildInfo = await fetchDiscordGuildInfo(context.req, context.params.id)
 
-    return {
-        props: {
-            token: info.props.token || null,
-            userInfo: info.props.userInfo || null,
-            guildInfo: info.props.guildInfo.filter(obj => obj.id === context.params.id)[0] || null,
-            dbGuildInfo: {
-                toggles: {
-                    restricted_voice_channels: false,
-                    restricted_text_channels: false,
-                    '8ball': true,
-                    show_requester: true,
-                    announce_messages: true,
-                    polls: true,
-                    tips: true,
-                    vote_skips: true,
-                    "dj_toggles": {
-                        "247": true,
-                        "play": false,
-                        "disconnect": true,
-                        "favouritetracks": false,
-                        "skip": false,
-                        "seek": false,
-                        "remove": false,
-                        "karaoke": false,
-                        "tremolo": false,
-                        "search": false,
-                        "loop": false,
-                        "nightcore": false,
-                        "join": true,
-                        "lyrics": false,
-                        "jump": false,
-                        "vibrato": false,
-                        "resume": false,
-                        "move": false,
-                        "nowplaying": false,
-                        "previous": false,
-                        "clear": false,
-                        "skipto": false,
-                        "8d": false,
-                        "pause": false,
-                        "autoplay": true,
-                        "volume": false,
-                        "lofi": false,
-                        "rewind": false,
-                        "stop": false,
-                        "shuffleplay": false,
-                        "shuffle": false,
-                        "queue": false
-                    },
-                    "log_toggles": {
-                        "queue_add": true,
-                        "track_move": true,
-                        "track_loop": true,
-                        "player_pause": true,
-                        "track_vote_skip": true,
-                        "queue_shuffle": true,
-                        "player_resume": true,
-                        "volume_change": true,
-                        "track_seek": true,
-                        "track_previous": true,
-                        "track_skip": true,
-                        "track_rewind": true,
-                        "bot_disconnected": true,
-                        "queue_remove": true,
-                        "filter_toggle": true,
-                        "player_stop": true,
-                        "queue_loop": true,
-                        "queue_clear": true,
-                        "track_jump": true
-                    }
-                },
-                eight_ball : [
-                    'Testing', 'Test again', 'Blessed again 🙏🏾'
-                ],
-                theme: 'green',
-                permissions: {
-                    '0': [],
-                    '1': ['500070942618157056'],
-                    '2': [],
-                    '3': [],
-                    '4': [],
-                    '5': [],
-                    users: {
-                        '274681651945144321': [1]
-                    }
-                },
-                restricted_channels: {
-                    voice_channels: ['915480301617164318', '412292759278321674'],
-                    text_channels: ['842795162513965066', '867063130445185065']
-                },
-                log_channel: '953840220783136809',
-                theme: 'green'
-            },
-            fullGuildInfo: access ? null : guildInfo,
-            hasAccess: access === false ? false : true,
-            localHostName: process.env.LOCAL_API_HOSTNAME
+        await robertifyAPI.setAccessToken();
+        const dbGuildInfo = await robertifyAPI.getGuildInfo(context.params.id)
+        const { access } = guildInfo;
+
+        return {
+            props: {
+                token: info.props.token || null,
+                userInfo: info.props.userInfo || null,
+                guildInfo: info.props.guildInfo.filter(obj => obj.id === context.params.id)[0] || null,
+                dbGuildInfo: dbGuildInfo || null,
+                fullGuildInfo: access ? null : guildInfo,
+                hasAccess: access === false ? false : true,
+                localHostName: process.env.LOCAL_API_HOSTNAME,
+                hostedHostName: process.env.HOSTED_API_HOSTNAME,
+                hostedMasterPassword: process.env.API_MASTER_PASSWORD
+            }
         }
+    } catch (ex) {
+        if (ex.response.status === 404)
+            return {
+                props: {
+                    token: info.props.token || null,
+                    userInfo: info.props.userInfo || null,
+                    guildInfo: info.props.guildInfo.filter(obj => obj.id === context.params.id)[0] || null,
+                    dbGuildInfo: null,
+                    fullGuildInfo: null,
+                    hasAccess: false,
+                    localHostName: process.env.LOCAL_API_HOSTNAME,
+                    hostedHostName: process.env.HOSTED_API_HOSTNAME
+                }
+            }
+        else console.log(ex);
     }
 }
