@@ -533,7 +533,6 @@ export default function GuildPage({ token, userInfo, guildInfo,
         else if (!Object.keys(originalData.toggles.log_toggles).length)
             originalData.toggles.log_toggles = getDefaultGuildInfo(fullGuildInfo).toggles.log_toggles;
     }
-    console.log(originalData.toggles);
     const [ togglesState, setTogglesState ] = useState(originalData ? originalData.toggles : null);
     
     const toggleState = (stateName) => {
