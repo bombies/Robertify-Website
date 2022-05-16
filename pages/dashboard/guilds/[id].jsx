@@ -216,7 +216,7 @@ function getDefaultGuildInfo(fullGuildInfo) {
             polls: true,
             tips: true,
             vote_skips: false,
-            "dj_toggles": {
+            dj_toggles: {
                 "247": false,
                 "play": false,
                 "disconnect": false,
@@ -250,7 +250,7 @@ function getDefaultGuildInfo(fullGuildInfo) {
                 "shuffle": false,
                 "queue": false
             },
-            "log_toggles": {
+            log_toggles: {
                 "queue_add": true,
                 "track_move": true,
                 "track_loop": true,
@@ -526,6 +526,14 @@ export default function GuildPage({ token, userInfo, guildInfo,
     
     const [ originalData, setOriginalData ] = useState(getOriginalDataObject(dbGuildInfo, fullGuildInfo));
     const [ changeMade, setChangeMade ] = useState(false);
+
+    if (originalData) {
+        if (!originalData.toggles.log_toggles)
+            originalData.toggles.log_toggles = getDefaultGuildInfo(fullGuildInfo).toggles.log_toggles;
+        else if (!Object.keys(originalData.toggles.log_toggles).length)
+            originalData.toggles.log_toggles = getDefaultGuildInfo(fullGuildInfo).toggles.log_toggles;
+    }
+    console.log(originalData.toggles);
     const [ togglesState, setTogglesState ] = useState(originalData ? originalData.toggles : null);
     
     const toggleState = (stateName) => {
