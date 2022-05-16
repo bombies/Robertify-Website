@@ -379,3 +379,17 @@ export async function fetchDiscordGuildInfo(req, guildId) {
         console.log(ex)
     }
 }
+
+export async function userHasVoted(id) {
+    try {
+        const res = await axios.get('https://top.gg/api/bots/893558050504466482/check?userId=' + id, {
+            headers: {
+                Authorization: process.env.TOP_GG_API_TOKEN
+            }
+        });
+        const { voted } =  res.data;
+        return voted === 1 ? true : false;
+    } catch (ex) {
+         console.log(ex);
+    }
+}

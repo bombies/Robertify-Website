@@ -1,7 +1,7 @@
 import Layout from "../../../components/Layout";
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { fetchAllDiscordUserInfo, fetchDiscordGuildInfo } from '../../../utils/APIUtils';
+import { fetchAllDiscordUserInfo, fetchDiscordGuildInfo, userHasVoted } from '../../../utils/APIUtils';
 import Link from 'next/link';
 import Toggle from "../../../components/Toggle";
 import SelectMenu from "../../../components/SelectMenu";
@@ -201,7 +201,9 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo) {
         log_channel: {...logChannelObj},
         theme: {...themeObj},
         toggles: {...dbGuildInfo.toggles},
-        eight_ball: [...dbGuildInfo.eight_ball]
+        eight_ball: [...dbGuildInfo.eight_ball],
+        autoplay: dbGuildInfo.autoplay ?? false,
+        twenty_four_seven_mode: dbGuildInfo.twenty_four_seven_mode ?? false
     }
 }
 
@@ -288,7 +290,9 @@ function getDefaultGuildInfo(fullGuildInfo) {
             text_channels: []
         },
         log_channel: '-1',
-        theme: 'green'
+        theme: 'green',
+        twenty_four_seven_mode: false,
+        autoplay: false,
     }
 
     return getOriginalDataObject(defaultObj, fullGuildInfo);
@@ -363,7 +367,8 @@ function arrayCompare(arr1, arr2) {
 
 export default function GuildPage({ token, userInfo, guildInfo,
     dbGuildInfo, fullGuildInfo, hasAccess,
-    localHostName, hostedHostName, hostedMasterPassword, botID
+    localHostName, hostedHostName, hostedMasterPassword,
+    botID, hasVoted
 }) {
     const router = useRouter();
 
@@ -571,6 +576,30 @@ export default function GuildPage({ token, userInfo, guildInfo,
                 setChangeMade(false);
             }
 
+            return newState;
+        });
+    }
+
+    const [ managementTogglesState, setManagementTogglesState ] = useState({
+        autoplay: originalData.autoplay,
+        twenty_four_seven: originalData.twenty_four_seven_mode,
+    })
+
+    const toggleManagementState = (stateName) => {
+        if (!hasPerms) return;
+
+        setManagementTogglesState(oldState => {
+            const newState = {
+                ...oldState,
+                [stateName]: !oldState[stateName]
+            };  
+            
+            setChangeMade(!compareAllStates(
+                djSelectObj.selectValues, vcSelectObj.selectValues,
+                tcSelectObj.selectValues, lcSelectObj.selectValues[0],
+                themeSelectObj.selectValues[0], togglesState, eightBallResponses,
+                newState
+            ))
             return newState;
         });
     }
@@ -817,7 +846,8 @@ export default function GuildPage({ token, userInfo, guildInfo,
     }
 
     const compareAllStates = (djRolesSelected, rvcSelected, rtcSelected,
-        logChannelSelected, themeSelected, togglesState, eightBallState = eightBallResponses
+        logChannelSelected, themeSelected, togglesState, eightBallState = eightBallResponses,
+        managementToggles = managementTogglesState
     ) => {
         if (!arrayCompare(originalData.djRoles.map(obj => ({ name: obj.name, id: obj.id })), djRolesSelected.map(obj => ({ name: obj.name, id: obj.id })))) {
             return false;
@@ -831,7 +861,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
             return false;
         }
         
-        if (!compare(originalData.log_channel, logChannelSelected)) {
+        if (!compare(originalData.log_channel, logChannelSelected ?? {})) {
             return false;
         }
         
@@ -846,6 +876,11 @@ export default function GuildPage({ token, userInfo, guildInfo,
         if (!arrayCompare(originalData.eight_ball.sort((a,b) => a.localeCompare(b)), eightBallState.sort((a,b) => a.localeCompare(b)))) {
             return false;
         }
+
+        if (managementToggles.autoplay !== originalData.autoplay)
+            return false;
+        if (managementToggles.twenty_four_seven !== originalData.twenty_four_seven_mode)
+            return false;
 
         return true;
     }
@@ -908,6 +943,11 @@ export default function GuildPage({ token, userInfo, guildInfo,
 
         setEightBallResponses(originalData.eight_ball);
         setEightBallInput('');
+
+        setManagementTogglesState({
+            autoplay: originalData.autoplay,
+            twenty_four_seven: originalData.twenty_four_seven_mode,
+        })
         setChangeMade(false);
     }
 
@@ -954,6 +994,11 @@ export default function GuildPage({ token, userInfo, guildInfo,
         setTogglesState(defaultObj.toggles);
 
         setEightBallResponses(defaultObj.eight_ball);
+
+        setManagementTogglesState({
+            autoplay: defaultObj.autoplay,
+            twenty_four_seven: defaultObj.twenty_four_seven_mode,
+        });
         setChangeMade(true);
     }
 
@@ -974,7 +1019,9 @@ export default function GuildPage({ token, userInfo, guildInfo,
                     permissions: {
                         ...dbGuildInfo.permissions,
                         '1': djSelectObj.selectValues.map(obj => obj.id)
-                    }
+                    },
+                    twenty_four_seven_mode: managementTogglesState.twenty_four_seven,
+                    autoplay: managementTogglesState.autoplay
                 }))
                 .then(setDoSaveState(false))
                 .catch(err => console.log(err));
@@ -1090,6 +1137,12 @@ export default function GuildPage({ token, userInfo, guildInfo,
                             />
                         </div>
                         <hr className='serverDash--divider' />
+                        <h2 className='serverDash--controlPanel-title'>Management Toggles</h2>
+                        <div className='serverDash--controlPanel-toggles'>
+                            <Toggle label='Autoplay' subTitle='Should Robertify play recommended tracks in the event of a finished queue?' isActive={managementTogglesState.autoplay} setActive={() => toggleManagementState('autoplay')} isDisabled={hasVoted ? false : true} isPremium={true} />
+                            <Toggle label='24/7 Mode' subTitle='Should Robertify never leave a voice channel it connects to?' isActive={managementTogglesState.twenty_four_seven} setActive={() => toggleManagementState('twenty_four_seven')} isDisabled={hasVoted ? false : true} isPremium={true} />
+                        </div>
+                        <hr className='serverDash--divider' />
                         <h2 className='serverDash--controlPanel-title'>Toggles</h2>
                         <div className='serverDash--controlPanel-toggles'>
                             <Toggle label='Restricted Voice Channels' subTitle='Should Robertify only be allowed to play in specific voice channels?' isActive={togglesState.restricted_voice_channels} setActive={() => toggleState('restricted_voice_channels')} />
@@ -1151,6 +1204,7 @@ export async function getServerSideProps(context) {
         await robertifyAPI.setAccessToken();
         const dbGuildInfo = await robertifyAPI.getGuildInfo(context.params.id)
         const { access } = guildInfo;
+        const hasVoted = info.props.userInfo ? await userHasVoted(info.props.userInfo.id) : false;
 
         return {
             props: {
@@ -1163,7 +1217,8 @@ export async function getServerSideProps(context) {
                 localHostName: process.env.LOCAL_API_HOSTNAME,
                 hostedHostName: process.env.HOSTED_API_HOSTNAME,
                 hostedMasterPassword: process.env.API_MASTER_PASSWORD,
-                botID: atob(process.env.DISCORD_BOT_TOKEN.split('.')[0])
+                botID: atob(process.env.DISCORD_BOT_TOKEN.split('.')[0]),
+                hasVoted: hasVoted
             }
         }
     } catch (ex) {
@@ -1179,7 +1234,8 @@ export async function getServerSideProps(context) {
                     localHostName: process.env.LOCAL_API_HOSTNAME,
                     hostedHostName: process.env.HOSTED_API_HOSTNAME,
                     hostedMasterPassword: process.env.API_MASTER_PASSWORD,
-                    botID: atob(process.env.DISCORD_BOT_TOKEN.split('.')[0])
+                    botID: atob(process.env.DISCORD_BOT_TOKEN.split('.')[0]),
+                    hasVoted: hasVoted
                 }
             }
         else console.log(ex);

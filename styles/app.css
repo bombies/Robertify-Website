@@ -1563,7 +1563,11 @@ footer {
 
 .cursor-notAllowed {
     cursor: not-allowed;
-    filter: brightness(50%);
+    filter: brightness(70%);
+}
+
+.pointer-noEvents {
+    pointer-events: none;
 }
 
 .banner-lg {
@@ -1577,8 +1581,26 @@ footer {
     font-weight: 400;
 }
 
+.banner-tiny {
+    padding: .15rem;
+    justify-content: space-between;
+    width: 80%;
+    border-radius: 2.5px;
+    box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.25);
+    font-size: .85rem;
+    font-weight: 400;
+}
+
 .banner-lg p {
     align-self: center;
+}
+
+.marin-left-sm {
+    margin-left: 2.5%;
+}
+
+.bg-green {
+    background-color: #147600;
 }
 
 .bg-dark {
@@ -1610,6 +1632,14 @@ footer {
 .img-tiny {
     width: 2.5rem;
     height: 2.5rem;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.font-med {
+    font-weight: 500;
 }
 
 @media (min-width: 1700px) {
