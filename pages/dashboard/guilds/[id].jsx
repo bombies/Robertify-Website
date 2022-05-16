@@ -559,10 +559,8 @@ export default function GuildPage({ token, userInfo, guildInfo,
             }
 
             if (!compare(originalData.toggles, newState)) {
-                console.log('Change made : true')
                 setChangeMade(true);
             } else if (changeMade && compare(originalData.toggles, newState)) {
-                console.log('Change made : false')
                 setChangeMade(false);
             }
 
@@ -1146,8 +1144,6 @@ export async function getServerSideProps(context) {
         await robertifyAPI.setAccessToken();
         const dbGuildInfo = await robertifyAPI.getGuildInfo(context.params.id)
         const { access } = guildInfo;
-
-        console.log(atob(process.env.DISCORD_BOT_TOKEN.split('.')[0]))
 
         return {
             props: {

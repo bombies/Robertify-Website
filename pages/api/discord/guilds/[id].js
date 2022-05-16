@@ -1,8 +1,9 @@
 import { DISCORD_GUILD_HASH } from ".";
 import { redis } from "../../../../utils/RedisClient";
 import { verifyMasterPassword } from "../users";
+import { withSentry } from '@sentry/nextjs';
 
-export default async function handler(req, res) {
+const handler = async (req, res) => {
     if (req.method !== 'GET')
         return res.status(400).json({ error: `You cannot ${req.method} this route!` })
     
@@ -22,4 +23,12 @@ export default async function handler(req, res) {
     } catch (ex) {
         console.log(ex);
     }
+}
+
+export default withSentry(handler);
+
+export const config = {
+    api: {
+      externalResolver: true,
+    },
 }

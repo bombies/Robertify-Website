@@ -1,6 +1,6 @@
 import { verifyMasterPassword } from '..';
 import { redis } from '../../../../../utils/RedisClient';
-
+import { withSentry } from '@sentry/nextjs';
 const Joi = require('@hapi/joi');
 
 export const GUILD_HASH = 'discordUserGuildHash#';
@@ -19,7 +19,7 @@ const validateBody = (body) => {
     return validationObj.validate(body);
 }
 
-export default async function handler(req, res) {
+const handler = async (req, res) => {
     try {
         if (req.method !== 'POST')
             return res.send(400).json({ message: `You can't ${req.method} this route!`})
@@ -39,4 +39,12 @@ export default async function handler(req, res) {
         console.log(ex)
         res.status(500).json({ error: 'An internal error occured' });
     }
+}
+
+export default withSentry(handler);
+
+export const config = {
+    api: {
+      externalResolver: true,
+    },
 }

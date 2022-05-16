@@ -1,7 +1,8 @@
 import { redis } from "../../../utils/RedisClient"
 import { verifyMasterPassword } from "./users";
+import { withSentry } from '@sentry/nextjs';
 
-export default async function handler(req, res) {
+const handler = async (req, res) => {
     const hashName = 'discordDataHash';
 
     try {
@@ -29,4 +30,12 @@ export default async function handler(req, res) {
         console.error(ex);
         res.status(500).json({ error: 'An internal error occured' })
     }
+}
+
+export default withSentry(handler);
+
+export const config = {
+    api: {
+      externalResolver: true,
+    },
 }

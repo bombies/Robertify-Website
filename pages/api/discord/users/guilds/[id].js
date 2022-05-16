@@ -1,8 +1,9 @@
 import { GUILD_HASH } from ".";
 import { verifyMasterPassword } from "..";
 import { redis } from "../../../../../utils/RedisClient";
+import { withSentry } from '@sentry/nextjs';
 
-export default async function handler(req, res) {
+const handler = async (req, res) => {
     try {
         if (req.method !== 'GET')
             return res.send(400).json({ message: `You can't ${req.method} this route!`})
@@ -20,4 +21,12 @@ export default async function handler(req, res) {
         console.log(ex)
         res.status(500).json({ error: 'An internal error occured' });
     }
+}
+
+export default withSentry(handler);
+
+export const config = {
+    api: {
+      externalResolver: true,
+    },
 }

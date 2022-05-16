@@ -1,5 +1,6 @@
 import { redis } from '../../../../utils/RedisClient';
 import { verifyMasterPassword } from '../users';
+import { withSentry } from '@sentry/nextjs';
 const Joi = require('@hapi/joi');
 
 const validateBody = (body) => {
@@ -51,7 +52,7 @@ const validateBody = (body) => {
 
 export const DISCORD_GUILD_HASH = 'discordGuildHash#';
 
-export default async function handler(req, res) {
+const handler = async (req, res) => {
     if (req.method !== 'POST')
         return res.status(400).json({ error: `You cannot ${req.method} this route!` })
 
@@ -69,4 +70,12 @@ export default async function handler(req, res) {
     } catch (ex) {
         console.log(ex);
     }
+}
+
+export default withSentry(handler);
+
+export const config = {
+    api: {
+      externalResolver: true,
+    },
 }

@@ -1,5 +1,6 @@
 import { redis } from '../../../../utils/RedisClient';
 const Joi = require('@hapi/joi');
+import { withSentry } from '@sentry/nextjs';
 
 const bodyValidate = (data) => {
     const validation = Joi.object({
@@ -21,7 +22,7 @@ export function verifyMasterPassword(req) {
         return null;
 }
 
-export default function handler(req, res) {
+const handler = async (req, res) => {
     try {
         if (req.method !== 'POST')
             return res.status(400).json({ error: `You cannot ${req.method} this route!` })
@@ -42,4 +43,12 @@ export default function handler(req, res) {
         console.error(ex);
         res.status(500).json({ error: 'An internal error occured' });
     }
+}
+
+export default withSentry(handler);
+
+export const config = {
+    api: {
+      externalResolver: true,
+    },
 }
