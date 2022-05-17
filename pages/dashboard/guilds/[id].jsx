@@ -585,8 +585,9 @@ export default function GuildPage({ token, userInfo, guildInfo,
         twenty_four_seven: originalData.twenty_four_seven_mode,
     })
 
-    const toggleManagementState = (stateName) => {
+    const toggleManagementState = (stateName, isPremium = false) => {
         if (!hasPerms) return;
+        if (isPremium && !hasVoted) return;
 
         setManagementTogglesState(oldState => {
             const newState = {
@@ -1139,8 +1140,8 @@ export default function GuildPage({ token, userInfo, guildInfo,
                         <hr className='serverDash--divider' />
                         <h2 className='serverDash--controlPanel-title'>Management Toggles</h2>
                         <div className='serverDash--controlPanel-toggles'>
-                            <Toggle label='Autoplay' subTitle='Should Robertify play recommended tracks in the event of a finished queue?' isActive={managementTogglesState.autoplay} setActive={() => toggleManagementState('autoplay')} isDisabled={hasVoted ? false : true} isPremium={true} />
-                            <Toggle label='24/7 Mode' subTitle='Should Robertify never leave a voice channel it connects to?' isActive={managementTogglesState.twenty_four_seven} setActive={() => toggleManagementState('twenty_four_seven')} isDisabled={hasVoted ? false : true} isPremium={true} />
+                            <Toggle label='Autoplay' subTitle='Should Robertify play recommended tracks in the event of a finished queue?' isActive={managementTogglesState.autoplay} setActive={() => toggleManagementState('autoplay', true)} isDisabled={hasVoted ? false : true} isPremium={true} />
+                            <Toggle label='24/7 Mode' subTitle='Should Robertify never leave a voice channel it connects to?' isActive={managementTogglesState.twenty_four_seven} setActive={() => toggleManagementState('twenty_four_seven', true)} isDisabled={hasVoted ? false : true} isPremium={true} />
                         </div>
                         <hr className='serverDash--divider' />
                         <h2 className='serverDash--controlPanel-title'>Toggles</h2>
