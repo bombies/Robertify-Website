@@ -1072,6 +1072,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
                         <div className='serverDash--controlPanel-mangement'>
                             <SelectMenu
                                 title='DJ Roles'
+                                id='djRoles'
                                 subTitle='Set DJ roles'
                                 menuOptions={djSelectObj.shownOptions}
                                 multiSelect={true}
@@ -1085,6 +1086,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
                             />
                             <SelectMenu
                                 title='Restricted Voice Channels'
+                                id='rvc'
                                 subTitle='Set Voice Channels'
                                 menuOptions={vcSelectObj.shownOptions}
                                 multiSelect={true}
@@ -1100,6 +1102,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
                             />
                             <SelectMenu
                                 title='Restricted Text Channels'
+                                id='rtc'
                                 subTitle='Set Text Channels'
                                 menuOptions={tcSelectObj.shownOptions}
                                 multiSelect={true}
@@ -1114,6 +1117,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
                             />
                             <SelectMenu
                                 title='Log Channel'
+                                id='lc'
                                 subTitle='Set the channel for Robertify logs to be sent'
                                 menuOptions={lcSelectObj.shownOptions}
                                 multiSelect={false}
@@ -1128,6 +1132,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
                             />
                             <SelectMenu
                                 title='Theme'
+                                id='theme'
                                 subTitle='Set the color theme for Roberify'
                                 menuOptions={themeSelectObj.shownOptions}
                                 multiSelect={false}

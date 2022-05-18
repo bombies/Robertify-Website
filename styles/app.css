@@ -1309,7 +1309,6 @@ footer {
 .selectMenu.option {
     padding: 1rem 2rem;
     border-radius: 10px;
-    /* cursor: pointer; */
     display: flex;
     justify-content: space-between;
     font-size: 1rem;

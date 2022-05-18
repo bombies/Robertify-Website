@@ -2,7 +2,7 @@ import { nanoid } from "nanoid";
 import { useEffect } from "react";
 
 export default function SelectMenu({ 
-        className = 'selectMenu', title, subTitle = null, menuOptions, multiSelect = false, placeHolder,
+        className = 'selectMenu', id, title, subTitle = null, menuOptions, multiSelect = false, placeHolder,
         selectValues, setSelectValues, optionsVisible, setOptionsVisible, searchText, setSearchText,
         isChannelMenu = false, isVoiceMenu = false 
     }) {
@@ -13,16 +13,18 @@ export default function SelectMenu({
     }
 
     useEffect(() => {
-        const selectMenu = document.getElementById(`${className}-menuOptionsContainer`);
-
-        const clickFunc = () => {
-            selectMenu.remove('active');
+        const menu = document.getElementById(`${className}-menuOptionsContainer#${id}`);
+        
+        const clickFun = (event) => {
+            if (!event.target.className.includes(`${className}`) && menu.classList.contains('active')) {
+                menu.classList.remove('active');
+            }
         }
 
-        document.addEventListener('click', clickFunc);
+        document.addEventListener('click', clickFun);
 
-        return () => document.removeEventListener('click', clickFunc);
-    }, []);
+        return () => document.removeEventListener('click', clickFun);
+    }, [])
 
     const options = !isChannelMenu ? menuOptions.map(option => {
         return <div key={option.id} className={`${className} option ${selectValues.some(obj => obj.id === option.id) && 'active'}`} style={!multiSelect ? { justifyContent: 'normal', gap: '1.5rem' } : {}} onClick={(event) => setSelectValues(event, optionsVisible, option)}>
@@ -54,9 +56,9 @@ export default function SelectMenu({
             </div>
             <div className={`${className} menu`} onClick={setOptionsVisible}>
                 <p className={`${className} menu-selected`}>{ !selectValues.length ? placeHolder : selectValues.length === 1 ? selectValues[0].name : `${selectValues.length} options selected` }</p>
-                <img src='https://i.robertify.me/images/zxqvx.png' alt='Drop down icon' />
+                <img className={`${className} dropDown`} src='https://i.robertify.me/images/zxqvx.png' alt='Drop down icon' />
             </div>
-            <div id={`${className}-menuOptionsContainer`} className={`${className} menu-optionsContainer ${optionsVisible ? 'active' : ''}`}>
+            <div id={`${className}-menuOptionsContainer#${id}`} className={`${className} menu-optionsContainer ${optionsVisible ? 'active' : ''}`}>
                 <input className={`${className} menu-options-search`} type='text' placeholder='Search...' value={searchText} onChange={search} />
                 <div className={`${className} menu-options`}>
                     {options}
