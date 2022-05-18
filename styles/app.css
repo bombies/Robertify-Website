@@ -488,6 +488,10 @@ nav {
 }
 
 .support {
+    position: relative;
+}
+
+.support::before {
     background-image: url('https://i.robertify.me/images/qfyvl.png');
     background-color: #565656;
     background-repeat: no-repeat;
@@ -495,14 +499,25 @@ nav {
     background-position: 50%;
     background-position-x: 100%;
     background-blend-mode: soft-light;
+    width: 100%;
+
+    content: '';
+    margin: -35px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    filter: blur(20px);
+    z-index: -1;
 }
 
 .support--items {
     display: flex;
     overflow: hidden;
-    padding: 11.5rem 5.0625rem 13rem 23rem;
+    padding: 11.5rem 5.0625rem 13rem 13rem;
 
-    backdrop-filter: blur(15px);
+    /* backdrop-filter: blur(15px); */
 }
 
 .support--desc {
@@ -997,6 +1012,7 @@ footer {
 
 .guildCard--banner {
     position: relative;
+    width: 50%;
 }
 
 .guildCard--owner-container {
