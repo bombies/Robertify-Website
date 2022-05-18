@@ -128,7 +128,7 @@ export default function Layout({ token, discordInfo, title,
                 {children}
             </main> 
             {showFooter &&
-                <footer className={stickyFooter && 'sticky-bottom'}>
+                <footer className={stickyFooter ? 'sticky-bottom' : ''}>
                     <div className='footer-brand'>
                         <img className='footer--logo' src='https://i.robertify.me/images/0bspn.png' alt='Footer Logo' />
                         <h1 className='footer--logo-text'>Robertify</h1>
