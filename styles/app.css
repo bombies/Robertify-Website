@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap');
 
 :root {
-    --main-content-padding-left: 20rem;
+    --main-content-padding-left: 15rem;
     --main-content-padding-left-2: 15rem;
     --green: #70FF6D;
     --toggle-transition-time: .2s
@@ -376,10 +376,11 @@ nav {
 }
 
 .aboutUs--img {
-    width: 20rem;
-    height: 20rem;
+    width: 15rem;
+    height: 15rem;
+    align-self: center;
     margin-right: 6.125rem;
-    filter: drop-shadow(0px 4px 25px rgba(0, 0, 0, 0.55));
+    filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.55));
 }
 
 .aboutUs--desc {
