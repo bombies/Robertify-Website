@@ -5,7 +5,9 @@ import { useRouter } from 'next/router';
 import NextNProgress from 'nextjs-progressbar';
 import { useState, useEffect } from 'react';
 
-export default function Layout({ token, discordInfo, title, showLogin = true, showFooter = true, discordLoginLink, children }) {
+export default function Layout({ token, discordInfo, title,
+    showLogin = true, showFooter = true, discordLoginLink,
+    stickyFooter = false, children }) {
     const router = useRouter();
     const [ layoutInfo, setLayoutInfo ] = useState({
         discordInfo: {...discordInfo},
@@ -127,7 +129,7 @@ export default function Layout({ token, discordInfo, title, showLogin = true, sh
                 {children}
             </main> 
             {showFooter &&
-                <footer>
+                <footer className={stickyFooter && 'sticky-bottom'}>
                     <div className='footer-brand'>
                         <img className='footer--logo' src='https://i.robertify.me/images/0bspn.png' alt='Footer Logo' />
                         <h1 className='footer--logo-text'>Robertify</h1>

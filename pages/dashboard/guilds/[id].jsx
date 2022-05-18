@@ -7,7 +7,6 @@ import Toggle from "../../../components/Toggle";
 import SelectMenu from "../../../components/SelectMenu";
 import TextOptionList from "../../../components/TextOptionList";
 import { robertifyAPI } from "../../../utils/RobertifyAPI";
-import axios from "axios";
 
 function sortChannelsByCategory(categories, channels) {
     if (!categories) return null;
@@ -373,7 +372,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
     const router = useRouter();
 
     useEffect(() => {
-        if (!hasAccess)
+        if (!hasAccess && guildInfo)
             router.push(`https://discord.com/oauth2/authorize?client_id=${botID}&permissions=524023090512&redirect_uri=${encodeURI(`${localHostName}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot&guild_id=${guildInfo.id}&disable_guild_select=true`)
     }, []);
 
@@ -450,7 +449,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
             router.push('/dashboard');
             return;
         }
-    }, [discordInfoState]);
+    }, [discordInfoState, dbGuildInfo, fullGuildInfo]);
 
     const categories = fullGuildInfo ? fullGuildInfo.channels.filter(channelObj => channelObj.type === 4) : null;
     const textChannels = fullGuildInfo ? fullGuildInfo.channels.filter(channelObj => channelObj.type === 0) : null;
@@ -525,9 +524,9 @@ export default function GuildPage({ token, userInfo, guildInfo,
     const textChannelsSorted = sortChannelsByCategory(categories, textChannels);
     const voiceChannelsSorted = sortChannelsByCategory(categories, voiceChannels);
 
-    let hasPerms = guildInfo.owner ? false : (Number(guildInfo.permissions) & (1 << 5)) === (1 << 5);
-    hasPerms ||= (Number(guildInfo.permissions) & (1 << 3)) == (1 << 3);
-    hasPerms = !Number(guildInfo.permissions) ? false : hasPerms;
+    let hasPerms = guildInfo ? guildInfo.owner ? false : (Number(guildInfo.permissions) & (1 << 5)) === (1 << 5) : false;
+    hasPerms ||= guildInfo ? (Number(guildInfo.permissions) & (1 << 3)) == (1 << 3) : false;
+    hasPerms = guildInfo ? !Number(guildInfo.permissions) ? false : hasPerms : false;
     
     const [ originalData, setOriginalData ] = useState(getOriginalDataObject(dbGuildInfo, fullGuildInfo));
     const [ changeMade, setChangeMade ] = useState(false);
@@ -581,8 +580,8 @@ export default function GuildPage({ token, userInfo, guildInfo,
     }
 
     const [ managementTogglesState, setManagementTogglesState ] = useState({
-        autoplay: originalData.autoplay,
-        twenty_four_seven: originalData.twenty_four_seven_mode,
+        autoplay: originalData ? originalData.autoplay : false,
+        twenty_four_seven: originalData ? originalData.twenty_four_seven_mode : false,
     })
 
     const toggleManagementState = (stateName, isPremium = false) => {
@@ -886,7 +885,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
         return true;
     }
 
-    const guildIcon = guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.${guild.icon.startsWith('a_') ? 'gif' : 'png'}?size=512` : 'https://i.robertify.me/images/rykx6.png';
+    const guildIcon = guild ? guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.${guild.icon.startsWith('a_') ? 'gif' : 'png'}?size=512` : 'https://i.robertify.me/images/rykx6.png' : null;
 
     const [ refreshAllowed,  setRefreshAllowed ] = useState(true);
 
@@ -1199,13 +1198,14 @@ export default function GuildPage({ token, userInfo, guildInfo,
 
 export async function getServerSideProps(context) {
     const info = await fetchAllDiscordUserInfo(context.req);
+    const hasVoted = info.props.userInfo ? await userHasVoted(info.props.userInfo.id) : false;
+
     try {
         const guildInfo = await fetchDiscordGuildInfo(context.req, context.params.id)
 
         await robertifyAPI.setAccessToken();
         const dbGuildInfo = await robertifyAPI.getGuildInfo(context.params.id)
         const { access } = guildInfo;
-        const hasVoted = info.props.userInfo ? await userHasVoted(info.props.userInfo.id) : false;
 
         return {
             props: {
@@ -1219,26 +1219,37 @@ export async function getServerSideProps(context) {
                 hostedHostName: process.env.HOSTED_API_HOSTNAME,
                 hostedMasterPassword: process.env.API_MASTER_PASSWORD,
                 botID: atob(process.env.DISCORD_BOT_TOKEN.split('.')[0]),
-                hasVoted: hasVoted
+                hasVoted: hasVoted ?? false
             }
         }
     } catch (ex) {
-        if (ex.response.status === 404)
+        if (ex.response) {
+            if (ex.response.status === 404)
+                return {
+                    props: {
+                        token: info.props.token || null,
+                        userInfo: info.props.userInfo || null,
+                        guildInfo: info.props.guildInfo.filter(obj => obj.id === context.params.id)[0] || null,
+                        dbGuildInfo: null,
+                        fullGuildInfo: null,
+                        hasAccess: false,
+                        localHostName: process.env.LOCAL_API_HOSTNAME,
+                        hostedHostName: process.env.HOSTED_API_HOSTNAME,
+                        hostedMasterPassword: process.env.API_MASTER_PASSWORD,
+                        botID: atob(process.env.DISCORD_BOT_TOKEN.split('.')[0]),
+                        hasVoted: hasVoted ?? false
+                    }
+                }
+            else console.log(ex);
+        } else {
+            console.log(ex);
             return {
                 props: {
-                    token: info.props.token || null,
-                    userInfo: info.props.userInfo || null,
-                    guildInfo: info.props.guildInfo.filter(obj => obj.id === context.params.id)[0] || null,
+                    guildInfo: null,
                     dbGuildInfo: null,
-                    fullGuildInfo: null,
-                    hasAccess: false,
-                    localHostName: process.env.LOCAL_API_HOSTNAME,
-                    hostedHostName: process.env.HOSTED_API_HOSTNAME,
-                    hostedMasterPassword: process.env.API_MASTER_PASSWORD,
-                    botID: atob(process.env.DISCORD_BOT_TOKEN.split('.')[0]),
-                    hasVoted: hasVoted
+                    fullGuildInfo: null
                 }
             }
-        else console.log(ex);
+        }
     }
 }
