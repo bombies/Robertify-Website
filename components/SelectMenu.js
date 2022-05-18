@@ -12,7 +12,7 @@ export default function SelectMenu({
     }
 
     const options = !isChannelMenu ? menuOptions.map(option => {
-        return <div key={option.id} className={`${className} option`} style={!multiSelect ? { justifyContent: 'normal', gap: '1.5rem' } : {}} onClick={() => setSelectValues(optionsVisible, option)}>
+        return <div key={option.id} className={`${className} option ${selectValues.some(obj => obj.id === option.id) && 'active'}`} style={!multiSelect ? { justifyContent: 'normal', gap: '1.5rem' } : {}} onClick={() => setSelectValues(optionsVisible, option)}>
             {option.icon || false}
             <p>{option.name}</p>
             {multiSelect && <div className={`${className} option-checkbox ${selectValues.some(obj => obj.id === option.id) && 'active'}`}></div>}
@@ -23,7 +23,7 @@ export default function SelectMenu({
             <h3>{categoryObj.category_name}</h3>
             {
                 categoryObj.channels.map(channel =>
-                    <div key={channel.id} className={`${className} option`} onClick={() => setSelectValues(optionsVisible, channel)}>
+                    <div key={channel.id} className={`${className} option ${selectValues.includes(channel) ? 'active' : ''}`} onClick={() => setSelectValues(optionsVisible, channel)}>
                         <img className='menu-glyph' src={isVoiceMenu ? 'https://i.imgur.com/KLccEa8.png' : 'https://i.imgur.com/4g770gD.png'} />
                         <p>{channel.name}</p>
                         {multiSelect && <div key={nanoid(8)} className={`${className} option-checkbox ${selectValues.includes(channel) ? 'active' : ''}`}></div>}
