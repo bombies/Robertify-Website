@@ -620,8 +620,8 @@ export default function GuildPage({ token, userInfo, guildInfo,
         }));
     }
 
-    const updateDjSelectValues = (isActive, value) => {
-        updateMenuSelectedValuesByID(isActive, setDjSelectObj, value, true, true, (newObj) => {
+    const updateDjSelectValues = (event, isActive, value) => {
+        updateMenuSelectedValuesByID(event, isActive, setDjSelectObj, value, true, true, (newObj) => {
             setChangeMade(!compareAllStates(
                 newObj.selectValues, vcSelectObj.selectValues,
                 tcSelectObj.selectValues, lcSelectObj.selectValues[0],
@@ -650,8 +650,8 @@ export default function GuildPage({ token, userInfo, guildInfo,
         toggleMenuVisibility(setVcSelectObj);
     }
 
-    const updateVcSelectValues = (isActive, value) => {
-        updateMenuSelectedValues(isActive, setVcSelectObj, value, true, true, (newObj) => {
+    const updateVcSelectValues = (event, isActive, value) => {
+        updateMenuSelectedValues(event, isActive, setVcSelectObj, value, true, true, (newObj) => {
             setChangeMade(!compareAllStates(
                 djSelectObj.selectValues, newObj.selectValues,
                 tcSelectObj.selectValues, lcSelectObj.selectValues[0],
@@ -674,8 +674,8 @@ export default function GuildPage({ token, userInfo, guildInfo,
         toggleMenuVisibility(setTcSelectObj);
     }
 
-    const updateTcSelectValues = (isActive, value) => {
-        updateMenuSelectedValues(isActive, setTcSelectObj, value, true, true, (newObj) => {
+    const updateTcSelectValues = (event, isActive, value) => {
+        updateMenuSelectedValues(event, isActive, setTcSelectObj, value, true, true, (newObj) => {
             setChangeMade(!compareAllStates(
                 djSelectObj.selectValues, vcSelectObj.selectValues,
                 newObj.selectValues, lcSelectObj.selectValues[0],
@@ -698,8 +698,8 @@ export default function GuildPage({ token, userInfo, guildInfo,
         toggleMenuVisibility(setLcSelectObj);
     }
 
-    const updateLcSelectValues = (isActive, value) => {
-        updateMenuSelectedValuesByID(isActive, setLcSelectObj, value, false, true, (newObj) => {
+    const updateLcSelectValues = (event, isActive, value) => {
+        updateMenuSelectedValuesByID(event, isActive, setLcSelectObj, value, false, true, (newObj) => {
             setChangeMade(!compareAllStates(
                 djSelectObj.selectValues, vcSelectObj.selectValues,
                 tcSelectObj.selectValues, newObj.selectValues[0],
@@ -722,8 +722,8 @@ export default function GuildPage({ token, userInfo, guildInfo,
         toggleMenuVisibility(setThemeSelectObj);
     }
 
-    const updateThemeSelectValues = (isActive, value) => {
-        updateMenuSelectedValues(isActive, setThemeSelectObj, value, false, false, (newObj) => {
+    const updateThemeSelectValues = (event, isActive, value) => {
+        updateMenuSelectedValues(event, isActive, setThemeSelectObj, value, false, false, (newObj) => {
             setChangeMade(!compareAllStates(
                 djSelectObj.selectValues, vcSelectObj.selectValues,
                 tcSelectObj.selectValues, lcSelectObj.selectValues[0],
@@ -750,11 +750,13 @@ export default function GuildPage({ token, userInfo, guildInfo,
         }));
     }
 
-    const updateMenuSelectedValues = (isActive, setterFunction, value,
+    const updateMenuSelectedValues = (event, isActive, setterFunction, value,
         multiSelect = false, enableDeselect = true, changeCheck = function(newObj) {}
     ) => {
         if (!hasPerms) return;
         if (!isActive) return;
+
+        event.stopPropagation();
 
         setterFunction(oldObj => {
             const newItem = {
@@ -768,11 +770,13 @@ export default function GuildPage({ token, userInfo, guildInfo,
         });
     }
 
-    const updateMenuSelectedValuesByID = (isActive, setterFunction, value,
+    const updateMenuSelectedValuesByID = (event, isActive, setterFunction, value,
         multiSelect = false, enableDeselect = true, changeCheck = function() {}
     ) => {
         if (!hasPerms) return;
         if (!isActive) return;
+
+        event.stopPropagation();
 
         setterFunction(oldObj => {
             const newItem = {
