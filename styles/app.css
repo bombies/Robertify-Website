@@ -120,6 +120,7 @@ nav {
     height: 3rem;
 
     display: flex;
+    flex-direction: row;
     justify-content: center;
     gap: 0.5rem;
 
@@ -149,14 +150,13 @@ nav {
 
 .nav--login-btn img {
     width: 1.5rem;
-    height: 1.5rem;
-
     align-self: center;
 }
 
-.nav--login-btn span {
-    height: 100%;
+.nav--login-btn p {
     color: black;
+    align-content: center;
+    align-self: center;
 }
 
 .nav--user {

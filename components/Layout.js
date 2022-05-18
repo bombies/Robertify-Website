@@ -45,7 +45,7 @@ export default function Layout({ token, discordInfo, title,
     }, [])
 
     const discordAvatar = discordInfoObj ? Object.keys(discordInfoObj).length ? `https://cdn.discordapp.com/avatars/${discordInfoObj.id}/${discordInfoObj.avatar}.${discordInfoObj.avatar.startsWith('a_') ? 'gif' : 'png'}?size=512` : null : null;
-    const loginButton = showLogin ? <li><a className='nav--login-btn' id='login-btn' href={discordLoginLink}><img src='https://i.robertify.me/images/c2n9x.png' alt='Login' /><span>Login</span></a></li> : '';
+    const loginButton = showLogin ? <li><a className='nav--login-btn' id='login-btn' href={discordLoginLink}><img src='https://i.robertify.me/images/c2n9x.png' alt='Login' /><p>Login</p></a></li> : '';
     
     const toggleUserPopout = () => {
         setLayoutInfo(oldLayoutInfo => ({
@@ -78,7 +78,6 @@ export default function Layout({ token, discordInfo, title,
                 </div>
                 <div className='nav--items'>
                     <ul className='nav--items-desktop-list' id='nav--items-desktop-list'>
-                        {/* <li><Link href='/'>Home</Link></li> */}
                         <li><a href='/invite'>Invite</a></li>
                         <li><a href='https://buy.robertify.me'>Store</a></li>
                         <li><Link href='/commands'>Commands</Link></li>
