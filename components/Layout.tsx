@@ -136,7 +136,7 @@ export default function Layout(props: Props) {
             <main>
                 {props.children}
             </main> 
-            {props.showFooter &&
+            {props.showFooter || props.showFooter === undefined &&
                 <footer className={props.stickyFooter ? 'sticky-bottom' : ''}>
                     <div className='footer-brand'>
                         <img className='footer--logo' src='https://i.robertify.me/images/ni48h.png' alt='Footer Logo' />
