@@ -1,3 +1,4 @@
+import { GetServerSideProps } from 'next';
 import { useState } from 'react';
 import CommandsTableRow from '../components/CommandsTableRow';
 import Hero from '../components/Hero';
@@ -154,8 +155,8 @@ export default function Commands({ commands, token, discordInfo }: Props) {
     )
 }
 
-export async function getServerSideProps({ req, res }) {
-    let commands: Command[] = [], realProps;
+export const getServerSideProps: GetServerSideProps =async ({ req, res }) => {
+    let commands: Command[] = [], realProps: { props: {token?: string, discordInfo?: any}};
     try {
         await robertifyAPI.setAccessToken()
         commands = await robertifyAPI.getCommandInfo();
