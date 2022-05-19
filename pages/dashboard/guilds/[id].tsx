@@ -132,6 +132,14 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
             }
             break;
         }
+        case 'mint': {
+            themeObj = {
+                id: 'ROBERTIFY_THEME_MINT',
+                name: 'Mint',
+                icon: <div className="circle" style={{ backgroundColor: `#4dffa0`, width: '1rem', height: '1rem' }}></div> 
+            }
+            break;
+        }
         case 'gold': {
             themeObj = {
                 id: 'ROBERTIFY_THEME_GOLD',
@@ -145,6 +153,14 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
                 id: 'ROBERTIFY_THEME_RED',
                 name: 'Red',
                 icon: <div className="circle" style={{ backgroundColor: `#ff0000`, width: '1rem', height: '1rem' }}></div> 
+            }
+            break;
+        }
+        case 'pastel_red': {
+            themeObj = {
+                id: 'ROBERTIFY_THEME_PASTEL_RED',
+                name: 'Red',
+                icon: <div className="circle" style={{ backgroundColor: `#ff9999`, width: '1rem', height: '1rem' }}></div> 
             }
             break;
         }
@@ -164,6 +180,14 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
             }
             break;
         }
+        case 'pastel_purple': {
+            themeObj = {
+                id: 'ROBERTIFY_THEME_PASTEL_PURPLE',
+                name: 'Pastel Purple',
+                icon: <div className="circle" style={{ backgroundColor: `#d199ff`, width: '1rem', height: '1rem' }}></div> 
+            }
+            break;
+        }
         case 'blue': {
             themeObj = {
                 id: 'ROBERTIFY_THEME_BLUE',
@@ -180,6 +204,14 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
             }
             break;
         }
+        case 'baby_blue': {
+            themeObj = {
+                id: 'ROBERTIFY_THEME_BABY_BLUE',
+                name: 'Baby Blue',
+                icon: <div className="circle" style={{ backgroundColor: `#99fffa`, width: '1rem', height: '1rem' }}></div> 
+            }
+            break;
+        }
         case 'orange': {
             themeObj = {
                 id: 'ROBERTIFY_THEME_ORANGE',
@@ -193,6 +225,14 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
                 id: 'ROBERTIFY_THEME_YELLOW',
                 name: 'Yellow',
                 icon: <div className="circle" style={{ backgroundColor: `#ffea00`, width: '1rem', height: '1rem' }}></div> 
+            }
+            break;
+        }
+        case 'pastel_yellow': {
+            themeObj = {
+                id: 'ROBERTIFY_THEME_PASTEL_YELLOW',
+                name: 'Pastel Yellow',
+                icon: <div className="circle" style={{ backgroundColor: `#faff99`, width: '1rem', height: '1rem' }}></div> 
             }
             break;
         }
@@ -481,6 +521,11 @@ export default function GuildPage({ token, userInfo, guildInfo,
             icon: <div className="circle" style={{ backgroundColor: `#00ff1e`, width: '1rem', height: '1rem' }}></div> 
         },
         {
+            id: 'ROBERTIFY_THEME_MINT',
+            name: 'Mint',
+            icon: <div className="circle" style={{ backgroundColor: `#4dffa0`, width: '1rem', height: '1rem' }}></div> 
+        },
+        {
             id: 'ROBERTIFY_THEME_GOLD',
             name: 'Gold',
             icon: <div className="circle" style={{ backgroundColor: `#ffa600`, width: '1rem', height: '1rem' }}></div> 
@@ -489,6 +534,11 @@ export default function GuildPage({ token, userInfo, guildInfo,
             id: 'ROBERTIFY_THEME_RED',
             name: 'Red',
             icon: <div className="circle" style={{ backgroundColor: `#ff0000`, width: '1rem', height: '1rem' }}></div> 
+        },
+        {
+            id: 'ROBERTIFY_THEME_PASTEL_RED',
+            name: 'Pastel Red',
+            icon: <div className="circle" style={{ backgroundColor: `#ff9999`, width: '1rem', height: '1rem' }}></div> 
         },
         {
             id: 'ROBERTIFY_THEME_PINK',
@@ -501,6 +551,11 @@ export default function GuildPage({ token, userInfo, guildInfo,
             icon: <div className="circle" style={{ backgroundColor: `#8000ff`, width: '1rem', height: '1rem' }}></div> 
         },
         {
+            id: 'ROBERTIFY_THEME_PASTEL_PURPLE',
+            name: 'Pastel Purple',
+            icon: <div className="circle" style={{ backgroundColor: `#d199ff`, width: '1rem', height: '1rem' }}></div> 
+        },
+        {
             id: 'ROBERTIFY_THEME_BLUE',
             name: 'Blue',
             icon: <div className="circle" style={{ backgroundColor: `#0077ff`, width: '1rem', height: '1rem' }}></div> 
@@ -511,6 +566,11 @@ export default function GuildPage({ token, userInfo, guildInfo,
             icon: <div className="circle" style={{ backgroundColor: `#00e1ff`, width: '1rem', height: '1rem' }}></div> 
         },
         {
+            id: 'ROBERTIFY_THEME_BABY_BLUE',
+            name: 'Baby Blue',
+            icon: <div className="circle" style={{ backgroundColor: `#99fffa`, width: '1rem', height: '1rem' }}></div> 
+        },
+        {
             id: 'ROBERTIFY_THEME_ORANGE',
             name: 'Orange',
             icon: <div className="circle" style={{ backgroundColor: `#ff4d00`, width: '1rem', height: '1rem' }}></div> 
@@ -519,6 +579,11 @@ export default function GuildPage({ token, userInfo, guildInfo,
             id: 'ROBERTIFY_THEME_YELLOW',
             name: 'Yellow',
             icon: <div className="circle" style={{ backgroundColor: `#ffea00`, width: '1rem', height: '1rem' }}></div> 
+        },
+        {
+            id: 'ROBERTIFY_THEME_PASTEL_YELLOW',
+            name: 'Pastel Yellow',
+            icon: <div className="circle" style={{ backgroundColor: `#faff99`, width: '1rem', height: '1rem' }}></div> 
         },
         {
             id: 'ROBERTIFY_THEME_DARK',
@@ -741,7 +806,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
         toggleMenuVisibility(setThemeSelectObj);
     }
 
-    const updateThemeSelectValues = (event, isActive, value) => {
+    const updateThemeSelectValues = (event: Event, isActive: boolean, value: any) => {
         updateMenuSelectedValues(event, isActive, setThemeSelectObj, value, false, false, (newObj) => {
             setChangeMade(!compareAllStates(
                 djSelectObj.selectValues, vcSelectObj.selectValues,
@@ -1034,7 +1099,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
                 .then(accessToken => robertifyAPI.updateGuildInfo(hostedHostName, accessToken, dbGuildInfo.server_id, {
                     toggles: togglesState,
                     eight_ball: eightBallResponses,
-                    theme: themeSelectObj.selectValues[0].name.toLowerCase(),
+                    theme: themeSelectObj.selectValues[0].name.toLowerCase().replaceAll(/\s/g, '_'),
                     log_channel: lcSelectObj.selectValues[0] ? lcSelectObj.selectValues[0] : '-1',
                     restricted_channels: {
                         text_channels: tcSelectObj.selectValues.map(obj => obj.id),
