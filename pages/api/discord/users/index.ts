@@ -1,6 +1,7 @@
 import { redis } from '../../../../utils/RedisClient';
 const Joi = require('@hapi/joi');
 import { withSentry } from '@sentry/nextjs';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 const bodyValidate = (data) => {
     const validation = Joi.object({
@@ -12,7 +13,7 @@ const bodyValidate = (data) => {
 
 export const USER_HASH = 'discordUserHash';
 
-export function verifyMasterPassword(req) {
+export function verifyMasterPassword(req: NextApiRequest) {
     const master_password = req.headers['master-password'];
         if (!master_password)
             return { message: 'Invalid authorization' };
@@ -22,7 +23,7 @@ export function verifyMasterPassword(req) {
         return null;
 }
 
-const handler = async (req, res) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         if (req.method !== 'POST')
             return res.status(400).json({ error: `You cannot ${req.method} this route!` })

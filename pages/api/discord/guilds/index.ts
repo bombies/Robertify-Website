@@ -1,6 +1,7 @@
 import { redis } from '../../../../utils/RedisClient';
 import { verifyMasterPassword } from '../users';
 import { withSentry } from '@sentry/nextjs';
+import { NextApiRequest, NextApiResponse } from 'next';
 const Joi = require('@hapi/joi');
 
 const validateBody = (body) => {
@@ -52,7 +53,7 @@ const validateBody = (body) => {
 
 export const DISCORD_GUILD_HASH = 'discordGuildHash#';
 
-const handler = async (req, res) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method !== 'POST')
         return res.status(400).json({ error: `You cannot ${req.method} this route!` })
 

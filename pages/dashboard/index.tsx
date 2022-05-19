@@ -88,10 +88,7 @@ export default function Dashboard({ token, discordInfo, guildsInfo }) {
     }, [discordInfoState, pageState.guildsInfo]);
 
     return (
-        <Layout token={token} discordInfo={discordInfoState}>
-            <Head>
-                <title>{'Robertify - Dashboard'}</title>
-            </Head>
+        <Layout token={token} discordInfo={discordInfoState} title='Robertify - Dashboard' showLogin={true}>
             <main className='guildCards--body'>
                 <h1 className='guildCards--heading'>Your Servers</h1>
                 <h2 className='guildCards--subheading'>Configure any one to your heart&apos;s desire...</h2>

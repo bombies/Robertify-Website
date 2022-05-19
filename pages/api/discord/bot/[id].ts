@@ -1,16 +1,18 @@
 import { redis } from "../../../../utils/RedisClient";
 import { robertifyAPI } from "../../../../utils/RobertifyAPI";
 import { withSentry } from '@sentry/nextjs';
+import { NextApiRequest, NextApiResponse } from "next";
+import { verifyMasterPassword } from "../users";
 
 const HASH_NAME = "ROBERTIFY_GUILD";
 
-const handler = async (req, res) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const verifyPassword = verifyMasterPassword(req);
     if (verifyPassword)
         return res.status(400).json(verifyPassword); 
 
     const { id } = req.query;
-    if (!(/^\d{17,18}$/.test(id)))
+    if (!(/^\d{17,18}$/.test(id.toString())))
         return res.status(400).json({ error: 'Invalid guild ID!' });
 
     if (req.method !== 'GET')

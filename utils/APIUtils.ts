@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 export async function fetchDiscordUserInfo(req) {
-    const token = req.cookies['login-token'];
-    const discordKey = token;
+    const token: string = req.cookies['login-token'];
+    const discordKey: string = token;
 
     if (!token)
         return {
@@ -208,7 +208,7 @@ export async function fetchAllDiscordUserInfo(req) {
                 props: {
                     token: token,
                     userInfo: {},
-                    guildInfo: {}
+                    guildInfo: []
                 }
             }
 
@@ -218,7 +218,7 @@ export async function fetchAllDiscordUserInfo(req) {
                 props: {
                     token: token,
                     userInfo: {},
-                    guildInfo: {}
+                    guildInfo: []
                 }
             }
         
@@ -291,7 +291,7 @@ export async function fetchAllDiscordUserInfo(req) {
             props: {
                 token: token,
                 userInfo: {},
-                guildInfo: {}
+                guildInfo: []
             }
         }
     }

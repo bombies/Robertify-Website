@@ -1,10 +1,19 @@
 import axios from 'axios';
 import jsCookie from 'js-cookie';
 import { nanoid } from 'nanoid';
+import { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import { URLSearchParams } from "url"
 
-export default function Callback(props) {
+type Props = {
+    discordClientID: string,
+    discordClientSecret: string,
+    apiMasterPassword: string,
+    localAPIHostname: string
+}
+
+export default function Callback(props: Props) {
     const router = useRouter();
     const { code, error } = router.query;
 
@@ -46,7 +55,7 @@ export default function Callback(props) {
                     }
                 })
                     .then(res => res.data)
-                    .then(router.push('/'))
+                    .then(() => router.push('/'))
                     .catch(err => console.log(err))
             })
             .catch(err => console.log(err))
@@ -59,7 +68,7 @@ export default function Callback(props) {
     )
 }
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
     return { 
         props: { 
             discordClientID: process.env.DISCORD_CLIENT_ID,

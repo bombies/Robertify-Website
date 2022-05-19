@@ -1,26 +1,35 @@
 import jsCookie from 'js-cookie';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { NextRouter, useRouter } from 'next/router';
 import NextNProgress from 'nextjs-progressbar';
 import { useState, useEffect } from 'react';
 
-export default function Layout({ token, discordInfo, title,
-    showLogin = true, showFooter = true, discordLoginLink,
-    stickyFooter = false, children }) {
-    const router = useRouter();
+interface Props {
+    token?: string,
+    discordInfo?: any,
+    title: string,
+    showLogin?: boolean,
+    showFooter?: boolean,
+    discordLoginLink?: string,
+    stickyFooter?: boolean,
+    children: JSX.Element[] | JSX.Element
+}
+
+export default function Layout(props: Props) {
+    const router: NextRouter = useRouter();
     const [ layoutInfo, setLayoutInfo ] = useState({
-        discordInfo: {...discordInfo},
+        discordInfo: {...props.discordInfo},
         userPopoutShown: false,
         loggedOut: true
     });
 
     if (!Object.keys(layoutInfo.discordInfo).length) {
-        if (discordInfo) {
-            if (Object.keys(discordInfo).length) {
+        if (props.discordInfo) {
+            if (Object.keys(props.discordInfo).length) {
                 setLayoutInfo(oldLayoutInfo => ({
                     ...oldLayoutInfo,
-                    discordInfo: {...discordInfo}
+                    discordInfo: {...props.discordInfo}
                 }));
             }
         }
@@ -45,7 +54,7 @@ export default function Layout({ token, discordInfo, title,
     }, [])
 
     const discordAvatar = discordInfoObj ? Object.keys(discordInfoObj).length ? `https://cdn.discordapp.com/avatars/${discordInfoObj.id}/${discordInfoObj.avatar}.${discordInfoObj.avatar.startsWith('a_') ? 'gif' : 'png'}?size=512` : null : null;
-    const loginButton = showLogin ? <li><a className='nav--login-btn' id='login-btn' href={discordLoginLink}><img src='https://i.robertify.me/images/c2n9x.png' alt='Login' /><p>Login</p></a></li> : '';
+    const loginButton = props.showLogin ? <li><a className='nav--login-btn' id='login-btn' href={props.discordLoginLink}><img src='https://i.robertify.me/images/c2n9x.png' alt='Login' /><p>Login</p></a></li> : '';
     
     const toggleUserPopout = () => {
         setLayoutInfo(oldLayoutInfo => ({
@@ -61,13 +70,13 @@ export default function Layout({ token, discordInfo, title,
             discordInfo: {},
             loggedOut: true
         })
-        router.reload(window.location.pathname)
+        router.reload();
     }
 
     return (
         <>
             <Head>
-                <title>{title ?? 'Robertify'}</title>
+                <title>{props.title ?? 'Robertify'}</title>
                 <link rel='robertify icon' href='/favicon.ico' />
             </Head>
             <NextNProgress color='#15ff00'/>
@@ -125,10 +134,10 @@ export default function Layout({ token, discordInfo, title,
                 }
             </nav>
             <main>
-                {children}
+                {props.children}
             </main> 
-            {showFooter &&
-                <footer className={stickyFooter ? 'sticky-bottom' : ''}>
+            {props.showFooter &&
+                <footer className={props.stickyFooter ? 'sticky-bottom' : ''}>
                     <div className='footer-brand'>
                         <img className='footer--logo' src='https://i.robertify.me/images/ni48h.png' alt='Footer Logo' />
                         <h1 className='footer--logo-text'>Robertify</h1>

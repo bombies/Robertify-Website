@@ -1,7 +1,19 @@
+import { MouseEventHandler } from "react"
+
+interface Props {
+    className?: string,
+    label: string,
+    subTitle?: string,
+    isActive: boolean,
+    setActive: (event: any) => void,
+    isDisabled?: boolean,
+    isPremium?: boolean 
+}
+
 export default function Toggle({ 
     className = 'toggleComponent', label, subTitle = null,
      isActive, setActive, isDisabled = false, isPremium = false
-}) {
+}: Props) {
     return (
         <div className={`${className}Container ${isActive && 'active'}`}>
             <div className={`${className} toggleDesc`}>

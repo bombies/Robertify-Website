@@ -2,11 +2,12 @@ import { GUILD_HASH } from ".";
 import { verifyMasterPassword } from "..";
 import { redis } from "../../../../../utils/RedisClient";
 import { withSentry } from '@sentry/nextjs';
+import { NextApiRequest, NextApiResponse } from "next";
 
-const handler = async (req, res) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         if (req.method !== 'GET')
-            return res.send(400).json({ message: `You can't ${req.method} this route!`})
+            return res.status(400).json({ message: `You can't ${req.method} this route!`})
 
         const verifyPassword = verifyMasterPassword(req);
         if (verifyPassword)

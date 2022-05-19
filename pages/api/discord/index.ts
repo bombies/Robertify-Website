@@ -1,8 +1,9 @@
 import { redis } from "../../../utils/RedisClient"
 import { verifyMasterPassword } from "./users";
 import { withSentry } from '@sentry/nextjs';
+import { NextApiRequest, NextApiResponse } from "next";
 
-const handler = async (req, res) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const hashName = 'discordDataHash';
 
     try {
@@ -21,7 +22,7 @@ const handler = async (req, res) => {
                 return res.status(400).json(verifyPassword); 
 
             const { id } = req.query;
-            const dataString = await redis.hget(hashName, id);
+            const dataString = await redis.hget(hashName, id.toString());
             return res.status(200).json(JSON.parse(dataString));
 
         } else 

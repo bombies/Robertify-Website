@@ -1,10 +1,13 @@
-import axios from 'axios';
-import jsCookie from 'js-cookie';
-import { nanoid } from 'nanoid';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
-export default function Callback(props) {
+type Props = {
+    discordClientID: string,
+    discordClientSecret: string,
+    localAPIHostname: string  
+}
+
+export default function Callback(props: Props) {
     const router = useRouter();
     const { code, guild_id, permissions, error } = router.query;
 

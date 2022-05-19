@@ -1,10 +1,10 @@
 import Link from 'next/link';
 
 export default function GuildCard({ guildID, guildIcon = null, guildName, isOwner = false,  guildPermissions = 0 }) {
-    const icon = guildIcon ? `https://cdn.discordapp.com/icons/${guildID}/${guildIcon}.${guildIcon.startsWith('a_') ? 'gif' : 'png'}?size=512` : 'https://i.robertify.me/images/rykx6.png';
+    const icon: string = guildIcon ? `https://cdn.discordapp.com/icons/${guildID}/${guildIcon}.${guildIcon.startsWith('a_') ? 'gif' : 'png'}?size=512` : 'https://i.robertify.me/images/rykx6.png';
 
     // Bitwise operations to check if the user has MANAGE_GUILD
-    let isModerator = isOwner ? false : (guildPermissions & (1 << 5)) === (1 << 5);
+    let isModerator: boolean = isOwner ? false : (guildPermissions & (1 << 5)) === (1 << 5);
 
     // If the user doesn't have MANAGE_GUILD check if they have ADMINISTRATOR
     isModerator ||= (guildPermissions & (1 << 3)) == (1 << 3);

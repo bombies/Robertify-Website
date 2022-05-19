@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import { useEffect } from "react";
+import { ChangeEvent, useEffect } from "react";
 
 export default function SelectMenu({ 
         className = 'selectMenu', id, title, subTitle = null, menuOptions, multiSelect = false, placeHolder,
@@ -7,7 +7,7 @@ export default function SelectMenu({
         isChannelMenu = false, isVoiceMenu = false 
     }) {
         
-    const search = (event) => {
+    const search = (event): void => {
         const { value } = event.target;
         setSearchText(value);
     }

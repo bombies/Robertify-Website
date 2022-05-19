@@ -7,6 +7,17 @@ import Toggle from "../../../components/Toggle";
 import SelectMenu from "../../../components/SelectMenu";
 import TextOptionList from "../../../components/TextOptionList";
 import { robertifyAPI } from "../../../utils/RobertifyAPI";
+import { GetServerSideProps } from "next";
+
+interface UpdateMenuProps {
+    event: Event,
+    isActive: boolean,
+    setterFunction: () => void,
+    value: any,
+    multiSelect?: boolean,
+    enableDeselect?: boolean,
+    changeCheck?: (obj: any) => void
+}
 
 function sortChannelsByCategory(categories, channels) {
     if (!categories) return null;
@@ -26,7 +37,19 @@ function sortChannelsByCategory(categories, channels) {
     return channelsSorted;
 }
 
-function getOriginalDataObject(dbGuildInfo, fullGuildInfo) {
+type OriginalData = {
+    djRoles: any[],
+    restricted_text_channels: any[],
+    restricted_voice_channels: any[],
+    log_channel: any,
+    theme: any,
+    toggles: any,
+    eight_ball: any[],
+    autoplay: boolean,
+    twenty_four_seven_mode: boolean
+}
+
+function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
     if (!dbGuildInfo) return null;
     if (!fullGuildInfo) return null;
 
@@ -289,7 +312,6 @@ function getDefaultGuildInfo(fullGuildInfo) {
             text_channels: []
         },
         log_channel: '-1',
-        theme: 'green',
         twenty_four_seven_mode: false,
         autoplay: false,
     }
@@ -297,7 +319,7 @@ function getDefaultGuildInfo(fullGuildInfo) {
     return getOriginalDataObject(defaultObj, fullGuildInfo);
 }
 
-function compare(object1, object2) {
+function compare(object1: any, object2: any) {
     if (!object1)
         return false;
     if (!object2)
@@ -338,14 +360,11 @@ function compare(object1, object2) {
     return true;
 }
 
-function arrayCompare(arr1, arr2) {
+function arrayCompare(arr1: any[], arr2: any[]) {
     if (!arr1)
         return false;
     if (!arr2)
         return false;
-
-    if (!arr1 instanceof Array || !arr2 instanceof Array )
-        throw new TypeError();
 
     if (arr1.length != arr2.length)
         return false;
@@ -379,7 +398,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
     const [ discordInfoState ] = useState({
         userInfo: userInfo,
         guildInfo: guildInfo
-    }, []);
+    });
     const guild = discordInfoState.guildInfo;
 
     const [ isRefreshing, setIsRefreshing ] = useState(false);
@@ -770,8 +789,9 @@ export default function GuildPage({ token, userInfo, guildInfo,
         });
     }
 
-    const updateMenuSelectedValuesByID = (event, isActive, setterFunction, value,
-        multiSelect = false, enableDeselect = true, changeCheck = function() {}
+    const updateMenuSelectedValuesByID = (
+        event: Event, isActive: boolean, setterFunction: (oldObj: any) => void,
+        value: any, multiSelect?: boolean, enableDeselect?: boolean, changeCheck?: (obj: any) => void
     ) => {
         if (!hasPerms) return;
         if (!isActive) return;
@@ -1027,7 +1047,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
                     twenty_four_seven_mode: managementTogglesState.twenty_four_seven,
                     autoplay: managementTogglesState.autoplay
                 }))
-                .then(setDoSaveState(false))
+                .then(() => setDoSaveState(false))
                 .catch(err => console.log(err));
         }
     }, [doSave])
@@ -1043,7 +1063,9 @@ export default function GuildPage({ token, userInfo, guildInfo,
             log_channel: {...lcSelectObj.selectValues.at(0)},
             theme: {...themeSelectObj.selectValues.at(0)},
             toggles: {...togglesState},
-            eight_ball: [...eightBallResponses]
+            eight_ball: [...eightBallResponses],
+            autoplay: managementTogglesState.autoplay,
+            twenty_four_seven_mode: managementTogglesState.twenty_four_seven
         });
         setChangeMade(false);
         setDoSaveState(true);
@@ -1205,7 +1227,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
     )
 }
 
-export async function getServerSideProps(context) {
+export const getServerSideProps: GetServerSideProps = async (context) => {
     const info = await fetchAllDiscordUserInfo(context.req);
     const hasVoted = info.props.userInfo ? await userHasVoted(info.props.userInfo.id) : false;
 

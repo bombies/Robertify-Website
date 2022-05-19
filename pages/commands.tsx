@@ -5,7 +5,17 @@ import Layout from '../components/Layout';
 import { fetchDiscordUserInfo } from '../utils/APIUtils';
 import { robertifyAPI } from '../utils/RobertifyAPI';
 
-function groupCommands(commands, max) {
+interface Command {
+    id: number, name: string, description: string, category: string
+}
+
+interface Props {
+    commands: Command[],
+    token: string,
+    discordInfo: any
+}
+
+function groupCommands(commands: JSX.Element[], max: number) {
     const arr = []
     
     let id = 0;
@@ -21,7 +31,7 @@ function groupCommands(commands, max) {
 
 const MAX_COMMANDS = 15;
 
-export default function Commands({ commands, token, discordInfo }) {
+export default function Commands({ commands, token, discordInfo }: Props) {
     const commandsCpy = [...commands].sort((a,b) => a.name.localeCompare(b.name));
     const allCommandsParsed = commandsCpy.map(command => <CommandsTableRow key={command.id} id={command.id} name={command.name} description={command.description} category={command.category} />)    
     const commandsParsed = groupCommands(allCommandsParsed, MAX_COMMANDS)
@@ -69,7 +79,7 @@ export default function Commands({ commands, token, discordInfo }) {
         setTableInfo(({
             selectedButton: 0,
             pageItems: (!value) ? ([...commandsParsed]) : ((pageItems.length) ? ([...pageItems] ): ([{}])),
-            [name]: value.trim(),
+            searchText: value.trim(),
             categoryValue: ''
         }))
     };
@@ -145,7 +155,7 @@ export default function Commands({ commands, token, discordInfo }) {
 }
 
 export async function getServerSideProps({ req, res }) {
-    let commands = [], realProps;
+    let commands: Command[] = [], realProps;
     try {
         await robertifyAPI.setAccessToken()
         commands = await robertifyAPI.getCommandInfo();
@@ -153,7 +163,7 @@ export async function getServerSideProps({ req, res }) {
     } catch (ex) {
         console.log(ex);
     }
-    
+
     return {
         props: {
             commands: commands,
