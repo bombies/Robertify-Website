@@ -45,8 +45,8 @@ nav {
 }
 
 .nav--brand-logo {
-    width: 3.5rem;
-    height: 3.5rem;
+    width: 6.5rem;
+    height: 6.5rem;
     margin-right: 1rem;
 
     align-self: center;
@@ -1842,6 +1842,11 @@ footer {
 }
 
 @media (max-width: 1025px) {
+    .nav--brand-logo {
+        width: 4.85rem;
+        height: 4.85rem;
+    }
+
     nav {
         position: relative;
         z-index: 1;
@@ -2140,6 +2145,11 @@ footer {
 }
 
 @media (max-width: 615px) {
+        .nav--brand-logo {
+            width: 4.5rem;
+            height: 4.5rem;
+        }
+
         .nav--brand-title {
             font-size: 1rem;
             line-height: 1.15rem;

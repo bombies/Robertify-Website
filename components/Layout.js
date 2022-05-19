@@ -73,7 +73,7 @@ export default function Layout({ token, discordInfo, title,
             <NextNProgress color='#15ff00'/>
            <nav>
                 <div className='nav--brand'>
-                    <Link href='/'><img className='nav--brand-logo' src='https://i.robertify.me/images/0bspn.png' alt='Logo'/></Link>
+                    <Link href='/'><img className='nav--brand-logo' src='https://i.robertify.me/images/ni48h.png' alt='Logo'/></Link>
                     <h1 className='nav--brand-title'><Link href='/'>Robertify</Link></h1>
                 </div>
                 <div className='nav--items'>
@@ -130,7 +130,7 @@ export default function Layout({ token, discordInfo, title,
             {showFooter &&
                 <footer className={stickyFooter ? 'sticky-bottom' : ''}>
                     <div className='footer-brand'>
-                        <img className='footer--logo' src='https://i.robertify.me/images/0bspn.png' alt='Footer Logo' />
+                        <img className='footer--logo' src='https://i.robertify.me/images/ni48h.png' alt='Footer Logo' />
                         <h1 className='footer--logo-text'>Robertify</h1>
                         <p className='footer--copyright'>Copyright ©️ Robertify 2022</p>
                         <div className='footer--links'>
