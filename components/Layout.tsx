@@ -54,7 +54,7 @@ export default function Layout(props: Props) {
     }, [])
 
     const discordAvatar = discordInfoObj ? Object.keys(discordInfoObj).length ? `https://cdn.discordapp.com/avatars/${discordInfoObj.id}/${discordInfoObj.avatar}.${discordInfoObj.avatar.startsWith('a_') ? 'gif' : 'png'}?size=512` : null : null;
-    const loginButton = props.showLogin ? <li><a className='nav--login-btn' id='login-btn' href={props.discordLoginLink}><img src='https://i.robertify.me/images/c2n9x.png' alt='Login' /><p>Login</p></a></li> : '';
+    const loginButton = props.showLogin || props.showLogin === undefined ? <li><a className='nav--login-btn' id='login-btn' href={props.discordLoginLink}><img src='https://i.robertify.me/images/c2n9x.png' alt='Login' /><p>Login</p></a></li> : '';
     
     const toggleUserPopout = () => {
         setLayoutInfo(oldLayoutInfo => ({

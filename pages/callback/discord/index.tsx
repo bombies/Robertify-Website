@@ -4,7 +4,6 @@ import { nanoid } from 'nanoid';
 import { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { URLSearchParams } from "url"
 
 type Props = {
     discordClientID: string,
@@ -38,11 +37,11 @@ export default function Callback(props: Props) {
             'client_id': props.discordClientID,
             'client_secret': props.discordClientSecret,
             'grant_type': 'authorization_code',
-            'code': code,
+            'code': code.toString(),
             'redirect_uri': `${props.localAPIHostname}/callback/discord`
         }
 
-        axios.post('https://discord.com/api/v10/oauth2/token', new URLSearchParams(data), config)
+        axios.post('https://discord.com/api/v10/oauth2/token?=', new URLSearchParams(data).toString(), config)
             .then(res => {
                 const id = nanoid(8);
                 jsCookie.set('login-token', id)
