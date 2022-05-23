@@ -2,8 +2,15 @@ import Layout from '../components/Layout';
 import Link from 'next/link';
 import { fetchDiscordUserInfo } from '../utils/APIUtils';
 import {GetServerSideProps, GetServerSidePropsContext} from "next";
+import {DiscordInfo} from "../utils/Types";
 
-export default function Home({ token, discordInfo, discordLoginLink }) {
+type Props = {
+    token: string,
+    discordInfo: DiscordInfo,
+    discordLoginLink: string
+}
+
+export default function Home({ token, discordInfo, discordLoginLink }: Props) {
     return (
         <Layout token={token} discordInfo={discordInfo} discordLoginLink={discordLoginLink} title='Robertify - Home Page'>
                 <div className='hero'>

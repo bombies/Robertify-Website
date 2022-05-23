@@ -1,6 +1,10 @@
 import axios from 'axios';
+import {NextApiRequest} from "next";
+import {DiscordInfo} from "./Types";
+import {IncomingMessage} from "http";
+import {NextApiRequestCookies} from "next/dist/server/api-utils";
 
-export async function fetchDiscordUserInfo(req) {
+export async function fetchDiscordUserInfo(req: IncomingMessage & {cookies: NextApiRequestCookies}) {
     const token: string = req.cookies['login-token'];
     const discordKey: string = token;
 
@@ -23,8 +27,7 @@ export async function fetchDiscordUserInfo(req) {
     if (!data)
         return {
             props: {
-                token: token,
-                discordInfo: {}
+                token: token
             }
         }
 
@@ -39,7 +42,7 @@ export async function fetchDiscordUserInfo(req) {
 
         // Cache hit
         if (cachedData.data) {
-            const discordUserData = cachedData.data;
+            const discordUserData: DiscordInfo = cachedData.data;
             return { 
                 props: {
                     token: req.cookies['login-token'] || '',
@@ -55,7 +58,7 @@ export async function fetchDiscordUserInfo(req) {
                     }
         });
 
-        const discordUserData = discordData.data;
+        const discordUserData: DiscordInfo = discordData.data;
 
         // Posting to cache
         axios.post(`${process.env.LOCAL_API_HOSTNAME}/api/discord/users/`, {
@@ -77,14 +80,13 @@ export async function fetchDiscordUserInfo(req) {
         console.log(ex)
         return {
             props: {
-                token: token,
-                discordInfo: {}
+                token: token
             }
         }
     }
 }
 
-export async function fetchDiscordUserGuildInfo(req) {
+export async function fetchDiscordUserGuildInfo(req: IncomingMessage & {cookies: NextApiRequestCookies}) {
     const token = req.cookies['login-token'];
     const discordKey = token;
         
@@ -182,7 +184,7 @@ export async function fetchDiscordUserGuildInfo(req) {
     }
 }
 
-export async function fetchAllDiscordUserInfo(req) {
+export async function fetchAllDiscordUserInfo(req: NextApiRequest) {
     const token = req.cookies['login-token'];
     const discordKey = token;
         
@@ -297,7 +299,7 @@ export async function fetchAllDiscordUserInfo(req) {
     }
 }
 
-export async function fetchDiscordGuildInfo(req, guildId) {
+export async function fetchDiscordGuildInfo(req: IncomingMessage & {cookies: NextApiRequestCookies}, guildId: string) {
     const token = req.cookies['login-token'];
     const discordKey = token;
         
@@ -380,7 +382,7 @@ export async function fetchDiscordGuildInfo(req, guildId) {
     }
 }
 
-export async function userHasVoted(id) {
+export async function userHasVoted(id: string) {
     try {
         const res = await axios.get('https://top.gg/api/bots/893558050504466482/check?userId=' + id, {
             headers: {

@@ -4,10 +4,11 @@ import Link from 'next/link';
 import { NextRouter, useRouter } from 'next/router';
 import NextNProgress from 'nextjs-progressbar';
 import { useState, useEffect } from 'react';
+import {DiscordInfo} from "../utils/Types";
 
 interface Props {
     token?: string,
-    discordInfo?: any,
+    discordInfo?: DiscordInfo,
     title: string,
     showLogin?: boolean,
     showFooter?: boolean,
@@ -67,7 +68,7 @@ export default function Layout(props: Props) {
         jsCookie.remove('login-token');
         setLayoutInfo({
             userPopoutShown: false,
-            discordInfo: {},
+            discordInfo: undefined,
             loggedOut: true
         })
         router.reload();
@@ -88,7 +89,7 @@ export default function Layout(props: Props) {
                 <div className='nav--items'>
                     <ul className='nav--items-desktop-list' id='nav--items-desktop-list'>
                         <li><a href='/invite'>Invite</a></li>
-                        <li><a href='https://buy.robertify.me'>Store</a></li>
+                        <li><Link className='premium' href='/premium'>Premium</Link></li>
                         <li><Link href='/commands'>Commands</Link></li>
                         <li><Link href='/vote'>Vote</Link></li>
                         <li><Link href='/support'>Support</Link></li>

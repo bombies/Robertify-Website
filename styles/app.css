@@ -36,7 +36,7 @@ nav {
     background: #181818;
     padding: 1rem 5.5rem 1rem 5.6rem;
     align-items: center;
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
     z-index: 1;
 }
 
@@ -132,8 +132,8 @@ nav {
     cursor: pointer;
 
     background: #FFFFFF;
-    border: 2.5px solid #000000;
-    box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.25);
+    border: 3px solid #000000;
+    box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
     transition: all .55s ease;
 }
@@ -204,7 +204,7 @@ nav {
     pointer-events: none;
 
     background: #242424;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
     border-radius: 20px;
 }
 
@@ -217,7 +217,7 @@ nav {
 .nav--user-popout-icon {
     width: 7.47rem;
     border-radius: 50%;
-    filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.5));
+    filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.5));
     margin: 1.875rem auto 0;
 }
 
@@ -267,7 +267,7 @@ nav {
     background: linear-gradient(180deg, #1F1F1F 0%, #00FF47 104.36%);
     text-align: center;
     overflow: hidden;
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
 }
 
 .vote-hero {
@@ -277,7 +277,7 @@ nav {
     background: linear-gradient(180deg, #1F1F1F 0%, #00FF47 104.36%);
     text-align: center;
     overflow: hidden;
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
 }
 
 .hero--title {
@@ -286,7 +286,7 @@ nav {
     font-weight: 700;
     font-size: 6rem;
     line-height: 7.5rem;
-    text-shadow: 0px 0px 30px rgba(0, 0, 0, 0.25);
+    text-shadow: 0 0 30px rgba(0, 0, 0, 0.25);
 }
 
 .hero--title:hover {
@@ -296,9 +296,8 @@ nav {
 
 .hero--subtitle {
     max-width: 42.625rem;
-    margin: auto;
-    margin-bottom: 3.25rem;
-    
+    margin: auto auto 3.25rem;
+
     font-weight: 300;
     font-size: 2.25rem;
     line-height: 3.375rem;
@@ -314,13 +313,13 @@ nav {
     padding: 0.625rem 2.25rem;
 
     background: linear-gradient(0deg, #039400 0%, #04C800 111.1%);
-    border: 3.5px solid rgb(0, 121, 6);
-    box-shadow: 0px 5px 10px 2px rgba(0, 0, 0, 0.25);
+    border: 4px solid rgb(0, 121, 6);
+    box-shadow: 0 5px 10px 2px rgba(0, 0, 0, 0.25);
     border-radius: 20px;
 
     cursor: pointer;
 
-    font-family: 'Poppins';
+    font-family: 'Poppins', sans-serif;
     text-decoration: none;
     font-style: normal;
     font-weight: 500;
@@ -333,7 +332,7 @@ nav {
 }
 
 .hero--button:hover {
-    border: 3.5px solid rgb(192, 255, 195);
+    border: 4px solid rgb(192, 255, 195);
     transform: scale(1.25);
 }
 
@@ -357,7 +356,7 @@ nav {
 .hero--img-button img {
     width: 16.5rem;
     border-radius: 15px;
-    filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.45));
+    filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.45));
     transition: all 1s ease-in-out;
 }
 
@@ -369,7 +368,7 @@ nav {
 .aboutUs {
     background: #3F3F3F;
     padding: 5rem 12.6475rem 15rem var(--main-content-padding-left);
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
 
     display: flex;
     overflow: hidden;
@@ -380,7 +379,7 @@ nav {
     height: 15rem;
     align-self: center;
     margin-right: 6.125rem;
-    filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.55));
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.55));
 }
 
 .aboutUs--desc {
@@ -393,7 +392,7 @@ nav {
     line-height: 6rem;
     text-transform: uppercase;
     color: var(--green);
-    text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.45);
+    text-shadow: 0 0 15px rgba(0, 0, 0, 0.45);
 }
 
 .aboutUs--desc-body {
@@ -409,7 +408,7 @@ nav {
     overflow: hidden;
 
     background: #383838;
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
 }
 
 .features--images {
@@ -430,7 +429,7 @@ nav {
     z-index: 0;
     transition: all .75s ease;
 
-    box-shadow: 0px 4px 20px 10px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 20px 10px rgba(0, 0, 0, 0.25);
     border-radius: 15px;
 
     object-fit: cover;
@@ -457,7 +456,7 @@ nav {
     line-height: 6rem;
     text-transform: uppercase;
     color: var(--green);
-    text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.45);
+    text-shadow: 0 0 15px rgba(0, 0, 0, 0.45);
 }
 
 .features--desc p {
@@ -533,7 +532,7 @@ nav {
     line-height: 6rem;
     text-transform: uppercase;
     color: var(--green);
-    text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.45);
+    text-shadow: 0 0 15px rgba(0, 0, 0, 0.45);
 }
 
 .support--desc-body {
@@ -543,7 +542,7 @@ nav {
 }
 
 .support img {
-    box-shadow: 0px 4px 20px 10px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 20px 10px rgba(0, 0, 0, 0.25);
     border-radius: 15px;
 }
 
@@ -553,12 +552,12 @@ nav {
     overflow: hidden;
 
     background: #383838;
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
 }
 
 .invite--icon {
     width: 10rem;
-    filter: drop-shadow(0px 4px 25px rgba(0, 0, 0, 0.55));
+    filter: drop-shadow(0 4px 25px rgba(0, 0, 0, 0.55));
 }
 
 .invite--title {
@@ -567,7 +566,7 @@ nav {
     line-height: 6.5625rem;
     text-transform: uppercase;
     color: var(--green);
-    text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.45);
+    text-shadow: 0 0 15px rgba(0, 0, 0, 0.45);
 }
 
 .invite--body {
@@ -578,21 +577,20 @@ nav {
     max-width: 41.40875rem;
     max-height: 6.915625rem;
 
-    margin: auto;
-    margin-bottom: 1.5rem;
+    margin: auto auto 1.5rem;
 }
 
 .invite a {
     padding: 0.625rem 2.25rem;
 
     background: linear-gradient(0deg, #039400 0%, #04C800 111.1%);
-    border: 3.5px solid rgb(0, 121, 6);
-    box-shadow: 0px 5px 10px 2px rgba(0, 0, 0, 0.25);
+    border: 4px solid rgb(0, 121, 6);
+    box-shadow: 0 5px 10px 2px rgba(0, 0, 0, 0.25);
     border-radius: 20px;
 
     cursor: pointer;
 
-    font-family: 'Poppins';
+    font-family: 'Poppins', sans-serif;
     text-decoration: none;
     font-style: normal;
     font-weight: 500;
@@ -605,7 +603,7 @@ nav {
 }
 
 .invite a:hover {
-    border: 3.5px solid rgb(192, 255, 195);
+    border: 4px solid rgb(192, 255, 195);
 }
 
 footer {
@@ -652,7 +650,6 @@ footer {
     background: linear-gradient(270deg, #70FF6D 0%, #04CD00 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;
 }
 
 .footer--links {
@@ -703,7 +700,7 @@ footer {
     background-color: rgba(0, 0, 0, 0.25);
     padding: 2rem;
     border-radius: 15px;
-    filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, .5));
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, .5));
 }
 
 .plain_text h1 {
@@ -712,7 +709,7 @@ footer {
     line-height: 3.75rem;
     color: #FFFFFF;
 
-    text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
 .plain_text p {
@@ -748,7 +745,7 @@ footer {
     display: flex;
     padding: 1.7rem 0 3.3rem 10rem;
     background-color: #242424;
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
 }
 
 .commands--about-images {
@@ -764,7 +761,7 @@ footer {
     object-fit: cover;
     transition: all 1.5s ease-in-out;
 
-    filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.35));
+    filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.35));
     border-radius: 25px;
 }
 
@@ -810,7 +807,7 @@ footer {
     border-collapse: collapse;
 
     background: rgba(23, 23, 23, 0.5);
-    box-shadow: 0px 0px 30px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0 30px 20px rgba(0, 0, 0, 0.25);
 }
 
 .commands_table--heading {
@@ -827,7 +824,7 @@ footer {
 .commands_table--row--data, .commands_table--heading {
     border: 1px solid black;
     border-collapse: collapse;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, .35);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .35);
 }
 
 .commands_table--row--data {
@@ -900,7 +897,7 @@ footer {
     line-height: 5rem;
 
     color: #00FF47;
-    text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
 .four-o-four h2 {
@@ -908,7 +905,7 @@ footer {
     font-weight: 700;
 
     color: #ffffff;
-    text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
 .four-o-four h3 {
@@ -916,7 +913,7 @@ footer {
     font-weight: 500;
 
     color: #aeaeae;
-    text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
 .four-o-four p {
@@ -924,7 +921,7 @@ footer {
     font-weight: 500;
 
     color: #8a8a8a;
-    text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
 /* Dashboard */
@@ -953,7 +950,7 @@ footer {
     border: none;
 
     transition: all .25s ease-in-out;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, .35);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .35);
 }
 
 .guildCards--search:focus {
@@ -978,7 +975,7 @@ footer {
 
     color: var(--green);
     font-size: 3rem;
-    text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.45);
+    text-shadow: 0 0 15px rgba(0, 0, 0, 0.45);
 }
 
 .guildCards--subheading {
@@ -989,7 +986,7 @@ footer {
     font-size: 1.5rem;
     font-weight: 400;
     margin-bottom: 2rem;
-    text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.45);
+    text-shadow: 0 0 15px rgba(0, 0, 0, 0.45);
 }
 
 .guildCard {
@@ -1000,15 +997,15 @@ footer {
     height: 10rem;
     background: #303030;
     border-radius: 20px;
-    border: rgba(0, 0, 0, 0) 0px solid;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, .35);
+    border: rgba(0, 0, 0, 0) 0 solid;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .35);
 
     transition: all .05s ease-in-out;
 }
 
 .guildCard:hover {
     transition: all .05s ease-in-out;
-    border: rgba(178, 255, 177, 0.103) 1.5px solid;
+    border: rgba(178, 255, 177, 0.103) 2px solid;
 }
 
 .guildCard--banner {
@@ -1056,7 +1053,7 @@ footer {
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
 
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, .35);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, .35);
 }
 
 .guildCard--text {
@@ -1090,7 +1087,7 @@ footer {
     margin: 1rem auto 0;
     border-radius: 9px;
     width: 50%;
-    box-shadow: 0px 0px 35px 5px rgba(0, 0, 0, .35);
+    box-shadow: 0 0 35px 5px rgba(0, 0, 0, .35);
     transition: all .1s ease-in-out;
 }
 
@@ -1133,7 +1130,7 @@ footer {
     height: 10%;
     margin: 1rem 0;
     padding: 1rem 0;
-    box-shadow: 0px 0px 35px 5px rgba(0, 0, 0, .25);
+    box-shadow: 0 0 35px 5px rgba(0, 0, 0, .25);
 
 }
 
@@ -1144,7 +1141,7 @@ footer {
 
     border-radius: 50%;
     border: 3px solid green;
-    box-shadow: 0px 0px 35px 5px rgba(0, 0, 0, .55);
+    box-shadow: 0 0 35px 5px rgba(0, 0, 0, .55);
 }
 
 .serverDash--guildBanner h1 {
@@ -1160,19 +1157,19 @@ footer {
     background-color: #2e2e2e;
     padding: 2rem 2.5rem;
     border-radius: 5px;
-    box-shadow: 0px 0px 35px 5px rgba(0, 0, 0, .25);
+    box-shadow: 0 0 35px 5px rgba(0, 0, 0, .25);
 }
 
 .serverDash--divider {
     width: 100%;
     margin: 1rem auto;
     border: 1px solid #1f1f1f;
-    box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, .15);
+    box-shadow: 0 0 5px 2px rgba(0, 0, 0, .15);
 }
 
 .serverDash--controlPanel-title {
     color: var(--green);
-    filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, .25));
+    filter: drop-shadow(0 0 4px rgba(0, 0, 0, .25));
     text-transform: uppercase;
     margin-bottom: 1rem;
 }
@@ -1180,7 +1177,7 @@ footer {
 .serverDash--controlPanel-toggles {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(auto, 1fr);
+    grid-template-rows: repeat(auto-fill, 1fr);
     row-gap: 1rem;
     column-gap: 3%;
 
@@ -1220,7 +1217,7 @@ footer {
     border-radius: 10px;
     cursor: pointer;
 
-    filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, .25));
+    filter: drop-shadow(0 0 4px rgba(0, 0, 0, .25));
 }
 
 .selectMenu.menu-selected {
@@ -1264,7 +1261,7 @@ footer {
     font-family: 'Poppins', sans-serif;
     font-size: 1rem;
     color: white;
-    filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, .25));
+    filter: drop-shadow(0 0 4px rgba(0, 0, 0, .25));
 }
 
 .selectMenu.menu-options {
@@ -1277,7 +1274,7 @@ footer {
     max-height: 20rem;
     overflow: auto;
     border-radius: 10px;
-    filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, .25));
+    filter: drop-shadow(0 0 4px rgba(0, 0, 0, .25));
     transition: all var(--toggle-transition-time) ease-in-out;
 }
 
@@ -1328,19 +1325,19 @@ footer {
     height: 1rem;
     border: 1px solid white;
     border-radius: 5px;
-    background-color: none;
+    background-color: transparent;
     align-self: center;
 }
 
 .selectMenu.option-checkbox.active {
     border: 1px solid var(--green);
     background-color: var(--green);
-    filter: drop-shadow(0px 0px 3px rgba(75, 255, 55, 0.5));
+    filter: drop-shadow(0 0 3px rgba(75, 255, 55, 0.5));
 }
 
 .selectMenu.option.active {
     background-color: rgba(153, 255, 119, 0.061);
-    filter: drop-shadow(0px 0px 5px rgba(75, 255, 55, 0.25));
+    filter: drop-shadow(0 0 5px rgba(75, 255, 55, 0.25));
 }
 
 .menu-glyph {
@@ -1370,7 +1367,7 @@ footer {
     width: 80%;
     border-radius: 10px;
     opacity: 1;
-    box-shadow: 0px 0px 20px 15px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0 20px 15px rgba(0, 0, 0, 0.25);
 }
 
 .serverDash--footer-buttons {
@@ -1417,7 +1414,7 @@ footer {
     background: #181818;
     border: 3px solid #181818;
     border-radius: 2rem;
-    filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, .25));
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, .25));
     transition: all var(--toggle-transition-time) ease-in-out;
     cursor: pointer;
 }
@@ -1456,7 +1453,7 @@ footer {
     font-size: 1.25rem;
     font-weight: 500;
     transition: all .2s ease-in-out;
-    filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, .35));
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, .35));
 }
 
 .button-md img {
@@ -1476,7 +1473,7 @@ footer {
 .textOption.optionsContainer {
     background-color: #181818;
     border-radius: 10px;
-    filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, .35));
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, .35));
 }
 
 .textOption.optionContainer {
@@ -1523,13 +1520,13 @@ footer {
     
 
     border-radius: 10px;
-    filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, .35));
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, .35));
 }
 
 .textOption.optionSubmitters img {
     width: 2rem;
     height: 2rem;
-    filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, .35));
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, .35));
 
     align-self: center;
 }
@@ -1597,7 +1594,7 @@ footer {
     justify-content: space-between;
     width: 80%;
     border-radius: 10px;
-    box-shadow: 0px 0px 20px 10px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.25);
     font-size: 1.5rem;
     font-weight: 400;
 }
@@ -1606,8 +1603,8 @@ footer {
     padding: .15rem;
     justify-content: space-between;
     width: 80%;
-    border-radius: 2.5px;
-    box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.25);
+    border-radius: 3px;
+    box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.25);
     font-size: .85rem;
     font-weight: 400;
 }
@@ -1685,7 +1682,7 @@ footer {
     }
     
     .guildCard--text {
-        margin-left: 0rem;
+        margin-left: 0;
     }
 
     .guildCard--text a {
@@ -1788,10 +1785,6 @@ footer {
         padding: 1rem 0.5rem 1rem 2.5rem;
     }
 
-    .nav--user {
-        justify-content: baseline;
-    }
-
     .nav--user-welcome {
         font-size: 1rem;
     }
@@ -1863,7 +1856,7 @@ footer {
         width: 100%;
         left: 0;
         top: 5.25rem;
-        filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+        filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
     }
 
     .nav--items-desktop-list {
@@ -2001,8 +1994,7 @@ footer {
     }
 
     .features--desc {
-        margin: auto;
-        margin-top: 1rem;
+        margin: 1rem auto auto;
         max-width: fit-content;
     }
 
@@ -2026,8 +2018,7 @@ footer {
     }
 
     .support--desc {
-        margin: auto;
-        margin-bottom: 2.5rem;
+        margin: auto auto 2.5rem;
     }
 
     .commands--about {
@@ -2047,7 +2038,7 @@ footer {
         object-fit: cover;
         transition: all 1.5s ease-in-out;
     
-        filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.35));
+        filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.35));
         border-radius: 25px;
     }
     
@@ -2100,7 +2091,7 @@ footer {
     .serverDash--controlPanel-toggles {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(auto, 1fr);
+        grid-template-rows: repeat(auto-fill, 1fr);
         row-gap: 1rem;
         column-gap: 3%;
     
@@ -2370,7 +2361,7 @@ footer {
             border-collapse: collapse;
         
             background: rgba(23, 23, 23, 0.5);
-            box-shadow: 0px 0px 30px 20px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 0 30px 20px rgba(0, 0, 0, 0.25);
         }
         
         .commands_table--heading {
@@ -2421,9 +2412,9 @@ footer {
         
             border-top-left-radius: 20px;
             border-top-right-radius: 20px;
-            border-bottom-left-radius: 0px;
+            border-bottom-left-radius: 0;
         
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, .35);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, .35);
         }
         
         .guildCard--text {
@@ -2470,7 +2461,7 @@ footer {
             font-size: .8rem;
             border-radius: 9px;
             width: 50%;
-            box-shadow: 0px 0px 35px 5px rgba(0, 0, 0, .35);
+            box-shadow: 0 0 35px 5px rgba(0, 0, 0, .35);
             transition: all .1s ease-in-out;
         }
         
@@ -2493,10 +2484,10 @@ footer {
             pointer-events: none;
         }
 
-        .serverDash--controlPanel-mangement {
+        .serverDash--controlPanel-management {
             display: grid;
             grid-template-columns: repeat(1, 1fr);
-            row-gap: 0%;
+            row-gap: 0;
             margin-bottom: 2rem;
         }
 
