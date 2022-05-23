@@ -73,7 +73,7 @@ class RobertifyAPI {
         return res.data;
     }
 
-    async getGuildInfo(id) {
+    async getGuildInfo(id: string) {
 
         const res = await axios.get(`${this.uri}/guilds/${id}`, {
             headers: {

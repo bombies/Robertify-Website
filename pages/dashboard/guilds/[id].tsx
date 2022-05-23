@@ -39,6 +39,11 @@ function sortChannelsByCategory(categories, channels) {
 
 type OriginalData = {
     djRoles: any[],
+    adminRoles: any[],
+    pollsRoles: any[],
+    themeRoles: any[],
+    eightBallRoles: any[],
+    banRoles: any[],
     restricted_text_channels: any[],
     restricted_voice_channels: any[],
     log_channel: any,
@@ -53,11 +58,11 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
     if (!dbGuildInfo) return null;
     if (!fullGuildInfo) return null;
 
-    function getRoleByID(id) {
+    function getRoleByID(id: string) {
         return fullGuildInfo.roles.filter(roleObj => roleObj.id === id)[0];
     }
 
-    function getTextChannelByID(id) {
+    function getTextChannelByID(id: string) {
         try {
             const channelObj = textChannelsSorted.filter(obj => obj[Object.keys(obj)[0]].channels.filter(channelObj => channelObj.id === id)[0])[0];
             channelObj[Object.keys(channelObj)[0]].channels = channelObj[Object.keys(channelObj)[0]].channels.filter(channelObj => channelObj.id === id);
@@ -69,6 +74,81 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
 
     // DJ Roles Obj
     const djRoles = dbGuildInfo.permissions['1'].map(roleID => {
+        try {
+            const roleObj = getRoleByID(roleID)
+            return ({
+                name: roleObj.name,
+                id: roleObj.id,
+                icon: <div className="circle" style={{ backgroundColor: `#${parseInt(roleObj.color || 10592673, 10).toString(16).padStart(6, '0')}`, width: '1rem', height: '1rem' }}></div> 
+            })
+        } catch (ex) {
+            return {};
+        }
+    });
+    //
+
+    // Admin Roles Obj
+    const adminRoles = dbGuildInfo.permissions['0'].map(roleID => {
+        try {
+            const roleObj = getRoleByID(roleID)
+            return ({
+                name: roleObj.name,
+                id: roleObj.id,
+                icon: <div className="circle" style={{ backgroundColor: `#${parseInt(roleObj.color || 10592673, 10).toString(16).padStart(6, '0')}`, width: '1rem', height: '1rem' }}></div> 
+            })
+        } catch (ex) {
+            return {};
+        }
+    });
+    //
+
+    // 8ball Roles Obj
+    const eightBallRoles = dbGuildInfo.permissions['5'].map(roleID => {
+        try {
+            const roleObj = getRoleByID(roleID)
+            return ({
+                name: roleObj.name,
+                id: roleObj.id,
+                icon: <div className="circle" style={{ backgroundColor: `#${parseInt(roleObj.color || 10592673, 10).toString(16).padStart(6, '0')}`, width: '1rem', height: '1rem' }}></div> 
+            })
+        } catch (ex) {
+            return {};
+        }
+    });
+    //
+
+    // Polls Roles Obj
+    const pollsRoles = dbGuildInfo.permissions['2'].map(roleID => {
+        try {
+            const roleObj = getRoleByID(roleID)
+            return ({
+                name: roleObj.name,
+                id: roleObj.id,
+                icon: <div className="circle" style={{ backgroundColor: `#${parseInt(roleObj.color || 10592673, 10).toString(16).padStart(6, '0')}`, width: '1rem', height: '1rem' }}></div> 
+            })
+        } catch (ex) {
+            return {};
+        }
+    });
+    //
+
+    // Ban Roles obj
+    const banRoles = dbGuildInfo.permissions['3'].map(roleID => {
+        try {
+            const roleObj = getRoleByID(roleID)
+            return ({
+                name: roleObj.name,
+                id: roleObj.id,
+                icon: <div className="circle" style={{ backgroundColor: `#${parseInt(roleObj.color || 10592673, 10).toString(16).padStart(6, '0')}`, width: '1rem', height: '1rem' }}></div> 
+            })
+        } catch (ex) {
+            return {};
+        }
+    });
+    //
+
+    // Theme Roles Obj
+    const themeRoles = dbGuildInfo.permissions['4'].map(roleID => {
         try {
             const roleObj = getRoleByID(roleID)
             return ({
@@ -122,7 +202,7 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
     //
 
     // Themes
-    let themeObj;
+    let themeObj: object;
     switch(dbGuildInfo.theme.toLowerCase()) {
         case 'green': {
             themeObj = {
@@ -258,6 +338,11 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
 
     return {
         djRoles: [...djRoles.filter(roleObj => Object.keys(roleObj).length)],
+        adminRoles: [...adminRoles.filter(roleObj => Object.keys(roleObj).length)],
+        eightBallRoles: [...eightBallRoles.filter(roleObj => Object.keys(roleObj).length)],
+        pollsRoles: [...pollsRoles.filter(roleObj => Object.keys(roleObj).length)],
+        themeRoles: [...themeRoles.filter(roleObj => Object.keys(roleObj).length)],
+        banRoles: [...banRoles.filter(roleObj => Object.keys(roleObj).length)],
         restricted_text_channels: [...restrictedTextChannels],
         restricted_voice_channels: [...restrictedVoiceChannels],
         log_channel: {...logChannelObj},
@@ -603,7 +688,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
             id: roleObj.id,
             icon: <div className="circle" style={{ backgroundColor: `#${parseInt(roleObj.color || 10592673, 10).toString(16).padStart(6, '0')}`, width: '1rem', height: '1rem' }}></div> 
         }
-    )).sort((a, b) => a.name.localeCompare(b.name)) : null;
+    )).sort((a: any, b: any) => a.name.localeCompare(b.name)) : null;
 
     const textChannelsSorted = sortChannelsByCategory(categories, textChannels);
     const voiceChannelsSorted = sortChannelsByCategory(categories, voiceChannels);
@@ -623,7 +708,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
     }
     const [ togglesState, setTogglesState ] = useState(originalData ? originalData.toggles : null);
     
-    const toggleState = (stateName) => {
+    const toggleState = (stateName: string) => {
         if (!hasPerms) return;
 
         setTogglesState(oldState => {
@@ -641,7 +726,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
         });
     }
 
-    const toggleInnerState = (objectName, stateName) => {
+    const toggleInnerState = (objectName: string, stateName: string) => {
         if (!hasPerms) return;
 
         setTogglesState(oldState => {
@@ -668,7 +753,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
         twenty_four_seven: originalData ? originalData.twenty_four_seven_mode : false,
     })
 
-    const toggleManagementState = (stateName, isPremium = false) => {
+    const toggleManagementState = (stateName: string, isPremium = false) => {
         if (!hasPerms) return;
         if (isPremium && !hasVoted) return;
 
@@ -688,6 +773,11 @@ export default function GuildPage({ token, userInfo, guildInfo,
         });
     }
 
+    /////////////////////////////////////////////////////////////
+    // PERMISSIONS
+    /////////////////////////////////////////////////////////////
+
+    // DJ
     const [ djSelectObj, setDjSelectObj ] = useState({
         optionsVisible: false,
         selectValues: originalData ? [...originalData.djRoles] : [],
@@ -704,7 +794,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
         }));
     }
 
-    const updateDjSelectValues = (event, isActive, value) => {
+    const updateDjSelectValues = (event: Event, isActive: boolean, value: any) => {
         updateMenuSelectedValuesByID(event, isActive, setDjSelectObj, value, true, true, (newObj) => {
             setChangeMade(!compareAllStates(
                 newObj.selectValues, vcSelectObj.selectValues,
@@ -722,6 +812,47 @@ export default function GuildPage({ token, userInfo, guildInfo,
             shownOptions: roleNamesSorted.filter(val => val.toLowerCase().includes(value.toLowerCase()))
         }));
     }
+    //
+
+    // ADMIN
+    const [ adminSelectObj, setAdminSelectObj ] = useState({
+        optionsVisible: false,
+        selectValues: originalData ? [...originalData.adminRoles] : [],
+        shownOptions: roleNamesSorted ? [...roleNamesSorted] : [],
+        searchText: ''
+    });
+
+    const toggleAdminOptionsVisible = () => {
+        if (!hasPerms) return;
+
+        setDjSelectObj(oldObj => ({
+            ...oldObj,
+            optionsVisible: !oldObj.optionsVisible
+        }));
+    }
+
+    const updateAdminSelectValues = (event: Event, isActive: boolean, value: any) => {
+        updateMenuSelectedValuesByID(event, isActive, setAdminSelectObj, value, true, true, (newObj) => {
+            setChangeMade(!compareAllStates(
+                newObj.selectValues, vcSelectObj.selectValues,
+                tcSelectObj.selectValues, lcSelectObj.selectValues[0],
+                themeSelectObj.selectValues[0], togglesState
+            ))});
+    }
+
+    const updateAdminSearchText = (value) => {
+        if (!hasPerms) return;
+
+        setDjSelectObj(oldObj => ({
+            ...oldObj,
+            searchText: value,
+            shownOptions: roleNamesSorted.filter(val => val.toLowerCase().includes(value.toLowerCase()))
+        }));
+    }
+    //
+
+
+    /////////////////////////////////////////////////////////////
 
     const [ vcSelectObj, setVcSelectObj ] = useState({
         optionsVisible: false,
@@ -1123,6 +1254,11 @@ export default function GuildPage({ token, userInfo, guildInfo,
 
         setOriginalData({
             djRoles: [...djSelectObj.selectValues],
+            adminRoles: [...adminSelectObj.selectValues],
+            eightBallRoles: [],
+            themeRoles: [],
+            pollsRoles: [],
+            banRoles: [],
             restricted_text_channels: [...tcSelectObj.selectValues],
             restricted_voice_channels: [...vcSelectObj.selectValues],
             log_channel: {...lcSelectObj.selectValues.at(0)},
@@ -1300,7 +1436,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         const guildInfo = await fetchDiscordGuildInfo(context.req, context.params.id)
 
         await robertifyAPI.setAccessToken();
-        const dbGuildInfo = await robertifyAPI.getGuildInfo(context.params.id)
+        const dbGuildInfo = await robertifyAPI.getGuildInfo(context.params.id.toString())
         const { access } = guildInfo;
 
         return {

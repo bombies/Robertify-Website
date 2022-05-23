@@ -1,6 +1,7 @@
 import Layout from '../components/Layout';
 import Link from 'next/link';
 import { fetchDiscordUserInfo } from '../utils/APIUtils';
+import {GetServerSideProps, GetServerSidePropsContext} from "next";
 
 export default function Home({ token, discordInfo, discordLoginLink }) {
     return (
@@ -15,6 +16,7 @@ export default function Home({ token, discordInfo, discordLoginLink }) {
                 </div>
                 <div className='mainContent'>
                     <div className='aboutUs' id='aboutUs'>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img className='aboutUs--img' src='https://i.robertify.me/images/vnjjd.png' alt='Logo' />
                         <div className='aboutUs--desc'>
                             <h2 className='aboutUs--desc-title'>About Us</h2>
@@ -23,9 +25,13 @@ export default function Home({ token, discordInfo, discordLoginLink }) {
                     </div>
                     <div className='features'>
                         <div className='features--images'>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src='https://i.robertify.me/images/xibic.png' alt='Requests Channel' />
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src='https://i.robertify.me/images/kjy0r.png' alt='Toggles' />
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src='https://i.robertify.me/images/ixghm.png' alt='Queue' />
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src='https://i.robertify.me/images/zty1i.png' alt='Restricted Channels' />
                         </div>
                         <div className='features--desc'>
@@ -54,11 +60,13 @@ export default function Home({ token, discordInfo, discordLoginLink }) {
                                 <h3 className='support--desc-title'>Support</h3>
                                 <p className='support--desc-body'>You can always join our <a href='https://robertify.me/support'>support server</a> to ask us questions about anything. You can also suggest new features, report bugs, talk about music and so much more. Don&apos;t be afraid to reach out, we&apos;d love to help you!</p>
                             </div>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src='https://i.robertify.me/images/o5zcy.png' alt='Support' />
                         </div>
                     </div>
                 </div>
                 <div className='invite'>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img className='invite--icon' src='https://i.robertify.me/images/bwl3q.png' alt='Invite Icon' />
                     <h1 className='invite--title'>Ready To Invite Us?</h1>
                     <p className='invite--body'>Invite Robertify in seconds by simply clicking on the button below. You&apos;re only one step away from the best listening experience on Discord.</p>
@@ -68,7 +76,7 @@ export default function Home({ token, discordInfo, discordLoginLink }) {
     );
 }
 
-export async function getServerSideProps({ req, res }) {
+export const getServerSideProps: GetServerSideProps = async ({req}: GetServerSidePropsContext) => {
     const data = await fetchDiscordUserInfo(req);
     const discordLoginLink = `https://discord.com/api/oauth2/authorize?client_id=${atob(process.env.DISCORD_BOT_TOKEN.split('.')[0])}&redirect_uri=${encodeURI(process.env.LOCAL_API_HOSTNAME + '/callback/discord')}&response_type=code&scope=identify%20guilds`;
 

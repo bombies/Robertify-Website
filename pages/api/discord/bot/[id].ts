@@ -24,7 +24,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     
     // Cache miss
     await robertifyAPI.setAccessToken();
-    const fetchedData = await robertifyAPI.getGuildInfo(id);
+    const fetchedData = await robertifyAPI.getGuildInfo(id.toString());
     return res.status(200).json(fetchedData);
 }
 
