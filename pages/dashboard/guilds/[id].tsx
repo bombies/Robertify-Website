@@ -1730,7 +1730,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
     const hasVoted = info.props.userInfo ? await userHasVoted(info.props.userInfo.id) : false;
 
     try {
-        const guildInfo = await fetchDiscordGuildInfo(context.req, context.params.id)
+        const guildInfo = await fetchDiscordGuildInfo(context.req, context.params.id.toString())
 
         await robertifyAPI.setAccessToken();
         const dbGuildInfo = await robertifyAPI.getGuildInfo(context.params.id.toString())

@@ -184,7 +184,7 @@ export async function fetchDiscordUserGuildInfo(req: IncomingMessage & {cookies:
     }
 }
 
-export async function fetchAllDiscordUserInfo(req: NextApiRequest) {
+export async function fetchAllDiscordUserInfo(req: IncomingMessage & {cookies: NextApiRequestCookies}) {
     const token = req.cookies['login-token'];
     const discordKey = token;
         
@@ -209,7 +209,6 @@ export async function fetchAllDiscordUserInfo(req: NextApiRequest) {
             return {
                 props: {
                     token: token,
-                    userInfo: {},
                     guildInfo: []
                 }
             }
@@ -219,7 +218,6 @@ export async function fetchAllDiscordUserInfo(req: NextApiRequest) {
             return {
                 props: {
                     token: token,
-                    userInfo: {},
                     guildInfo: []
                 }
             }
@@ -292,7 +290,6 @@ export async function fetchAllDiscordUserInfo(req: NextApiRequest) {
         return {
             props: {
                 token: token,
-                userInfo: {},
                 guildInfo: []
             }
         }
