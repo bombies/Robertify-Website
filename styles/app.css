@@ -1187,7 +1187,7 @@ footer {
     margin-bottom: 3rem;
 }
 
-.serverDash--controlPanel-mangement {
+.serverDash--controlPanel-management {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     row-gap: 5%;

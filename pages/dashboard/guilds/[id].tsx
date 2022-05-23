@@ -7,7 +7,7 @@ import Toggle from "../../../components/Toggle";
 import SelectMenu from "../../../components/SelectMenu";
 import TextOptionList from "../../../components/TextOptionList";
 import { robertifyAPI } from "../../../utils/RobertifyAPI";
-import { GetServerSideProps } from "next";
+import {GetServerSideProps, GetServerSidePropsContext} from "next";
 
 interface UpdateMenuProps {
     event: Event,
@@ -715,11 +715,12 @@ export default function GuildPage({ token, userInfo, guildInfo,
             const newState = {
                 ...oldState,
                 [stateName]: !oldState[stateName]
-            };  
-            
+            };
+
             setChangeMade(!compareAllStates(
-                djSelectObj.selectValues, vcSelectObj.selectValues,
-                tcSelectObj.selectValues, lcSelectObj.selectValues[0],
+                djSelectObj.selectValues, adminSelectObj.selectValues, pollsSelectObj.selectValues,
+                banRolesSelectObj.selectValues, themeRolesSelectObj.selectValues, eightBallRolesSelectObj.selectValues,
+                vcSelectObj.selectValues, tcSelectObj.selectValues, lcSelectObj.selectValues[0],
                 themeSelectObj.selectValues[0], newState
             ))
             return newState;
@@ -761,13 +762,13 @@ export default function GuildPage({ token, userInfo, guildInfo,
             const newState = {
                 ...oldState,
                 [stateName]: !oldState[stateName]
-            };  
-            
+            };
+
             setChangeMade(!compareAllStates(
-                djSelectObj.selectValues, vcSelectObj.selectValues,
-                tcSelectObj.selectValues, lcSelectObj.selectValues[0],
-                themeSelectObj.selectValues[0], togglesState, eightBallResponses,
-                newState
+                djSelectObj.selectValues, adminSelectObj.selectValues, pollsSelectObj.selectValues,
+                banRolesSelectObj.selectValues, themeRolesSelectObj.selectValues, eightBallRolesSelectObj.selectValues,
+                vcSelectObj.selectValues, tcSelectObj.selectValues, lcSelectObj.selectValues[0],
+                themeSelectObj.selectValues[0], togglesState, eightBallResponses, newState
             ))
             return newState;
         });
@@ -797,8 +798,9 @@ export default function GuildPage({ token, userInfo, guildInfo,
     const updateDjSelectValues = (event: Event, isActive: boolean, value: any) => {
         updateMenuSelectedValuesByID(event, isActive, setDjSelectObj, value, true, true, (newObj) => {
             setChangeMade(!compareAllStates(
-                newObj.selectValues, vcSelectObj.selectValues,
-                tcSelectObj.selectValues, lcSelectObj.selectValues[0],
+                newObj.selectValues, adminSelectObj.selectValues, pollsSelectObj.selectValues,
+                banRolesSelectObj.selectValues, themeRolesSelectObj.selectValues, eightBallRolesSelectObj.selectValues,
+                vcSelectObj.selectValues, tcSelectObj.selectValues, lcSelectObj.selectValues[0],
                 themeSelectObj.selectValues[0], togglesState
             ))});
     }
@@ -809,7 +811,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
         setDjSelectObj(oldObj => ({
             ...oldObj,
             searchText: value,
-            shownOptions: roleNamesSorted.filter(val => val.toLowerCase().includes(value.toLowerCase()))
+            shownOptions: roleNamesSorted.filter(val => val.name.toLowerCase().includes(value.toLowerCase()))
         }));
     }
     //
@@ -825,7 +827,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
     const toggleAdminOptionsVisible = () => {
         if (!hasPerms) return;
 
-        setDjSelectObj(oldObj => ({
+        setAdminSelectObj(oldObj => ({
             ...oldObj,
             optionsVisible: !oldObj.optionsVisible
         }));
@@ -834,8 +836,9 @@ export default function GuildPage({ token, userInfo, guildInfo,
     const updateAdminSelectValues = (event: Event, isActive: boolean, value: any) => {
         updateMenuSelectedValuesByID(event, isActive, setAdminSelectObj, value, true, true, (newObj) => {
             setChangeMade(!compareAllStates(
-                newObj.selectValues, vcSelectObj.selectValues,
-                tcSelectObj.selectValues, lcSelectObj.selectValues[0],
+                djSelectObj.selectValues, newObj.selectValues, pollsSelectObj.selectValues,
+                banRolesSelectObj.selectValues, themeRolesSelectObj.selectValues, eightBallRolesSelectObj.selectValues,
+                vcSelectObj.selectValues, tcSelectObj.selectValues, lcSelectObj.selectValues[0],
                 themeSelectObj.selectValues[0], togglesState
             ))});
     }
@@ -843,14 +846,165 @@ export default function GuildPage({ token, userInfo, guildInfo,
     const updateAdminSearchText = (value) => {
         if (!hasPerms) return;
 
-        setDjSelectObj(oldObj => ({
+        setAdminSelectObj(oldObj => ({
             ...oldObj,
             searchText: value,
-            shownOptions: roleNamesSorted.filter(val => val.toLowerCase().includes(value.toLowerCase()))
+            shownOptions: roleNamesSorted.filter(val => val.name.toLowerCase().includes(value.toLowerCase()))
         }));
     }
     //
 
+    // POLLS
+    const [ pollsSelectObj, setPollsSelectObj ] = useState({
+        optionsVisible: false,
+        selectValues: originalData ? [...originalData.pollsRoles] : [],
+        shownOptions: roleNamesSorted ? [...roleNamesSorted] : [],
+        searchText: ''
+    });
+
+    const togglePollsOptionsVisible = () => {
+        if (!hasPerms) return;
+
+        setPollsSelectObj(oldObj => ({
+            ...oldObj,
+            optionsVisible: !oldObj.optionsVisible
+        }));
+    }
+
+    const updatePollsSelectValues = (event: Event, isActive: boolean, value: any) => {
+        updateMenuSelectedValuesByID(event, isActive, setPollsSelectObj, value, true, true, (newObj) => {
+            setChangeMade(!compareAllStates(
+                djSelectObj.selectValues, adminSelectObj.selectValues, newObj.selectValues,
+                banRolesSelectObj.selectValues, themeRolesSelectObj.selectValues, eightBallRolesSelectObj.selectValues,
+                vcSelectObj.selectValues, tcSelectObj.selectValues, lcSelectObj.selectValues[0],
+                themeSelectObj.selectValues[0], togglesState
+            ))});
+    }
+
+    const updatePollsSearchText = (value) => {
+        if (!hasPerms) return;
+
+        setPollsSelectObj(oldObj => ({
+            ...oldObj,
+            searchText: value,
+            shownOptions: roleNamesSorted.filter(val => val.name.toLowerCase().includes(value.toLowerCase()))
+        }));
+    }
+    //
+
+    // BAN
+    const [ banRolesSelectObj, setBanRolesSelectObj ] = useState({
+        optionsVisible: false,
+        selectValues: originalData ? [...originalData.banRoles] : [],
+        shownOptions: roleNamesSorted ? [...roleNamesSorted] : [],
+        searchText: ''
+    });
+
+    const toggleBanRolesOptionsVisible = () => {
+        if (!hasPerms) return;
+
+        setBanRolesSelectObj(oldObj => ({
+            ...oldObj,
+            optionsVisible: !oldObj.optionsVisible
+        }));
+    }
+
+    const updateBanRolesSelectValues = (event: Event, isActive: boolean, value: any) => {
+        updateMenuSelectedValuesByID(event, isActive, setBanRolesSelectObj, value, true, true, (newObj) => {
+            setChangeMade(!compareAllStates(
+                djSelectObj.selectValues, adminSelectObj.selectValues, pollsSelectObj.selectValues,
+                newObj.selectValues, themeRolesSelectObj.selectValues, eightBallRolesSelectObj.selectValues,
+                vcSelectObj.selectValues, tcSelectObj.selectValues, lcSelectObj.selectValues[0],
+                themeSelectObj.selectValues[0], togglesState
+            ))});
+    }
+
+    const updateBanRolesSearchText = (value) => {
+        if (!hasPerms) return;
+
+        setBanRolesSelectObj(oldObj => ({
+            ...oldObj,
+            searchText: value,
+            shownOptions: roleNamesSorted.filter(val => val.name.toLowerCase().includes(value.toLowerCase()))
+        }));
+    }
+    //
+
+    // THEME
+    const [ themeRolesSelectObj, setThemeRolesSelectObj ] = useState({
+        optionsVisible: false,
+        selectValues: originalData ? [...originalData.themeRoles] : [],
+        shownOptions: roleNamesSorted ? [...roleNamesSorted] : [],
+        searchText: ''
+    });
+
+    const toggleThemeRolesOptionsVisible = () => {
+        if (!hasPerms) return;
+
+        setThemeRolesSelectObj(oldObj => ({
+            ...oldObj,
+            optionsVisible: !oldObj.optionsVisible
+        }));
+    }
+
+    const updateThemeRolesSelectValues = (event: Event, isActive: boolean, value: any) => {
+        updateMenuSelectedValuesByID(event, isActive, setThemeRolesSelectObj, value, true, true, (newObj) => {
+            setChangeMade(!compareAllStates(
+                djSelectObj.selectValues, adminSelectObj.selectValues, pollsSelectObj.selectValues,
+                banRolesSelectObj.selectValues, newObj.selectValues, eightBallRolesSelectObj.selectValues,
+                vcSelectObj.selectValues, tcSelectObj.selectValues, lcSelectObj.selectValues[0],
+                themeSelectObj.selectValues[0], togglesState
+            ))});
+    }
+
+    const updateThemeRolesSearchText = (value) => {
+        if (!hasPerms) return;
+
+        setThemeRolesSelectObj(oldObj => ({
+            ...oldObj,
+            searchText: value,
+            shownOptions: roleNamesSorted.filter(val => val.name.toLowerCase().includes(value.toLowerCase()))
+        }));
+    }
+    //
+
+    // EIGHT BALL
+    const [ eightBallRolesSelectObj, setEightBallRolesSelectObj ] = useState({
+        optionsVisible: false,
+        selectValues: originalData ? [...originalData.eightBallRoles] : [],
+        shownOptions: roleNamesSorted ? [...roleNamesSorted] : [],
+        searchText: ''
+    });
+
+    const toggleEightBallRolesOptionsVisible = () => {
+        if (!hasPerms) return;
+
+        setEightBallRolesSelectObj(oldObj => ({
+            ...oldObj,
+            optionsVisible: !oldObj.optionsVisible
+        }));
+    }
+
+    const updateEightBallRolesSelectValues = (event: Event, isActive: boolean, value: any) => {
+        updateMenuSelectedValuesByID(event, isActive, setEightBallRolesSelectObj, value, true, true, (newObj) => {
+            setChangeMade(!compareAllStates(
+                djSelectObj.selectValues, adminSelectObj.selectValues, pollsSelectObj.selectValues,
+                banRolesSelectObj.selectValues, themeRolesSelectObj.selectValues, newObj.selectValues,
+                vcSelectObj.selectValues, tcSelectObj.selectValues, lcSelectObj.selectValues[0],
+                themeSelectObj.selectValues[0], togglesState
+            ))});
+    }
+
+    const updateEightBallRolesSearchText = (value) => {
+        if (!hasPerms) return;
+
+        setEightBallRolesSelectObj(oldObj => ({
+            ...oldObj,
+            searchText: value,
+            shownOptions: roleNamesSorted.filter(val => val.name.toLowerCase().includes(value.toLowerCase()))
+        }));
+    }
+    //
 
     /////////////////////////////////////////////////////////////
 
@@ -868,8 +1022,9 @@ export default function GuildPage({ token, userInfo, guildInfo,
     const updateVcSelectValues = (event, isActive, value) => {
         updateMenuSelectedValues(event, isActive, setVcSelectObj, value, true, true, (newObj) => {
             setChangeMade(!compareAllStates(
-                djSelectObj.selectValues, newObj.selectValues,
-                tcSelectObj.selectValues, lcSelectObj.selectValues[0],
+                djSelectObj.selectValues, adminSelectObj.selectValues, pollsSelectObj.selectValues,
+                banRolesSelectObj.selectValues, themeRolesSelectObj.selectValues, eightBallRolesSelectObj.selectValues,
+                newObj.selectValues, tcSelectObj.selectValues, lcSelectObj.selectValues[0],
                 themeSelectObj.selectValues[0], togglesState
             ))});
     }
@@ -892,8 +1047,9 @@ export default function GuildPage({ token, userInfo, guildInfo,
     const updateTcSelectValues = (event, isActive, value) => {
         updateMenuSelectedValues(event, isActive, setTcSelectObj, value, true, true, (newObj) => {
             setChangeMade(!compareAllStates(
-                djSelectObj.selectValues, vcSelectObj.selectValues,
-                newObj.selectValues, lcSelectObj.selectValues[0],
+                djSelectObj.selectValues, adminSelectObj.selectValues, pollsSelectObj.selectValues,
+                banRolesSelectObj.selectValues, themeRolesSelectObj.selectValues, eightBallRolesSelectObj.selectValues,
+                vcSelectObj.selectValues, newObj.selectValues, lcSelectObj.selectValues[0],
                 themeSelectObj.selectValues[0], togglesState
             ))});
     }
@@ -916,8 +1072,9 @@ export default function GuildPage({ token, userInfo, guildInfo,
     const updateLcSelectValues = (event, isActive, value) => {
         updateMenuSelectedValuesByID(event, isActive, setLcSelectObj, value, false, true, (newObj) => {
             setChangeMade(!compareAllStates(
-                djSelectObj.selectValues, vcSelectObj.selectValues,
-                tcSelectObj.selectValues, newObj.selectValues[0],
+                djSelectObj.selectValues, adminSelectObj.selectValues, pollsSelectObj.selectValues,
+                banRolesSelectObj.selectValues, themeRolesSelectObj.selectValues, eightBallRolesSelectObj.selectValues,
+                vcSelectObj.selectValues, tcSelectObj.selectValues, newObj.selectValues[0],
                 themeSelectObj.selectValues[0], togglesState
             ))});
     }
@@ -940,8 +1097,9 @@ export default function GuildPage({ token, userInfo, guildInfo,
     const updateThemeSelectValues = (event: Event, isActive: boolean, value: any) => {
         updateMenuSelectedValues(event, isActive, setThemeSelectObj, value, false, false, (newObj) => {
             setChangeMade(!compareAllStates(
-                djSelectObj.selectValues, vcSelectObj.selectValues,
-                tcSelectObj.selectValues, lcSelectObj.selectValues[0],
+                djSelectObj.selectValues, adminSelectObj.selectValues, pollsSelectObj.selectValues,
+                banRolesSelectObj.selectValues, themeRolesSelectObj.selectValues, eightBallRolesSelectObj.selectValues,
+                vcSelectObj.selectValues, tcSelectObj.selectValues, lcSelectObj.selectValues[0],
                 newObj.selectValues[0], togglesState
             ))});
     }
@@ -1041,10 +1199,11 @@ export default function GuildPage({ token, userInfo, guildInfo,
             const newItem = [...oldResponses, response]
 
             setChangeMade(!compareAllStates(
-                djSelectObj.selectValues, vcSelectObj.selectValues,
-                tcSelectObj.selectValues, lcSelectObj.selectValues[0],
+                djSelectObj.selectValues, adminSelectObj.selectValues, pollsSelectObj.selectValues,
+                banRolesSelectObj.selectValues, themeRolesSelectObj.selectValues, eightBallRolesSelectObj.selectValues,
+                vcSelectObj.selectValues, tcSelectObj.selectValues, lcSelectObj.selectValues[0],
                 themeSelectObj.selectValues[0], togglesState, newItem
-            ))
+            ));
 
             return newItem;
         });
@@ -1056,20 +1215,44 @@ export default function GuildPage({ token, userInfo, guildInfo,
             const newItem = [...oldResponses.filter(oldResponse => oldResponse != response)]
 
             setChangeMade(!compareAllStates(
-                djSelectObj.selectValues, vcSelectObj.selectValues,
-                tcSelectObj.selectValues, lcSelectObj.selectValues[0],
+                djSelectObj.selectValues, adminSelectObj.selectValues, pollsSelectObj.selectValues,
+                banRolesSelectObj.selectValues, themeRolesSelectObj.selectValues, eightBallRolesSelectObj.selectValues,
+                vcSelectObj.selectValues, tcSelectObj.selectValues, lcSelectObj.selectValues[0],
                 themeSelectObj.selectValues[0], togglesState, newItem
-            ))
+            ));
 
             return newItem;
         })
     }
 
-    const compareAllStates = (djRolesSelected, rvcSelected, rtcSelected,
-        logChannelSelected, themeSelected, togglesState, eightBallState = eightBallResponses,
+    const compareAllStates = (
+        djRolesSelected, adminRolesSelected, pollsRolesSelected,
+        banRolesSelected, themeRolesSelected, eightBallRolesSelected,
+        rvcSelected, rtcSelected, logChannelSelected,
+        themeSelected, togglesState, eightBallState = eightBallResponses,
         managementToggles = managementTogglesState
     ) => {
         if (!arrayCompare(originalData.djRoles.map(obj => ({ name: obj.name, id: obj.id })), djRolesSelected.map(obj => ({ name: obj.name, id: obj.id })))) {
+            return false;
+        }
+
+        if (!arrayCompare(originalData.adminRoles.map(obj => ({ name: obj.name, id: obj.id })), adminRolesSelected.map(obj => ({ name: obj.name, id: obj.id })))) {
+            return false;
+        }
+
+        if (!arrayCompare(originalData.pollsRoles.map(obj => ({ name: obj.name, id: obj.id })), pollsRolesSelected.map(obj => ({ name: obj.name, id: obj.id })))) {
+            return false;
+        }
+
+        if (!arrayCompare(originalData.banRoles.map(obj => ({ name: obj.name, id: obj.id })), banRolesSelected.map(obj => ({ name: obj.name, id: obj.id })))) {
+            return false;
+        }
+
+        if (!arrayCompare(originalData.themeRoles.map(obj => ({ name: obj.name, id: obj.id })), themeRolesSelected.map(obj => ({ name: obj.name, id: obj.id })))) {
+            return false;
+        }
+
+        if (!arrayCompare(originalData.eightBallRoles.map(obj => ({ name: obj.name, id: obj.id })), eightBallRolesSelected.map(obj => ({ name: obj.name, id: obj.id })))) {
             return false;
         }
         
@@ -1099,6 +1282,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
 
         if (managementToggles.autoplay !== originalData.autoplay)
             return false;
+
         if (managementToggles.twenty_four_seven !== originalData.twenty_four_seven_mode)
             return false;
 
@@ -1183,6 +1367,41 @@ export default function GuildPage({ token, userInfo, guildInfo,
             searchText: ''
         });
 
+        setAdminSelectObj({
+            optionsVisible: false,
+            selectValues: [...defaultObj.adminRoles],
+            shownOptions: [...roleNamesSorted],
+            searchText: ''
+        });
+
+        setPollsSelectObj({
+            optionsVisible: false,
+            selectValues: [...defaultObj.pollsRoles],
+            shownOptions: [...roleNamesSorted],
+            searchText: ''
+        });
+
+        setBanRolesSelectObj({
+            optionsVisible: false,
+            selectValues: [...defaultObj.banRoles],
+            shownOptions: [...roleNamesSorted],
+            searchText: ''
+        });
+
+        setThemeRolesSelectObj({
+            optionsVisible: false,
+            selectValues: [...defaultObj.themeRoles],
+            shownOptions: [...roleNamesSorted],
+            searchText: ''
+        });
+
+        setEightBallRolesSelectObj({
+            optionsVisible: false,
+            selectValues: [...defaultObj.eightBallRoles],
+            shownOptions: [...roleNamesSorted],
+            searchText: ''
+        });
+
         setVcSelectObj({
             optionsVisible: false,
             selectValues: [...defaultObj.restricted_voice_channels],
@@ -1237,8 +1456,12 @@ export default function GuildPage({ token, userInfo, guildInfo,
                         voice_channels: vcSelectObj.selectValues.map(obj => obj.id)
                     },
                     permissions: {
-                        ...dbGuildInfo.permissions,
-                        '1': djSelectObj.selectValues.map(obj => obj.id)
+                        '0': adminSelectObj.selectValues.map(obj => obj.id),
+                        '1': djSelectObj.selectValues.map(obj => obj.id),
+                        '2': pollsSelectObj.selectValues.map(obj => obj.id),
+                        '3': banRolesSelectObj.selectValues.map(obj => obj.id),
+                        '4': themeRolesSelectObj.selectValues.map(obj => obj.id),
+                        '5': eightBallRolesSelectObj.selectValues.map(obj => obj.id)
                     },
                     twenty_four_seven_mode: managementTogglesState.twenty_four_seven,
                     autoplay: managementTogglesState.autoplay
@@ -1255,10 +1478,10 @@ export default function GuildPage({ token, userInfo, guildInfo,
         setOriginalData({
             djRoles: [...djSelectObj.selectValues],
             adminRoles: [...adminSelectObj.selectValues],
-            eightBallRoles: [],
-            themeRoles: [],
-            pollsRoles: [],
-            banRoles: [],
+            pollsRoles: [...pollsSelectObj.selectValues],
+            banRoles: [...banRolesSelectObj.selectValues],
+            themeRoles: [...themeRolesSelectObj.selectValues],
+            eightBallRoles: [...eightBallRolesSelectObj.selectValues],
             restricted_text_channels: [...tcSelectObj.selectValues],
             restricted_voice_channels: [...vcSelectObj.selectValues],
             log_channel: {...lcSelectObj.selectValues.at(0)},
@@ -1292,21 +1515,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
                             <div className='serverDash--noPermsOverlay-bg'></div>
                         </div>}
                         <h2 className='serverDash--controlPanel-title'>Management</h2>
-                        <div className='serverDash--controlPanel-mangement'>
-                            <SelectMenu
-                                title='DJ Roles'
-                                id='djRoles'
-                                subTitle='Set DJ roles'
-                                menuOptions={djSelectObj.shownOptions}
-                                multiSelect={true}
-                                placeHolder='Select multiple roles'
-                                selectValues={djSelectObj.selectValues}
-                                setSelectValues={updateDjSelectValues}
-                                optionsVisible={djSelectObj.optionsVisible}
-                                setOptionsVisible={toggleDjOptionsVisible}
-                                searchText={djSelectObj.searchText}
-                                setSearchText={updateDjSearchText}
-                            />
+                        <div className='serverDash--controlPanel-management'>
                             <SelectMenu
                                 title='Restricted Voice Channels'
                                 id='rvc'
@@ -1369,6 +1578,94 @@ export default function GuildPage({ token, userInfo, guildInfo,
                             />
                         </div>
                         <hr className='serverDash--divider' />
+                        <h2 className='serverDash--controlPanel-title'>Permissions</h2>
+                        <div className='serverDash--controlPanel-management'>
+                            <SelectMenu
+                                title='Admin Roles'
+                                id='adminRoles'
+                                subTitle='Set the roles to have the Administrator permission!'
+                                menuOptions={adminSelectObj.shownOptions}
+                                multiSelect={true}
+                                placeHolder='Select multiple roles'
+                                selectValues={adminSelectObj.selectValues}
+                                setSelectValues={updateAdminSelectValues}
+                                optionsVisible={adminSelectObj.optionsVisible}
+                                setOptionsVisible={toggleAdminOptionsVisible}
+                                searchText={adminSelectObj.searchText}
+                                setSearchText={updateAdminSearchText}
+                            />
+                            <SelectMenu
+                                title='DJ Roles'
+                                id='djRoles'
+                                subTitle='Set the roles to have the DJ permission!'
+                                menuOptions={djSelectObj.shownOptions}
+                                multiSelect={true}
+                                placeHolder='Select multiple roles'
+                                selectValues={djSelectObj.selectValues}
+                                setSelectValues={updateDjSelectValues}
+                                optionsVisible={djSelectObj.optionsVisible}
+                                setOptionsVisible={toggleDjOptionsVisible}
+                                searchText={djSelectObj.searchText}
+                                setSearchText={updateDjSearchText}
+                            />
+                            <SelectMenu
+                                title='Polls Roles'
+                                id='pollsRoles'
+                                subTitle='Set the roles to have the permission to make polls!'
+                                menuOptions={pollsSelectObj.shownOptions}
+                                multiSelect={true}
+                                placeHolder='Select multiple roles'
+                                selectValues={pollsSelectObj.selectValues}
+                                setSelectValues={updatePollsSelectValues}
+                                optionsVisible={pollsSelectObj.optionsVisible}
+                                setOptionsVisible={togglePollsOptionsVisible}
+                                searchText={pollsSelectObj.searchText}
+                                setSearchText={updatePollsSearchText}
+                            />
+                            <SelectMenu
+                                title='Ban Roles'
+                                id='banRoles'
+                                subTitle='Set the roles to have the permission to ban users from using Robertify!'
+                                menuOptions={banRolesSelectObj.shownOptions}
+                                multiSelect={true}
+                                placeHolder='Select multiple roles'
+                                selectValues={banRolesSelectObj.selectValues}
+                                setSelectValues={updateBanRolesSelectValues}
+                                optionsVisible={banRolesSelectObj.optionsVisible}
+                                setOptionsVisible={toggleBanRolesOptionsVisible}
+                                searchText={banRolesSelectObj.searchText}
+                                setSearchText={updateBanRolesSearchText}
+                            />
+                            <SelectMenu
+                                title='Theme Roles'
+                                id='themeRoles'
+                                subTitle='Set the roles to have the permission to change Robertify&apos;s theme!'
+                                menuOptions={themeRolesSelectObj.shownOptions}
+                                multiSelect={true}
+                                placeHolder='Select multiple roles'
+                                selectValues={themeRolesSelectObj.selectValues}
+                                setSelectValues={updateThemeRolesSelectValues}
+                                optionsVisible={themeRolesSelectObj.optionsVisible}
+                                setOptionsVisible={toggleThemeRolesOptionsVisible}
+                                searchText={themeRolesSelectObj.searchText}
+                                setSearchText={updateThemeRolesSearchText}
+                            />
+                            <SelectMenu
+                                title='8Ball Roles'
+                                id='8ballRoles'
+                                subTitle='Set the roles to have the permission to modify 8ball responses!'
+                                menuOptions={eightBallRolesSelectObj.shownOptions}
+                                multiSelect={true}
+                                placeHolder='Select multiple roles'
+                                selectValues={eightBallRolesSelectObj.selectValues}
+                                setSelectValues={updateEightBallRolesSelectValues}
+                                optionsVisible={eightBallRolesSelectObj.optionsVisible}
+                                setOptionsVisible={toggleEightBallRolesOptionsVisible}
+                                searchText={eightBallRolesSelectObj.searchText}
+                                setSearchText={updateEightBallRolesSearchText}
+                            />
+                        </div>
+                        <hr className='serverDash--divider' />
                         <h2 className='serverDash--controlPanel-title'>Management Toggles</h2>
                         <div className='serverDash--controlPanel-toggles'>
                             <Toggle label='Autoplay' subTitle='Should Robertify play recommended tracks in the event of a finished queue?' isActive={managementTogglesState.autoplay} setActive={() => toggleManagementState('autoplay', true)} isDisabled={hasVoted ? false : true} isPremium={true} />
@@ -1428,7 +1725,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
     )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
     const info = await fetchAllDiscordUserInfo(context.req);
     const hasVoted = info.props.userInfo ? await userHasVoted(info.props.userInfo.id) : false;
 
