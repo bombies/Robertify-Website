@@ -1,7 +1,7 @@
 import axios from "axios";
 
 class RobertifyAPI {
-    private username: string;
+    private readonly username: string;
     private masterPassword: string;
     private uri: string;
     private accessToken: string;
@@ -11,14 +11,6 @@ class RobertifyAPI {
         this.masterPassword = process.env.API_MASTER_PASSWORD
         this.uri = process.env.HOSTED_API_HOSTNAME
         this.accessToken = null;
-    }
-
-    setMasterPassword(masterPassword) {
-        this.masterPassword = masterPassword;
-    }
-
-    setURI(uri: string) {
-        this.uri = uri;
     }
 
     async setAccessToken() {
@@ -60,10 +52,6 @@ class RobertifyAPI {
         return token;
     }
 
-    /**
-     * 
-     * @returns Promise<{commands: { data: [] } }> CommandInfo
-     */
     async getCommandInfo(): Promise<{ id: number, name: string, description: string, category: string  }[]> {
         const res = await axios.get(`${this.uri}/commands`, {
             headers: {
