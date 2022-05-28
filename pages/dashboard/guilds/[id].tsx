@@ -1504,7 +1504,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
         <Layout token={token} discordInfo={discordInfoState.userInfo} title={`Robertify - ${guild.name}`} >
             <main className='serverDash'>
                 <div className='serverDash--optionsContainer'>
-                    <Link className='serverDash--backLink' href='/dashboard'>Go back to your servers</Link>
+                    <Link href='/dashboard'><div className='serverDash--backLink'><img src='https://i.robertify.me/images/t5he5.png' alt='Go back'></img><a>Go back to your servers</a></div></Link>
                     <div className='serverDash--guildBanner'>
                         <img src={guildIcon} alt='Guild Icon'></img>
                         <h1>{guild.name}</h1>

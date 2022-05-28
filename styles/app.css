@@ -1108,19 +1108,32 @@ footer {
 .serverDash--optionsContainer {
     margin: 3rem 0;
     width: 80%;
-
 }
 
-.serverDash--optionsContainer a {
+.serverDash--backLink {
+    display: flex;
+    transition: all 1s ease;
+    gap: .5rem;
+}
+
+.serverDash--backLink a {
     font-size: 1.5rem;
     text-decoration: none;
     transition: all 1s ease-in-out;
 }
 
-.serverDash--optionsContainer a:hover {
-    color: #87ffa9;
-    font-size: 1.55rem;
+.serverDash--backLink:hover {
+    transform: scale(1.025);
+    filter: brightness(200%);
     transition: all 1s ease;
+    cursor: pointer;
+}
+
+.serverDash--backLink img {
+    width: 1.5rem;
+    text-decoration: none;
+    transition: all 1s ease-in-out;
+    align-self: center;
 }
 
 .serverDash--guildBanner {
