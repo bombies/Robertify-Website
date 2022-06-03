@@ -4,7 +4,7 @@ import { ChangeEvent, useEffect } from "react";
 export default function SelectMenu({ 
         className = 'selectMenu', id, title, subTitle = null, menuOptions, multiSelect = false, placeHolder,
         selectValues, setSelectValues, optionsVisible, setOptionsVisible, searchText, setSearchText,
-        isChannelMenu = false, isVoiceMenu = false 
+        isChannelMenu = false, isVoiceMenu = false, isPremium = false, isDisabled = false
     }) {
         
     const search = (event): void => {
@@ -51,14 +51,14 @@ export default function SelectMenu({
     return (
         <div className={className}>
             <div className={`${className} menuDesc`}>
-                <p className={`${className} title`}>{title}</p>
+                <p className={`${className} title`}>{title} {isPremium && <span className='banner-tiny bg-green pointer-noEvents marin-left-sm font-med'>Premium</span>}</p>
                 <p className={`${className} subTitle`}>{subTitle}</p>
             </div>
-            <div className={`${className} menu`} onClick={setOptionsVisible}>
-                <p className={`${className} menu-selected`}>{ !selectValues.length ? placeHolder : selectValues.length === 1 ? selectValues[0].name : `${selectValues.length} options selected` }</p>
-                <img className={`${className} dropDown`} src='https://i.robertify.me/images/zxqvx.png' alt='Drop down icon' />
+            <div className={`${className} menu ${isDisabled ? 'cursor-notAllowed' : ''}`} onClick={setOptionsVisible}>
+                <p className={`${className} menu-selected ${isDisabled ? 'cursor-notAllowed' : ''}`}>{ !selectValues.length ? placeHolder : selectValues.length === 1 ? selectValues[0].name : `${selectValues.length} options selected` }</p>
+                <img className={`${className} dropDown ${isDisabled ? 'cursor-notAllowed' : ''}`} src='https://i.robertify.me/images/zxqvx.png' alt='Drop down icon' />
             </div>
-            <div id={`${className}-menuOptionsContainer#${id}`} className={`${className} menu-optionsContainer ${optionsVisible ? 'active' : ''}`}>
+            <div id={`${className}-menuOptionsContainer#${id}`} className={`${className} menu-optionsContainer ${optionsVisible ? 'active' : ''} ${isDisabled ? 'cursor-notAllowed' : ''}`}>
                 <input className={`${className} menu-options-search`} type='text' placeholder='Search...' value={searchText} onChange={search} />
                 <div className={`${className} menu-options`}>
                     {options}

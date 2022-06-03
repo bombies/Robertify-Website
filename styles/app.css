@@ -1308,7 +1308,6 @@ footer {
     color: gray;
     padding: 1rem 2rem;
     border-radius: 10px;
-    /* cursor: pointer; */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -1593,8 +1592,8 @@ footer {
 }
 
 .cursor-notAllowed {
-    cursor: not-allowed;
-    filter: brightness(70%);
+    cursor: not-allowed !important;
+    filter: brightness(60%);
 }
 
 .pointer-noEvents {

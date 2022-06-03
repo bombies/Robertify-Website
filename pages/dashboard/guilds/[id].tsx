@@ -1091,6 +1091,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
     })
 
     const toggleThemeOptionsVisible = () => {
+        if (!hasVoted) return;
         toggleMenuVisibility(setThemeSelectObj);
     }
 
@@ -1575,6 +1576,8 @@ export default function GuildPage({ token, userInfo, guildInfo,
                                 setOptionsVisible={toggleThemeOptionsVisible}
                                 searchText={themeSelectObj.searchText}
                                 setSearchText={updateThemeSearchText}
+                                isPremium={true}
+                                isDisabled={hasVoted ? false : true}
                             />
                         </div>
                         <hr className='serverDash--divider' />
