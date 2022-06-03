@@ -161,6 +161,7 @@ nav {
 
 .nav--user {
     display: flex;
+    transition: all 1s ease-in-out;
 }
 
 .nav--user-welcome {
@@ -168,7 +169,7 @@ nav {
     align-self: center;
     text-align: center;
     margin-right: 1rem;
-    pointer-events: none;
+    cursor: pointer;
 }
 
 .nav--user-welcome span {
@@ -181,11 +182,10 @@ nav {
     border-radius: 50%;
     object-fit: cover;
     cursor: pointer;
-    transition: all 1s ease-in-out;
 }
 
-.nav--user-icon:hover {
-    transform: scale(1.2);
+.nav--user:hover {
+    transform: scale(1.025);
 }
 
 .nav--user-popout {
