@@ -30,7 +30,7 @@ export default function Home({ token, discordInfo, discordLoginLink }: Props) {
                             <p className='aboutUs--desc-body'>Robertify is a music bot programmed completely in Java using JDA. The name &quot;Robertify&quot; originated from the simple fact that a friend of bombies (main Developer) named Robert wanted a music bot, so he made one for him. Eventually, Robertify became his own project to him and he&apos;s been putting in most of his efforts into it ever since.</p>
                         </div>
                     </div>
-                    <div className='features !bg-stone-700'>
+                    <div className='features !bg-neutral-700'>
                         <div className='features--images'>
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src='https://i.robertify.me/images/xibic.png' alt='Requests Channel' />
