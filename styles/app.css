@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap');
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
     --main-content-padding-left: 15rem;
     --main-content-padding-left-2: 15rem;
@@ -1668,8 +1672,25 @@ footer {
     font-weight: 700;
 }
 
+.bg-transparent-gray {
+    background-color: rgba(48, 48, 48, 0.55);
+}
+
 .font-med {
     font-weight: 500;
+}
+
+.bg-blurred {
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://i.robertify.me/images/s4o7q.png);
+    background-size: cover;
+}
+
+.markdown {
+    padding: .2rem;
+    background-color: rgba(0, 0, 0, 0.45);
+    font-size: .9rem;
+    letter-spacing: .15rem;
+    border-radius: 5px;
 }
 
 @media (min-width: 1700px) {
@@ -1969,6 +1990,12 @@ footer {
 
     .nav--user-popout-options hr {
         margin: .25rem auto;
+    }
+
+    .nav--user-popout-icon-username {
+        font-weight: 400;
+        font-size: 1.15rem;
+        line-height: .75rem;
     }
 
     .hero--button {

@@ -11,8 +11,10 @@
   "dependencies": {
     "@hapi/joi": "^17.1.1",
     "@sentry/nextjs": "^7.0.0",
+    "@tailwindcss/typography": "^0.5.2",
     "axios": "^0.27.2",
     "discord-oauth2": "^2.10.0",
+    "html-react-parser": "^1.4.14",
     "ioredis": "^5.0.6",
     "js-cookie": "^3.0.1",
     "nanoid": "^3.3.4",
@@ -22,13 +24,16 @@
     "react-dom": "18.1.0",
     "react-query": "^3.39.1",
     "redis": "^4.1.0",
-    "styled-components": "^5.3.5"
+    "styled-components": "^5.3.5",
+    "tailwindcss": "^3.0.24"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.2",
     "@types/node": "^17.0.38",
     "@types/react": "^18.0.10",
+    "autoprefixer": "^10.4.7",
     "eslint": "8.16.0",
-    "eslint-config-next": "12.1.6"
+    "eslint-config-next": "12.1.6",
+    "postcss": "^8.4.14"
   }
 }

@@ -92,7 +92,7 @@ export default function Layout(props: Props) {
                         <li><Link className='premium' href='/premium'>Premium</Link></li>
                         <li><Link href='/commands'>Commands</Link></li>
                         <li><Link href='/vote'>Vote</Link></li>
-                        <li><Link href='/support'>Support</Link></li>
+                        <li><Link href='/faq'>Support</Link></li>
                         {
                             discordInfoObj ?
                                 !Object.keys(discordInfoObj).length ? 
@@ -108,7 +108,7 @@ export default function Layout(props: Props) {
                         discordInfoObj ?
                             Object.keys(discordInfoObj).length ? 
                                 <div className='nav--user'>
-                                    <p className='nav--user-welcome' onClick={toggleUserPopout}>Welcome back, <span>{discordInfoObj.username}</span></p>
+                                    <p className='nav--user-welcome laptop:hidden' onClick={toggleUserPopout}>Welcome back, <span>{discordInfoObj.username}</span></p>
                                     <img className='nav--user-icon' onClick={toggleUserPopout} src={discordAvatar} alt='Discord User Icon'/>
                                 </div>
                             : ''
@@ -123,7 +123,7 @@ export default function Layout(props: Props) {
                 {discordInfoObj && 
                     <div className={`nav--user-popout${ userPopoutShown  ? ' active' : ''}`}>
                         <img className={'nav--user-popout-icon'} src={discordAvatar} alt='Discord User Icon' />
-                        <p className='nav--user-popout-icon-username'>{`${discordInfoObj.username}#${discordInfoObj.discriminator}`}</p>
+                        <p className='nav--user-popout-icon-username phone:text-sm'>{`${discordInfoObj.username}#${discordInfoObj.discriminator}`}</p>
                         <div className='nav--user-popout-options-container'>
                             <ul className='nav--user-popout-options'>
                                 <li><Link href='/dashboard'>Servers</Link></li>
