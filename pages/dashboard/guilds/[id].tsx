@@ -37,6 +37,12 @@ function sortChannelsByCategory(categories, channels) {
     return channelsSorted;
 }
 
+type LocaleObject = {
+    id: string,
+    name: string,
+    icon: JSX.Element
+}
+
 type OriginalData = {
     djRoles: any[],
     adminRoles: any[],
@@ -51,7 +57,8 @@ type OriginalData = {
     toggles: any,
     eight_ball: any[],
     autoplay: boolean,
-    twenty_four_seven_mode: boolean
+    twenty_four_seven_mode: boolean,
+    locale: LocaleObject,
 }
 
 function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
@@ -336,6 +343,68 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
     }
     //
 
+    // Locale
+    let localeObj: LocaleObject;
+    switch (dbGuildInfo.locale.toLowerCase()) {
+        case "english": {
+            localeObj = {
+                id: 'english',
+                name: "English (UK)",
+                icon: <img className='w-8' src='https://i.imgur.com/AeDZp1s.png'/>
+            };
+            break;
+        }
+        case "spanish": {
+            localeObj = {
+                id: 'spanish',
+                name: "Spanish",
+                icon: <img className='w-8' src='https://i.imgur.com/ml1NNba.png' />
+            };
+            break;
+        }
+        case "portuguese": {
+            localeObj = {
+                id: 'portuguese',
+                name: "Portuguese",
+                icon: <img className='w-8' src='https://i.imgur.com/WLMDtE6.png' />
+            };
+            break;
+        }
+        case "russian": {
+            localeObj = {
+                id: 'russian',
+                name: "Russian",
+                icon: <img className='w-8' src='https://i.imgur.com/bcnN2W8.png' />
+            };
+            break;
+        }
+        case "dutch": {
+            localeObj = {
+                id: 'dutch',
+                name: "Dutch",
+                icon: <img className='w-8' src='https://i.imgur.com/vUQ8kA8.png' />
+            }
+        }
+        case "french": {
+            localeObj = {
+                id: 'french',
+                name: "French",
+                icon: <img className='w-8' src='https://i.imgur.com/RB4Seme.png' />
+            };
+            break;
+        }
+        case "german": {
+            localeObj = {
+                id: 'german',
+                name: "German",
+                icon: <img className='w-8' src='https://i.imgur.com/enouegk.png' />
+            };
+            break;
+        }
+    }
+
+    //
+
     return {
         djRoles: [...djRoles.filter(roleObj => Object.keys(roleObj).length)],
         adminRoles: [...adminRoles.filter(roleObj => Object.keys(roleObj).length)],
@@ -350,7 +419,8 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
         toggles: {...dbGuildInfo.toggles},
         eight_ball: [...dbGuildInfo.eight_ball],
         autoplay: dbGuildInfo.autoplay ?? false,
-        twenty_four_seven_mode: dbGuildInfo.twenty_four_seven_mode ?? false
+        twenty_four_seven_mode: dbGuildInfo.twenty_four_seven_mode ?? false,
+        locale: localeObj
     }
 }
 
@@ -439,6 +509,7 @@ function getDefaultGuildInfo(fullGuildInfo) {
         log_channel: '-1',
         twenty_four_seven_mode: false,
         autoplay: false,
+        locale: 'english'
     }
 
     return getOriginalDataObject(defaultObj, fullGuildInfo);
@@ -682,6 +753,44 @@ export default function GuildPage({ token, userInfo, guildInfo,
         }
     ]
 
+    const locales = [
+        {
+            id: 'english',
+            name: "English (UK)",
+            icon: <img className='w-8' src='https://i.imgur.com/AeDZp1s.png'/>
+        },
+        {
+            id: 'spanish',
+            name: "Spanish",
+            icon: <img className='w-8' src='https://i.imgur.com/ml1NNba.png' />
+        },
+        {
+            id: 'portuguese',
+            name: "Portuguese",
+            icon: <img className='w-8' src='https://i.imgur.com/WLMDtE6.png' />
+        },
+        {
+            id: 'russian',
+            name: "Russian",
+            icon: <img className='w-8' src='https://i.imgur.com/bcnN2W8.png' />
+        },
+        {
+            id: 'dutch',
+            name: "Dutch",
+            icon: <img className='w-8' src='https://i.imgur.com/vUQ8kA8.png' />
+        },
+        {
+            id: 'french',
+            name: "French",
+            icon: <img className='w-8' src='https://i.imgur.com/RB4Seme.png' />
+        },
+        {
+            id: 'german',
+            name: "German",
+            icon: <img className='w-8' src='https://i.imgur.com/enouegk.png' />
+        }
+    ]
+
     const roleNamesSorted = fullGuildInfo ? fullGuildInfo.roles.map(roleObj => (
         {
             name: roleObj.name,
@@ -721,7 +830,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
                 djSelectObj.selectValues, adminSelectObj.selectValues, pollsSelectObj.selectValues,
                 banRolesSelectObj.selectValues, themeRolesSelectObj.selectValues, eightBallRolesSelectObj.selectValues,
                 vcSelectObj.selectValues, tcSelectObj.selectValues, lcSelectObj.selectValues[0],
-                themeSelectObj.selectValues[0], newState
+                themeSelectObj.selectValues[0], newState, langSelectObj.selectValues[0]
             ))
             return newState;
         });
@@ -768,7 +877,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
                 djSelectObj.selectValues, adminSelectObj.selectValues, pollsSelectObj.selectValues,
                 banRolesSelectObj.selectValues, themeRolesSelectObj.selectValues, eightBallRolesSelectObj.selectValues,
                 vcSelectObj.selectValues, tcSelectObj.selectValues, lcSelectObj.selectValues[0],
-                themeSelectObj.selectValues[0], togglesState, eightBallResponses, newState
+                themeSelectObj.selectValues[0], togglesState, langSelectObj.selectValues[0], eightBallResponses, newState
             ))
             return newState;
         });
@@ -801,7 +910,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
                 newObj.selectValues, adminSelectObj.selectValues, pollsSelectObj.selectValues,
                 banRolesSelectObj.selectValues, themeRolesSelectObj.selectValues, eightBallRolesSelectObj.selectValues,
                 vcSelectObj.selectValues, tcSelectObj.selectValues, lcSelectObj.selectValues[0],
-                themeSelectObj.selectValues[0], togglesState
+                themeSelectObj.selectValues[0], togglesState, langSelectObj.selectValues[0]
             ))});
     }
 
@@ -839,7 +948,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
                 djSelectObj.selectValues, newObj.selectValues, pollsSelectObj.selectValues,
                 banRolesSelectObj.selectValues, themeRolesSelectObj.selectValues, eightBallRolesSelectObj.selectValues,
                 vcSelectObj.selectValues, tcSelectObj.selectValues, lcSelectObj.selectValues[0],
-                themeSelectObj.selectValues[0], togglesState
+                themeSelectObj.selectValues[0], togglesState, langSelectObj.selectValues[0]
             ))});
     }
 
@@ -877,7 +986,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
                 djSelectObj.selectValues, adminSelectObj.selectValues, newObj.selectValues,
                 banRolesSelectObj.selectValues, themeRolesSelectObj.selectValues, eightBallRolesSelectObj.selectValues,
                 vcSelectObj.selectValues, tcSelectObj.selectValues, lcSelectObj.selectValues[0],
-                themeSelectObj.selectValues[0], togglesState
+                themeSelectObj.selectValues[0], togglesState, langSelectObj.selectValues[0]
             ))});
     }
 
@@ -915,7 +1024,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
                 djSelectObj.selectValues, adminSelectObj.selectValues, pollsSelectObj.selectValues,
                 newObj.selectValues, themeRolesSelectObj.selectValues, eightBallRolesSelectObj.selectValues,
                 vcSelectObj.selectValues, tcSelectObj.selectValues, lcSelectObj.selectValues[0],
-                themeSelectObj.selectValues[0], togglesState
+                themeSelectObj.selectValues[0], togglesState, langSelectObj.selectValues[0]
             ))});
     }
 
@@ -953,7 +1062,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
                 djSelectObj.selectValues, adminSelectObj.selectValues, pollsSelectObj.selectValues,
                 banRolesSelectObj.selectValues, newObj.selectValues, eightBallRolesSelectObj.selectValues,
                 vcSelectObj.selectValues, tcSelectObj.selectValues, lcSelectObj.selectValues[0],
-                themeSelectObj.selectValues[0], togglesState
+                themeSelectObj.selectValues[0], togglesState, langSelectObj.selectValues[0]
             ))});
     }
 
@@ -991,7 +1100,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
                 djSelectObj.selectValues, adminSelectObj.selectValues, pollsSelectObj.selectValues,
                 banRolesSelectObj.selectValues, themeRolesSelectObj.selectValues, newObj.selectValues,
                 vcSelectObj.selectValues, tcSelectObj.selectValues, lcSelectObj.selectValues[0],
-                themeSelectObj.selectValues[0], togglesState
+                themeSelectObj.selectValues[0], togglesState, langSelectObj.selectValues[0]
             ))});
     }
 
@@ -1025,7 +1134,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
                 djSelectObj.selectValues, adminSelectObj.selectValues, pollsSelectObj.selectValues,
                 banRolesSelectObj.selectValues, themeRolesSelectObj.selectValues, eightBallRolesSelectObj.selectValues,
                 newObj.selectValues, tcSelectObj.selectValues, lcSelectObj.selectValues[0],
-                themeSelectObj.selectValues[0], togglesState
+                themeSelectObj.selectValues[0], togglesState, langSelectObj.selectValues[0]
             ))});
     }
 
@@ -1050,7 +1159,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
                 djSelectObj.selectValues, adminSelectObj.selectValues, pollsSelectObj.selectValues,
                 banRolesSelectObj.selectValues, themeRolesSelectObj.selectValues, eightBallRolesSelectObj.selectValues,
                 vcSelectObj.selectValues, newObj.selectValues, lcSelectObj.selectValues[0],
-                themeSelectObj.selectValues[0], togglesState
+                themeSelectObj.selectValues[0], togglesState, langSelectObj.selectValues[0]
             ))});
     }
 
@@ -1075,7 +1184,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
                 djSelectObj.selectValues, adminSelectObj.selectValues, pollsSelectObj.selectValues,
                 banRolesSelectObj.selectValues, themeRolesSelectObj.selectValues, eightBallRolesSelectObj.selectValues,
                 vcSelectObj.selectValues, tcSelectObj.selectValues, newObj.selectValues[0],
-                themeSelectObj.selectValues[0], togglesState
+                themeSelectObj.selectValues[0], togglesState, langSelectObj.selectValues[0]
             ))});
     }
 
@@ -1101,7 +1210,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
                 djSelectObj.selectValues, adminSelectObj.selectValues, pollsSelectObj.selectValues,
                 banRolesSelectObj.selectValues, themeRolesSelectObj.selectValues, eightBallRolesSelectObj.selectValues,
                 vcSelectObj.selectValues, tcSelectObj.selectValues, lcSelectObj.selectValues[0],
-                newObj.selectValues[0], togglesState
+                newObj.selectValues[0], togglesState, langSelectObj.selectValues[0]
             ))});
     }
 
@@ -1115,9 +1224,46 @@ export default function GuildPage({ token, userInfo, guildInfo,
         }))
     }
 
-    const toggleMenuVisibility = (setterFunction) => {
+    const [ langSelectObj, setLangSelectObj ] = useState({
+        optionsVisible: false,
+        selectValues: [{...originalData.locale}],
+        shownOptions: locales ? [...locales] : [],
+        searchText: ''
+    })
+
+    const toggleLangOptionsVisible = () => {
         if (!hasPerms) return;
 
+        setLangSelectObj(oldObj => ({
+            ...oldObj,
+            optionsVisible: !oldObj.optionsVisible
+        }));
+    }
+
+    const updateLangSelectValues = (event: Event, isActive: boolean, value: any) => {
+        updateMenuSelectedValues(event, isActive, setLangSelectObj, value, false, false, (newObj) => {
+            setChangeMade(!compareAllStates(
+                djSelectObj.selectValues, adminSelectObj.selectValues, pollsSelectObj.selectValues,
+                banRolesSelectObj.selectValues, themeRolesSelectObj.selectValues, eightBallRolesSelectObj.selectValues,
+                vcSelectObj.selectValues, tcSelectObj.selectValues, lcSelectObj.selectValues[0],
+                themeSelectObj.selectValues[0], togglesState, newObj.selectValues[0]
+            ))});
+    }
+
+    const updateLangSearchText = (value) => {
+        if (!hasPerms) return;
+
+        setLangSelectObj(oldObj => ({
+            ...oldObj,
+            searchText: value,
+            shownOptions: themes.filter(val => val.name.toLowerCase().includes(value.toLowerCase()))
+        }))
+    }
+
+    const toggleMenuVisibility = (setterFunction) => {
+        console.log('attempting toggling visibility')
+        if (!hasPerms) return;
+        console.log('toggling visibility')
         setterFunction(oldObj => ({
             ...oldObj,
             optionsVisible: !oldObj.optionsVisible
@@ -1230,7 +1376,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
         djRolesSelected, adminRolesSelected, pollsRolesSelected,
         banRolesSelected, themeRolesSelected, eightBallRolesSelected,
         rvcSelected, rtcSelected, logChannelSelected,
-        themeSelected, togglesState, eightBallState = eightBallResponses,
+        themeSelected, togglesState, languageState, eightBallState = eightBallResponses,
         managementToggles = managementTogglesState
     ) => {
         if (!arrayCompare(originalData.djRoles.map(obj => ({ name: obj.name, id: obj.id })), djRolesSelected.map(obj => ({ name: obj.name, id: obj.id })))) {
@@ -1285,6 +1431,9 @@ export default function GuildPage({ token, userInfo, guildInfo,
             return false;
 
         if (managementToggles.twenty_four_seven !== originalData.twenty_four_seven_mode)
+            return false;
+
+        if (languageState.id !== originalData.locale.id)
             return false;
 
         return true;
@@ -1343,6 +1492,13 @@ export default function GuildPage({ token, userInfo, guildInfo,
             shownOptions: [...themes],
             searchText: ''
         });
+
+        setLangSelectObj({
+            optionsVisible: false,
+            selectValues: [{...originalData.locale}],
+            shownOptions: [...locales],
+            searchText: ''
+        })
 
         setTogglesState(originalData.toggles);
 
@@ -1431,6 +1587,13 @@ export default function GuildPage({ token, userInfo, guildInfo,
             searchText: ''
         });
 
+        setLangSelectObj({
+            optionsVisible: false,
+            selectValues: [{...defaultObj.locale}],
+            shownOptions: [...locales],
+            searchText: '',
+        })
+
         setTogglesState(defaultObj.toggles);
 
         setEightBallResponses(defaultObj.eight_ball);
@@ -1490,7 +1653,8 @@ export default function GuildPage({ token, userInfo, guildInfo,
             toggles: {...togglesState},
             eight_ball: [...eightBallResponses],
             autoplay: managementTogglesState.autoplay,
-            twenty_four_seven_mode: managementTogglesState.twenty_four_seven
+            twenty_four_seven_mode: managementTogglesState.twenty_four_seven,
+            locale: langSelectObj.selectValues[0]
         });
         setChangeMade(false);
         setDoSaveState(true);
@@ -1506,11 +1670,11 @@ export default function GuildPage({ token, userInfo, guildInfo,
             <main className='serverDash'>
                 <div className='serverDash--optionsContainer'>
                     <Link href='/dashboard'><div className='serverDash--backLink'><img src='https://i.robertify.me/images/t5he5.png' alt='Go back'></img><a>Go back to your servers</a></div></Link>
-                    <div className='serverDash--guildBanner'>
+                    <div className='serverDash--guildBanner !bg-neutral-800'>
                         <img src={guildIcon} alt='Guild Icon'></img>
                         <h1>{guild.name}</h1>
                     </div>
-                    <div className='serverDash--controlPanel'>
+                    <div className='serverDash--controlPanel !bg-neutral-800'>
                         {hasPerms || <div className='serverDash--noPermsOverlay'>
                             <span>You must have either the <strong className='noPerms-permission'>MANAGE SERVER</strong> or <strong className='noPerms-permission'>ADMINISTRATOR</strong> permission to configure this server!</span>
                             <div className='serverDash--noPermsOverlay-bg'></div>
@@ -1577,8 +1741,22 @@ export default function GuildPage({ token, userInfo, guildInfo,
                                 searchText={themeSelectObj.searchText}
                                 setSearchText={updateThemeSearchText}
                                 isPremium={true}
-                                isDisabled={hasVoted ? false : true}
+                                isDisabled={!hasVoted}
                             />
+                            {/*<SelectMenu*/}
+                            {/*    title='Language'*/}
+                            {/*    id='language'*/}
+                            {/*    subTitle='Set the language for Robertify'*/}
+                            {/*    menuOptions={langSelectObj.shownOptions}*/}
+                            {/*    multiSelect={false}*/}
+                            {/*    placeHolder='Select a language'*/}
+                            {/*    selectValues={langSelectObj.selectValues}*/}
+                            {/*    setSelectValues={updateLangSelectValues}*/}
+                            {/*    optionsVisible={langSelectObj.optionsVisible}*/}
+                            {/*    setOptionsVisible={toggleLangOptionsVisible}*/}
+                            {/*    searchText={langSelectObj.searchText}*/}
+                            {/*    setSearchText={updateLangSearchText}*/}
+                            {/*/>*/}
                         </div>
                         <hr className='serverDash--divider' />
                         <h2 className='serverDash--controlPanel-title'>Permissions</h2>
@@ -1736,7 +1914,8 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
         const guildInfo = await fetchDiscordGuildInfo(context.req, context.params.id.toString())
 
         await robertifyAPI.setAccessToken();
-        const dbGuildInfo = await robertifyAPI.getGuildInfo(context.params.id.toString())
+        const dbGuildInfo = await robertifyAPI.getGuildInfo(context.params.id.toString());
+
         const { access } = guildInfo;
 
         return {

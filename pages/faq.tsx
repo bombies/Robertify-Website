@@ -26,7 +26,7 @@ export default function FAQ({ token, discordInfo, discordLoginLink }: Props) {
             <main>
                 <Hero title='FAQ' subTitle='Find out what&apos;s frequently asked about Robertify!' />
             </main>
-            <div className='bg-stone-800 py-10 flex justify-center gap-x-32 laptop:gap-x-16'>
+            <div className='bg-neutral-800 py-10 flex justify-center gap-x-32 laptop:gap-x-16'>
                 <img className='w-64 laptop:w-32 drop-shadow-xl ease-in-out duration-1000 hover:scale-105' src='https://i.robertify.me/images/l8pdz.png' alt='Support Icon' />
                 <p className='text-left self-center text-2xl max-w-lg drop-shadow-lg laptop:text-lg laptop:max-w-sm'>Need direct support from someone on our team? Join the <Link href='/support'><span className='text-green-500 ease-in-out duration-500 hover:brightness-125 cursor-pointer'>support server</span></Link>!</p>
             </div>

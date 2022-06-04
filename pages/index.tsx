@@ -22,7 +22,7 @@ export default function Home({ token, discordInfo, discordLoginLink }: Props) {
                     </div>
                 </div>
                 <div className='mainContent'>
-                    <div className='aboutUs' id='aboutUs'>
+                    <div className='aboutUs !bg-neutral-800' id='aboutUs'>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img className='aboutUs--img' src='https://i.robertify.me/images/vnjjd.png' alt='Logo' />
                         <div className='aboutUs--desc'>
@@ -30,7 +30,7 @@ export default function Home({ token, discordInfo, discordLoginLink }: Props) {
                             <p className='aboutUs--desc-body'>Robertify is a music bot programmed completely in Java using JDA. The name &quot;Robertify&quot; originated from the simple fact that a friend of bombies (main Developer) named Robert wanted a music bot, so he made one for him. Eventually, Robertify became his own project to him and he&apos;s been putting in most of his efforts into it ever since.</p>
                         </div>
                     </div>
-                    <div className='features'>
+                    <div className='features !bg-stone-700'>
                         <div className='features--images'>
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src='https://i.robertify.me/images/xibic.png' alt='Requests Channel' />
@@ -72,9 +72,9 @@ export default function Home({ token, discordInfo, discordLoginLink }: Props) {
                         </div>
                     </div>
                 </div>
-                <div className='invite'>
+                <div className='invite !bg-neutral-800'>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img className='invite--icon' src='https://i.robertify.me/images/bwl3q.png' alt='Invite Icon' />
+                    <img className='mx-auto w-32 phone:w-16' src='https://i.robertify.me/images/bwl3q.png' alt='Invite Icon' />
                     <h1 className='invite--title'>Ready To Invite Us?</h1>
                     <p className='invite--body'>Invite Robertify in seconds by simply clicking on the button below. You&apos;re only one step away from the best listening experience on Discord.</p>
                     <Link className='invite--button' href='/invite'>Invite</Link>

@@ -1189,6 +1189,8 @@ footer {
     filter: drop-shadow(0 0 4px rgba(0, 0, 0, .25));
     text-transform: uppercase;
     margin-bottom: 1rem;
+    font-size: 2rem;
+    font-weight: bold;
 }
 
 .serverDash--controlPanel-toggles {

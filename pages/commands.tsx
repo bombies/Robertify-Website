@@ -97,7 +97,7 @@ export default function Commands({ commands, token, discordInfo }: Props) {
         }))
     };
 
-    const pageButtons = pageItems.map(commandObj => commandObj.id || commandObj.id === 0 ? <button className={`command-page-btn${commandObj.id === selectedButton ? ' selected' : ''}`} onClick={() => handlePageChange(commandObj.id)}>{commandObj.id + 1}</button> : '');
+    const pageButtons = pageItems.map(commandObj => commandObj.id || commandObj.id === 0 ? <button className={`command-page-btn${commandObj.id === selectedButton ? ' selected' : ''} rounded-sm`} onClick={() => handlePageChange(commandObj.id)}>{commandObj.id + 1}</button> : '');
 
     return (
         <Layout token={token} discordInfo={discordInfo} title='Robertify - Commands'>
@@ -106,7 +106,7 @@ export default function Commands({ commands, token, discordInfo }: Props) {
                 subTitle='So... many... commands...'
             />
             <main>
-                <div className='commands--about'>
+                <div className='commands--about !bg-neutral-800'>
                     <div className='commands--about-images'>
                         <img src='https://i.robertify.me/images/hjw5n.png' alt='Favourite Tracks' />
                         <span />
