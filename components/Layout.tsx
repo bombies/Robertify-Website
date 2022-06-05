@@ -54,7 +54,7 @@ export default function Layout(props: Props) {
         return () => menu.removeEventListener('click', clickFun)
     }, [])
 
-    const discordAvatar = discordInfoObj ? Object.keys(discordInfoObj).length ? `https://cdn.discordapp.com/avatars/${discordInfoObj.id}/${discordInfoObj.avatar}.${discordInfoObj.avatar.startsWith('a_') ? 'gif' : 'png'}?size=512` : null : null;
+    const discordAvatar = discordInfoObj ? Object.keys(discordInfoObj).length ? `https://cdn.discordapp.com/avatars/${discordInfoObj.id}/${discordInfoObj.avatar}.${discordInfoObj.avatar.startsWith('a_') ? 'gif' : 'webp'}?size=512` : null : null;
     const loginButton = props.showLogin || props.showLogin === undefined ? <li><a className='nav--login-btn' id='login-btn' href={props.discordLoginLink}><img src='https://i.robertify.me/images/c2n9x.png' alt='Login' /><p>Login</p></a></li> : '';
     
     const toggleUserPopout = () => {
@@ -122,7 +122,7 @@ export default function Layout(props: Props) {
                 </div>
                 {discordInfoObj && 
                     <div className={`nav--user-popout${ userPopoutShown  ? ' active' : ''}`}>
-                        <img className={'nav--user-popout-icon'} src={discordAvatar} alt='Discord User Icon' />
+                        <img loading='lazy' decoding='async' className={'nav--user-popout-icon'} src={discordAvatar} alt='Discord User Icon' />
                         <p className='nav--user-popout-icon-username phone:text-sm'>{`${discordInfoObj.username}#${discordInfoObj.discriminator}`}</p>
                         <div className='nav--user-popout-options-container'>
                             <ul className='nav--user-popout-options'>
@@ -144,8 +144,8 @@ export default function Layout(props: Props) {
                         <h1 className='footer--logo-text'>Robertify</h1>
                         <p className='footer--copyright'>Copyright ©️ Robertify 2022</p>
                         <div className='footer--links'>
-                            <a className='footer--link-github' href='https://github.com/bombies/Robertify-Bot' target={'_blank'} rel={'noreferrer'}><img src='https://i.robertify.me/images/3ythy.png' alt='Discord'/></a>    
-                            <a className='footer--link-discord' href='https://robertify.me/invite' target={'_blank'} rel={'noreferrer'}><img src='https://i.robertify.me/images/2n1nb.png' alt='Discord'/></a>    
+                            <a className='footer--link-github' href='https://github.com/bombies/Robertify-Bot' target={'_blank'} rel={'noreferrer'}><img loading='lazy' decoding='async' src='https://i.robertify.me/images/3ythy.png' alt='Discord'/></a>
+                            <a className='footer--link-discord' href='https://robertify.me/invite' target={'_blank'} rel={'noreferrer'}><img loading='lazy' decoding='async' src='https://i.robertify.me/images/2n1nb.png' alt='Discord'/></a>
                         </div>
                     </div>
                     <div className='footer-info'>

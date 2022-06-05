@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 export default function GuildCard({ guildID, guildIcon = null, guildName, isOwner = false,  guildPermissions = 0 }) {
-    const icon: string = guildIcon ? `https://cdn.discordapp.com/icons/${guildID}/${guildIcon}.${guildIcon.startsWith('a_') ? 'gif' : 'png'}?size=512` : 'https://i.robertify.me/images/rykx6.png';
+    const icon: string = guildIcon ? `https://cdn.discordapp.com/icons/${guildID}/${guildIcon}.${guildIcon.startsWith('a_') ? 'gif' : 'webp'}?size=512` : 'https://i.robertify.me/images/rykx6.png';
 
     // Bitwise operations to check if the user has MANAGE_GUILD
     let isModerator: boolean = isOwner ? false : (guildPermissions & (1 << 5)) === (1 << 5);
@@ -18,12 +18,12 @@ export default function GuildCard({ guildID, guildIcon = null, guildName, isOwne
             <div className='guildCard--banner'>
                 { isOwner === true ?
                     <div className='guildCard--owner-container'>
-                        <img className='guildCard--owner-glyph' src='https://i.robertify.me/images/gmqf5.png' />
+                        <img loading='lazy' decoding='async' className='guildCard--owner-glyph' src='https://i.robertify.me/images/gmqf5.png' />
                         <span className='guildCard--owner-tooltip'>Server Owner</span>                
                     </div>
                     : isModerator && 
                         <div className='guildCard--owner-container'>
-                            <img className='guildCard--owner-glyph' src='https://i.robertify.me/images/bhg1n.png' />
+                            <img loading='lazy' decoding='async' className='guildCard--owner-glyph' src='https://i.robertify.me/images/bhg1n.png' />
                             <span className='guildCard--owner-tooltip'>Server Moderator</span>  
                         </div>
                 }

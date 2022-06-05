@@ -32,7 +32,7 @@ export default function ArticleBubble(props: Props) {
                 {props.subtitle && <p className='drop-shadow-lg font-med text-xl phone:text-lg text-gray-300 mb-6'>{props.subtitle}</p>}
             </div>
             <p className={`${props.subtitle ? '' : 'mt-6'} phone:text-sm`}>{content}</p>
-            {props.contentImg && <img className='rounded-lg drop-shadow-lg mt-6 ease-in-out duration-1000 hover:scale-125 z-10' src={props.contentImg}/>}
+            {props.contentImg && <img loading='lazy' decoding='async' className='rounded-lg drop-shadow-lg mt-6 ease-in-out duration-1000 hover:scale-125 z-10' src={props.contentImg}/>}
         </div>
     )
 }
