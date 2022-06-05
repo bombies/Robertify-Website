@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { fetchDiscordUserInfo } from '../utils/APIUtils';
 import {GetServerSideProps, GetServerSidePropsContext} from "next";
 import {DiscordInfo} from "../utils/Types";
+import Hero from "../components/Hero";
 
 type Props = {
     token: string,
@@ -11,16 +12,21 @@ type Props = {
 }
 
 export default function Home({ token, discordInfo, discordLoginLink }: Props) {
+    const heroButtons = [
+        {
+            name: "Invite",
+            href: '/invite',
+            isNextButton: true
+        },
+        {
+            name: "Learn More",
+            href: '#aboutUs'
+        }
+    ]
+
     return (
         <Layout token={token} discordInfo={discordInfo} discordLoginLink={discordLoginLink} title='Robertify - Home Page'>
-                <div className='hero'>
-                    <h1 className='hero--title'>Robertify</h1>
-                    <h3 className='hero--subtitle'>A discord music bot with a multitude of features that will fit your liking!</h3>
-                    <div className='hero--buttons'>
-                        <Link href='/invite'><span className='hero--button'>Invite</span></Link>
-                        <a className='hero--button' href='#aboutUs'>Learn More</a>
-                    </div>
-                </div>
+            <Hero title='Robertify' subTitle='A discord music bot that with a multitude of features that will fit your liking!' buttons={heroButtons}/>
                 <div className='mainContent'>
                     <div className='aboutUs !bg-neutral-800' id='aboutUs'>
                         {/* eslint-disable-next-line @next/next/no-img-element */}

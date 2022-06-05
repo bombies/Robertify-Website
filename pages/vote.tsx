@@ -23,7 +23,7 @@ export default function Vote({ token, discordInfo }) {
             <Hero
                 title='Vote'
                 subTitle='Thank you for taking an interest in supporting us!'
-                imageButons={buttons}
+                imageButtons={buttons}
             />
         </Layout>
     )

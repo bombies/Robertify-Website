@@ -268,7 +268,7 @@ nav {
     position: relative;
     padding-top: 9.875rem;
     padding-bottom: 9.4375rem;
-    background: linear-gradient(180deg, #1F1F1F 0%, #00FF47 104.36%);
+    background-image: url("https://i.imgur.com/pBkAhvI.jpeg");
     text-align: center;
     overflow: hidden;
     filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
