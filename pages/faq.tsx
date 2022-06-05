@@ -14,19 +14,14 @@ type Props = {
 }
 
 export default function FAQ({ token, discordInfo, discordLoginLink }: Props) {
-    const articleAuthor = {
-        name: 'bombies#4445',
-        avatar: 'https://cdn.discordapp.com/avatars/274681651945144321/a_278626ba681402814279de89e3da7fda.gif?size=512'
-    };
-
-    const cards = faqMsgs.cards.map(obj => <ArticleBubble key={obj.title} title={obj.title} content={obj.content} contentImg={obj.contentImg} />);
+    const cards = faqMsgs.cards.map(obj => <ArticleBubble key={obj.title} title={obj.title} content={obj.content} contentImg={obj.contentImg} collapsable={true} />);
 
     return (
         <Layout title='Robertify - FAQ' discordLoginLink={discordLoginLink} discordInfo={discordInfo} token={token}>
             <main>
                 <Hero title='FAQ' subTitle='Find out what&apos;s frequently asked about Robertify!' />
             </main>
-            <div className='bg-neutral-800 py-10 flex justify-center gap-x-32 laptop:gap-x-16'>
+            <div className='bg-neutral-800 py-10 flex justify-center gap-x-32 laptop:gap-x-16 phone:gap-x-8 phone:px-5'>
                 <img className='w-64 laptop:w-32 drop-shadow-xl ease-in-out duration-1000 hover:scale-105' src='https://i.robertify.me/images/l8pdz.png' alt='Support Icon' />
                 <p className='text-left self-center text-2xl max-w-lg drop-shadow-lg laptop:text-lg laptop:max-w-sm'>Need direct support from someone on our team? Join the <Link href='/support'><span className='text-green-500 ease-in-out duration-500 hover:brightness-125 cursor-pointer'>support server</span></Link>!</p>
             </div>
