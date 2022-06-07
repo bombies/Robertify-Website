@@ -27,7 +27,7 @@ export default function GuildCard({ guildID, guildIcon = null, guildName, isOwne
                             <span className='guildCard--owner-tooltip'>Server Moderator</span>  
                         </div>
                 }
-                <img className='shadow-[0_4px_10px_rgba(0,0,0,0.35)] w-full' src={icon} alt={`${guildName} Guild Icon`} />
+                <img className='shadow-[0_4px_10px_rgba(0,0,0,0.35)] w-full object-cover' src={icon} alt={`${guildName} Guild Icon`} />
             </div>
             <div className='guildCard--text'>
                 <h2 className='guildCard--name'>{guildName}</h2>
