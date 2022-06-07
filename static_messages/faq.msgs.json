@@ -30,7 +30,7 @@
       "contentImg": "https://i.imgur.com/oHdBhTK.gif"
     },
     {
-      "title": "HOW CAN I ROBERTIFY ONLY PLAY MUSIC IN SPECIFIC CHANNELS?",
+      "title": "HOW CAN I MAKE ROBERTIFY ONLY PLAY MUSIC IN SPECIFIC CHANNELS?",
       "content": "Similar to restricted text channels, you can limit voice channels in the same way.\\n\\nYou must run the command <span className='markdown'>restrictedchannels add [#voiceChannel]</span>.\\n\\nThe bot will <b>ONLY</b> be allowed to join the channels you restricted.\\n\\n<em><b>Note:</b> You must enable <span className='text-green-400'>restrictedvoice</span> in the <span className='markdown'>toggles</span> menu.</em>",
       "contentImg": "https://i.imgur.com/FMsY3VN.gif"
     },
@@ -46,7 +46,7 @@
     },
     {
       "title": "HOW CAN I ENABLE VOTE SKIPS?",
-      "content": "In order to enable vote skips, you must first ensure that the <span className='markdown'>voteskips</span> toggle has been toggled on. Once toggled on, the bot will automatically make the <span className='markdown'>skip</span> command a DJ-only command. You can check that this is so by running the <span className='markdown'>toggles dj list</span> command and verifying.\\n\\nIf vote skips are toggled on and you still notice them not working, check your DJ toggles and ensure that the <span className='markdown'>skip</span> command is DJ-only"
+      "content": "In order to enable vote skips, you must first ensure that the <span className='markdown'>voteskips</span> toggle has been toggled on. Once toggled on, the bot will automatically make the <span className='markdown'>skip</span> command a DJ-only command. You can check that this is so by running the <span className='markdown'>toggles dj list</span> command and verifying.\\n\\nIf vote skips are toggled on and you still notice them not working, check your DJ toggles and ensure that the <span className='markdown'>skip</span> command is DJ-only."
     },
     {
       "title": "HOW CAN I REPORT A BUG?",

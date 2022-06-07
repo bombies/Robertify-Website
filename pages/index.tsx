@@ -79,8 +79,8 @@ export default function Home({ token, discordInfo, discordLoginLink }: Props) {
                 </div>
             </div>
             <div className='py-32 bg-neutral-800'>
-                <h1 className='text-center uppercase text-green-400 font-med text-7xl drop-shadow-lg'>Ready To Invite Us?</h1>
-                <p className='text-center text-2xl max-w-xl mt-3 mx-auto drop-shadow-lg'>Invite Robertify in seconds by simply clicking on the button below. You&apos;re only one step away from the best listening experience on Discord.</p>
+                <h1 className='text-center uppercase text-green-400 font-med text-7xl phone:text-4xl drop-shadow-lg'>Ready To Invite Us?</h1>
+                <p className='text-center text-2xl phone:text-lg max-w-xl mt-3 mx-auto drop-shadow-lg'>Invite Robertify in seconds by simply clicking on the button below. You&apos;re only one step away from the best listening experience on Discord.</p>
                 <Link href='/invite'><p className='text-center mt-6 mx-auto w-40 px-6 py-3 bg-green-600 rounded-lg uppercase text-white font-med text-3xl drop-shadow-lg transition-all ease-in-out duration-500 hover:scale-110 hover:bg-green-500 hover:drop-shadow-xl'>Invite</p></Link>
             </div>
         </Layout>

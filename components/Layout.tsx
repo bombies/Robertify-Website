@@ -84,7 +84,7 @@ export default function Layout(props: Props) {
            <nav>
                 <div className='flex cursor-pointer transition-all duration-1000 ease-in-out hover:scale-110'>
                     <Link href='/'><img className='w-24 phone:w-16 mr-5' src='https://i.robertify.me/images/ni48h.png' alt='Logo'/></Link>
-                    <h1 className='self-center uppercase text-2xl phone:text-lg tracking-[.25em]'><Link href='/'><span className='text-white font-med'>Robertify</span></Link></h1>
+                    <h1 className='self-center uppercase text-2xl phone:text-sm tracking-[.25em]'><Link href='/'><span className='text-white font-med'>Robertify</span></Link></h1>
                 </div>
                 <div className='nav--items'>
                     <ul className='nav--items-desktop-list' id='nav--items-desktop-list'>
@@ -140,16 +140,16 @@ export default function Layout(props: Props) {
             {props.showFooter || props.showFooter === undefined &&
                 <footer className={props.stickyFooter ? 'sticky-bottom' : ''}>
                     <div className=''>
-                        <img className='w-52 m-auto' src='https://i.robertify.me/images/ni48h.png' alt='Footer Logo' />
-                        <p className='text-sm text-center text-neutral-300'>Copyright ©️ Robertify 2022</p>
-                        <div className='flex justify-center gap-x-8 pt-5'>
-                            <a className='w-8 transition-all duration-500 ease-in-out hover:brightness-125' href='https://github.com/bombies/Robertify-Bot' target={'_blank'} rel={'noreferrer'}><img loading='lazy' decoding='async' src='https://i.robertify.me/images/3ythy.png' alt='Discord'/></a>
-                            <a className='w-8 transition-all duration-500 ease-in-out hover:brightness-125' href='https://robertify.me/invite' target={'_blank'} rel={'noreferrer'}><img loading='lazy' decoding='async' src='https://i.robertify.me/images/2n1nb.png' alt='Discord'/></a>
+                        <img className='w-52 phone:w-16 m-auto' src='https://i.robertify.me/images/ni48h.png' alt='Footer Logo' />
+                        <p className='text-sm phone:text-[.55rem] text-center text-neutral-300'>Copyright ©️ Robertify 2022</p>
+                        <div className='flex justify-center gap-x-8 phone:gap-x-2 pt-5 phone:pt-2'>
+                            <a className='w-8 phone:w-5 transition-all duration-500 ease-in-out hover:brightness-125' href='https://github.com/bombies/Robertify-Bot' target={'_blank'} rel={'noreferrer'}><img loading='lazy' decoding='async' src='https://i.robertify.me/images/3ythy.png' alt='Discord'/></a>
+                            <a className='w-8 phone:w-5 transition-all duration-500 ease-in-out hover:brightness-125' href='https://robertify.me/invite' target={'_blank'} rel={'noreferrer'}><img loading='lazy' decoding='async' src='https://i.robertify.me/images/2n1nb.png' alt='Discord'/></a>
                         </div>
                     </div>
                     <div className='footer-info'>
                         <div className='footer-info--resources'>
-                            <h3 className='footer-info--resources-heading'>Resouces</h3>
+                            <h3 className='footer-info--resources-heading'>Resources</h3>
                             <ul className='footer--info--resources-list'>
                                 <li><Link href='/tos'>Terms of Service</Link></li>
                                 <li><Link href='/privacy-policy'>Privacy Policy</Link></li>
