@@ -12,7 +12,7 @@ type Props = {
 
 export default function Premium(props: Props) {
     return (
-        <Layout token={props.token} title='Robertify - Premium' discordInfo={props.discordInfo} discordLoginLink={props.discordLoginLink} >
+        <Layout token={props.token} title='Robertify - Premium' discordInfo={props.discordInfo} discordLoginLink={props.discordLoginLink} stickyFooter={true} >
             <main>
                 <Hero title='Premium' subTitle='Coming soon...'></Hero>
             </main>
