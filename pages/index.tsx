@@ -27,64 +27,62 @@ export default function Home({ token, discordInfo, discordLoginLink }: Props) {
     return (
         <Layout token={token} discordInfo={discordInfo} discordLoginLink={discordLoginLink} title='Robertify - Home Page'>
             <Hero title='Robertify' subTitle='A discord music bot that with a multitude of features that will fit your liking!' buttons={heroButtons}/>
-                <div className='mainContent'>
-                    <div className='aboutUs !bg-neutral-800' id='aboutUs'>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img className='aboutUs--img' src='https://i.robertify.me/images/vnjjd.png' alt='Logo' />
-                        <div className='aboutUs--desc'>
-                            <h2 className='aboutUs--desc-title'>About Us</h2>
-                            <p className='aboutUs--desc-body'>Robertify is a music bot programmed completely in Java using JDA. The name &quot;Robertify&quot; originated from the simple fact that a friend of bombies (main Developer) named Robert wanted a music bot, so he made one for him. Eventually, Robertify became his own project to him and he&apos;s been putting in most of his efforts into it ever since.</p>
-                        </div>
-                    </div>
-                    <div className='features !bg-neutral-700'>
-                        <div className='features--images'>
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src='https://i.robertify.me/images/xibic.png' alt='Requests Channel' />
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src='https://i.robertify.me/images/kjy0r.png' alt='Toggles' />
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src='https://i.robertify.me/images/ixghm.png' alt='Queue' />
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src='https://i.robertify.me/images/zty1i.png' alt='Restricted Channels' />
-                        </div>
-                        <div className='features--desc'>
-                            <h3>Features</h3>
-                            <p className='features--desc-body'>There are so many features and commands jam-packed into Robertify. All of the features provided have been virgoursly tested to ensure the best quality of service for you, our client. Some of these awesome features include:</p>
-                            <ul>
-                                <li>Requests Channels</li>
-                                <li>Feature Toggles</li>
-                                <li>An amazing queue system</li>
-                                <li>Restricted Channels</li>
-                                <li>Vote Skipping</li>
-                                <li>Auto Play</li>
-                                <li>Favourite Tracks</li>
-                                <li>Auto Play</li>
-                                <li>High Quality, No-Lag Playback</li>
-                                <li>Search For Music</li>
-                                <li>Precise Lyrics</li>
-                                <li>Spotify, Deezer, YouTube and so many more sources</li>
-                                <li><Link href='/commands'>And so much more...</Link></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div className='support'>
-                        <div className='support--items'>
-                            <div className='support--desc'>
-                                <h3 className='support--desc-title'>Support</h3>
-                                <p className='support--desc-body'>You can always join our <a href='https://robertify.me/support'>support server</a> to ask us questions about anything. You can also suggest new features, report bugs, talk about music and so much more. Don&apos;t be afraid to reach out, we&apos;d love to help you!</p>
-                            </div>
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src='https://i.robertify.me/images/o5zcy.png' alt='Support' />
-                        </div>
-                    </div>
-                </div>
-                <div className='invite !bg-neutral-800'>
+            <div className='mainContent'>
+                <div className='aboutUs !bg-neutral-800' id='aboutUs'>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img className='mx-auto w-32 phone:w-16' src='https://i.robertify.me/images/bwl3q.png' alt='Invite Icon' />
-                    <h1 className='invite--title'>Ready To Invite Us?</h1>
-                    <p className='invite--body'>Invite Robertify in seconds by simply clicking on the button below. You&apos;re only one step away from the best listening experience on Discord.</p>
-                    <Link className='invite--button' href='/invite'>Invite</Link>
+                    <img className='aboutUs--img' src='https://i.robertify.me/images/vnjjd.png' alt='Logo' />
+                    <div className='aboutUs--desc'>
+                        <h2 className='aboutUs--desc-title'>About Us</h2>
+                        <p className='aboutUs--desc-body'>Robertify is a music bot programmed completely in Java using JDA. The name &quot;Robertify&quot; originated from the simple fact that a friend of bombies (main Developer) named Robert wanted a music bot, so he made one for him. Eventually, Robertify became his own project to him and he&apos;s been putting in most of his efforts into it ever since.</p>
+                    </div>
                 </div>
+                <div className='features !bg-neutral-700'>
+                    <div className='features--images'>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src='https://i.robertify.me/images/xibic.png' alt='Requests Channel' />
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src='https://i.robertify.me/images/kjy0r.png' alt='Toggles' />
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src='https://i.robertify.me/images/ixghm.png' alt='Queue' />
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src='https://i.robertify.me/images/zty1i.png' alt='Restricted Channels' />
+                    </div>
+                    <div className='features--desc'>
+                        <h3>Features</h3>
+                        <p className='features--desc-body'>There are so many features and commands jam-packed into Robertify. All of the features provided have been virgoursly tested to ensure the best quality of service for you, our client. Some of these awesome features include:</p>
+                        <ul>
+                            <li>Requests Channels</li>
+                            <li>Feature Toggles</li>
+                            <li>An amazing queue system</li>
+                            <li>Restricted Channels</li>
+                            <li>Vote Skipping</li>
+                            <li>Auto Play</li>
+                            <li>Favourite Tracks</li>
+                            <li>Auto Play</li>
+                            <li>High Quality, No-Lag Playback</li>
+                            <li>Search For Music</li>
+                            <li>Precise Lyrics</li>
+                            <li>Spotify, Deezer, YouTube and so many more sources</li>
+                            <li><Link href='/commands'>And so much more...</Link></li>
+                        </ul>
+                    </div>
+                </div>
+                <div className='support'>
+                    <div className='support--items'>
+                        <div className='support--desc'>
+                            <h3 className='support--desc-title'>Support</h3>
+                            <p className='support--desc-body'>You can always join our <a href='https://robertify.me/support'>support server</a> to ask us questions about anything. You can also suggest new features, report bugs, talk about music and so much more. Don&apos;t be afraid to reach out, we&apos;d love to help you!</p>
+                        </div>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src='https://i.robertify.me/images/o5zcy.png' alt='Support' />
+                    </div>
+                </div>
+            </div>
+            <div className='py-32 bg-neutral-800'>
+                <h1 className='text-center uppercase text-green-400 font-med text-7xl drop-shadow-lg'>Ready To Invite Us?</h1>
+                <p className='text-center text-2xl max-w-xl mt-3 mx-auto drop-shadow-lg'>Invite Robertify in seconds by simply clicking on the button below. You&apos;re only one step away from the best listening experience on Discord.</p>
+                <Link href='/invite'><p className='text-center mt-6 mx-auto w-40 px-6 py-3 bg-green-600 rounded-lg uppercase text-white font-med text-3xl drop-shadow-lg transition-all ease-in-out duration-500 hover:scale-110 hover:bg-green-500 hover:drop-shadow-xl'>Invite</p></Link>
+            </div>
         </Layout>
     );
 }
