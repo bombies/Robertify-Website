@@ -89,7 +89,7 @@ export default function Layout(props: Props) {
                 <div className='nav--items'>
                     <ul className='nav--items-desktop-list' id='nav--items-desktop-list'>
                         <li><a href='/invite'>Invite</a></li>
-                        <li><Link className='premium' href='/premium'><div className='flex cursor-pointer transition-all duration-1000 ease-in-out hover:scale-105'><img className='w-8' src='https://i.imgur.com/NkPClfS.png' /><span className='self-center text-green-400 font-med transition-all duration-1000 ease-in-out hover:!text-green-300'>Premium</span></div></Link></li>
+                        <li><Link className='premium' href='/premium'><div className='flex cursor-pointer transition-all duration-1000 ease-in-out hover:scale-105 tablet:justify-center'><img className='w-8 tablet:h-8 self-center' src='https://i.imgur.com/NkPClfS.png' /><span className='self-center text-green-400 font-med transition-all duration-1000 ease-in-out hover:!text-green-300'>Premium</span></div></Link></li>
                         <li><Link href='/commands'>Commands</Link></li>
                         <li><Link href='/vote'>Vote</Link></li>
                         <li><Link href='/faq'>Support</Link></li>
