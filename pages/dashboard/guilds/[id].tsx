@@ -345,63 +345,81 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
 
     // Locale
     let localeObj: LocaleObject;
-    switch (dbGuildInfo.locale.toLowerCase()) {
-        case "english": {
-            localeObj = {
-                id: 'english',
-                name: "English (UK)",
-                icon: <img className='w-8' src='https://i.imgur.com/AeDZp1s.png'/>
-            };
-            break;
-        }
-        case "spanish": {
-            localeObj = {
-                id: 'spanish',
-                name: "Spanish",
-                icon: <img className='w-8' src='https://i.imgur.com/ml1NNba.png' />
-            };
-            break;
-        }
-        case "portuguese": {
-            localeObj = {
-                id: 'portuguese',
-                name: "Portuguese",
-                icon: <img className='w-8' src='https://i.imgur.com/WLMDtE6.png' />
-            };
-            break;
-        }
-        case "russian": {
-            localeObj = {
-                id: 'russian',
-                name: "Russian",
-                icon: <img className='w-8' src='https://i.imgur.com/bcnN2W8.png' />
-            };
-            break;
-        }
-        case "dutch": {
-            localeObj = {
-                id: 'dutch',
-                name: "Dutch",
-                icon: <img className='w-8' src='https://i.imgur.com/vUQ8kA8.png' />
+    if (dbGuildInfo.locale) {
+        switch (dbGuildInfo.locale.toLowerCase()) {
+            case "english": {
+                localeObj = {
+                    id: 'english',
+                    name: "English (UK)",
+                    icon: <img className='w-8' src='https://i.imgur.com/AeDZp1s.png'/>
+                };
+                break;
+            }
+            case "spanish": {
+                localeObj = {
+                    id: 'spanish',
+                    name: "Spanish",
+                    icon: <img className='w-8' src='https://i.imgur.com/ml1NNba.png' />
+                };
+                break;
+            }
+            case "portuguese": {
+                localeObj = {
+                    id: 'portuguese',
+                    name: "Portuguese",
+                    icon: <img className='w-8' src='https://i.imgur.com/WLMDtE6.png' />
+                };
+                break;
+            }
+            case "russian": {
+                localeObj = {
+                    id: 'russian',
+                    name: "Russian",
+                    icon: <img className='w-8' src='https://i.imgur.com/bcnN2W8.png' />
+                };
+                break;
+            }
+            case "dutch": {
+                localeObj = {
+                    id: 'dutch',
+                    name: "Dutch",
+                    icon: <img className='w-8' src='https://i.imgur.com/vUQ8kA8.png' />
+                }
+            }
+            case "french": {
+                localeObj = {
+                    id: 'french',
+                    name: "French",
+                    icon: <img className='w-8' src='https://i.imgur.com/RB4Seme.png' />
+                };
+                break;
+            }
+            case "german": {
+                localeObj = {
+                    id: 'german',
+                    name: "German",
+                    icon: <img className='w-8' src='https://i.imgur.com/enouegk.png' />
+                };
+                break;
+            }
+            default: {
+                localeObj = {
+                    id: 'english',
+                    name: "English (UK)",
+                    icon: <img className='w-8' src='https://i.imgur.com/AeDZp1s.png'/>
+                };
+                break;
             }
         }
-        case "french": {
-            localeObj = {
-                id: 'french',
-                name: "French",
-                icon: <img className='w-8' src='https://i.imgur.com/RB4Seme.png' />
-            };
-            break;
-        }
-        case "german": {
-            localeObj = {
-                id: 'german',
-                name: "German",
-                icon: <img className='w-8' src='https://i.imgur.com/enouegk.png' />
-            };
-            break;
-        }
+    } else {
+        localeObj = {
+            id: 'english',
+            name: "English (UK)",
+            icon: <img className='w-8' src='https://i.imgur.com/AeDZp1s.png'/>
+        };
     }
+
+
 
     //
 
@@ -420,7 +438,7 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
         eight_ball: [...dbGuildInfo.eight_ball],
         autoplay: dbGuildInfo.autoplay ?? false,
         twenty_four_seven_mode: dbGuildInfo.twenty_four_seven_mode ?? false,
-        locale: localeObj
+        locale: {...localeObj}
     }
 }
 
@@ -1226,7 +1244,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
 
     const [ langSelectObj, setLangSelectObj ] = useState({
         optionsVisible: false,
-        selectValues: [{...originalData.locale}],
+        selectValues: originalData ? [{...originalData.locale}] : [],
         shownOptions: locales ? [...locales] : [],
         searchText: ''
     })
