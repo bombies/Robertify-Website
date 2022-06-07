@@ -139,13 +139,12 @@ export default function Layout(props: Props) {
             </main> 
             {props.showFooter || props.showFooter === undefined &&
                 <footer className={props.stickyFooter ? 'sticky-bottom' : ''}>
-                    <div className='footer-brand'>
-                        <img className='footer--logo' src='https://i.robertify.me/images/ni48h.png' alt='Footer Logo' />
-                        <h1 className='footer--logo-text'>Robertify</h1>
-                        <p className='footer--copyright'>Copyright ©️ Robertify 2022</p>
-                        <div className='footer--links'>
-                            <a className='footer--link-github' href='https://github.com/bombies/Robertify-Bot' target={'_blank'} rel={'noreferrer'}><img loading='lazy' decoding='async' src='https://i.robertify.me/images/3ythy.png' alt='Discord'/></a>
-                            <a className='footer--link-discord' href='https://robertify.me/invite' target={'_blank'} rel={'noreferrer'}><img loading='lazy' decoding='async' src='https://i.robertify.me/images/2n1nb.png' alt='Discord'/></a>
+                    <div className=''>
+                        <img className='w-52 m-auto' src='https://i.robertify.me/images/ni48h.png' alt='Footer Logo' />
+                        <p className='text-sm text-center text-neutral-300'>Copyright ©️ Robertify 2022</p>
+                        <div className='flex justify-center gap-x-8 pt-5'>
+                            <a className='w-8 transition-all duration-500 ease-in-out hover:brightness-125' href='https://github.com/bombies/Robertify-Bot' target={'_blank'} rel={'noreferrer'}><img loading='lazy' decoding='async' src='https://i.robertify.me/images/3ythy.png' alt='Discord'/></a>
+                            <a className='w-8 transition-all duration-500 ease-in-out hover:brightness-125' href='https://robertify.me/invite' target={'_blank'} rel={'noreferrer'}><img loading='lazy' decoding='async' src='https://i.robertify.me/images/2n1nb.png' alt='Discord'/></a>
                         </div>
                     </div>
                     <div className='footer-info'>
