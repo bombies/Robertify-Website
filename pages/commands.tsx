@@ -106,16 +106,16 @@ export default function Commands({ commands, token, discordInfo }: Props) {
                 subTitle='So... many... commands...'
             />
             <main>
-                <div className='commands--about !bg-neutral-800'>
-                    <div className='commands--about-images'>
+                <div className='commands--about !bg-neutral-800 phone:block phone:p-7'>
+                    <div className='commands--about-images phone:!flex phone:flex-row phone:justify-center'>
                         <img src='https://i.robertify.me/images/hjw5n.png' alt='Favourite Tracks' />
                         <span />
                         <span />
                         <img src='https://i.robertify.me/images/jg8ua.png' alt='Themes' />
                     </div>
-                    <div className='commands--about-desc'>
-                        <h3 className='commands--about-desc-title'>Your capability is astounding</h3>
-                        <p className='commands--about-desc-body'>There are so many commands and features that can truly maximize your satisfaction with Robertify. With over 50+ commands you are guaranteed an amazing user and listening experience. With Robust music commands such as volume control and favourite tracks working in tandem with slick features like Request Channels, you won’t feel like listening to music the way you used to on Discord before Robertify.</p>
+                    <div className='m-auto phone:m-0'>
+                        <h3 className='uppercase text-green-400 font-med text-3xl phone:text-xl drop-shadow-lg phone:mt-6 phone:text-center'>Your capability is astounding</h3>
+                        <p className='max-w-xl phone:max-w-md mt-4 text-xl phone:text-sm phone:text-center'>There are so many commands and features that can truly maximize your satisfaction with Robertify. With over 50+ commands you are guaranteed an amazing user and listening experience. With Robust music commands such as volume control and favourite tracks working in tandem with slick features like Request Channels, you won’t feel like listening to music the way you used to on Discord before Robertify.</p>
                     </div>
                 </div>
                 <div className='commands'>
@@ -132,7 +132,7 @@ export default function Commands({ commands, token, discordInfo }: Props) {
                             <option value='misc'>Miscellaneous</option>
                             <option value='utility'>Utility</option>
                         </select>
-                        <input type='text' name='searchText' placeholder='Search...' value={searchText} onChange={updateSearchText} />
+                        <input className='placeholder-neutral-500' type='text' name='searchText' placeholder='Search...' value={searchText} onChange={updateSearchText} />
                     </div>
                     <table className='commands_table'>
                         <thead>
