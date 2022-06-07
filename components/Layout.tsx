@@ -82,9 +82,9 @@ export default function Layout(props: Props) {
             </Head>
             <NextNProgress color='#15ff00'/>
            <nav>
-                <div className='nav--brand'>
-                    <Link href='/'><img className='nav--brand-logo' src='https://i.robertify.me/images/ni48h.png' alt='Logo'/></Link>
-                    <h1 className='nav--brand-title'><Link href='/'>Robertify</Link></h1>
+                <div className='flex cursor-pointer transition-all duration-1000 ease-in-out hover:scale-110'>
+                    <Link href='/'><img className='w-24 phone:w-16 mr-5' src='https://i.robertify.me/images/ni48h.png' alt='Logo'/></Link>
+                    <h1 className='self-center uppercase text-2xl phone:text-lg tracking-[.25em]'><Link href='/'><span className='text-white font-med'>Robertify</span></Link></h1>
                 </div>
                 <div className='nav--items'>
                     <ul className='nav--items-desktop-list' id='nav--items-desktop-list'>
