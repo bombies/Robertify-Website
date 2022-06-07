@@ -90,10 +90,10 @@ export default function Dashboard({ token, discordInfo, guildsInfo }) {
     return (
         <Layout token={token} discordInfo={discordInfoState} title='Robertify - Dashboard' showLogin={true}>
             <main className='guildCards--body'>
-                <h1 className='guildCards--heading'>Your Servers</h1>
-                <h2 className='guildCards--subheading'>Configure any one to your heart&apos;s desire...</h2>
+                <h1 className='text-6xl uppercase font-med text-center text-green-400'>Your Servers</h1>
+                <h2 className='text-2xl text-center text-neutral-400 my-5 italic'>Configure any one to your heart&apos;s desire...</h2>
                 <input 
-                    className='guildCards--search'
+                    className='w-1/2 h-4 self-center mb-3 py-8 px-8 rounded-md outline-0 bg-neutral-800 text-white placeholder-neutral-500 text-2xl border-0 drop-shadow-lg mb-6 transition-all duration-500 ease-in-out focus:outline-green-500 focus:outline-1 focus:outline'
                     type='text'
                     placeholder='Search...'
                     value={pageState.searchText}

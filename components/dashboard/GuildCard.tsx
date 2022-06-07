@@ -14,7 +14,7 @@ export default function GuildCard({ guildID, guildIcon = null, guildName, isOwne
     isModerator = !guildPermissions ? false : isModerator;
 
     return (
-        <div className="guildCard">
+        <div className="flex overflow-hidden w-full h-40 bg-neutral-800 rounded-3xl border-0 hover:border-[2px] border-white/[.103] drop-shadow-lg transition-all duration-[50ms] ease-in-out">
             <div className='guildCard--banner'>
                 { isOwner === true ?
                     <div className='guildCard--owner-container'>
@@ -27,7 +27,7 @@ export default function GuildCard({ guildID, guildIcon = null, guildName, isOwne
                             <span className='guildCard--owner-tooltip'>Server Moderator</span>  
                         </div>
                 }
-                <img className='guildCard--icon' src={icon} alt={`${guildName} Guild Icon`} />
+                <img className='shadow-[0_4px_10px_rgba(0,0,0,0.35)]' src={icon} alt={`${guildName} Guild Icon`} />
             </div>
             <div className='guildCard--text'>
                 <h2 className='guildCard--name'>{guildName}</h2>
