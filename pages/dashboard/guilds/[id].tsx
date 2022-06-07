@@ -1279,9 +1279,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
     }
 
     const toggleMenuVisibility = (setterFunction) => {
-        console.log('attempting toggling visibility')
         if (!hasPerms) return;
-        console.log('toggling visibility')
         setterFunction(oldObj => ({
             ...oldObj,
             optionsVisible: !oldObj.optionsVisible
