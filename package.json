@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
-    "@sentry/nextjs": "^7.0.0",
+    "@sentry/nextjs": "^7.1.1",
     "@tailwindcss/typography": "^0.5.2",
     "axios": "^0.27.2",
     "discord-oauth2": "^2.10.0",
