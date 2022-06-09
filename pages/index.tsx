@@ -71,7 +71,7 @@ export default function Home({ token, discordInfo, discordLoginLink }: Props) {
                     <div className='support--items'>
                         <div className='support--desc'>
                             <h3 className='support--desc-title'>Support</h3>
-                            <p className='support--desc-body'>You can always join our <a href='https://robertify.me/support'>support server</a> to ask us questions about anything. You can also suggest new features, report bugs, talk about music and so much more. Don&apos;t be afraid to reach out, we&apos;d love to help you!</p>
+                            <p className='support--desc-body'>You can always join our <a className='text-green-400 cursor-pointer transition-all duration-200 ease-in-out hover:text-green-300' href='https://robertify.me/support'>support server</a> to ask us questions about anything. You can also suggest new features, report bugs, talk about music and so much more. Don&apos;t be afraid to reach out, we&apos;d love to help you!</p>
                         </div>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src='https://i.robertify.me/images/o5zcy.png' alt='Support' />
