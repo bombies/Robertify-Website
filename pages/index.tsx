@@ -63,7 +63,7 @@ export default function Home({ token, discordInfo, discordLoginLink }: Props) {
                             <li>Search For Music</li>
                             <li>Precise Lyrics</li>
                             <li>Spotify, Deezer, YouTube and so many more sources</li>
-                            <li><Link href='/commands'>And so much more...</Link></li>
+                            <li><Link href='/commands'><span className='text-green-400 cursor-pointer transition-all duration-200 ease-in-out hover:text-green-300'>And so much more...</span></Link></li>
                         </ul>
                     </div>
                 </div>
