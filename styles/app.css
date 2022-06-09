@@ -269,6 +269,7 @@ nav {
     padding-top: 9.875rem;
     padding-bottom: 9.4375rem;
     background-image: url("https://i.imgur.com/pBkAhvI.jpeg");
+    background-size: cover;
     text-align: center;
     overflow: hidden;
     filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
