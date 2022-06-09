@@ -442,7 +442,7 @@ nav {
 
 .features--images > img:hover {
     z-index: 1;
-    transform: scale(1.75);
+    transform: scale(1.35);
 }
 
 .features--desc {
