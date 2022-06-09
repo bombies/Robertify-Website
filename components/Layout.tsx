@@ -80,7 +80,7 @@ export default function Layout(props: Props) {
                 <title>{props.title ?? 'Robertify'}</title>
                 <link rel='robertify icon' href='/favicon.ico' />
             </Head>
-            <NextNProgress color='#15ff00'/>
+            <NextNProgress color='rgb(34,197,94)'/>
            <nav>
                 <div className='flex cursor-pointer transition-all duration-1000 ease-in-out hover:scale-110'>
                     <Link href='/'><img className='w-24 phone:w-16 mr-5' src='https://i.robertify.me/images/ni48h.png' alt='Logo'/></Link>
