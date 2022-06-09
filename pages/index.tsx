@@ -33,7 +33,7 @@ export default function Home({ token, discordInfo, discordLoginLink }: Props) {
                     <img className='aboutUs--img' src='https://i.robertify.me/images/vnjjd.png' alt='Logo' />
                     <div className='aboutUs--desc'>
                         <h2 className='aboutUs--desc-title'>About Us</h2>
-                        <p className='aboutUs--desc-body'>Robertify is a music bot programmed completely in Java using JDA. The name &quot;Robertify&quot; originated from the simple fact that a friend of bombies (main Developer) named Robert wanted a music bot, so he made one for him. Eventually, Robertify became his own project to him and he&apos;s been putting in most of his efforts into it ever since.</p>
+                        <p className='aboutUs--desc-body'>Robertify is a music bot programmed completely in Java using JDA. The name &quot;Robertify&quot; originated from the simple fact that a friend of bombies (main developer) named Robert wanted a music bot, so he made one for him. Eventually, Robertify became his own project to him and he&apos;s been putting in most of his efforts into it ever since.</p>
                     </div>
                 </div>
                 <div className='features !bg-neutral-700'>
