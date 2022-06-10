@@ -27,7 +27,7 @@
     "react-query": "^3.39.1",
     "redis": "^4.1.0",
     "styled-components": "^5.3.5",
-    "tailwindcss": "^3.0.24"
+    "tailwindcss": "^3.1.1"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.2",
