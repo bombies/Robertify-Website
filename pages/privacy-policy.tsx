@@ -2,9 +2,9 @@ import Hero from '../components/Hero';
 import Layout from '../components/Layout';
 import { fetchDiscordUserInfo } from '../utils/APIUtils';
 
-export default function PrivacyPolicy({ token, discordInfo }) {
+export default function PrivacyPolicy({ token, discordInfo, discordLoginLink }) {
     return (
-        <Layout token={token} discordInfo={discordInfo} title='Robertify - Privacy Policy'>
+        <Layout token={token} discordInfo={discordInfo} title='Robertify - Privacy Policy' discordLoginLink={discordLoginLink}>
             <Hero
                 title='Privacy Policy'
             />
@@ -47,5 +47,13 @@ export default function PrivacyPolicy({ token, discordInfo }) {
 }
 
 export async function getServerSideProps({ req, res }) {
-    return fetchDiscordUserInfo(req);
+    const discordLoginLink = `https://discord.com/api/oauth2/authorize?client_id=${atob(process.env.DISCORD_BOT_TOKEN.split('.')[0])}&redirect_uri=${encodeURI(process.env.LOCAL_API_HOSTNAME + '/callback/discord')}&response_type=code&scope=identify%20guilds`;
+    const discordUserInfo = await fetchDiscordUserInfo(req)
+    return {
+        props: {
+            token: discordUserInfo.props.token ? discordUserInfo.props.token : null,
+            discordInfo: discordUserInfo.props.discordInfo ? discordUserInfo.props.discordInfo : null,
+            discordLoginLink: discordLoginLink
+        }
+    }
 }

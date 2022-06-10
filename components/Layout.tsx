@@ -55,7 +55,7 @@ export default function Layout(props: Props) {
     }, [])
 
     const discordAvatar = discordInfoObj ? Object.keys(discordInfoObj).length ? `https://cdn.discordapp.com/avatars/${discordInfoObj.id}/${discordInfoObj.avatar}.${discordInfoObj.avatar.startsWith('a_') ? 'gif' : 'webp'}?size=512` : null : null;
-    const loginButton = props.showLogin || props.showLogin === undefined ? <li><a className='flex gap-x-2 bg-white p-2 rounded-lg transition-all duration-700 ease-in-out hover:scale-105' id='login-btn' href={props.discordLoginLink}><img className='w-8 m-auto' src='https://i.imgur.com/mfzFpni.png' alt='Login' /><p className='self-center text-black uppercase font-med text-xl'>Login</p></a></li> : '';
+    const loginButton = props.showLogin || props.showLogin === undefined ? <li><a className='flex gap-x-2 bg-white p-2 rounded-lg transition-all duration-700 ease-in-out hover:scale-105 cursor-pointer' id='login-btn' href={props.discordLoginLink}><img className='w-8 m-auto' src='https://i.imgur.com/mfzFpni.png' alt='Login' /><p className='self-center text-black uppercase font-med text-xl'>Login</p></a></li> : '';
     
     const toggleUserPopout = () => {
         setLayoutInfo(oldLayoutInfo => ({
@@ -136,28 +136,28 @@ export default function Layout(props: Props) {
             </nav>
             <main>
                 {props.children}
-            </main> 
-            {props.showFooter || props.showFooter === undefined &&
-                <footer className={props.stickyFooter ? 'sticky-bottom' : ''}>
-                    <div className=''>
-                        <img className='w-52 phone:w-16 m-auto' src='https://i.robertify.me/images/ni48h.png' alt='Footer Logo' />
-                        <p className='text-sm phone:text-[.55rem] text-center text-neutral-300'>Copyright ©️ Robertify 2022</p>
-                        <div className='flex justify-center gap-x-8 phone:gap-x-2 pt-5 phone:pt-2'>
-                            <a className='w-8 phone:w-5 transition-all duration-500 ease-in-out hover:brightness-125' href='https://github.com/bombies/Robertify-Bot' target={'_blank'} rel={'noreferrer'}><img loading='lazy' decoding='async' src='https://i.robertify.me/images/3ythy.png' alt='Discord'/></a>
-                            <a className='w-8 phone:w-5 transition-all duration-500 ease-in-out hover:brightness-125' href='https://robertify.me/invite' target={'_blank'} rel={'noreferrer'}><img loading='lazy' decoding='async' src='https://i.robertify.me/images/2n1nb.png' alt='Discord'/></a>
+                {props.showFooter || props.showFooter === undefined &&
+                    <footer className={props.stickyFooter ? 'sticky-bottom' : ''}>
+                        <div className=''>
+                            <img className='w-52 phone:w-16 m-auto' src='https://i.robertify.me/images/ni48h.png' alt='Footer Logo' />
+                            <p className='text-sm phone:text-[.55rem] text-center text-neutral-300'>Copyright ©️ Robertify 2022</p>
+                            <div className='flex justify-center gap-x-8 phone:gap-x-2 pt-5 phone:pt-2'>
+                                <a className='w-8 phone:w-5 transition-all duration-500 ease-in-out hover:brightness-125' href='https://github.com/bombies/Robertify-Bot' target={'_blank'} rel={'noreferrer'}><img loading='lazy' decoding='async' src='https://i.robertify.me/images/3ythy.png' alt='Discord'/></a>
+                                <a className='w-8 phone:w-5 transition-all duration-500 ease-in-out hover:brightness-125' href='https://robertify.me/invite' target={'_blank'} rel={'noreferrer'}><img loading='lazy' decoding='async' src='https://i.robertify.me/images/2n1nb.png' alt='Discord'/></a>
+                            </div>
                         </div>
-                    </div>
-                    <div className='footer-info'>
-                        <div className='footer-info--resources'>
-                            <h3 className='footer-info--resources-heading'>Resources</h3>
-                            <ul className='footer--info--resources-list'>
-                                <li><Link href='/tos'>Terms of Service</Link></li>
-                                <li><Link href='/privacy-policy'>Privacy Policy</Link></li>
-                            </ul>
+                        <div className='footer-info'>
+                            <div className='footer-info--resources'>
+                                <h3 className='footer-info--resources-heading'>Resources</h3>
+                                <ul className='footer--info--resources-list'>
+                                    <li><Link href='/tos'>Terms of Service</Link></li>
+                                    <li><Link href='/privacy-policy'>Privacy Policy</Link></li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                </footer>
-            }
+                    </footer>
+                }
+            </main>
         </>
     )
 }

@@ -13,7 +13,8 @@ interface Command {
 interface Props {
     commands: Command[],
     token: string,
-    discordInfo: any
+    discordInfo: any,
+    discordLoginLink: string
 }
 
 function groupCommands(commands: JSX.Element[], max: number) {
@@ -32,7 +33,7 @@ function groupCommands(commands: JSX.Element[], max: number) {
 
 const MAX_COMMANDS = 15;
 
-export default function Commands({ commands, token, discordInfo }: Props) {
+export default function Commands({ commands, token, discordInfo, discordLoginLink }: Props) {
     const commandsCpy = [...commands].sort((a,b) => a.name.localeCompare(b.name));
     const allCommandsParsed = commandsCpy.map(command => <CommandsTableRow key={command.id} id={command.id} name={command.name} description={command.description} category={command.category} />)    
     const commandsParsed = groupCommands(allCommandsParsed, MAX_COMMANDS)
@@ -100,7 +101,7 @@ export default function Commands({ commands, token, discordInfo }: Props) {
     const pageButtons = pageItems.map(commandObj => commandObj.id || commandObj.id === 0 ? <button className={`command-page-btn${commandObj.id === selectedButton ? ' selected' : ''} rounded-sm`} onClick={() => handlePageChange(commandObj.id)}>{commandObj.id + 1}</button> : '');
 
     return (
-        <Layout token={token} discordInfo={discordInfo} title='Robertify - Commands'>
+        <Layout token={token} discordInfo={discordInfo} title='Robertify - Commands' discordLoginLink={discordLoginLink}>
             <Hero
                 title='Commands'
                 subTitle='So... many... commands...'
@@ -157,6 +158,7 @@ export default function Commands({ commands, token, discordInfo }: Props) {
 
 export const getServerSideProps: GetServerSideProps =async ({ req, res }) => {
     let commands: Command[] = [], realProps: { props: {token?: string, discordInfo?: any}};
+    const discordLoginLink = `https://discord.com/api/oauth2/authorize?client_id=${atob(process.env.DISCORD_BOT_TOKEN.split('.')[0])}&redirect_uri=${encodeURI(process.env.LOCAL_API_HOSTNAME + '/callback/discord')}&response_type=code&scope=identify%20guilds`;
     try {
         await robertifyAPI.setAccessToken()
         commands = await robertifyAPI.getCommandInfo();
@@ -169,7 +171,8 @@ export const getServerSideProps: GetServerSideProps =async ({ req, res }) => {
         props: {
             commands: commands,
             token: realProps.props.token || null,
-            discordInfo: realProps.props.discordInfo || null
+            discordInfo: realProps.props.discordInfo || null,
+            discordLoginLink: discordLoginLink
         }
     }
 }

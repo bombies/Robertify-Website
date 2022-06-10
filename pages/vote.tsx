@@ -2,7 +2,7 @@ import Hero from '../components/Hero';
 import Layout from '../components/Layout';
 import { fetchDiscordUserInfo } from '../utils/APIUtils';
 
-export default function Vote({ token, discordInfo }) {
+export default function Vote({ token, discordInfo, discordLoginLink }) {
     const buttons = [
         {
             href: 'https://top.gg/bot/893558050504466482/vote',
@@ -19,7 +19,7 @@ export default function Vote({ token, discordInfo }) {
     ]
 
     return (
-        <Layout token={token} discordInfo={discordInfo} title='Robertify - Vote'>
+        <Layout token={token} discordInfo={discordInfo} discordLoginLink={discordLoginLink} title='Robertify - Vote'>
             <Hero
                 title='Vote'
                 subTitle='Thank you for taking an interest in supporting us!'
@@ -30,5 +30,13 @@ export default function Vote({ token, discordInfo }) {
 }
 
 export async function getServerSideProps({ req, res }) {
-    return fetchDiscordUserInfo(req);
+    const discordLoginLink = `https://discord.com/api/oauth2/authorize?client_id=${atob(process.env.DISCORD_BOT_TOKEN.split('.')[0])}&redirect_uri=${encodeURI(process.env.LOCAL_API_HOSTNAME + '/callback/discord')}&response_type=code&scope=identify%20guilds`;
+    const discordUserInfo = await fetchDiscordUserInfo(req)
+    return {
+        props: {
+            token: discordUserInfo.props.token ? discordUserInfo.props.token : null,
+            discordInfo: discordUserInfo.props.discordInfo ? discordUserInfo.props.discordInfo : null,
+            discordLoginLink: discordLoginLink
+        }
+    }
 }
