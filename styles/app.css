@@ -24,7 +24,7 @@ html {
 body {
     font-family: 'Poppins', sans-serif;
     color: #FFFFFF;
-    background: #3F3F3F;
+    background: rgb(23 23 23);
 }
 
 a {
@@ -1678,6 +1678,11 @@ footer {
     font-size: .9rem;
     letter-spacing: .15rem;
     border-radius: 5px;
+}
+
+.border-gradient-green {
+    border-width: 2px;
+    border-color: #00c33e;
 }
 
 @media (min-width: 1700px) {
