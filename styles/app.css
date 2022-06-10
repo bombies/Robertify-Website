@@ -1084,18 +1084,6 @@ footer {
     font-size: 1rem;
 }
 
-.guildCard--text a {
-    text-decoration: none;
-    color: white;
-    background-color: #039400;
-    padding: .5rem;
-    margin: 1rem auto 0;
-    border-radius: 9px;
-    width: 50%;
-    box-shadow: 0 0 35px 5px rgba(0, 0, 0, .35);
-    transition: all .1s ease-in-out;
-}
-
 .guildCard--text a:hover {
     transform: scale(1.05);
     transition: all .1s ease-in;
