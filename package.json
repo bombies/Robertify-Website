@@ -14,6 +14,8 @@
     "@tailwindcss/typography": "^0.5.2",
     "axios": "^0.27.2",
     "discord-oauth2": "^2.10.0",
+    "flowbite": "^1.4.7",
+    "flowbite-react": "^0.0.25",
     "html-react-parser": "^1.4.14",
     "ioredis": "^5.0.6",
     "js-cookie": "^3.0.1",

@@ -50,7 +50,7 @@ export default function Home({ token, discordInfo, discordLoginLink }: Props) {
                     <div className='features--desc'>
                         <h3>Features</h3>
                         <p className='features--desc-body'>There are so many features and commands jam-packed into Robertify. All of the features provided have been virgoursly tested to ensure the best quality of service for you, our client. Some of these awesome features include:</p>
-                        <ul>
+                        <ul className='list-disc'>
                             <li>Requests Channels</li>
                             <li>Feature Toggles</li>
                             <li>An amazing queue system</li>

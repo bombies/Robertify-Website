@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import {Tooltip} from "flowbite-react";
 
 export default function GuildCard({ guildID, guildIcon = null, guildName, isOwner = false,  guildPermissions = 0 }) {
     const icon: string = guildIcon ? `https://cdn.discordapp.com/icons/${guildID}/${guildIcon}.${guildIcon.startsWith('a_') ? 'gif' : 'webp'}?size=512` : 'https://i.robertify.me/images/rykx6.png';
@@ -14,20 +15,22 @@ export default function GuildCard({ guildID, guildIcon = null, guildName, isOwne
     isModerator = !guildPermissions ? false : isModerator;
 
     return (
-        <div className="flex overflow-hidden w-full h-40 bg-neutral-800 rounded-3xl border-0 hover:border-[2px] border-white/[.103] drop-shadow-lg transition-all duration-[50ms] ease-in-out">
-            <div className='guildCard--banner'>
+        <div className="flex phone:flex-col overflow-hidden w-full h-40 bg-neutral-800 rounded-3xl border-0 hover:border-[2px] border-white/[.103] drop-shadow-lg transition-all duration-[50ms] ease-in-out">
+            <div className='w-full phone:h-1/2'>
                 { isOwner === true ?
-                    <div className='guildCard--owner-container'>
-                        <img loading='lazy' decoding='async' className='guildCard--owner-glyph' src='https://i.robertify.me/images/gmqf5.png' />
-                        <span className='guildCard--owner-tooltip'>Server Owner</span>                
+                    <div className='flex gap-x-2 z-10 absolute left-4 top-3'>
+                        <Tooltip content='Server Owner' trigger='hover' style='dark' placement='right'>
+                            <img loading='lazy' decoding='async' className='w-4 h-4 self-center' src='https://i.robertify.me/images/gmqf5.png' />
+                        </Tooltip>
                     </div>
                     : isModerator && 
-                        <div className='guildCard--owner-container'>
-                            <img loading='lazy' decoding='async' className='guildCard--owner-glyph' src='https://i.robertify.me/images/bhg1n.png' />
-                            <span className='guildCard--owner-tooltip'>Server Moderator</span>  
+                        <div className='flex gap-x-2 z-10 absolute left-4 top-3'>
+                            <Tooltip content='Server Moderator' trigger='hover' style='dark' placement='right'>
+                                <img loading='lazy' decoding='async' className='w-4 h-4 self-center' src='https://i.robertify.me/images/bhg1n.png' />
+                            </Tooltip>
                         </div>
                 }
-                <img className='shadow-[0_4px_10px_rgba(0,0,0,0.35)] w-full object-cover' src={icon} alt={`${guildName} Guild Icon`} />
+                <img className='shadow-[0_4px_10px_rgba(0,0,0,0.35)] w-full h-full object-cover z-0 relative' src={icon} alt={`${guildName} Guild Icon`} />
             </div>
             <div className='guildCard--text'>
                 <h2 className='guildCard--name'>{guildName}</h2>
