@@ -96,13 +96,13 @@ nav {
 }
 
 .nav--items a {
-    color: #A8EE8F;
+    color: rgb(34 197 94);
     text-decoration: none !important;
     transition: all .55s ease;
 }
 
 .nav--items a:hover {
-    color: #51ff11;
+    color: rgb(74 222 128);
 }
 
 .nav--items li {
