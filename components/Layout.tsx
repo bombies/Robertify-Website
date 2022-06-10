@@ -108,7 +108,7 @@ export default function Layout(props: Props) {
                         discordInfoObj ?
                             Object.keys(discordInfoObj).length ? 
                                 <div className='nav--user'>
-                                    <p className='nav--user-welcome laptop:hidden' onClick={toggleUserPopout}>Welcome back, <span>{discordInfoObj.username}</span></p>
+                                    <p className='nav--user-welcome laptop:hidden' onClick={toggleUserPopout}>Welcome back, <span className='text-green-400'>{discordInfoObj.username}</span></p>
                                     <img className='nav--user-icon' onClick={toggleUserPopout} src={discordAvatar} alt='Discord User Icon'/>
                                 </div>
                             : ''

@@ -176,10 +176,6 @@ nav {
     cursor: pointer;
 }
 
-.nav--user-welcome span {
-    color: #1fe25d;
-}
-
 .nav--user-icon {
     width: 5rem;
     height: 5rem;
