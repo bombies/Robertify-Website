@@ -14,6 +14,7 @@ module.exports = {
     extend: {
         'animation': {
             'text':'text 3s ease infinite',
+            'text-fast': 'text 1.5s ease infinite',
             'button': 'text 5s ease infinite'
         },
         'keyframes': {

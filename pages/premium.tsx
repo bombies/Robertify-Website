@@ -25,6 +25,9 @@ export default function Premium(props: Props) {
                                 title='Card Title'
                                 titleColor='text-green-300'
                                 subTitle='Card SubTitle'
+                                subTitleAnimated={true}
+                                subTitleColour='text-green-400'
+                                subTitleToColour='text-lime-400'
                                 content='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae lorem eu tellus tempor accumsan ut in augue. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum lobortis volutpat dignissim. Integer at nulla quis dui accumsan maximus. In aliquam egestas blandit. Suspendisse at enim pharetra, dignissim sem eget, sodales ante. Maecenas malesuada ex est, sit amet rutrum nisi tincidunt id. Nam nec neque vel risus feugiat faucibus in at massa. Nullam diam odio, tincidunt vitae lectus ut, imperdiet facilisis diam. Morbi nec nisl pretium, ultricies ante sed, mollis ante. Duis faucibus dapibus mi, nec venenatis augue vulputate sodales.\n\nFusce vitae lacinia odio. Morbi ut tortor in tellus rhoncus convallis sed non libero. Vivamus fermentum vestibulum lacus, tempor porta est euismod in. Fusce molestie suscipit nisl, sit amet lacinia erat sagittis eget. Sed tellus nisi, euismod sit amet venenatis nec, maximus quis tellus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius enim nisi. Sed orci erat, dapibus sit amet semper et, semper auctor sem. Nulla dui ligula, consectetur sed eros ac, accumsan sollicitudin enim. Sed eu felis eu metus cursus porttitor at eu metus. Mauris nec vestibulum ante, a aliquet purus. Pellentesque vel augue at neque mattis rhoncus. Nam a faucibus ex. Morbi id aliquet tellus.'
                                 maxHeight='h-[35rem]'
                                 buttons={[
@@ -45,6 +48,9 @@ export default function Premium(props: Props) {
                                 title='Card Title'
                                 titleColor='text-green-300'
                                 subTitle='Card SubTitle'
+                                subTitleAnimated={true}
+                                subTitleColour='text-green-400'
+                                subTitleToColour='text-lime-400'
                                 content='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae lorem eu tellus tempor accumsan ut in augue. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum lobortis volutpat dignissim. Integer at nulla quis dui accumsan maximus. In aliquam egestas blandit. Suspendisse at enim pharetra, dignissim sem eget, sodales ante. Maecenas malesuada ex est, sit amet rutrum nisi tincidunt id. Nam nec neque vel risus feugiat faucibus in at massa. Nullam diam odio, tincidunt vitae lectus ut, imperdiet facilisis diam. Morbi nec nisl pretium, ultricies ante sed, mollis ante. Duis faucibus dapibus mi, nec venenatis augue vulputate sodales.\n\nFusce vitae lacinia odio. Morbi ut tortor in tellus rhoncus convallis sed non libero. Vivamus fermentum vestibulum lacus, tempor porta est euismod in. Fusce molestie suscipit nisl, sit amet lacinia erat sagittis eget. Sed tellus nisi, euismod sit amet venenatis nec, maximus quis tellus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius enim nisi. Sed orci erat, dapibus sit amet semper et, semper auctor sem. Nulla dui ligula, consectetur sed eros ac, accumsan sollicitudin enim. Sed eu felis eu metus cursus porttitor at eu metus. Mauris nec vestibulum ante, a aliquet purus. Pellentesque vel augue at neque mattis rhoncus. Nam a faucibus ex. Morbi id aliquet tellus.'
                                 maxHeight='h-[35rem]'
                                 buttons={[
@@ -65,6 +71,9 @@ export default function Premium(props: Props) {
                                 title='Card Title'
                                 titleColor='text-green-300'
                                 subTitle='Card SubTitle'
+                                subTitleAnimated={true}
+                                subTitleColour='text-green-400'
+                                subTitleToColour='text-lime-400'
                                 content='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae lorem eu tellus tempor accumsan ut in augue. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum lobortis volutpat dignissim. Integer at nulla quis dui accumsan maximus. In aliquam egestas blandit. Suspendisse at enim pharetra, dignissim sem eget, sodales ante. Maecenas malesuada ex est, sit amet rutrum nisi tincidunt id. Nam nec neque vel risus feugiat faucibus in at massa. Nullam diam odio, tincidunt vitae lectus ut, imperdiet facilisis diam. Morbi nec nisl pretium, ultricies ante sed, mollis ante. Duis faucibus dapibus mi, nec venenatis augue vulputate sodales.\n\nFusce vitae lacinia odio. Morbi ut tortor in tellus rhoncus convallis sed non libero. Vivamus fermentum vestibulum lacus, tempor porta est euismod in. Fusce molestie suscipit nisl, sit amet lacinia erat sagittis eget. Sed tellus nisi, euismod sit amet venenatis nec, maximus quis tellus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius enim nisi. Sed orci erat, dapibus sit amet semper et, semper auctor sem. Nulla dui ligula, consectetur sed eros ac, accumsan sollicitudin enim. Sed eu felis eu metus cursus porttitor at eu metus. Mauris nec vestibulum ante, a aliquet purus. Pellentesque vel augue at neque mattis rhoncus. Nam a faucibus ex. Morbi id aliquet tellus.'
                                 maxHeight='h-[35rem]'
                                 buttons={[
@@ -85,6 +94,9 @@ export default function Premium(props: Props) {
                                 title='Card Title'
                                 titleColor='text-green-300'
                                 subTitle='Card SubTitle'
+                                subTitleAnimated={true}
+                                subTitleColour='text-green-400'
+                                subTitleToColour='text-lime-400'
                                 content='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae lorem eu tellus tempor accumsan ut in augue. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum lobortis volutpat dignissim. Integer at nulla quis dui accumsan maximus. In aliquam egestas blandit. Suspendisse at enim pharetra, dignissim sem eget, sodales ante. Maecenas malesuada ex est, sit amet rutrum nisi tincidunt id. Nam nec neque vel risus feugiat faucibus in at massa. Nullam diam odio, tincidunt vitae lectus ut, imperdiet facilisis diam. Morbi nec nisl pretium, ultricies ante sed, mollis ante. Duis faucibus dapibus mi, nec venenatis augue vulputate sodales.\n\nFusce vitae lacinia odio. Morbi ut tortor in tellus rhoncus convallis sed non libero. Vivamus fermentum vestibulum lacus, tempor porta est euismod in. Fusce molestie suscipit nisl, sit amet lacinia erat sagittis eget. Sed tellus nisi, euismod sit amet venenatis nec, maximus quis tellus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius enim nisi. Sed orci erat, dapibus sit amet semper et, semper auctor sem. Nulla dui ligula, consectetur sed eros ac, accumsan sollicitudin enim. Sed eu felis eu metus cursus porttitor at eu metus. Mauris nec vestibulum ante, a aliquet purus. Pellentesque vel augue at neque mattis rhoncus. Nam a faucibus ex. Morbi id aliquet tellus.'
                                 maxHeight='h-[35rem]'
                                 buttons={[
@@ -105,6 +117,9 @@ export default function Premium(props: Props) {
                                 title='Card Title'
                                 titleColor='text-green-300'
                                 subTitle='Card SubTitle'
+                                subTitleAnimated={true}
+                                subTitleColour='text-green-400'
+                                subTitleToColour='text-lime-400'
                                 content='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae lorem eu tellus tempor accumsan ut in augue. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum lobortis volutpat dignissim. Integer at nulla quis dui accumsan maximus. In aliquam egestas blandit. Suspendisse at enim pharetra, dignissim sem eget, sodales ante. Maecenas malesuada ex est, sit amet rutrum nisi tincidunt id. Nam nec neque vel risus feugiat faucibus in at massa. Nullam diam odio, tincidunt vitae lectus ut, imperdiet facilisis diam. Morbi nec nisl pretium, ultricies ante sed, mollis ante. Duis faucibus dapibus mi, nec venenatis augue vulputate sodales.\n\nFusce vitae lacinia odio. Morbi ut tortor in tellus rhoncus convallis sed non libero. Vivamus fermentum vestibulum lacus, tempor porta est euismod in. Fusce molestie suscipit nisl, sit amet lacinia erat sagittis eget. Sed tellus nisi, euismod sit amet venenatis nec, maximus quis tellus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius enim nisi. Sed orci erat, dapibus sit amet semper et, semper auctor sem. Nulla dui ligula, consectetur sed eros ac, accumsan sollicitudin enim. Sed eu felis eu metus cursus porttitor at eu metus. Mauris nec vestibulum ante, a aliquet purus. Pellentesque vel augue at neque mattis rhoncus. Nam a faucibus ex. Morbi id aliquet tellus.'
                                 maxHeight='h-[35rem]'
                                 buttons={[
