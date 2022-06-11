@@ -27,7 +27,6 @@ export default function Premium(props: Props) {
                                 titleColor='text-orange-300'
                                 subTitle='$3.99/mo.'
                                 subTitleColour='text-orange-400'
-                                subTitleToColour='to-red-400'
                                 content='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae lorem eu tellus tempor accumsan ut in augue. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum lobortis volutpat dignissim. Integer at nulla quis dui accumsan maximus. In aliquam egestas blandit. Suspendisse at enim pharetra, dignissim sem eget, sodales ante. Maecenas malesuada ex est, sit amet rutrum nisi tincidunt id. Nam nec neque vel risus feugiat faucibus in at massa. Nullam diam odio, tincidunt vitae lectus ut, imperdiet facilisis diam. Morbi nec nisl pretium, ultricies ante sed, mollis ante. Duis faucibus dapibus mi, nec venenatis augue vulputate sodales.\n\nFusce vitae lacinia odio. Morbi ut tortor in tellus rhoncus convallis sed non libero. Vivamus fermentum vestibulum lacus, tempor porta est euismod in. Fusce molestie suscipit nisl, sit amet lacinia erat sagittis eget. Sed tellus nisi, euismod sit amet venenatis nec, maximus quis tellus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius enim nisi. Sed orci erat, dapibus sit amet semper et, semper auctor sem. Nulla dui ligula, consectetur sed eros ac, accumsan sollicitudin enim. Sed eu felis eu metus cursus porttitor at eu metus. Mauris nec vestibulum ante, a aliquet purus. Pellentesque vel augue at neque mattis rhoncus. Nam a faucibus ex. Morbi id aliquet tellus.'
                                 maxHeight='h-[35rem]'
                                 buttons={[
@@ -37,8 +36,6 @@ export default function Premium(props: Props) {
                                         href: 'nowhere',
                                         colour: 'bg-orange-400',
                                         size: 'md',
-                                        gradientDirection: 'bg-gradient-to-br',
-                                        toColour: 'to-red-400'
                                     }
                                 ]}
                             />
@@ -47,8 +44,7 @@ export default function Premium(props: Props) {
                                 title='Silver'
                                 titleColor='text-neutral-300'
                                 subTitle='$5.99/mo'
-                                subTitleColour='text-neutral-500'
-                                subTitleToColour='to-neutral-100'
+                                subTitleColour='text-neutral-400'
                                 content='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae lorem eu tellus tempor accumsan ut in augue. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum lobortis volutpat dignissim. Integer at nulla quis dui accumsan maximus. In aliquam egestas blandit. Suspendisse at enim pharetra, dignissim sem eget, sodales ante. Maecenas malesuada ex est, sit amet rutrum nisi tincidunt id. Nam nec neque vel risus feugiat faucibus in at massa. Nullam diam odio, tincidunt vitae lectus ut, imperdiet facilisis diam. Morbi nec nisl pretium, ultricies ante sed, mollis ante. Duis faucibus dapibus mi, nec venenatis augue vulputate sodales.\n\nFusce vitae lacinia odio. Morbi ut tortor in tellus rhoncus convallis sed non libero. Vivamus fermentum vestibulum lacus, tempor porta est euismod in. Fusce molestie suscipit nisl, sit amet lacinia erat sagittis eget. Sed tellus nisi, euismod sit amet venenatis nec, maximus quis tellus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius enim nisi. Sed orci erat, dapibus sit amet semper et, semper auctor sem. Nulla dui ligula, consectetur sed eros ac, accumsan sollicitudin enim. Sed eu felis eu metus cursus porttitor at eu metus. Mauris nec vestibulum ante, a aliquet purus. Pellentesque vel augue at neque mattis rhoncus. Nam a faucibus ex. Morbi id aliquet tellus.'
                                 maxHeight='h-[35rem]'
                                 buttons={[
@@ -58,8 +54,6 @@ export default function Premium(props: Props) {
                                         href: 'nowhere',
                                         colour: 'bg-neutral-500',
                                         size: 'md',
-                                        gradientDirection: 'bg-gradient-to-br',
-                                        toColour: 'to-neutral-300'
                                     }
                                 ]}
                             />
@@ -69,7 +63,6 @@ export default function Premium(props: Props) {
                                 titleColor='text-amber-500'
                                 subTitle='$7.99/mo'
                                 subTitleColour='text-amber-400'
-                                subTitleToColour='to-yellow-200'
                                 content='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae lorem eu tellus tempor accumsan ut in augue. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum lobortis volutpat dignissim. Integer at nulla quis dui accumsan maximus. In aliquam egestas blandit. Suspendisse at enim pharetra, dignissim sem eget, sodales ante. Maecenas malesuada ex est, sit amet rutrum nisi tincidunt id. Nam nec neque vel risus feugiat faucibus in at massa. Nullam diam odio, tincidunt vitae lectus ut, imperdiet facilisis diam. Morbi nec nisl pretium, ultricies ante sed, mollis ante. Duis faucibus dapibus mi, nec venenatis augue vulputate sodales.\n\nFusce vitae lacinia odio. Morbi ut tortor in tellus rhoncus convallis sed non libero. Vivamus fermentum vestibulum lacus, tempor porta est euismod in. Fusce molestie suscipit nisl, sit amet lacinia erat sagittis eget. Sed tellus nisi, euismod sit amet venenatis nec, maximus quis tellus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius enim nisi. Sed orci erat, dapibus sit amet semper et, semper auctor sem. Nulla dui ligula, consectetur sed eros ac, accumsan sollicitudin enim. Sed eu felis eu metus cursus porttitor at eu metus. Mauris nec vestibulum ante, a aliquet purus. Pellentesque vel augue at neque mattis rhoncus. Nam a faucibus ex. Morbi id aliquet tellus.'
                                 maxHeight='h-[35rem]'
                                 buttons={[
@@ -79,8 +72,6 @@ export default function Premium(props: Props) {
                                         href: 'nowhere',
                                         colour: 'bg-amber-500',
                                         size: 'md',
-                                        gradientDirection: 'bg-gradient-to-br',
-                                        toColour: 'to-yellow-200'
                                     }
                                 ]}
                             />
@@ -90,7 +81,6 @@ export default function Premium(props: Props) {
                                 titleColor='text-cyan-300'
                                 subTitle='$8.99/mo'
                                 subTitleColour='text-cyan-400'
-                                subTitleToColour='to-cyan-500'
                                 content='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae lorem eu tellus tempor accumsan ut in augue. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum lobortis volutpat dignissim. Integer at nulla quis dui accumsan maximus. In aliquam egestas blandit. Suspendisse at enim pharetra, dignissim sem eget, sodales ante. Maecenas malesuada ex est, sit amet rutrum nisi tincidunt id. Nam nec neque vel risus feugiat faucibus in at massa. Nullam diam odio, tincidunt vitae lectus ut, imperdiet facilisis diam. Morbi nec nisl pretium, ultricies ante sed, mollis ante. Duis faucibus dapibus mi, nec venenatis augue vulputate sodales.\n\nFusce vitae lacinia odio. Morbi ut tortor in tellus rhoncus convallis sed non libero. Vivamus fermentum vestibulum lacus, tempor porta est euismod in. Fusce molestie suscipit nisl, sit amet lacinia erat sagittis eget. Sed tellus nisi, euismod sit amet venenatis nec, maximus quis tellus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius enim nisi. Sed orci erat, dapibus sit amet semper et, semper auctor sem. Nulla dui ligula, consectetur sed eros ac, accumsan sollicitudin enim. Sed eu felis eu metus cursus porttitor at eu metus. Mauris nec vestibulum ante, a aliquet purus. Pellentesque vel augue at neque mattis rhoncus. Nam a faucibus ex. Morbi id aliquet tellus.'
                                 maxHeight='h-[35rem]'
                                 buttons={[
@@ -100,18 +90,15 @@ export default function Premium(props: Props) {
                                         href: 'nowhere',
                                         colour: 'bg-cyan-500',
                                         size: 'md',
-                                        gradientDirection: 'bg-gradient-to-br',
-                                        toColour: 'to-cyan-400'
                                     }
                                 ]}
                             />
                             <GenericCard
                                 coverImage='https://i.imgur.com/qYPa0Cd.png'
                                 title='Emerald'
-                                titleColor='text-green-300'
+                                titleColor='text-lime-300'
                                 subTitle='$9.99/mo'
-                                subTitleColour='text-green-400'
-                                subTitleToColour='to-lime-400'
+                                subTitleColour='text-lime-400'
                                 content='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae lorem eu tellus tempor accumsan ut in augue. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum lobortis volutpat dignissim. Integer at nulla quis dui accumsan maximus. In aliquam egestas blandit. Suspendisse at enim pharetra, dignissim sem eget, sodales ante. Maecenas malesuada ex est, sit amet rutrum nisi tincidunt id. Nam nec neque vel risus feugiat faucibus in at massa. Nullam diam odio, tincidunt vitae lectus ut, imperdiet facilisis diam. Morbi nec nisl pretium, ultricies ante sed, mollis ante. Duis faucibus dapibus mi, nec venenatis augue vulputate sodales.\n\nFusce vitae lacinia odio. Morbi ut tortor in tellus rhoncus convallis sed non libero. Vivamus fermentum vestibulum lacus, tempor porta est euismod in. Fusce molestie suscipit nisl, sit amet lacinia erat sagittis eget. Sed tellus nisi, euismod sit amet venenatis nec, maximus quis tellus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius enim nisi. Sed orci erat, dapibus sit amet semper et, semper auctor sem. Nulla dui ligula, consectetur sed eros ac, accumsan sollicitudin enim. Sed eu felis eu metus cursus porttitor at eu metus. Mauris nec vestibulum ante, a aliquet purus. Pellentesque vel augue at neque mattis rhoncus. Nam a faucibus ex. Morbi id aliquet tellus.'
                                 maxHeight='h-[35rem]'
                                 buttons={[
@@ -119,10 +106,8 @@ export default function Premium(props: Props) {
                                         id: 'buttonTest5',
                                         text: 'SUBSCRIBE',
                                         href: 'nowhere',
-                                        colour: 'bg-green-500',
+                                        colour: 'bg-lime-600',
                                         size: 'md',
-                                        gradientDirection: 'bg-gradient-to-br',
-                                        toColour: 'to-lime-400'
                                     }
                                 ]}
                             />
