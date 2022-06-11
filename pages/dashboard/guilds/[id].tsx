@@ -606,7 +606,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
 
     useEffect(() => {
         if (!hasAccess && guildInfo)
-            router.push(`https://discord.com/oauth2/authorize?client_id=${botID}&permissions=524023090512&redirect_uri=${encodeURI(`${localHostName}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot&guild_id=${guildInfo.id}&disable_guild_select=true`)
+            router.push(`https://discord.com/oauth2/authorize?client_id=${botID}&permissions=524023090512&redirect_uri=${encodeURI(`${localHostName}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot%20applications.commands&guild_id=${guildInfo.id}&disable_guild_select=true`)
     }, []);
 
     const [ discordInfoState ] = useState({
