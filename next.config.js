@@ -8,7 +8,7 @@ const { withSentryConfig } = require('@sentry/nextjs');
 /** @type {import('next').NextConfig} */
 moduleExports = {
   images: {
-    domains: ['i.robertify.me']
+    domains: ['i.robertify.me', 'i.imgur.com']
   },
   async redirects() {
     return [
