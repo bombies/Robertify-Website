@@ -17,7 +17,7 @@ export default function GenericCard(props: Props) {
     const parsedContent = props.content.replaceAll('\\n', '<br/>');
     const content = Parser(parsedContent);
 
-    const buttons = props.buttons ? props.buttons.map(button => <Button key={button.id} text={button.text} colour={button.colour} size={button.size} href={button.href} />) : []
+    const buttons = props.buttons ? props.buttons.map(button => <Button key={button.id} text={button.text} colour={button.colour} size={button.size} href={button.href} gradientDirection={button.gradientDirection} toColour={button.toColour} animatedStyle={button.animatedStyle} />) : []
 
     return (
         <div className={`w-full bg-neutral-900 p-5 rounded-xl drop-shadow-lg ${props.maxHeight || ''}`}>

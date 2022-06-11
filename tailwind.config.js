@@ -11,7 +11,24 @@ module.exports = {
       tablet: {'max': '1025px'},
       phone: {'max': '615px'}
     },
-    extend: {},
+    extend: {
+        'animation': {
+            'text':'text 3s ease infinite',
+            'button': 'text 5s ease infinite'
+        },
+        'keyframes': {
+            'text': {
+                '0%, 100%': {
+                    'background-size':'200% 200%',
+                    'background-position': 'left center'
+                },
+                '50%': {
+                    'background-size':'200% 200%',
+                    'background-position': 'right center'
+                }
+            },
+        }
+    },
   },
   plugins: [
       require('@tailwindcss/typography'),
