@@ -140,7 +140,7 @@ export default function Premium(props: Props) {
                     <div className='flex phone:block flex-row-reverse justify-center gap-x-32 tablet:gap-x-16 mb-56 tablet:mb-32'>
                         <img className='rounded-xl drop-shadow-lg transition-all duration-700 hover:scale-105 w-1/3 tablet:w-1/2 phone:w-full' src='https://i.imgur.com/h16tz9W.png' />
                         <div className='my-auto'>
-                            <h3 className='text-4xl tablet:text-3xl phone:text-2xl tablet:max-w-md uppercase font-med drop-shadow-lg text-transparent bg-clip-text bg-gradient-to-br from-green-500 to text-lime-400 max-w-2xl'>Experience a listening experience made just for you with AutoPlay</h3>
+                            <h3 className='text-4xl tablet:text-3xl phone:text-2xl tablet:max-w-md uppercase font-med drop-shadow-lg text-transparent bg-clip-text bg-gradient-to-br from-green-500 to text-lime-400 max-w-2xl'>A listening experience made just for you with AutoPlay</h3>
                             <p className='max-w-xl tablet:max-w-md text-xl tablet:text-lg text-neutral-200'>On the ending of your queue Robertify will automatically continue playing songs just like the ones you were playing!</p>
                         </div>
                     </div>
