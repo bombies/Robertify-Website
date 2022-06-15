@@ -31,6 +31,7 @@ interface OnApproveData {
 
 export default function Premium(props: Props) {
     const cardHeight = 'h-[30rem]';
+    const buttonSize = 'md';
 
     return (
         <Layout token={props.token} title='Robertify - Premium' discordInfo={props.discordInfo} discordLoginLink={props.discordLoginLink} >
@@ -51,7 +52,8 @@ export default function Premium(props: Props) {
                                 buttons={[{
                                     text: 'Subscribe',
                                     colour: 'bg-orange-400',
-                                    href: 'nowhere'
+                                    href: 'nowhere',
+                                    size: buttonSize
                                 }]}
                             />
                             <GenericCard
@@ -65,7 +67,8 @@ export default function Premium(props: Props) {
                                 buttons={[{
                                     text: 'Subscribe',
                                     colour: 'bg-neutral-400',
-                                    href: 'nowhere'
+                                    href: 'nowhere',
+                                    size: buttonSize
                                 }]}
                             />
                             <GenericCard
@@ -79,7 +82,8 @@ export default function Premium(props: Props) {
                                 buttons={[{
                                     text: 'Subscribe',
                                     colour: 'bg-amber-500',
-                                    href: 'nowhere'
+                                    href: 'nowhere',
+                                    size: buttonSize
                                 }]}
                             />
                             <GenericCard
@@ -93,7 +97,8 @@ export default function Premium(props: Props) {
                                 buttons={[{
                                     text: 'Subscribe',
                                     colour: 'bg-cyan-500',
-                                    href: 'nowhere'
+                                    href: 'nowhere',
+                                    size: buttonSize
                                 }]}
                             />
                             <GenericCard
@@ -107,7 +112,8 @@ export default function Premium(props: Props) {
                                 buttons={[{
                                     text: 'Subscribe',
                                     colour: 'bg-lime-600',
-                                    href: 'nowhere'
+                                    href: 'nowhere',
+                                    size: buttonSize
                                 }]}
                             />
                         </div>
