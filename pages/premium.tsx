@@ -124,49 +124,49 @@ export default function Premium(props: Props) {
                     <div className='flex phone:block justify-center gap-x-32 tablet:gap-x-16 mb-56 tablet:mb-32'>
                         <img  className='rounded-xl drop-shadow-lg transition-all duration-700 hover:scale-105 w-1/3 tablet:w-4/6 phone:w-full' src='https://i.imgur.com/mMxjx8V.gif' />
                         <div className='my-auto'>
-                            <h3 className='text-4xl tablet:text-3xl phone:text-2xl tablet:max-w-md uppercase font-med drop-shadow-lg text-transparent bg-clip-text bg-gradient-to-br from-green-500 to text-lime-400'>Show off your colours with themes</h3>
+                            <h3 className='text-4xl tablet:text-3xl phone:text-2xl tablet:max-w-md uppercase font-med drop-shadow-lg text-lime-400'>Show off your colours with themes</h3>
                             <p className='max-w-xl tablet:max-w-md text-xl tablet:text-lg text-neutral-200'>There are up to 16 colour choices for you to choose from with Robertify Premium! Enjoy listening to your music in style with your favourite colour.</p>
                         </div>
                     </div>
                     <div className='flex phone:block flex-row-reverse justify-center gap-x-32 tablet:gap-x-16 mb-56 tablet:mb-32'>
                         <img className='rounded-xl drop-shadow-lg transition-all duration-700 hover:scale-105 w-1/3 tablet:w-4/6 phone:w-full' src='https://i.imgur.com/Vf2W9S0.gif' />
                         <div className='my-auto'>
-                            <h3 className='text-4xl tablet:text-3xl phone:text-2xl tablet:max-w-md uppercase font-med drop-shadow-lg text-transparent bg-clip-text bg-gradient-to-br from-green-500 to text-lime-400'>Save your favourite tracks</h3>
+                            <h3 className='text-4xl tablet:text-3xl phone:text-2xl tablet:max-w-md uppercase font-med drop-shadow-lg text-lime-400'>Save your favourite tracks</h3>
                             <p className='max-w-xl tablet:max-w-md text-xl tablet:text-lg text-neutral-200'>Save a track as one of your favourites! Once saved, you can add this track to the queue any time you&apos;d like! All it takes is one click.</p>
                         </div>
                     </div>
                     <div className='flex phone:block justify-center gap-x-32 tablet:gap-x-16 mb-56 tablet:mb-32'>
                         <img  className='rounded-xl drop-shadow-lg transition-all duration-700 hover:scale-105 w-1/3 tablet:w-4/6 phone:w-full' src='https://i.imgur.com/QDr0lGq.gif' />
                         <div className='my-auto'>
-                            <h3 className='text-4xl tablet:text-3xl phone:text-2xl tablet:max-w-md uppercase font-med drop-shadow-lg text-transparent bg-clip-text bg-gradient-to-br from-green-500 to text-lime-400'>Have fun with Audio Filters</h3>
+                            <h3 className='text-4xl tablet:text-3xl phone:text-2xl tablet:max-w-md uppercase font-med drop-shadow-lg text-lime-400'>Have fun with Audio Filters</h3>
                             <p className='max-w-xl tablet:max-w-md text-xl tablet:text-lg text-neutral-200'>Shake up how you listen to music on Robertify with 5 exciting audio filters. You get to choose to listen to music with the 8D, Karaoke, Tremolo, Vibrato and Nightcore filters!</p>
                         </div>
                     </div>
                     <div className='flex phone:block flex-row-reverse justify-center gap-x-32 tablet:gap-x-16 mb-56 tablet:mb-32'>
                         <img className='rounded-xl drop-shadow-lg transition-all duration-700 hover:scale-105 w-1/3 tablet:w-1/2 phone:w-full' src='https://i.imgur.com/h16tz9W.png' />
                         <div className='my-auto'>
-                            <h3 className='text-4xl tablet:text-3xl phone:text-2xl tablet:max-w-md uppercase font-med drop-shadow-lg text-transparent bg-clip-text bg-gradient-to-br from-green-500 to text-lime-400 max-w-2xl'>A listening experience made just for you with AutoPlay</h3>
+                            <h3 className='text-4xl tablet:text-3xl phone:text-2xl tablet:max-w-md uppercase font-med drop-shadow-lg text-lime-400 max-w-2xl'>A listening experience made just for you with AutoPlay</h3>
                             <p className='max-w-xl tablet:max-w-md text-xl tablet:text-lg text-neutral-200'>On the ending of your queue Robertify will automatically continue playing songs just like the ones you were playing!</p>
                         </div>
                     </div>
                     <div className='flex phone:block justify-center gap-x-32 tablet:gap-x-16 mb-56 tablet:mb-32'>
                         <img  className='rounded-xl drop-shadow-lg transition-all duration-700 hover:scale-105 w-1/3 tablet:w-4/6 phone:w-full' src='https://i.imgur.com/uUdnrgf.png' />
                         <div className='my-auto'>
-                            <h3 className='text-4xl tablet:text-3xl phone:text-2xl tablet:max-w-md uppercase font-med drop-shadow-lg text-transparent bg-clip-text bg-gradient-to-br from-green-500 to text-lime-400'>Never stop the fun with 24/7 mode</h3>
+                            <h3 className='text-4xl tablet:text-3xl phone:text-2xl tablet:max-w-md uppercase font-med drop-shadow-lg text-lime-400'>Never stop the fun with 24/7 mode</h3>
                             <p className='max-w-xl tablet:max-w-md text-xl tablet:text-lg text-neutral-200'>Robertify will always stay in a voice channel with 24/7 mode enabled. Enjoy your listening experience. All. Week. Long.</p>
                         </div>
                     </div>
                     <div className='flex phone:block flex-row-reverse justify-center gap-x-32 tablet:gap-x-16 mb-56 tablet:mb-24'>
                         <img className='rounded-xl drop-shadow-lg transition-all duration-700 hover:scale-105 w-1/3 tablet:w-4/6 phone:w-full' src='https://i.imgur.com/gU1ERCM.gif' />
                         <div className='my-auto'>
-                            <h3 className='text-4xl tablet:text-3xl phone:text-2xl tablet:max-w-md uppercase font-med drop-shadow-lg text-transparent bg-clip-text bg-gradient-to-br from-green-500 to text-lime-400 max-w-2xl'>Control the volume for everyone with global volume control</h3>
+                            <h3 className='text-4xl tablet:text-3xl phone:text-2xl tablet:max-w-md uppercase font-med drop-shadow-lg text-lime-400 max-w-2xl'>Control the volume for everyone with global volume control</h3>
                             <p className='max-w-xl tablet:max-w-md text-xl tablet:text-lg text-neutral-200'>Music being too loud? Robertify premium allows you to adjust the volume of the bot for every single user in your server.</p>
                         </div>
                     </div>
                     <div className='flex phone:block justify-center gap-x-32 tablet:gap-x-16 pb-24'>
                         <img  className='rounded-xl drop-shadow-lg transition-all duration-700 hover:scale-105 w-1/3 tablet:w-1/2 phone:w-full' src='https://i.imgur.com/qSPmGJB.png' />
                         <div className='my-auto'>
-                            <h3 className='text-4xl tablet:text-3xl phone:text-xl tablet:max-w-md uppercase font-med drop-shadow-lg text-transparent bg-clip-text bg-gradient-to-br from-green-500 to text-lime-400 max-w-3xl'>Share Robertify with more of your community with more instances</h3>
+                            <h3 className='text-4xl tablet:text-3xl phone:text-xl tablet:max-w-md uppercase font-med drop-shadow-lg text-lime-400 max-w-3xl'>Share Robertify with more of your community with more instances</h3>
                             <p className='max-w-xl tablet:max-w-md text-xl tablet:text-lg text-neutral-200'>Robertify Premium grants you access to more Robertify bots! More of your community members will be able to enjoy the amazing and immersive features of Robertify.</p>
                         </div>
                     </div>
