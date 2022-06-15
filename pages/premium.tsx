@@ -30,20 +30,7 @@ interface OnApproveData {
 }
 
 export default function Premium(props: Props) {
-    const createMutation = useMutation<{ data: any }, AxiosError, any, Response>(
-        (): any => axios.post('/api/paypal/createOrder'),
-    )
-    const captureMutation = useMutation<string, AxiosError, any, Response>(
-        (data): any => axios.post('/api/paypal/captureOrder', data),
-    )
-    const createPayPalOrder = async (): Promise<string> => {
-        const response = await createMutation.mutateAsync({})
-        return response.data.orderID
-    }
-
-    const onApprove = async (data: OnApproveData): Promise<void> => {
-        return captureMutation.mutate({ orderID: data.orderID })
-    }
+    const cardHeight = 'h-[30rem]';
 
     return (
         <Layout token={props.token} title='Robertify - Premium' discordInfo={props.discordInfo} discordLoginLink={props.discordLoginLink} >
@@ -60,11 +47,12 @@ export default function Premium(props: Props) {
                                 subTitle='$3.99/mo.'
                                 subTitleColour='text-orange-400'
                                 contentList={['3 Premium Servers', 'Full Premium Access']}
-                                maxHeight='h-[25rem]'
-                                paypalButton={{
-                                    createOrder: createPayPalOrder,
-                                    onApprove: onApprove
-                                }}
+                                maxHeight={cardHeight}
+                                buttons={[{
+                                    text: 'Subscribe',
+                                    colour: 'bg-orange-400',
+                                    href: 'nowhere'
+                                }]}
                             />
                             <GenericCard
                                 coverImage='https://i.imgur.com/eKM574t.png'
@@ -73,11 +61,12 @@ export default function Premium(props: Props) {
                                 subTitle='$5.99/mo'
                                 subTitleColour='text-neutral-400'
                                 contentList={['5 Premium Servers', 'Full Premium Access']}
-                                maxHeight='h-[25rem]'
-                                paypalButton={{
-                                    createOrder: createPayPalOrder,
-                                    onApprove: onApprove
-                                }}
+                                maxHeight={cardHeight}
+                                buttons={[{
+                                    text: 'Subscribe',
+                                    colour: 'bg-neutral-400',
+                                    href: 'nowhere'
+                                }]}
                             />
                             <GenericCard
                                 coverImage='https://i.imgur.com/t3oEYn1.png'
@@ -86,11 +75,12 @@ export default function Premium(props: Props) {
                                 subTitle='$7.99/mo'
                                 subTitleColour='text-amber-400'
                                 contentList={['3 Premium Servers', 'Full Premium Access']}
-                                maxHeight='h-[25rem]'
-                                paypalButton={{
-                                    createOrder: createPayPalOrder,
-                                    onApprove: onApprove
-                                }}
+                                maxHeight={cardHeight}
+                                buttons={[{
+                                    text: 'Subscribe',
+                                    colour: 'bg-amber-500',
+                                    href: 'nowhere'
+                                }]}
                             />
                             <GenericCard
                                 coverImage='https://i.imgur.com/cGDz0bM.png'
@@ -99,11 +89,12 @@ export default function Premium(props: Props) {
                                 subTitle='$8.99/mo'
                                 subTitleColour='text-cyan-400'
                                 contentList={['3 Premium Servers', 'Full Premium Access']}
-                                maxHeight='h-[25rem]'
-                                paypalButton={{
-                                    createOrder: createPayPalOrder,
-                                    onApprove: onApprove
-                                }}
+                                maxHeight={cardHeight}
+                                buttons={[{
+                                    text: 'Subscribe',
+                                    colour: 'bg-cyan-500',
+                                    href: 'nowhere'
+                                }]}
                             />
                             <GenericCard
                                 coverImage='https://i.imgur.com/qYPa0Cd.png'
@@ -112,11 +103,12 @@ export default function Premium(props: Props) {
                                 subTitle='$9.99/mo'
                                 subTitleColour='text-lime-400'
                                 contentList={['3 Premium Servers', 'Full Premium Access']}
-                                maxHeight='h-[25rem]'
-                                paypalButton={{
-                                    createOrder: createPayPalOrder,
-                                    onApprove: onApprove
-                                }}
+                                maxHeight={cardHeight}
+                                buttons={[{
+                                    text: 'Subscribe',
+                                    colour: 'bg-lime-600',
+                                    href: 'nowhere'
+                                }]}
                             />
                         </div>
                     </fieldset>
