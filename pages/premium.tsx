@@ -5,6 +5,13 @@ import {fetchDiscordUserInfo} from "../utils/APIUtils";
 import Hero from "../components/Hero";
 import GenericCard from "../components/GenericCard";
 import Button from "../components/Button";
+import axios, { AxiosError } from 'axios'
+import { useMutation } from 'react-query'
+import {
+    PayPalScriptProvider,
+    PayPalButtons,
+    FUNDING,
+} from '@paypal/react-paypal-js'
 
 type Props = {
     token: string,
@@ -12,7 +19,32 @@ type Props = {
     discordLoginLink: string
 }
 
+interface OnApproveData {
+    billingToken?: string | null
+    facilitatorAccessToken: string
+    orderID: string
+    payerID?: string | null
+    paymentID?: string | null
+    subscriptionID?: string | null
+    authCode?: string | null
+}
+
 export default function Premium(props: Props) {
+    const createMutation = useMutation<{ data: any }, AxiosError, any, Response>(
+        (): any => axios.post('/api/paypal/createOrder'),
+    )
+    const captureMutation = useMutation<string, AxiosError, any, Response>(
+        (data): any => axios.post('/api/paypal/captureOrder', data),
+    )
+    const createPayPalOrder = async (): Promise<string> => {
+        const response = await createMutation.mutateAsync({})
+        return response.data.orderID
+    }
+
+    const onApprove = async (data: OnApproveData): Promise<void> => {
+        return captureMutation.mutate({ orderID: data.orderID })
+    }
+
     return (
         <Layout token={props.token} title='Robertify - Premium' discordInfo={props.discordInfo} discordLoginLink={props.discordLoginLink} >
             <main className='bg-neutral-900 overflow-hidden'>
@@ -27,17 +59,12 @@ export default function Premium(props: Props) {
                                 titleColor='text-orange-300'
                                 subTitle='$3.99/mo.'
                                 subTitleColour='text-orange-400'
-                                content='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae lorem eu tellus tempor accumsan ut in augue. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum lobortis volutpat dignissim. Integer at nulla quis dui accumsan maximus. In aliquam egestas blandit. Suspendisse at enim pharetra, dignissim sem eget, sodales ante. Maecenas malesuada ex est, sit amet rutrum nisi tincidunt id. Nam nec neque vel risus feugiat faucibus in at massa. Nullam diam odio, tincidunt vitae lectus ut, imperdiet facilisis diam. Morbi nec nisl pretium, ultricies ante sed, mollis ante. Duis faucibus dapibus mi, nec venenatis augue vulputate sodales.\n\nFusce vitae lacinia odio. Morbi ut tortor in tellus rhoncus convallis sed non libero. Vivamus fermentum vestibulum lacus, tempor porta est euismod in. Fusce molestie suscipit nisl, sit amet lacinia erat sagittis eget. Sed tellus nisi, euismod sit amet venenatis nec, maximus quis tellus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius enim nisi. Sed orci erat, dapibus sit amet semper et, semper auctor sem. Nulla dui ligula, consectetur sed eros ac, accumsan sollicitudin enim. Sed eu felis eu metus cursus porttitor at eu metus. Mauris nec vestibulum ante, a aliquet purus. Pellentesque vel augue at neque mattis rhoncus. Nam a faucibus ex. Morbi id aliquet tellus.'
-                                maxHeight='h-[35rem]'
-                                buttons={[
-                                    {
-                                        id: 'buttonTest1',
-                                        text: 'SUBSCRIBE',
-                                        href: 'nowhere',
-                                        colour: 'bg-orange-400',
-                                        size: 'md',
-                                    }
-                                ]}
+                                contentList={['3 Premium Servers', 'Full Premium Access']}
+                                maxHeight='h-[25rem]'
+                                paypalButton={{
+                                    createOrder: createPayPalOrder,
+                                    onApprove: onApprove
+                                }}
                             />
                             <GenericCard
                                 coverImage='https://i.imgur.com/eKM574t.png'
@@ -45,17 +72,12 @@ export default function Premium(props: Props) {
                                 titleColor='text-neutral-300'
                                 subTitle='$5.99/mo'
                                 subTitleColour='text-neutral-400'
-                                content='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae lorem eu tellus tempor accumsan ut in augue. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum lobortis volutpat dignissim. Integer at nulla quis dui accumsan maximus. In aliquam egestas blandit. Suspendisse at enim pharetra, dignissim sem eget, sodales ante. Maecenas malesuada ex est, sit amet rutrum nisi tincidunt id. Nam nec neque vel risus feugiat faucibus in at massa. Nullam diam odio, tincidunt vitae lectus ut, imperdiet facilisis diam. Morbi nec nisl pretium, ultricies ante sed, mollis ante. Duis faucibus dapibus mi, nec venenatis augue vulputate sodales.\n\nFusce vitae lacinia odio. Morbi ut tortor in tellus rhoncus convallis sed non libero. Vivamus fermentum vestibulum lacus, tempor porta est euismod in. Fusce molestie suscipit nisl, sit amet lacinia erat sagittis eget. Sed tellus nisi, euismod sit amet venenatis nec, maximus quis tellus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius enim nisi. Sed orci erat, dapibus sit amet semper et, semper auctor sem. Nulla dui ligula, consectetur sed eros ac, accumsan sollicitudin enim. Sed eu felis eu metus cursus porttitor at eu metus. Mauris nec vestibulum ante, a aliquet purus. Pellentesque vel augue at neque mattis rhoncus. Nam a faucibus ex. Morbi id aliquet tellus.'
-                                maxHeight='h-[35rem]'
-                                buttons={[
-                                    {
-                                        id: 'buttonTest2',
-                                        text: 'SUBSCRIBE',
-                                        href: 'nowhere',
-                                        colour: 'bg-neutral-500',
-                                        size: 'md',
-                                    }
-                                ]}
+                                contentList={['5 Premium Servers', 'Full Premium Access']}
+                                maxHeight='h-[25rem]'
+                                paypalButton={{
+                                    createOrder: createPayPalOrder,
+                                    onApprove: onApprove
+                                }}
                             />
                             <GenericCard
                                 coverImage='https://i.imgur.com/t3oEYn1.png'
@@ -63,17 +85,12 @@ export default function Premium(props: Props) {
                                 titleColor='text-amber-500'
                                 subTitle='$7.99/mo'
                                 subTitleColour='text-amber-400'
-                                content='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae lorem eu tellus tempor accumsan ut in augue. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum lobortis volutpat dignissim. Integer at nulla quis dui accumsan maximus. In aliquam egestas blandit. Suspendisse at enim pharetra, dignissim sem eget, sodales ante. Maecenas malesuada ex est, sit amet rutrum nisi tincidunt id. Nam nec neque vel risus feugiat faucibus in at massa. Nullam diam odio, tincidunt vitae lectus ut, imperdiet facilisis diam. Morbi nec nisl pretium, ultricies ante sed, mollis ante. Duis faucibus dapibus mi, nec venenatis augue vulputate sodales.\n\nFusce vitae lacinia odio. Morbi ut tortor in tellus rhoncus convallis sed non libero. Vivamus fermentum vestibulum lacus, tempor porta est euismod in. Fusce molestie suscipit nisl, sit amet lacinia erat sagittis eget. Sed tellus nisi, euismod sit amet venenatis nec, maximus quis tellus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius enim nisi. Sed orci erat, dapibus sit amet semper et, semper auctor sem. Nulla dui ligula, consectetur sed eros ac, accumsan sollicitudin enim. Sed eu felis eu metus cursus porttitor at eu metus. Mauris nec vestibulum ante, a aliquet purus. Pellentesque vel augue at neque mattis rhoncus. Nam a faucibus ex. Morbi id aliquet tellus.'
-                                maxHeight='h-[35rem]'
-                                buttons={[
-                                    {
-                                        id: 'buttonTest3',
-                                        text: 'SUBSCRIBE',
-                                        href: 'nowhere',
-                                        colour: 'bg-amber-500',
-                                        size: 'md',
-                                    }
-                                ]}
+                                contentList={['3 Premium Servers', 'Full Premium Access']}
+                                maxHeight='h-[25rem]'
+                                paypalButton={{
+                                    createOrder: createPayPalOrder,
+                                    onApprove: onApprove
+                                }}
                             />
                             <GenericCard
                                 coverImage='https://i.imgur.com/cGDz0bM.png'
@@ -81,17 +98,12 @@ export default function Premium(props: Props) {
                                 titleColor='text-cyan-300'
                                 subTitle='$8.99/mo'
                                 subTitleColour='text-cyan-400'
-                                content='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae lorem eu tellus tempor accumsan ut in augue. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum lobortis volutpat dignissim. Integer at nulla quis dui accumsan maximus. In aliquam egestas blandit. Suspendisse at enim pharetra, dignissim sem eget, sodales ante. Maecenas malesuada ex est, sit amet rutrum nisi tincidunt id. Nam nec neque vel risus feugiat faucibus in at massa. Nullam diam odio, tincidunt vitae lectus ut, imperdiet facilisis diam. Morbi nec nisl pretium, ultricies ante sed, mollis ante. Duis faucibus dapibus mi, nec venenatis augue vulputate sodales.\n\nFusce vitae lacinia odio. Morbi ut tortor in tellus rhoncus convallis sed non libero. Vivamus fermentum vestibulum lacus, tempor porta est euismod in. Fusce molestie suscipit nisl, sit amet lacinia erat sagittis eget. Sed tellus nisi, euismod sit amet venenatis nec, maximus quis tellus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius enim nisi. Sed orci erat, dapibus sit amet semper et, semper auctor sem. Nulla dui ligula, consectetur sed eros ac, accumsan sollicitudin enim. Sed eu felis eu metus cursus porttitor at eu metus. Mauris nec vestibulum ante, a aliquet purus. Pellentesque vel augue at neque mattis rhoncus. Nam a faucibus ex. Morbi id aliquet tellus.'
-                                maxHeight='h-[35rem]'
-                                buttons={[
-                                    {
-                                        id: 'buttonTest4',
-                                        text: 'SUBSCRIBE',
-                                        href: 'nowhere',
-                                        colour: 'bg-cyan-500',
-                                        size: 'md',
-                                    }
-                                ]}
+                                contentList={['3 Premium Servers', 'Full Premium Access']}
+                                maxHeight='h-[25rem]'
+                                paypalButton={{
+                                    createOrder: createPayPalOrder,
+                                    onApprove: onApprove
+                                }}
                             />
                             <GenericCard
                                 coverImage='https://i.imgur.com/qYPa0Cd.png'
@@ -99,17 +111,12 @@ export default function Premium(props: Props) {
                                 titleColor='text-lime-300'
                                 subTitle='$9.99/mo'
                                 subTitleColour='text-lime-400'
-                                content='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae lorem eu tellus tempor accumsan ut in augue. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum lobortis volutpat dignissim. Integer at nulla quis dui accumsan maximus. In aliquam egestas blandit. Suspendisse at enim pharetra, dignissim sem eget, sodales ante. Maecenas malesuada ex est, sit amet rutrum nisi tincidunt id. Nam nec neque vel risus feugiat faucibus in at massa. Nullam diam odio, tincidunt vitae lectus ut, imperdiet facilisis diam. Morbi nec nisl pretium, ultricies ante sed, mollis ante. Duis faucibus dapibus mi, nec venenatis augue vulputate sodales.\n\nFusce vitae lacinia odio. Morbi ut tortor in tellus rhoncus convallis sed non libero. Vivamus fermentum vestibulum lacus, tempor porta est euismod in. Fusce molestie suscipit nisl, sit amet lacinia erat sagittis eget. Sed tellus nisi, euismod sit amet venenatis nec, maximus quis tellus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius enim nisi. Sed orci erat, dapibus sit amet semper et, semper auctor sem. Nulla dui ligula, consectetur sed eros ac, accumsan sollicitudin enim. Sed eu felis eu metus cursus porttitor at eu metus. Mauris nec vestibulum ante, a aliquet purus. Pellentesque vel augue at neque mattis rhoncus. Nam a faucibus ex. Morbi id aliquet tellus.'
-                                maxHeight='h-[35rem]'
-                                buttons={[
-                                    {
-                                        id: 'buttonTest5',
-                                        text: 'SUBSCRIBE',
-                                        href: 'nowhere',
-                                        colour: 'bg-lime-600',
-                                        size: 'md',
-                                    }
-                                ]}
+                                contentList={['3 Premium Servers', 'Full Premium Access']}
+                                maxHeight='h-[25rem]'
+                                paypalButton={{
+                                    createOrder: createPayPalOrder,
+                                    onApprove: onApprove
+                                }}
                             />
                         </div>
                     </fieldset>
