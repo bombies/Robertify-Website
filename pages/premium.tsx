@@ -174,7 +174,7 @@ export default function Premium(props: Props) {
                 <div className='text-center py-12'>
                     <h1 className='uppercase text-7xl tablet:text-5xl font-bold mt-6 drop-shadow-lg text-transparent bg-clip-text bg-gradient-to-br from-green-300 to-lime-400'>Ready to go premium?</h1>
                     <p className='text-2xl phone:text-lg max-w-xl mx-auto mb-12'>Click on the button below to start choosing your desired tier! We are excited to have you join the premium family.</p>
-                    <Button href='#subscribe' text='SUBSCRIBE' colour='bg-green-400' animatedStyle={true} toColour='lime-green-400' gradientDirection='bg-gradient-to-br' size='lg' />
+                    <Button href='#subscribe' text='SUBSCRIBE' colour='bg-lime-500'size='lg' center={true} />
                 </div>
             </main>
         </Layout>
