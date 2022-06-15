@@ -47,7 +47,7 @@ export default function Premium(props: Props) {
                                 titleColor='text-orange-300'
                                 subTitle='$3.99/mo.'
                                 subTitleColour='text-orange-400'
-                                contentList={['3 Premium Servers', 'Full Premium Access']}
+                                contentList={['1 Premium Server', 'Full Premium Access']}
                                 maxHeight={cardHeight}
                                 buttons={[{
                                     text: 'Subscribe',
@@ -62,7 +62,7 @@ export default function Premium(props: Props) {
                                 titleColor='text-neutral-300'
                                 subTitle='$5.99/mo'
                                 subTitleColour='text-neutral-400'
-                                contentList={['5 Premium Servers', 'Full Premium Access']}
+                                contentList={['3 Premium Servers', 'Full Premium Access']}
                                 maxHeight={cardHeight}
                                 buttons={[{
                                     text: 'Subscribe',
@@ -77,7 +77,7 @@ export default function Premium(props: Props) {
                                 titleColor='text-amber-500'
                                 subTitle='$7.99/mo'
                                 subTitleColour='text-amber-400'
-                                contentList={['3 Premium Servers', 'Full Premium Access']}
+                                contentList={['6 Premium Servers', 'Full Premium Access']}
                                 maxHeight={cardHeight}
                                 buttons={[{
                                     text: 'Subscribe',
@@ -92,7 +92,7 @@ export default function Premium(props: Props) {
                                 titleColor='text-cyan-300'
                                 subTitle='$8.99/mo'
                                 subTitleColour='text-cyan-400'
-                                contentList={['3 Premium Servers', 'Full Premium Access']}
+                                contentList={['10 Premium Servers', 'Full Premium Access']}
                                 maxHeight={cardHeight}
                                 buttons={[{
                                     text: 'Subscribe',
@@ -107,7 +107,7 @@ export default function Premium(props: Props) {
                                 titleColor='text-lime-300'
                                 subTitle='$9.99/mo'
                                 subTitleColour='text-lime-400'
-                                contentList={['3 Premium Servers', 'Full Premium Access']}
+                                contentList={['15 Premium Servers', 'Full Premium Access']}
                                 maxHeight={cardHeight}
                                 buttons={[{
                                     text: 'Subscribe',
