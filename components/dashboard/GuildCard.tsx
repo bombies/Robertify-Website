@@ -34,7 +34,7 @@ export default function GuildCard({ guildID, guildIcon = null, guildName, isOwne
             </div>
             <div className='guildCard--text'>
                 <h2 className='guildCard--name'>{guildName}</h2>
-                <Link href={`/dashboard/guilds/${guildID}`}><span className='text-white bg-green-500 transition-all duration-200 ease-in-out hover:scale-105 w-1/2 mx-auto rounded-lg px-3 py-2 mt-2 cursor-pointer phone:py-1 phone:w-2/5'>Configure</span></Link>
+                <Link href={`/dashboard/guilds/${guildID}`}><span className='text-white bg-lime-600 transition-all duration-200 ease-in-out hover:scale-105 w-1/2 mx-auto rounded-lg px-3 py-2 mt-2 cursor-pointer phone:py-1 phone:w-2/5'>Configure</span></Link>
             </div>
         </div>
     )

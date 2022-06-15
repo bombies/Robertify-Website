@@ -80,7 +80,7 @@ export default function Layout(props: Props) {
                 <title>{props.title ?? 'Robertify'}</title>
                 <link rel='robertify icon' href='/favicon.ico' />
             </Head>
-            <NextNProgress color='rgb(34,197,94)'/>
+            <NextNProgress color='rgb(132,204,22)'/>
            <nav>
                 <div className='flex cursor-pointer transition-all duration-1000 ease-in-out hover:scale-110'>
                     <Link href='/'><img className='w-24 phone:w-16 mr-5' src='https://i.robertify.me/images/ni48h.png' alt='Logo'/></Link>
@@ -89,7 +89,7 @@ export default function Layout(props: Props) {
                 <div className='nav--items'>
                     <ul className='nav--items-desktop-list' id='nav--items-desktop-list'>
                         <li><a href='/invite'>Invite</a></li>
-                        <li><Link className='premium' href='/premium'><div className='flex cursor-pointer transition-all duration-1000 ease-in-out hover:scale-105 tablet:justify-center'><img className='w-8 tablet:h-8 self-center' src='https://i.imgur.com/NkPClfS.png' /><span className='self-center text-green-400 font-med transition-all duration-1000 ease-in-out hover:!text-green-300'>Premium</span></div></Link></li>
+                        <li><Link className='premium' href='/premium'><div className='flex cursor-pointer transition-all duration-1000 ease-in-out hover:scale-105 tablet:justify-center'><img className='w-8 tablet:h-8 self-center' src='https://i.imgur.com/NkPClfS.png' /><span className='self-center text-lime-400 font-med transition-all duration-1000 ease-in-out hover:!text-lime-300'>Premium</span></div></Link></li>
                         <li><Link href='/commands'>Commands</Link></li>
                         <li><Link href='/vote'>Vote</Link></li>
                         <li><Link href='/faq'>Support</Link></li>
@@ -108,7 +108,7 @@ export default function Layout(props: Props) {
                         discordInfoObj ?
                             Object.keys(discordInfoObj).length ? 
                                 <div className='nav--user'>
-                                    <p className='nav--user-welcome laptop:hidden' onClick={toggleUserPopout}>Welcome back, <span className='text-green-400'>{discordInfoObj.username}</span></p>
+                                    <p className='nav--user-welcome laptop:hidden' onClick={toggleUserPopout}>Welcome back, <span className='text-lime-500'>{discordInfoObj.username}</span></p>
                                     <img className='nav--user-icon' onClick={toggleUserPopout} src={discordAvatar} alt='Discord User Icon'/>
                                 </div>
                             : ''
