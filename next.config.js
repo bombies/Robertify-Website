@@ -46,7 +46,7 @@ moduleExports = {
     return config;
   },
   images: {
-    domains: ['i.robertify.me', 'i.imgur.com']
+    domains: ['i.robertify.me', 'i.imgur.com', 'cdn.discordapp.com']
   },
   async redirects() {
     return [

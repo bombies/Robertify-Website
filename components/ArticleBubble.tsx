@@ -1,5 +1,6 @@
 import Parser from "html-react-parser";
 import {useState} from "react";
+import Image from "next/image";
 
 type Props = {
     author?: Author,
@@ -41,7 +42,9 @@ export default function ArticleBubble(props: Props) {
             {/*Author Div*/}
             { props.author &&
                 <div className='flex gap-x-5'>
-                    <img className='rounded-full w-16 drop-shadow-lg' src={props.author.avatar} alt={`${props.author.name} Avatar Icon`} />
+                    <div className='relative rounded-full w-16 h-16 drop-shadow-lg'>
+                        <Image src={props.author.avatar} alt={`${props.author.name} Avatar Icon`} className='rounded-full drop-shadow-lg' />
+                    </div>
                     <p className='self-center drop-shadow-lg'>{props.author.name}</p>
                 </div>
             }
@@ -53,7 +56,12 @@ export default function ArticleBubble(props: Props) {
             {/*Content Div*/}
             <div className={`${props.collapsable ? `${contentViewState ? '' : 'opacity-0'} ease-in-out duration-500` : ''}`}>
                 <p className={`${props.subtitle ? '' : 'mt-6'} phone:text-sm`}>{content}</p>
-                {props.contentImg && <img loading='lazy' decoding='async' className='rounded-lg drop-shadow-lg mt-6 ease-in-out duration-1000 hover:scale-125 z-10' src={props.contentImg}/>}
+                {
+                    props.contentImg &&
+                    <div className='relative h-[20rem] rounded-lg drop-shadow-lg mt-6 ease-in-out duration-1000 hover:scale-125 z-10'>
+                        <Image src={props.contentImg} alt='Article Bubble Content' layout='fill' objectFit='contain' className='rounded-lg' />
+                    </div>
+                }
             </div>
         </div>
     )

@@ -4,6 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
+$transition-fast: 200ms;
+$transition-medium: 500ms;
+$transition-slow: 700ms;
+$transition-slowest: 1000ms;
+
 :root {
     --main-content-padding-left: 15rem;
     --main-content-padding-left-2: 15rem;
@@ -1103,7 +1108,7 @@ footer {
 }
 
 .serverDash--backLink:hover {
-    transform: scale(1.025);
+    transform: scale(1.005);
     filter: brightness(200%);
     transition: all 1s ease;
     cursor: pointer;
@@ -1125,16 +1130,6 @@ footer {
     padding: 1rem 0;
     box-shadow: 0 0 35px 5px rgba(0, 0, 0, .25);
 
-}
-
-.serverDash--guildBanner img {
-    width: 7.5rem;
-    margin-left: 2rem;
-    align-self: center;
-
-    border-radius: 50%;
-    border: 3px solid green;
-    box-shadow: 0 0 35px 5px rgba(0, 0, 0, .55);
 }
 
 .serverDash--guildBanner h1 {
@@ -1674,6 +1669,62 @@ footer {
 .border-gradient-green {
     border-width: 2px;
     border-color: #00c33e;
+}
+
+.glow-red {
+    text-shadow: 0px 0px 10px rgba(255, 84, 84, 0.5);
+}
+
+.glow-white {
+    text-shadow: 0px 0px 4px rgba(255, 255, 255, 1);
+}
+
+.box-glow-red {
+    box-shadow: 0px 0px 10px rgba(255, 84, 84, 0.5);
+}
+
+.shadow-darkest {
+    box-shadow: 0px 10px 40px 10px rgba(0, 0, 0, 0.4);
+}
+
+.transition-fast {
+    transition: all $transition-fast ease-in-out;
+}
+
+.transition-medium {
+    transition: all $transition-medium ease-in-out;
+}
+
+.transition-slow {
+    transition: all $transition-slow ease-in-out;
+}
+
+.transition-slowest {
+    transition: all $transition-slowest ease-in-out;
+}
+
+.bg-blurred {
+    backdrop-filter: blur(20px);
+}
+
+.bg-glass {
+    background: linear-gradient(105.1deg, rgba(217, 217, 217, 0.4) 2.06%, rgba(187, 187, 187, 0.4) 97.86%);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+}
+
+.bg-glass-dark {
+    background: linear-gradient(105.1deg, rgba(134, 134, 134, 0.4) 2.06%, rgba(85, 85, 85, 0.4) 97.86%);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+}
+
+.border-glass {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.box-shadow-3xl {
+    box-shadow: 0 4px 20px 10px rgba(0, 0, 0, 0.25);
 }
 
 @media (min-width: 1700px) {

@@ -4,6 +4,7 @@ import { fetchDiscordUserInfo } from '../utils/APIUtils';
 import {GetServerSideProps, GetServerSidePropsContext} from "next";
 import {DiscordInfo} from "../utils/Types";
 import Hero from "../components/Hero";
+import Image from "next/image";
 
 type Props = {
     token: string,
@@ -29,7 +30,6 @@ export default function Home({ token, discordInfo, discordLoginLink }: Props) {
             <Hero title='Robertify' subTitle='A discord music bot that with a multitude of features that will fit your liking!' buttons={heroButtons}/>
             <div className='mainContent'>
                 <div className='aboutUs !bg-neutral-800' id='aboutUs'>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img className='aboutUs--img' src='https://i.robertify.me/images/vnjjd.png' alt='Logo' />
                     <div className='aboutUs--desc'>
                         <h2 className='uppercase text-8xl phone:text-5xl tablet:mt-4 font-med text-lime-400 drop-shadow-lg'>About Us</h2>
@@ -38,14 +38,18 @@ export default function Home({ token, discordInfo, discordLoginLink }: Props) {
                 </div>
                 <div className='features !bg-neutral-700'>
                     <div className='features--images'>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src='https://i.robertify.me/images/xibic.png' alt='Requests Channel' />
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src='https://i.robertify.me/images/kjy0r.png' alt='Toggles' />
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src='https://i.robertify.me/images/ixghm.png' alt='Queue' />
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src='https://i.robertify.me/images/zty1i.png' alt='Restricted Channels' />
+                        <div className='relative w-[17.75rem] h-[17.75rem] phone:w-[8rem] phone:h-[8rem] box-shadow-3xl transition-slow z-0 hover:z-10 hover:scale-125 rounded-3xl'>
+                            <Image src='https://i.robertify.me/images/xibic.png' layout='fill' alt='Requests Channel' className='object-cover rounded-3xl' />
+                        </div>
+                        <div className='relative w-[17.75rem] h-[17.75rem] phone:w-[8rem] phone:h-[8rem] box-shadow-3xl transition-slow z-0 hover:z-10 hover:scale-125 rounded-3xl'>
+                            <Image src='https://i.robertify.me/images/kjy0r.png' layout='fill' alt='Toggles' className='object-cover rounded-3xl' />
+                        </div>
+                        <div className='relative w-[17.75rem] h-[17.75rem] phone:w-[8rem] phone:h-[8rem] box-shadow-3xl transition-slow z-0 hover:z-10 hover:scale-125 rounded-3xl'>
+                            <Image src='https://i.robertify.me/images/ixghm.png' layout='fill' alt='Queue' className='object-cover rounded-3xl' />
+                        </div>
+                        <div className='relative w-[17.75rem] h-[17.75rem] phone:w-[8rem] phone:h-[8rem] box-shadow-3xl transition-slow z-0 hover:z-10 hover:scale-125 rounded-3xl'>
+                            <Image src='https://i.robertify.me/images/zty1i.png' layout='fill' alt='Restricted Channels' className='object-cover rounded-3xl' />
+                        </div>
                     </div>
                     <div className='features--desc'>
                         <h3 className='uppercase text-6xl tablet:mt-4 font-med text-lime-400 drop-shadow-lg'>Features</h3>
@@ -73,7 +77,6 @@ export default function Home({ token, discordInfo, discordLoginLink }: Props) {
                             <h3 className='uppercase text-8xl phone:text-5xl tablet:mt-4 font-med text-lime-400 drop-shadow-lg'>Support</h3>
                             <p className='support--desc-body'>You can always join our <a className='text-lime-400 cursor-pointer transition-all duration-200 ease-in-out hover:text-green-300' href='https://robertify.me/support'>support server</a> to ask us questions about anything. You can also suggest new features, report bugs, talk about music and so much more. Don&apos;t be afraid to reach out, we&apos;d love to help you!</p>
                         </div>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src='https://i.robertify.me/images/o5zcy.png' alt='Support' />
                     </div>
                 </div>

@@ -44,7 +44,7 @@ Total : 39 files,  9451 codes, 43 comments, 692 blanks, all 10186 lines
 | [pages/vote.js](/pages/vote.js) | JavaScript | 31 | 0 | 3 | 34 |
 | [public/vercel.svg](/public/vercel.svg) | XML | 4 | 0 | 0 | 4 |
 | [styles/Home.module.css](/styles/Home.module.css) | CSS | 100 | 0 | 17 | 117 |
-| [styles/app.css](/styles/app.css) | CSS | 1,805 | 7 | 433 | 2,245 |
+| [styles/app.css](/styles/app.scss) | CSS | 1,805 | 7 | 433 | 2,245 |
 | [styles/globals.css](/styles/globals.css) | CSS | 14 | 0 | 3 | 17 |
 | [utils/APIUtils.js](/utils/APIUtils.js) | JavaScript | 319 | 16 | 46 | 381 |
 | [utils/DiscordOAuth.js](/utils/DiscordOAuth.js) | JavaScript | 37 | 0 | 7 | 44 |

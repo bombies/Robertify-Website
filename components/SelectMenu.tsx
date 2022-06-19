@@ -1,5 +1,6 @@
 import { nanoid } from "nanoid";
 import { ChangeEvent, useEffect } from "react";
+import Image from "next/image";
 
 export default function SelectMenu({ 
         className = 'selectMenu', id, title, subTitle = null, menuOptions, multiSelect = false, placeHolder,
@@ -39,7 +40,9 @@ export default function SelectMenu({
             {
                 categoryObj.channels.map(channel =>
                     <div key={channel.id} className={`${className} option ${selectValues.includes(channel) ? 'active' : ''}`} onClick={(event) => setSelectValues(event, optionsVisible, channel)}>
-                        <img className='menu-glyph' src={isVoiceMenu ? 'https://i.imgur.com/KLccEa8.png' : 'https://i.imgur.com/4g770gD.png'} />
+                        <div className='relative w-4 h-4'>
+                            <Image src={isVoiceMenu ? 'https://i.imgur.com/KLccEa8.png' : 'https://i.imgur.com/4g770gD.png'} alt='' layout='fill' />
+                        </div>
                         <p>{channel.name}</p>
                         {multiSelect && <div key={nanoid(8)} className={`${className} option-checkbox ${selectValues.includes(channel) ? 'active' : ''}`}></div>}
                     </div>

@@ -5,13 +5,7 @@ import {fetchDiscordUserInfo} from "../utils/APIUtils";
 import Hero from "../components/Hero";
 import GenericCard from "../components/GenericCard";
 import Button from "../components/Button";
-import axios, { AxiosError } from 'axios'
-import { useMutation } from 'react-query'
-import {
-    PayPalScriptProvider,
-    PayPalButtons,
-    FUNDING,
-} from '@paypal/react-paypal-js'
+import Image from "next/image";
 
 type Props = {
     token: string,
@@ -122,42 +116,54 @@ export default function Premium(props: Props) {
                 <div className='px-12 bg-neutral-800'>
                     <h1 className='uppercase text-7xl phone:text-5xl font-bold text-center mt-10 pt-5 pb-10 text-transparent bg-clip-text bg-gradient-to-tr from-green-400 to-lime-400 animate-text drop-shadow-lg'>But what do I get?</h1>
                     <div className='flex phone:block justify-center gap-x-32 tablet:gap-x-16 mb-56 tablet:mb-32'>
-                        <img  className='rounded-xl drop-shadow-lg transition-all duration-700 hover:scale-105 w-1/3 tablet:w-4/6 phone:w-full' src='https://i.imgur.com/mMxjx8V.gif' />
+                        <div className='relative rounded-xl drop-shadow-lg transition-all duration-700 hover:scale-105 w-1/3 h-[35rem] tablet:w-4/6 phone:w-full'>
+                            <Image src='https://i.imgur.com/mMxjx8V.gif' alt='Themes Examples' layout='fill' objectFit='contain' className='rounded-xl drop-shadow-lg' />
+                        </div>
                         <div className='my-auto'>
                             <h3 className='text-4xl tablet:text-3xl phone:text-2xl tablet:max-w-md uppercase font-med drop-shadow-lg text-lime-400'>Show off your colours with themes</h3>
                             <p className='max-w-xl tablet:max-w-md text-xl tablet:text-lg text-neutral-200'>There are up to 16 colour choices for you to choose from with Robertify Premium! Enjoy listening to your music in style with your favourite colour.</p>
                         </div>
                     </div>
                     <div className='flex phone:block flex-row-reverse justify-center gap-x-32 tablet:gap-x-16 mb-56 tablet:mb-32'>
-                        <img className='rounded-xl drop-shadow-lg transition-all duration-700 hover:scale-105 w-1/3 tablet:w-4/6 phone:w-full' src='https://i.imgur.com/Vf2W9S0.gif' />
+                        <div className='relative rounded-xl drop-shadow-lg transition-all duration-700 hover:scale-105 w-1/3 h-[35rem] tablet:w-4/6 phone:w-full'>
+                            <Image src='https://i.imgur.com/Vf2W9S0.gif' alt='Favourite Tracks Examples' layout='fill' objectFit='contain' className='rounded-xl drop-shadow-lg' />
+                        </div>
                         <div className='my-auto'>
                             <h3 className='text-4xl tablet:text-3xl phone:text-2xl tablet:max-w-md uppercase font-med drop-shadow-lg text-lime-400'>Save your favourite tracks</h3>
                             <p className='max-w-xl tablet:max-w-md text-xl tablet:text-lg text-neutral-200'>Save a track as one of your favourites! Once saved, you can add this track to the queue any time you&apos;d like! All it takes is one click.</p>
                         </div>
                     </div>
                     <div className='flex phone:block justify-center gap-x-32 tablet:gap-x-16 mb-56 tablet:mb-32'>
-                        <img  className='rounded-xl drop-shadow-lg transition-all duration-700 hover:scale-105 w-1/3 tablet:w-4/6 phone:w-full' src='https://i.imgur.com/QDr0lGq.gif' />
+                        <div className='relative rounded-xl drop-shadow-lg transition-all duration-700 hover:scale-105 w-1/3 h-[35rem] tablet:w-4/6 phone:w-full'>
+                            <Image src='https://i.imgur.com/QDr0lGq.gif' alt='Filters Example' layout='fill' objectFit='contain' className='rounded-xl drop-shadow-lg' />
+                        </div>
                         <div className='my-auto'>
                             <h3 className='text-4xl tablet:text-3xl phone:text-2xl tablet:max-w-md uppercase font-med drop-shadow-lg text-lime-400'>Have fun with Audio Filters</h3>
                             <p className='max-w-xl tablet:max-w-md text-xl tablet:text-lg text-neutral-200'>Shake up how you listen to music on Robertify with 5 exciting audio filters. You get to choose to listen to music with the 8D, Karaoke, Tremolo, Vibrato and Nightcore filters!</p>
                         </div>
                     </div>
                     <div className='flex phone:block flex-row-reverse justify-center gap-x-32 tablet:gap-x-16 mb-56 tablet:mb-32'>
-                        <img className='rounded-xl drop-shadow-lg transition-all duration-700 hover:scale-105 w-1/3 tablet:w-1/2 phone:w-full' src='https://i.imgur.com/h16tz9W.png' />
+                        <div className='rounded-xl drop-shadow-lg transition-all duration-700 hover:scale-105 w-1/3 h-[17rem] tablet:w-1/2 phone:w-full'>
+                            <Image src='https://i.imgur.com/h16tz9W.png' alt='Auto Play Example' layout='fill' objectFit='cover' className='rounded-xl drop-shadow-lg' />
+                        </div>
                         <div className='my-auto'>
                             <h3 className='text-4xl tablet:text-3xl phone:text-2xl tablet:max-w-md uppercase font-med drop-shadow-lg text-lime-400 max-w-2xl'>A listening experience made just for you with AutoPlay</h3>
                             <p className='max-w-xl tablet:max-w-md text-xl tablet:text-lg text-neutral-200'>On the ending of your queue Robertify will automatically continue playing songs just like the ones you were playing!</p>
                         </div>
                     </div>
                     <div className='flex phone:block justify-center gap-x-32 tablet:gap-x-16 mb-56 tablet:mb-32'>
-                        <img  className='rounded-xl drop-shadow-lg transition-all duration-700 hover:scale-105 w-1/3 tablet:w-4/6 phone:w-full' src='https://i.imgur.com/uUdnrgf.png' />
+                        <div className='rounded-xl drop-shadow-lg transition-all duration-700 hover:scale-105 w-1/3 h-[17rem] tablet:w-1/2 phone:w-full'>
+                            <Image src='https://i.imgur.com/uUdnrgf.png' alt='24/7 Example' layout='fill' objectFit='cover' className='rounded-xl drop-shadow-lg' />
+                        </div>
                         <div className='my-auto'>
                             <h3 className='text-4xl tablet:text-3xl phone:text-2xl tablet:max-w-md uppercase font-med drop-shadow-lg text-lime-400'>Never stop the fun with 24/7 mode</h3>
                             <p className='max-w-xl tablet:max-w-md text-xl tablet:text-lg text-neutral-200'>Robertify will always stay in a voice channel with 24/7 mode enabled. Enjoy your listening experience. All. Week. Long.</p>
                         </div>
                     </div>
                     <div className='flex phone:block flex-row-reverse justify-center gap-x-32 tablet:gap-x-16 mb-56 tablet:mb-24'>
-                        <img className='rounded-xl drop-shadow-lg transition-all duration-700 hover:scale-105 w-1/3 tablet:w-4/6 phone:w-full' src='https://i.imgur.com/gU1ERCM.gif' />
+                        <div className='relative rounded-xl drop-shadow-lg transition-all duration-700 hover:scale-105 w-1/3 h-[35rem] tablet:w-4/6 phone:w-full'>
+                            <Image src='https://i.imgur.com/gU1ERCM.gif' alt='Volume Control Example' layout='fill' objectFit='contain' className='rounded-xl drop-shadow-lg' />
+                        </div>
                         <div className='my-auto'>
                             <h3 className='text-4xl tablet:text-3xl phone:text-2xl tablet:max-w-md uppercase font-med drop-shadow-lg text-lime-400 max-w-2xl'>Control the volume for everyone with global volume control</h3>
                             <p className='max-w-xl tablet:max-w-md text-xl tablet:text-lg text-neutral-200'>Music being too loud? Robertify premium allows you to adjust the volume of the bot for every single user in your server.</p>

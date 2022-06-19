@@ -6,6 +6,7 @@ import Hero from "../components/Hero";
 import Link from "next/link";
 import ArticleBubble from "../components/ArticleBubble";
 import faqMsgs from '../static_messages/faq.msgs.json' assert {type: 'json'};
+import Image from "next/image";
 
 type Props = {
     token: string,
@@ -22,11 +23,13 @@ export default function FAQ({ token, discordInfo, discordLoginLink }: Props) {
                 <Hero title='FAQ' subTitle='Find out what&apos;s frequently asked about Robertify!' />
             </main>
             <div className='bg-neutral-800 py-10 flex justify-center gap-x-32 laptop:gap-x-16 phone:gap-x-8 phone:px-5'>
-                <img className='w-64 laptop:w-32 drop-shadow-xl ease-in-out duration-1000 hover:scale-105' src='https://i.robertify.me/images/l8pdz.png' alt='Support Icon' />
-                <p className='text-left self-center text-2xl max-w-lg drop-shadow-lg laptop:text-lg laptop:max-w-sm'>Need direct support from someone on our team? Join the <Link href='/support'><span className='text-green-500 ease-in-out duration-500 hover:brightness-125 cursor-pointer'>support server</span></Link>!</p>
+                <div className='relative w-64 h-64 laptop:w-32 laptop:w-32 drop-shadow-xl ease-in-out duration-1000 hover:scale-105'>
+                    <Image src='https://i.robertify.me/images/l8pdz.png' alt='Support Icon' layout='fill' />
+                </div>
+                <p className='text-left self-center text-2xl max-w-lg drop-shadow-lg laptop:text-lg laptop:max-w-sm'>Need direct support from someone on our team? Join the <Link href='/support'><span className='text-lime-500 ease-in-out duration-500 hover:brightness-125 cursor-pointer'>support server</span></Link>!</p>
             </div>
             <div className='bg-blurred py-10'>
-                <h1 className='text-green-400 font-bold text-5xl phone:text-2xl uppercase drop-shadow-xl text-center mb-10'>Frequently Asked Questions</h1>
+                <h1 className='text-lime-400 font-bold text-5xl phone:text-2xl uppercase drop-shadow-xl text-center mb-10'>Frequently Asked Questions</h1>
                 <div className='grid grid-cols-3 laptop:grid-cols-2 phone:grid-cols-1 mx-auto gap-y-10 place-items-start'>
                     {cards}
                 </div>

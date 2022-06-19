@@ -5,6 +5,7 @@ import { NextRouter, useRouter } from 'next/router';
 import NextNProgress from 'nextjs-progressbar';
 import { useState, useEffect } from 'react';
 import {DiscordInfo} from "../utils/Types";
+import Image from "next/image";
 
 interface Props {
     token?: string,
@@ -83,13 +84,26 @@ export default function Layout(props: Props) {
             <NextNProgress color='rgb(132,204,22)'/>
            <nav>
                 <div className='flex cursor-pointer transition-all duration-1000 ease-in-out hover:scale-110'>
-                    <Link href='/'><img className='w-24 phone:w-16 mr-5' src='https://i.robertify.me/images/ni48h.png' alt='Logo'/></Link>
+                    <Link href='/'>
+                        <div className='w-24 h-24 phone:w-16 phone:h-16 mr-5 relative'>
+                            <Image src='https://i.robertify.me/images/ni48h.png' layout='fill' alt='Logo' />
+                        </div>
+                    </Link>
                     <h1 className='self-center uppercase text-2xl phone:text-sm tracking-[.25em]'><Link href='/'><span className='text-white font-med'>Robertify</span></Link></h1>
                 </div>
                 <div className='nav--items'>
                     <ul className='nav--items-desktop-list' id='nav--items-desktop-list'>
                         <li><a href='/invite'>Invite</a></li>
-                        <li><Link className='premium' href='/premium'><div className='flex cursor-pointer transition-all duration-1000 ease-in-out hover:scale-105 tablet:justify-center'><img className='w-8 tablet:h-8 self-center' src='https://i.imgur.com/NkPClfS.png' /><span className='self-center text-lime-400 font-med transition-all duration-1000 ease-in-out hover:!text-lime-300'>Premium</span></div></Link></li>
+                        <li>
+                            <Link className='premium' href='/premium'>
+                                <div className='flex cursor-pointer transition-all duration-1000 ease-in-out hover:scale-105 tablet:justify-center'>
+                                    <div className='w-8 h-8 self-center relative'>
+                                        <Image src='https://i.imgur.com/NkPClfS.png' layout='fill' alt='Premium Glyph' />
+                                    </div>
+                                    <span className='self-center text-lime-400 font-med transition-all duration-1000 ease-in-out hover:!text-lime-300'>Premium</span>
+                                </div>
+                            </Link>
+                        </li>
                         <li><Link href='/commands'>Commands</Link></li>
                         <li><Link href='/vote'>Vote</Link></li>
                         <li><Link href='/faq'>Support</Link></li>
@@ -103,26 +117,31 @@ export default function Layout(props: Props) {
                         }
                     </ul>
                 </div>
-                <div className='nav--div-1'>
+                <div className='nav--div-1 flex'>
                     {
                         discordInfoObj ?
                             Object.keys(discordInfoObj).length ? 
                                 <div className='nav--user'>
                                     <p className='nav--user-welcome laptop:hidden' onClick={toggleUserPopout}>Welcome back, <span className='text-lime-500'>{discordInfoObj.username}</span></p>
-                                    <img className='nav--user-icon' onClick={toggleUserPopout} src={discordAvatar} alt='Discord User Icon'/>
+                                    <div onClick={toggleUserPopout} className='mx-auto w-16 h-16 relative rounded-full z-0'>
+                                        <Image src={discordAvatar || 'https://i.robertify.me/images/rykx6.png'} layout='fill' alt='Discord User Icon' className='rounded-full z-0' />
+                                    </div>
                                 </div>
                             : ''
                         : ''
                     }
-                    <div className='nav--items-mobile' id='nav--items-mobile'>
+                    <div className='nav--items-mobile my-4' id='nav--items-mobile'>
                         <span className='nav--mobile-bar'></span>
                         <span className='nav--mobile-bar'></span>
                         <span className='nav--mobile-bar'></span>
                     </div>
                 </div>
                 {discordInfoObj && 
-                    <div className={`nav--user-popout${ userPopoutShown  ? ' active' : ''}`}>
-                        <img loading='lazy' decoding='async' className={'nav--user-popout-icon'} src={discordAvatar} alt='Discord User Icon' />
+                    <div className={`nav--user-popout${ userPopoutShown  ? ' active' : ''} justify-center`}>
+                        <div className='mx-auto w-32 h-32 phone:w-24 phone:h-24 relative rounded-full'>
+                            <Image src={discordAvatar || 'https://i.robertify.me/images/rykx6.png'} layout='fill' alt='Discord User Icon' className='rounded-full' />
+                        </div>
+                        {/*<img loading='lazy' decoding='async' className={'nav--user-popout-icon'} src={discordAvatar} alt='Discord User Icon' />*/}
                         <p className='nav--user-popout-icon-username phone:text-sm'>{`${discordInfoObj.username}#${discordInfoObj.discriminator}`}</p>
                         <div className='nav--user-popout-options-container'>
                             <ul className='nav--user-popout-options'>
@@ -138,12 +157,22 @@ export default function Layout(props: Props) {
                 {props.children}
                 {props.showFooter || props.showFooter === undefined &&
                     <footer className={props.stickyFooter ? 'sticky-bottom' : ''}>
-                        <div className=''>
-                            <img className='w-52 phone:w-16 m-auto' src='https://i.robertify.me/images/ni48h.png' alt='Footer Logo' />
+                        <div>
+                            <div className='relative w-52 h-52 phone:w-16 phone:h-16 m-auto'>
+                                <Image src='https://i.robertify.me/images/ni48h.png' alt='Footer' layout='fill' />
+                            </div>
                             <p className='text-sm phone:text-[.55rem] text-center text-neutral-300'>Copyright ©️ Robertify 2022</p>
                             <div className='flex justify-center gap-x-8 phone:gap-x-2 pt-5 phone:pt-2'>
-                                <a className='w-8 phone:w-5 transition-all duration-500 ease-in-out hover:brightness-125' href='https://github.com/bombies/Robertify-Bot' target={'_blank'} rel={'noreferrer'}><img loading='lazy' decoding='async' src='https://i.robertify.me/images/3ythy.png' alt='Discord'/></a>
-                                <a className='w-8 phone:w-5 transition-all duration-500 ease-in-out hover:brightness-125' href='https://robertify.me/invite' target={'_blank'} rel={'noreferrer'}><img loading='lazy' decoding='async' src='https://i.robertify.me/images/2n1nb.png' alt='Discord'/></a>
+                                <a className='transition-all duration-500 ease-in-out hover:brightness-125' href='https://github.com/bombies/Robertify-Bot' target={'_blank'} rel={'noreferrer'}>
+                                    <div className='w-8 h-8 phone:w-5 phone:h-5 relative'>
+                                        <Image src='https://i.robertify.me/images/3ythy.png' alt='GitHub' layout='fill' />
+                                    </div>
+                                </a>
+                                <a className='w-8 phone:w-5 transition-all duration-500 ease-in-out hover:brightness-125' href='https://robertify.me/invite' target={'_blank'} rel={'noreferrer'}>
+                                    <div className='w-8 h-8 phone:w-5 phone:h-5 relative'>
+                                        <Image src='https://i.robertify.me/images/2n1nb.png' alt='Discord' layout='fill' />
+                                    </div>
+                                </a>
                             </div>
                         </div>
                         <div className='footer-info'>

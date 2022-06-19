@@ -1,4 +1,5 @@
 import { useState} from 'react';
+import Image from "next/image";
 
 interface Props {
     options: string[],
@@ -42,8 +43,10 @@ export default function TextOptionList(props: Props) {
                 {parsedOptions.length ? parsedOptions : <p className={`${className} noResponses`}>{props.noResponsesMsg}</p>}
             </div>
             <div className={`${className} optionSubmitters`}>
-                <input type='text' placeholder={props.placeholder} value={props.inputValue} onChange={(event) => { setError(null); props.setInputValue(event.target.value) }} />
-                <img src='https://i.robertify.me/images/t7mco.png' alt='Add Option' onClick={() => { setError(null); addNewOption(props.inputValue) }} />
+                <input className='placeholder-neutral-500' type='text' placeholder={props.placeholder} value={props.inputValue} onChange={(event) => { setError(null); props.setInputValue(event.target.value) }} />
+                <div onClick={() => { setError(null); addNewOption(props.inputValue) }} className='relative w-8 h-8 self-center'>
+                    <Image src='https://i.robertify.me/images/t7mco.png' alt='Add Option' layout='fill' />
+                </div>
             </div>
             { error && <p className={`${className} error`}>{`Error: ${error}`}</p> }
         </div>
