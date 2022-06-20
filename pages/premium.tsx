@@ -28,7 +28,7 @@ const getTierColour = (tier: number): string => {
         case 1: return 'text-neutral-300';
         case 2: return 'text-amber-400';
         case 3: return 'text-cyan-400';
-        case 4: return 'text-green-400';
+        case 4: return 'text-lime-500';
         default: return 'text-white';
     }
 }
@@ -38,8 +38,8 @@ const parseTier = (tier: number): string => {
         case 0: return 'Bronze';
         case 1: return 'Silver';
         case 2: return 'Gold';
-        case 3: return 'Emerald';
-        case 4: return 'Diamond';
+        case 3: return 'Diamond';
+        case 4: return 'Emerald';
         default: return '???';
     }
 }
@@ -64,8 +64,6 @@ export default function Premium(props: Props) {
     const [ selectedServers, setSelectedServers ] = useState([]);
     const [ selectedRemovalServers, setSelectedRemovalServers ] = useState([]);
     const [ dataChanged, setDataChanged ] = useState(false);
-
-    console.log(props.premiumInfo.premium_servers);
 
     useEffect(() => {
         setDataChanged(() => {
@@ -140,8 +138,8 @@ export default function Premium(props: Props) {
                                         <div className='self-center ml-12 phone:ml-2'>
                                             <h1 className='text-4xl tablet:text-2xl phone:text-xl text-lime-200 font-medium'>{`${props.discordInfo.username}#${props.discordInfo.discriminator}`}</h1>
                                             <h1 className='text-xl tablet:text-lg phone:text-sm'>Tier: <span className={`${getTierColour(props.premiumInfo.premium_tier)} uppercase font-medium`}>{parseTier(props.premiumInfo.premium_tier)}</span></h1>
-                                            <h1 className='text-xl tablet:text-lg phone:text-sm'>Premium Started: <span className='text-lime-300'>{new Date(Number(props.premiumInfo.premium_started) * 1000).toDateString()}</span></h1>
-                                            <h1 className='text-xl tablet:text-lg phone:text-sm'>Premium Ends: <span className='text-lime-300'>{new Date(Number(props.premiumInfo.premium_expires) * 1000).toDateString()}</span></h1>
+                                            <h1 className='text-xl tablet:text-lg phone:text-sm'>Premium Started: <span className='text-lime-300'>{new Date(Number(props.premiumInfo.premium_started)).toDateString()}</span></h1>
+                                            <h1 className='text-xl tablet:text-lg phone:text-sm'>Premium Ends: <span className='text-lime-300'>{new Date(Number(props.premiumInfo.premium_expires)).toDateString()}</span></h1>
                                         </div>
                                     </div>
                                     <div className='bg-neutral-800 rounded-xl p-6 w-5/6 mx-auto'>
