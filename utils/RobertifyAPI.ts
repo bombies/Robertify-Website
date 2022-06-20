@@ -11,6 +11,7 @@ class RobertifyAPI {
         this.masterPassword = process.env.API_MASTER_PASSWORD
         this.uri = process.env.HOSTED_API_HOSTNAME
         this.accessToken = null;
+        this.setAccessToken().then();
     }
 
     async setAccessToken() {
@@ -26,7 +27,7 @@ class RobertifyAPI {
      * 
      * @returns {Promise<String>} AccessToken
      */
-    private async getAccessToken(): Promise<string> {
+    async getAccessToken(): Promise<string> {
         const res = await axios.post(`${this.uri}/login`, {
             user_name: this.username,
             master_password: this.masterPassword
@@ -80,6 +81,48 @@ class RobertifyAPI {
             } 
         });
         return res.data;
+    }
+
+    async getPremiumUser(userID: string) {
+        try {
+            const userInfo = await axios.get(`${this.uri}/premium/${userID}`, {
+                headers: {
+                    'auth-token': this.accessToken
+                }
+            });
+
+            if (userInfo.status === 404)
+                return null;
+            return userInfo.data;
+        } catch (ex) {
+            if (ex.response.status !== 404)
+                console.error(ex);
+            return null;
+        }
+    }
+
+    async addPremiumServers(userID: string, premiumServers: string[] | void) {
+        try {
+            await axios.patch(`${this.uri}/premium/guilds/${userID}`, premiumServers, {
+                headers: {
+                    'auth-token': this.accessToken
+                }
+            })
+        }  catch (ex) {
+            console.error(ex);
+        }
+    }
+
+    async addPremiumServersManual(uri: string, accessToken: string, userID: string, premiumServers: string[] | void) {
+        try {
+            await axios.post(`${uri}/premium/guilds/${userID}`, premiumServers, {
+                headers: {
+                    'auth-token': accessToken
+                }
+            })
+        }  catch (ex) {
+            console.error(ex);
+        }
     }
 }
 

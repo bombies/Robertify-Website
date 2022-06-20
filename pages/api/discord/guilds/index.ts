@@ -66,7 +66,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         if (error)
             return res.status(400).json({ error: error.details[0].message });
 
-        const result = await redis.setex(DISCORD_GUILD_HASH + req.body.id, 600, JSON.stringify(req.body))
+        const result = await redis.setex(DISCORD_GUILD_HASH + req.body.id, 120, JSON.stringify(req.body))
         res.status(200).json({ success: true, result: result })
     } catch (ex) {
         console.log(ex);
