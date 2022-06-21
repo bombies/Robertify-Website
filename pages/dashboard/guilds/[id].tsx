@@ -1,6 +1,6 @@
 import Layout from "../../../components/Layout";
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import { fetchAllDiscordUserInfo, fetchDiscordGuildInfo, userHasVoted } from '../../../utils/APIUtils';
 import Link from 'next/link';
 import Toggle from "../../../components/Toggle";
@@ -9,6 +9,8 @@ import TextOptionList from "../../../components/TextOptionList";
 import { robertifyAPI } from "../../../utils/RobertifyAPI";
 import {GetServerSideProps, GetServerSidePropsContext} from "next";
 import Image from "next/image";
+import DashboardHeader from "../../../components/dashboard/DashboardHeader";
+import {useQuery} from "react-query";
 
 interface UpdateMenuProps {
     event: Event,
@@ -608,7 +610,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
     useEffect(() => {
         if (!hasAccess && guildInfo)
             router.push(`https://discord.com/oauth2/authorize?client_id=${botID}&permissions=524023090512&redirect_uri=${encodeURI(`${localHostName}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot%20applications.commands&guild_id=${guildInfo.id}&disable_guild_select=true`)
-    }, []);
+    }, [botID, guildInfo, hasAccess, localHostName, router]);
 
     const [ discordInfoState ] = useState({
         userInfo: userInfo,
@@ -617,11 +619,147 @@ export default function GuildPage({ token, userInfo, guildInfo,
     const guild = discordInfoState.guildInfo;
 
     const [ isRefreshing, setIsRefreshing ] = useState(false);
+    const [ robertifyGuildInfo, setRobertifyGuildInfo ] = useState(dbGuildInfo);
+    const [ originalData, setOriginalData ] = useState(getOriginalDataObject(dbGuildInfo, fullGuildInfo));
+    const [ changeMade, setChangeMade ] = useState(false);
+    const roleNamesSorted = fullGuildInfo ? fullGuildInfo.roles.map(roleObj => (
+        {
+            name: roleObj.name,
+            id: roleObj.id,
+            icon: <div className="circle" style={{ backgroundColor: `#${parseInt(roleObj.color || 10592673, 10).toString(16).padStart(6, '0')}`, width: '1rem', height: '1rem' }}></div>
+        }
+    )).sort((a: any, b: any) => a.name.localeCompare(b.name)) : null;
+    const categories = fullGuildInfo ? fullGuildInfo.channels.filter(channelObj => channelObj.type === 4) : null;
+    const textChannels = fullGuildInfo ? fullGuildInfo.channels.filter(channelObj => channelObj.type === 0) : null;
+    const voiceChannels = fullGuildInfo ? fullGuildInfo.channels.filter(channelObj => channelObj.type === 2) : null;
+    const textChannelsSorted = sortChannelsByCategory(categories, textChannels);
+    const voiceChannelsSorted = sortChannelsByCategory(categories, voiceChannels);
+
+    const themes = useMemo(() => [
+        {
+            id: 'ROBERTIFY_THEME_GREEN',
+            name: 'Green',
+            icon: <div className="circle" style={{ backgroundColor: `#00ff1e`, width: '1rem', height: '1rem' }}></div>
+        },
+        {
+            id: 'ROBERTIFY_THEME_MINT',
+            name: 'Mint',
+            icon: <div className="circle" style={{ backgroundColor: `#4dffa0`, width: '1rem', height: '1rem' }}></div>
+        },
+        {
+            id: 'ROBERTIFY_THEME_GOLD',
+            name: 'Gold',
+            icon: <div className="circle" style={{ backgroundColor: `#ffa600`, width: '1rem', height: '1rem' }}></div>
+        },
+        {
+            id: 'ROBERTIFY_THEME_RED',
+            name: 'Red',
+            icon: <div className="circle" style={{ backgroundColor: `#ff0000`, width: '1rem', height: '1rem' }}></div>
+        },
+        {
+            id: 'ROBERTIFY_THEME_PASTEL_RED',
+            name: 'Pastel Red',
+            icon: <div className="circle" style={{ backgroundColor: `#ff9999`, width: '1rem', height: '1rem' }}></div>
+        },
+        {
+            id: 'ROBERTIFY_THEME_PINK',
+            name: 'Pink',
+            icon: <div className="circle" style={{ backgroundColor: `#ff00ee`, width: '1rem', height: '1rem' }}></div>
+        },
+        {
+            id: 'ROBERTIFY_THEME_PURPLE',
+            name: 'Purple',
+            icon: <div className="circle" style={{ backgroundColor: `#8000ff`, width: '1rem', height: '1rem' }}></div>
+        },
+        {
+            id: 'ROBERTIFY_THEME_PASTEL_PURPLE',
+            name: 'Pastel Purple',
+            icon: <div className="circle" style={{ backgroundColor: `#d199ff`, width: '1rem', height: '1rem' }}></div>
+        },
+        {
+            id: 'ROBERTIFY_THEME_BLUE',
+            name: 'Blue',
+            icon: <div className="circle" style={{ backgroundColor: `#0077ff`, width: '1rem', height: '1rem' }}></div>
+        },
+        {
+            id: 'ROBERTIFY_THEME_LIGHT_BLUE',
+            name: 'Light Blue',
+            icon: <div className="circle" style={{ backgroundColor: `#00e1ff`, width: '1rem', height: '1rem' }}></div>
+        },
+        {
+            id: 'ROBERTIFY_THEME_BABY_BLUE',
+            name: 'Baby Blue',
+            icon: <div className="circle" style={{ backgroundColor: `#99fffa`, width: '1rem', height: '1rem' }}></div>
+        },
+        {
+            id: 'ROBERTIFY_THEME_ORANGE',
+            name: 'Orange',
+            icon: <div className="circle" style={{ backgroundColor: `#ff4d00`, width: '1rem', height: '1rem' }}></div>
+        },
+        {
+            id: 'ROBERTIFY_THEME_YELLOW',
+            name: 'Yellow',
+            icon: <div className="circle" style={{ backgroundColor: `#ffea00`, width: '1rem', height: '1rem' }}></div>
+        },
+        {
+            id: 'ROBERTIFY_THEME_PASTEL_YELLOW',
+            name: 'Pastel Yellow',
+            icon: <div className="circle" style={{ backgroundColor: `#faff99`, width: '1rem', height: '1rem' }}></div>
+        },
+        {
+            id: 'ROBERTIFY_THEME_DARK',
+            name: 'Dark',
+            icon: <div className="circle" style={{ backgroundColor: `#000000`, width: '1rem', height: '1rem' }}></div>
+        },
+        {
+            id: 'ROBERTIFY_THEME_Light',
+            name: 'Light',
+            icon: <div className="circle" style={{ backgroundColor: `#ffffff`, width: '1rem', height: '1rem' }}></div>
+        }
+    ], []);
+
+    const locales = useMemo(() => [
+        {
+            id: 'english',
+            name: "English (UK)",
+            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/AeDZp1s.png' alt='English Locale' layout='fill'/></div>
+        },
+        {
+            id: 'spanish',
+            name: "Spanish",
+            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/ml1NNba.png' alt='Spanish Locale' layout='fill'/></div>
+        },
+        {
+            id: 'portuguese',
+            name: "Portuguese",
+            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/WLMDtE6.png' alt='Portuguese Locale' layout='fill'/></div>
+        },
+        {
+            id: 'russian',
+            name: "Russian",
+            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/bcnN2W8.png' alt='Russian Locale' layout='fill'/></div>
+        },
+        {
+            id: 'dutch',
+            name: "Dutch",
+            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/vUQ8kA8.png' alt='Dutch Locale' layout='fill'/></div>
+        },
+        {
+            id: 'french',
+            name: "French",
+            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/RB4Seme.png' alt='French Locale' layout='fill'/></div>
+        },
+        {
+            id: 'german',
+            name: "German",
+            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/enouegk.png' alt='German Locale' layout='fill'/></div>
+        }
+    ], []);
 
     useEffect(() => {
         setIsRefreshing(false);
-        setOriginalData(getOriginalDataObject(dbGuildInfo, fullGuildInfo));
-    }, [token, userInfo, guildInfo, dbGuildInfo, fullGuildInfo, hasAccess, localHostName])
+        setOriginalData(getOriginalDataObject(robertifyGuildInfo, fullGuildInfo));
+    }, [token, userInfo, guildInfo, robertifyGuildInfo, fullGuildInfo, hasAccess, localHostName])
 
     useEffect(() => {
         if (!hasAccess)
@@ -661,7 +799,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
             shownOptions: [...themes],
             searchText: ''
         });
-    }, [isRefreshing]);
+    }, [hasAccess, isRefreshing, originalData.djRoles, originalData.eight_ball, originalData.log_channel, originalData.restricted_text_channels, originalData.restricted_voice_channels, originalData.theme, originalData.toggles, roleNamesSorted, textChannelsSorted, themes, voiceChannelsSorted]);
 
     useEffect(() => {
         if (!discordInfoState.userInfo) {
@@ -674,7 +812,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
             return;
         }
 
-        if (!dbGuildInfo) {
+        if (!robertifyGuildInfo) {
             router.push(`https://discord.com/oauth2/authorize?client_id=${botID}&permissions=524023090512&redirect_uri=${encodeURI(`${localHostName}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot%20applications.commands&guild_id=${guildInfo.id}&disable_guild_select=true`)
             return;
         }
@@ -683,150 +821,17 @@ export default function GuildPage({ token, userInfo, guildInfo,
             router.push('/dashboard');
             return;
         }
-    }, [discordInfoState, dbGuildInfo, fullGuildInfo]);
+    }, [discordInfoState, dbGuildInfo, fullGuildInfo, router, botID, localHostName, guildInfo.id]);
 
-    const categories = fullGuildInfo ? fullGuildInfo.channels.filter(channelObj => channelObj.type === 4) : null;
-    const textChannels = fullGuildInfo ? fullGuildInfo.channels.filter(channelObj => channelObj.type === 0) : null;
-    const voiceChannels = fullGuildInfo ? fullGuildInfo.channels.filter(channelObj => channelObj.type === 2) : null;
-    
-    const themes = [
-        {
-            id: 'ROBERTIFY_THEME_GREEN',
-            name: 'Green',
-            icon: <div className="circle" style={{ backgroundColor: `#00ff1e`, width: '1rem', height: '1rem' }}></div> 
-        },
-        {
-            id: 'ROBERTIFY_THEME_MINT',
-            name: 'Mint',
-            icon: <div className="circle" style={{ backgroundColor: `#4dffa0`, width: '1rem', height: '1rem' }}></div> 
-        },
-        {
-            id: 'ROBERTIFY_THEME_GOLD',
-            name: 'Gold',
-            icon: <div className="circle" style={{ backgroundColor: `#ffa600`, width: '1rem', height: '1rem' }}></div> 
-        },
-        {
-            id: 'ROBERTIFY_THEME_RED',
-            name: 'Red',
-            icon: <div className="circle" style={{ backgroundColor: `#ff0000`, width: '1rem', height: '1rem' }}></div> 
-        },
-        {
-            id: 'ROBERTIFY_THEME_PASTEL_RED',
-            name: 'Pastel Red',
-            icon: <div className="circle" style={{ backgroundColor: `#ff9999`, width: '1rem', height: '1rem' }}></div> 
-        },
-        {
-            id: 'ROBERTIFY_THEME_PINK',
-            name: 'Pink',
-            icon: <div className="circle" style={{ backgroundColor: `#ff00ee`, width: '1rem', height: '1rem' }}></div> 
-        },
-        {
-            id: 'ROBERTIFY_THEME_PURPLE',
-            name: 'Purple',
-            icon: <div className="circle" style={{ backgroundColor: `#8000ff`, width: '1rem', height: '1rem' }}></div> 
-        },
-        {
-            id: 'ROBERTIFY_THEME_PASTEL_PURPLE',
-            name: 'Pastel Purple',
-            icon: <div className="circle" style={{ backgroundColor: `#d199ff`, width: '1rem', height: '1rem' }}></div> 
-        },
-        {
-            id: 'ROBERTIFY_THEME_BLUE',
-            name: 'Blue',
-            icon: <div className="circle" style={{ backgroundColor: `#0077ff`, width: '1rem', height: '1rem' }}></div> 
-        },
-        {
-            id: 'ROBERTIFY_THEME_LIGHT_BLUE',
-            name: 'Light Blue',
-            icon: <div className="circle" style={{ backgroundColor: `#00e1ff`, width: '1rem', height: '1rem' }}></div> 
-        },
-        {
-            id: 'ROBERTIFY_THEME_BABY_BLUE',
-            name: 'Baby Blue',
-            icon: <div className="circle" style={{ backgroundColor: `#99fffa`, width: '1rem', height: '1rem' }}></div> 
-        },
-        {
-            id: 'ROBERTIFY_THEME_ORANGE',
-            name: 'Orange',
-            icon: <div className="circle" style={{ backgroundColor: `#ff4d00`, width: '1rem', height: '1rem' }}></div> 
-        },
-        {
-            id: 'ROBERTIFY_THEME_YELLOW',
-            name: 'Yellow',
-            icon: <div className="circle" style={{ backgroundColor: `#ffea00`, width: '1rem', height: '1rem' }}></div> 
-        },
-        {
-            id: 'ROBERTIFY_THEME_PASTEL_YELLOW',
-            name: 'Pastel Yellow',
-            icon: <div className="circle" style={{ backgroundColor: `#faff99`, width: '1rem', height: '1rem' }}></div> 
-        },
-        {
-            id: 'ROBERTIFY_THEME_DARK',
-            name: 'Dark',
-            icon: <div className="circle" style={{ backgroundColor: `#000000`, width: '1rem', height: '1rem' }}></div> 
-        },
-        {
-            id: 'ROBERTIFY_THEME_Light',
-            name: 'Light',
-            icon: <div className="circle" style={{ backgroundColor: `#ffffff`, width: '1rem', height: '1rem' }}></div> 
-        }
-    ]
 
-    const locales = [
-        {
-            id: 'english',
-            name: "English (UK)",
-            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/AeDZp1s.png' alt='English Locale' layout='fill'/></div>
-        },
-        {
-            id: 'spanish',
-            name: "Spanish",
-            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/ml1NNba.png' alt='Spanish Locale' layout='fill'/></div>
-        },
-        {
-            id: 'portuguese',
-            name: "Portuguese",
-            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/WLMDtE6.png' alt='Portuguese Locale' layout='fill'/></div>
-        },
-        {
-            id: 'russian',
-            name: "Russian",
-            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/bcnN2W8.png' alt='Russian Locale' layout='fill'/></div>
-        },
-        {
-            id: 'dutch',
-            name: "Dutch",
-            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/vUQ8kA8.png' alt='Dutch Locale' layout='fill'/></div>
-        },
-        {
-            id: 'french',
-            name: "French",
-            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/RB4Seme.png' alt='French Locale' layout='fill'/></div>
-        },
-        {
-            id: 'german',
-            name: "German",
-            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/enouegk.png' alt='German Locale' layout='fill'/></div>
-        }
-    ]
+    const {} = useQuery(['robertifyGuildInfo'], () => {
+        robertifyAPI.getGuildInfo(guildInfo.id)
+    });
 
-    const roleNamesSorted = fullGuildInfo ? fullGuildInfo.roles.map(roleObj => (
-        {
-            name: roleObj.name,
-            id: roleObj.id,
-            icon: <div className="circle" style={{ backgroundColor: `#${parseInt(roleObj.color || 10592673, 10).toString(16).padStart(6, '0')}`, width: '1rem', height: '1rem' }}></div> 
-        }
-    )).sort((a: any, b: any) => a.name.localeCompare(b.name)) : null;
-
-    const textChannelsSorted = sortChannelsByCategory(categories, textChannels);
-    const voiceChannelsSorted = sortChannelsByCategory(categories, voiceChannels);
 
     let hasPerms = guildInfo ? guildInfo.owner ? false : (Number(guildInfo.permissions) & (1 << 5)) === (1 << 5) : false;
     hasPerms ||= guildInfo ? (Number(guildInfo.permissions) & (1 << 3)) == (1 << 3) : false;
     hasPerms = guildInfo ? !Number(guildInfo.permissions) ? false : hasPerms : false;
-    
-    const [ originalData, setOriginalData ] = useState(getOriginalDataObject(dbGuildInfo, fullGuildInfo));
-    const [ changeMade, setChangeMade ] = useState(false);
 
     if (originalData) {
         if (!originalData.toggles.log_toggles)
@@ -1680,8 +1685,9 @@ export default function GuildPage({ token, userInfo, guildInfo,
     const logToggles = togglesState ? Object.keys(togglesState.log_toggles).map(key => <Toggle key={key} label={key.replaceAll('_', ' ')} isActive={togglesState.log_toggles[key]} setActive={() => toggleInnerState('log_toggles', key)} />) : null;
     const djToggles = togglesState ? Object.keys(togglesState.dj_toggles).map(key => <Toggle key={key} label={key.replaceAll('_', ' ')} isActive={togglesState.dj_toggles[key]} setActive={() => toggleInnerState('dj_toggles', key)} />) : null;
 
-    if (!hasAccess) return <div></div>
+    const [ selectedBot, setSelectedBot ] = useState(0);
 
+    if (!hasAccess) return <div></div>
     return (
         <Layout token={token} discordInfo={discordInfoState.userInfo} title={`Robertify - ${guild.name}`} >
             <main className='serverDash'>
@@ -1702,6 +1708,10 @@ export default function GuildPage({ token, userInfo, guildInfo,
                             <Image src={guildIcon} alt='Guild Icon' layout='fill' objectFit='cover' className='rounded-full shadow-xl' />
                         </div>
                         <h1 className='z-10'>{guild.name}</h1>
+                    </div>
+                    <div className='flex gap-2'>
+                        <DashboardHeader text='Robertify' isSelected={selectedBot === 0} icon={guildIcon} onClick={() => setSelectedBot(0)} />
+                        <DashboardHeader text='Robertify 2' isSelected={selectedBot === 1} icon={guildIcon} onClick={() => setSelectedBot(1)} />
                     </div>
                     <div className='serverDash--controlPanel !bg-neutral-800'>
                         {hasPerms || <div className='serverDash--noPermsOverlay'>
@@ -1974,7 +1984,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
                 guildInfo: info.props.guildInfo.filter(obj => obj.id === context.params.id)[0] || null,
                 dbGuildInfo: dbGuildInfo || null,
                 fullGuildInfo: access ? null : guildInfo,
-                hasAccess: access === false ? false : true,
+                hasAccess: access !== false,
                 localHostName: process.env.LOCAL_API_HOSTNAME,
                 hostedHostName: process.env.HOSTED_API_HOSTNAME,
                 hostedMasterPassword: process.env.API_MASTER_PASSWORD,
