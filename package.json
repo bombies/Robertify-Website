@@ -18,7 +18,7 @@
     "axios": "^0.27.2",
     "discord-oauth2": "^2.10.0",
     "flowbite": "^1.4.7",
-    "flowbite-react": "^0.0.26",
+    "flowbite-react": "^0.0.27",
     "html-react-parser": "^2.0.0",
     "ioredis": "^5.0.6",
     "js-cookie": "^3.0.1",
