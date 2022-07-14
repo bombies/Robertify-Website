@@ -46,7 +46,8 @@ const validateBody = (body) => {
         stickers: Joi.array(),
         nsfw: Joi.boolean().allow(null),
         channels: Joi.array().required(),
-        premium_progress_bar_enabled: Joi.boolean().required()
+        premium_progress_bar_enabled: Joi.boolean().required(),
+        max_stage_video_channel_users: Joi.number()
     });
     return validationObj.validate(body);
 }

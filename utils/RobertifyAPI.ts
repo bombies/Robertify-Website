@@ -62,13 +62,19 @@ class RobertifyAPI {
         return res.data;
     }
 
-    async getGuildInfo(id: string) {
-
-        const res = await axios.get(`${this.uri}/guilds/${id}`, {
+    private getGuildInfoRequest(botId: string, guildId: string) {
+        return axios.get(`${this.uri}/guilds/${botId}/${guildId}`, {
             headers: {
                 'auth-token': this.accessToken
             }
         });
+    }
+
+    async getGuildInfo(id: string , botId?: string) {
+        if (!this.accessToken)
+            await this.setAccessToken()
+
+        const res = await this.getGuildInfoRequest(botId || '1', id);
         return res.data;
     }
 

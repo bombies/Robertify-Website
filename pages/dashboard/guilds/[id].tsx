@@ -11,6 +11,8 @@ import {GetServerSideProps, GetServerSidePropsContext} from "next";
 import Image from "next/image";
 import DashboardHeader from "../../../components/dashboard/DashboardHeader";
 import {useQuery} from "react-query";
+import useSWR from 'swr';
+import axios from "axios";
 
 interface UpdateMenuProps {
     event: Event,
@@ -113,7 +115,7 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
     //
 
     // 8ball Roles Obj
-    const eightBallRoles = dbGuildInfo.permissions['5'].map(roleID => {
+    const eightBallRoles = dbGuildInfo.permissions['5'] ? dbGuildInfo.permissions['5'].map(roleID => {
         try {
             const roleObj = getRoleByID(roleID)
             return ({
@@ -124,11 +126,11 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
         } catch (ex) {
             return {};
         }
-    });
+    }) : [];
     //
 
     // Polls Roles Obj
-    const pollsRoles = dbGuildInfo.permissions['2'].map(roleID => {
+    const pollsRoles = dbGuildInfo.permissions['2'] ? dbGuildInfo.permissions['2'].map(roleID => {
         try {
             const roleObj = getRoleByID(roleID)
             return ({
@@ -139,11 +141,11 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
         } catch (ex) {
             return {};
         }
-    });
+    }) : [];
     //
 
     // Ban Roles obj
-    const banRoles = dbGuildInfo.permissions['3'].map(roleID => {
+    const banRoles = dbGuildInfo.permissions['3'] ? dbGuildInfo.permissions['3'].map(roleID => {
         try {
             const roleObj = getRoleByID(roleID)
             return ({
@@ -154,11 +156,11 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
         } catch (ex) {
             return {};
         }
-    });
+    }) : [];
     //
 
     // Theme Roles Obj
-    const themeRoles = dbGuildInfo.permissions['4'].map(roleID => {
+    const themeRoles = dbGuildInfo.permissions['4'] ? dbGuildInfo.permissions['4'].map(roleID => {
         try {
             const roleObj = getRoleByID(roleID)
             return ({
@@ -169,7 +171,7 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
         } catch (ex) {
             return {};
         }
-    });
+    }) : [];
     //
 
     // Channels
@@ -600,12 +602,17 @@ function arrayCompare(arr1: any[], arr2: any[]) {
     return true;
 }
 
-export default function GuildPage({ token, userInfo, guildInfo,
-    dbGuildInfo, fullGuildInfo, hasAccess,
+export default function GuildPage({ token, userInfo, guildInfo, fullGuildInfo, hasAccess,
     localHostName, hostedHostName, hostedMasterPassword,
-    botID, hasVoted
+    botID, botID2, hasVoted
 }) {
     const router = useRouter();
+    const [ selectedBot, setSelectedBot ] = useState(1);
+    const { botGuildInfo, isLoading, isError } = useBotGuildInfo(selectedBot.toString(), guildInfo.id, hostedMasterPassword)
+    const [ guildInfoState, setGuildInfoState ] = useState(botGuildInfo);
+    const [ isRefreshing, setIsRefreshing ] = useState(false);
+    const [ originalData, setOriginalData ] = useState(getOriginalDataObject(guildInfoState, fullGuildInfo));
+    const [ changeMade, setChangeMade ] = useState(false);
 
     useEffect(() => {
         if (!hasAccess && guildInfo)
@@ -618,10 +625,6 @@ export default function GuildPage({ token, userInfo, guildInfo,
     });
     const guild = discordInfoState.guildInfo;
 
-    const [ isRefreshing, setIsRefreshing ] = useState(false);
-    const [ robertifyGuildInfo, setRobertifyGuildInfo ] = useState(dbGuildInfo);
-    const [ originalData, setOriginalData ] = useState(getOriginalDataObject(dbGuildInfo, fullGuildInfo));
-    const [ changeMade, setChangeMade ] = useState(false);
     const roleNamesSorted = fullGuildInfo ? fullGuildInfo.roles.map(roleObj => (
         {
             name: roleObj.name,
@@ -757,14 +760,77 @@ export default function GuildPage({ token, userInfo, guildInfo,
     ], []);
 
     useEffect(() => {
+        if (!botGuildInfo)
+            return;
+
+        setGuildInfoState(botGuildInfo);
+
+        const originalDataObject = getOriginalDataObject(botGuildInfo, fullGuildInfo);
+        setOriginalData(originalDataObject);
+
+        setManagementTogglesState({
+            autoplay: originalDataObject ? originalDataObject.autoplay : false,
+            twenty_four_seven: originalDataObject ? originalDataObject.twenty_four_seven_mode : false,
+        })
+        setTogglesState(originalDataObject.toggles);
+        setEightBallResponses(originalDataObject.eight_ball);
+        setDjSelectObj({
+            optionsVisible: false,
+            selectValues: [...originalDataObject.djRoles],
+            shownOptions: [...roleNamesSorted],
+            searchText: ''
+        });
+        setVcSelectObj({
+            optionsVisible: false,
+            selectValues: [...originalDataObject.restricted_voice_channels],
+            shownOptions: [...voiceChannelsSorted],
+            searchText: ''
+        });
+        setTcSelectObj({
+            optionsVisible: false,
+            selectValues: [...originalDataObject.restricted_text_channels],
+            shownOptions: [...textChannelsSorted],
+            searchText: ''
+        });
+        setLcSelectObj({
+            optionsVisible: false,
+            selectValues: Object.keys(originalDataObject.log_channel).length ? [originalData.log_channel] : [],
+            shownOptions: [...textChannelsSorted],
+            searchText: ''
+        });
+        setThemeSelectObj({
+            optionsVisible: false,
+            selectValues: [{...originalDataObject.theme}],
+            shownOptions: [...themes],
+            searchText: ''
+        });
+    }, [botGuildInfo]);
+
+    useEffect(() => {
+        if (isLoading)
+            return;
+    }, [isLoading])
+
+    useEffect(() => {
         setIsRefreshing(false);
-        setOriginalData(getOriginalDataObject(robertifyGuildInfo, fullGuildInfo));
-    }, [token, userInfo, guildInfo, robertifyGuildInfo, fullGuildInfo, hasAccess, localHostName])
+        setOriginalData(getOriginalDataObject(botGuildInfo, fullGuildInfo));
+    }, [token, userInfo, guildInfo, fullGuildInfo, hasAccess, localHostName])
 
     useEffect(() => {
         if (!hasAccess)
             return;
         if (isRefreshing)
+            return;
+        if (isLoading)
+            return;
+        if (isError)
+            return;
+
+        if (!originalData) {
+            setOriginalData(getOriginalDataObject(botGuildInfo, fullGuildInfo));
+        }
+
+        if (!originalData)
             return;
 
         setTogglesState(originalData.toggles);
@@ -799,8 +865,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
             shownOptions: [...themes],
             searchText: ''
         });
-    }, [hasAccess, isRefreshing, originalData.djRoles, originalData.eight_ball, originalData.log_channel, originalData.restricted_text_channels, originalData.restricted_voice_channels, originalData.theme, originalData.toggles, roleNamesSorted, textChannelsSorted, themes, voiceChannelsSorted]);
-
+    }, [hasAccess, isRefreshing]);
     useEffect(() => {
         if (!discordInfoState.userInfo) {
             router.push('/');
@@ -812,8 +877,8 @@ export default function GuildPage({ token, userInfo, guildInfo,
             return;
         }
 
-        if (!robertifyGuildInfo) {
-            router.push(`https://discord.com/oauth2/authorize?client_id=${botID}&permissions=524023090512&redirect_uri=${encodeURI(`${localHostName}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot%20applications.commands&guild_id=${guildInfo.id}&disable_guild_select=true`)
+        if (!guildInfoState && !isLoading) {
+            router.push(`https://discord.com/oauth2/authorize?client_id=${selectedBot === 1 ? botID : botID2}&permissions=524023090512&redirect_uri=${encodeURI(`${localHostName}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot%20applications.commands&guild_id=${guildInfo.id}&disable_guild_select=true`)
             return;
         }
 
@@ -821,13 +886,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
             router.push('/dashboard');
             return;
         }
-    }, [discordInfoState, dbGuildInfo, fullGuildInfo, router, botID, localHostName, guildInfo.id]);
-
-
-    const {} = useQuery(['robertifyGuildInfo'], () => {
-        robertifyAPI.getGuildInfo(guildInfo.id)
-    });
-
+    }, [discordInfoState, guildInfoState, fullGuildInfo, router, botID, localHostName, guildInfo.id]);
 
     let hasPerms = guildInfo ? guildInfo.owner ? false : (Number(guildInfo.permissions) & (1 << 5)) === (1 << 5) : false;
     hasPerms ||= guildInfo ? (Number(guildInfo.permissions) & (1 << 3)) == (1 << 3) : false;
@@ -839,8 +898,9 @@ export default function GuildPage({ token, userInfo, guildInfo,
         else if (!Object.keys(originalData.toggles.log_toggles).length)
             originalData.toggles.log_toggles = getDefaultGuildInfo(fullGuildInfo).toggles.log_toggles;
     }
+
     const [ togglesState, setTogglesState ] = useState(originalData ? originalData.toggles : null);
-    
+
     const toggleState = (stateName: string) => {
         if (!hasPerms) return;
 
@@ -1343,10 +1403,10 @@ export default function GuildPage({ token, userInfo, guildInfo,
 
             if (channelsArrFiltered) {
                 if (channelsArrFiltered.length)
-                    return { 
+                    return {
                         [Object.keys(categoryObj)[0]]: {
                             channels: channelsArrFiltered,
-                            category_name:  catObj.category_name 
+                            category_name:  catObj.category_name
                         }
                     }
             }
@@ -1424,27 +1484,27 @@ export default function GuildPage({ token, userInfo, guildInfo,
         if (!arrayCompare(originalData.eightBallRoles.map(obj => ({ name: obj.name, id: obj.id })), eightBallRolesSelected.map(obj => ({ name: obj.name, id: obj.id })))) {
             return false;
         }
-        
+
         if (!arrayCompare(originalData.restricted_text_channels.sort((a,b) => a.id.localeCompare(b.id)), rtcSelected.sort((a,b) => a.id.localeCompare(b.id)))) {
             return false;
         }
-        
+
         if (!arrayCompare(originalData.restricted_voice_channels.sort((a,b) => a.id.localeCompare(b.id)), rvcSelected.sort((a,b) => a.id.localeCompare(b.id)))) {
             return false;
         }
-        
+
         if (!compare(originalData.log_channel, logChannelSelected ?? {})) {
             return false;
         }
-        
+
         if (themeSelected.name !== originalData.theme.name) {
             return false;
         }
-        
+
         if (!compare(originalData.toggles, togglesState)) {
             return false;
         }
-        
+
         if (!arrayCompare(originalData.eight_ball.sort((a,b) => a.localeCompare(b)), eightBallState.sort((a,b) => a.localeCompare(b)))) {
             return false;
         }
@@ -1632,7 +1692,7 @@ export default function GuildPage({ token, userInfo, guildInfo,
     useEffect(() => {
         if (doSave) {
             robertifyAPI.setAccessTokenWithParams(hostedHostName, hostedMasterPassword)
-                .then(accessToken => robertifyAPI.updateGuildInfo(hostedHostName, accessToken, dbGuildInfo.server_id, {
+                .then(accessToken => robertifyAPI.updateGuildInfo(hostedHostName, accessToken, guildInfoState.server_id, {
                     toggles: togglesState,
                     eight_ball: eightBallResponses,
                     theme: themeSelectObj.selectValues[0].name.toLowerCase().replaceAll(/\s/g, '_'),
@@ -1681,13 +1741,14 @@ export default function GuildPage({ token, userInfo, guildInfo,
         setChangeMade(false);
         setDoSaveState(true);
     }
-    
+
     const logToggles = togglesState ? Object.keys(togglesState.log_toggles).map(key => <Toggle key={key} label={key.replaceAll('_', ' ')} isActive={togglesState.log_toggles[key]} setActive={() => toggleInnerState('log_toggles', key)} />) : null;
     const djToggles = togglesState ? Object.keys(togglesState.dj_toggles).map(key => <Toggle key={key} label={key.replaceAll('_', ' ')} isActive={togglesState.dj_toggles[key]} setActive={() => toggleInnerState('dj_toggles', key)} />) : null;
 
-    const [ selectedBot, setSelectedBot ] = useState(0);
-
     if (!hasAccess) return <div></div>
+    if (isError)
+        if (isError.response.status === 404)
+            router.push(`https://discord.com/oauth2/authorize?client_id=${botID2}&permissions=524023090512&redirect_uri=${encodeURI(`${localHostName}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot%20applications.commands&guild_id=${guildInfo.id}&disable_guild_select=true`)
     return (
         <Layout token={token} discordInfo={discordInfoState.userInfo} title={`Robertify - ${guild.name}`} >
             <main className='serverDash'>
@@ -1710,237 +1771,266 @@ export default function GuildPage({ token, userInfo, guildInfo,
                         <h1 className='z-10'>{guild.name}</h1>
                     </div>
                     <div className='flex gap-2'>
-                        <DashboardHeader text='Robertify' isSelected={selectedBot === 0} icon={guildIcon} onClick={() => setSelectedBot(0)} />
-                        <DashboardHeader text='Robertify 2' isSelected={selectedBot === 1} icon={guildIcon} onClick={() => setSelectedBot(1)} />
+                        <DashboardHeader text='Robertify' isSelected={selectedBot === 1} icon='https://i.robertify.me/images/xl21e.png' onClick={() => {
+                            if (changeMade)
+                                return;
+                            setSelectedBot(1)
+                        }} />
+                        <DashboardHeader text='Robertify 2' isSelected={selectedBot === 2} icon='https://i.robertify.me/images/uuaxp.png' onClick={() => {
+                            if (changeMade)
+                                return;
+                            setSelectedBot(2)
+                        }} />
                     </div>
                     <div className='serverDash--controlPanel !bg-neutral-800'>
                         {hasPerms || <div className='serverDash--noPermsOverlay'>
                             <span>You must have either the <strong className='noPerms-permission'>MANAGE SERVER</strong> or <strong className='noPerms-permission'>ADMINISTRATOR</strong> permission to configure this server!</span>
                             <div className='serverDash--noPermsOverlay-bg'></div>
                         </div>}
-                        <h2 className='serverDash--controlPanel-title'>Management</h2>
-                        <div className='serverDash--controlPanel-management'>
-                            <SelectMenu
-                                title='Restricted Voice Channels'
-                                id='rvc'
-                                subTitle='Set Voice Channels'
-                                menuOptions={vcSelectObj.shownOptions}
-                                multiSelect={true}
-                                placeHolder='Select multiple channels'
-                                selectValues={vcSelectObj.selectValues}
-                                setSelectValues={updateVcSelectValues}
-                                optionsVisible={vcSelectObj.optionsVisible}
-                                setOptionsVisible={toggleVcOptionsVisible}
-                                searchText={vcSelectObj.searchText}
-                                setSearchText={updateVcSearchText}
-                                isChannelMenu={true}
-                                isVoiceMenu={true}
-                            />
-                            <SelectMenu
-                                title='Restricted Text Channels'
-                                id='rtc'
-                                subTitle='Set Text Channels'
-                                menuOptions={tcSelectObj.shownOptions}
-                                multiSelect={true}
-                                placeHolder='Select multiple channels'
-                                selectValues={tcSelectObj.selectValues}
-                                setSelectValues={updateTcSelectValues}
-                                optionsVisible={tcSelectObj.optionsVisible}
-                                setOptionsVisible={toggleTcOptionsVisible}
-                                searchText={tcSelectObj.searchText}
-                                setSearchText={updateTcSearchText}
-                                isChannelMenu={true}
-                            />
-                            <SelectMenu
-                                title='Log Channel'
-                                id='lc'
-                                subTitle='Set the channel for Robertify logs to be sent'
-                                menuOptions={lcSelectObj.shownOptions}
-                                multiSelect={false}
-                                placeHolder='Select a channel'
-                                selectValues={lcSelectObj.selectValues}
-                                setSelectValues={updateLcSelectValues}
-                                optionsVisible={lcSelectObj.optionsVisible}
-                                setOptionsVisible={toggleLcOptionsVisible}
-                                searchText={lcSelectObj.searchText}
-                                setSearchText={updateLcSearchText}
-                                isChannelMenu={true}
-                            />
-                            <SelectMenu
-                                title='Theme'
-                                id='theme'
-                                subTitle='Set the color theme for Roberify'
-                                menuOptions={themeSelectObj.shownOptions}
-                                multiSelect={false}
-                                placeHolder='Select a channel'
-                                selectValues={themeSelectObj.selectValues}
-                                setSelectValues={updateThemeSelectValues}
-                                optionsVisible={themeSelectObj.optionsVisible}
-                                setOptionsVisible={toggleThemeOptionsVisible}
-                                searchText={themeSelectObj.searchText}
-                                setSearchText={updateThemeSearchText}
-                                isPremium={true}
-                                isDisabled={!hasVoted}
-                            />
-                            {/*<SelectMenu*/}
-                            {/*    title='Language'*/}
-                            {/*    id='language'*/}
-                            {/*    subTitle='Set the language for Robertify'*/}
-                            {/*    menuOptions={langSelectObj.shownOptions}*/}
-                            {/*    multiSelect={false}*/}
-                            {/*    placeHolder='Select a language'*/}
-                            {/*    selectValues={langSelectObj.selectValues}*/}
-                            {/*    setSelectValues={updateLangSelectValues}*/}
-                            {/*    optionsVisible={langSelectObj.optionsVisible}*/}
-                            {/*    setOptionsVisible={toggleLangOptionsVisible}*/}
-                            {/*    searchText={langSelectObj.searchText}*/}
-                            {/*    setSearchText={updateLangSearchText}*/}
-                            {/*/>*/}
-                        </div>
-                        <hr className='serverDash--divider' />
-                        <h2 className='serverDash--controlPanel-title'>Permissions</h2>
-                        <div className='serverDash--controlPanel-management'>
-                            <SelectMenu
-                                title='Admin Roles'
-                                id='adminRoles'
-                                subTitle='Set the roles to have the Administrator permission!'
-                                menuOptions={adminSelectObj.shownOptions}
-                                multiSelect={true}
-                                placeHolder='Select multiple roles'
-                                selectValues={adminSelectObj.selectValues}
-                                setSelectValues={updateAdminSelectValues}
-                                optionsVisible={adminSelectObj.optionsVisible}
-                                setOptionsVisible={toggleAdminOptionsVisible}
-                                searchText={adminSelectObj.searchText}
-                                setSearchText={updateAdminSearchText}
-                            />
-                            <SelectMenu
-                                title='DJ Roles'
-                                id='djRoles'
-                                subTitle='Set the roles to have the DJ permission!'
-                                menuOptions={djSelectObj.shownOptions}
-                                multiSelect={true}
-                                placeHolder='Select multiple roles'
-                                selectValues={djSelectObj.selectValues}
-                                setSelectValues={updateDjSelectValues}
-                                optionsVisible={djSelectObj.optionsVisible}
-                                setOptionsVisible={toggleDjOptionsVisible}
-                                searchText={djSelectObj.searchText}
-                                setSearchText={updateDjSearchText}
-                            />
-                            <SelectMenu
-                                title='Polls Roles'
-                                id='pollsRoles'
-                                subTitle='Set the roles to have the permission to make polls!'
-                                menuOptions={pollsSelectObj.shownOptions}
-                                multiSelect={true}
-                                placeHolder='Select multiple roles'
-                                selectValues={pollsSelectObj.selectValues}
-                                setSelectValues={updatePollsSelectValues}
-                                optionsVisible={pollsSelectObj.optionsVisible}
-                                setOptionsVisible={togglePollsOptionsVisible}
-                                searchText={pollsSelectObj.searchText}
-                                setSearchText={updatePollsSearchText}
-                            />
-                            <SelectMenu
-                                title='Ban Roles'
-                                id='banRoles'
-                                subTitle='Set the roles to have the permission to ban users from using Robertify!'
-                                menuOptions={banRolesSelectObj.shownOptions}
-                                multiSelect={true}
-                                placeHolder='Select multiple roles'
-                                selectValues={banRolesSelectObj.selectValues}
-                                setSelectValues={updateBanRolesSelectValues}
-                                optionsVisible={banRolesSelectObj.optionsVisible}
-                                setOptionsVisible={toggleBanRolesOptionsVisible}
-                                searchText={banRolesSelectObj.searchText}
-                                setSearchText={updateBanRolesSearchText}
-                            />
-                            <SelectMenu
-                                title='Theme Roles'
-                                id='themeRoles'
-                                subTitle='Set the roles to have the permission to change Robertify&apos;s theme!'
-                                menuOptions={themeRolesSelectObj.shownOptions}
-                                multiSelect={true}
-                                placeHolder='Select multiple roles'
-                                selectValues={themeRolesSelectObj.selectValues}
-                                setSelectValues={updateThemeRolesSelectValues}
-                                optionsVisible={themeRolesSelectObj.optionsVisible}
-                                setOptionsVisible={toggleThemeRolesOptionsVisible}
-                                searchText={themeRolesSelectObj.searchText}
-                                setSearchText={updateThemeRolesSearchText}
-                            />
-                            <SelectMenu
-                                title='8Ball Roles'
-                                id='8ballRoles'
-                                subTitle='Set the roles to have the permission to modify 8ball responses!'
-                                menuOptions={eightBallRolesSelectObj.shownOptions}
-                                multiSelect={true}
-                                placeHolder='Select multiple roles'
-                                selectValues={eightBallRolesSelectObj.selectValues}
-                                setSelectValues={updateEightBallRolesSelectValues}
-                                optionsVisible={eightBallRolesSelectObj.optionsVisible}
-                                setOptionsVisible={toggleEightBallRolesOptionsVisible}
-                                searchText={eightBallRolesSelectObj.searchText}
-                                setSearchText={updateEightBallRolesSearchText}
-                            />
-                        </div>
-                        <hr className='serverDash--divider' />
-                        <h2 className='serverDash--controlPanel-title'>Management Toggles</h2>
-                        <div className='serverDash--controlPanel-toggles'>
-                            <Toggle label='Autoplay' subTitle='Should Robertify play recommended tracks in the event of a finished queue?' isActive={managementTogglesState.autoplay} setActive={() => toggleManagementState('autoplay', true)} isDisabled={hasVoted ? false : true} isPremium={true} />
-                            <Toggle label='24/7 Mode' subTitle='Should Robertify never leave a voice channel it connects to?' isActive={managementTogglesState.twenty_four_seven} setActive={() => toggleManagementState('twenty_four_seven', true)} isDisabled={hasVoted ? false : true} isPremium={true} />
-                        </div>
-                        <hr className='serverDash--divider' />
-                        <h2 className='serverDash--controlPanel-title'>Toggles</h2>
-                        <div className='serverDash--controlPanel-toggles'>
-                            <Toggle label='Restricted Voice Channels' subTitle='Should Robertify only be allowed to play in specific voice channels?' isActive={togglesState.restricted_voice_channels} setActive={() => toggleState('restricted_voice_channels')} />
-                            <Toggle label='Restricted Text Channels' subTitle='Should Robertify commands only be allowed to be used in a specific channel?' isActive={togglesState.restricted_text_channels} setActive={() => toggleState('restricted_text_channels')}/>
-                            <Toggle label='Show Requester' subTitle='Toggle if you want the song requester to be visible in now playing messages' isActive={togglesState.show_requester} setActive={() => toggleState('show_requester')}/>
-                            <Toggle label='8ball' subTitle='Toggle if you want the 8ball module to be enabled in this server' isActive={togglesState['8ball']} setActive={() => toggleState('8ball')}/>
-                            <Toggle label='Polls' subTitle='Toggle if you want polls to be enabled in this server' isActive={togglesState.polls} setActive={() => toggleState('polls')}/>
-                            <Toggle label='Tips' subTitle='Toggle if you want tips to be enabled in this server' isActive={togglesState.tips} setActive={() => toggleState('tips')}/>
-                            <Toggle label='Vote Skips' subTitle='Toggle if you want vote skips to be enabled in this server' isActive={togglesState.vote_skips} setActive={() => toggleState('vote_skips')}/>
-                            <Toggle label='Announce Messages' subTitle='Toggle if you want Now Playing messages to be announced' isActive={togglesState.announce_messages} setActive={() => toggleState('announce_messages')}/>
-                        </div>
-                        <hr className='serverDash--divider' />
-                        <h2 className='serverDash--controlPanel-title'>DJ Toggles</h2>
-                        <div className='serverDash--controlPanel-toggles'>
-                            {djToggles}
-                        </div>
-                        <hr className='serverDash--divider' />
-                        <h2 className='serverDash--controlPanel-title'>Log Toggles</h2>
-                        <div className='serverDash--controlPanel-toggles'>
-                            {logToggles}
-                        </div>
-                        <hr className='serverDash--divider' />
-                        <h2 className='serverDash--controlPanel-title'>8ball</h2>
-                        <div className='serverDash--controlPanel-8ball'>
-                            <TextOptionList
-                                options={eightBallResponses}
-                                addOption={addEightBallResponse}
-                                removeOption={removeEightBallResponse}
-                                inputValue={eightBallInput}
-                                setInputValue={setEightBallInput}
-                                placeholder='Add an 8ball response...'
-                                noResponsesMsg='You have no custom responses...'
-                            />
-                        </div>
-                        <hr className='serverDash--divider' />
-                        <div className='serverDash--footer-buttons'>
-                            <button className='button-md danger' onClick={reset}>
-                                <div className='relative w-[1.25rem] h-[1.25rem] self-center'>
-                                    <Image src='https://i.robertify.me/images/pup8a.png' alt='Reset Button' layout='fill' />
+                        {
+                            isLoading ?
+                                <div className='h-64 flex justify-center'>
+                                    <div className='self-center'>
+                                        <div className='relative w-12 h-12 animate-spin'>
+                                            <Image src='https://i.robertify.me/images/b4t1n.png' alt='' layout='fill' />
+                                        </div>
+                                    </div>
                                 </div>
-                                Reset
-                            </button>
-                            <button className={`button-md primary ${!refreshAllowed && 'cursor-notAllowed'}`} onClick={refresh}>
-                                <div className='relative w-[1.25rem] h-[1.25rem] self-center'>
-                                    <Image src='https://i.robertify.me/images/v1u8p.png' alt='Refresh Button' layout='fill' />
+                                :
+                                <div>
+                                    {
+                                        isError ?
+                                            isError.response.status === 404 ?
+                                                <div>
+                                                    <h1>Now inviting Robertify 2!</h1>
+                                                </div>
+                                                :
+                                                <div>
+                                                    <h1 className='uppercase font-medium text-4xl text-red-500'>Fatal Error!</h1>
+                                                    <h3 className='text-2xl text-red-400'>Please copy this error and send it to the developer.</h3>
+                                                    <hr />
+                                                    <div className='bg-neutral-900 rounded-3xl p-6 w-3/4'>
+                                                        <p className='markdown'>{isError.response.status !== 404 && JSON.stringify(isError, null, 4)}</p>
+                                                    </div>
+                                                </div>
+                                            :
+                                            guildInfoState ?
+                                                <div>
+                                                    <h2 className='serverDash--controlPanel-title'>Management</h2>
+                                                    <div className='serverDash--controlPanel-management'>
+                                                        <SelectMenu
+                                                            title='Restricted Voice Channels'
+                                                            id='rvc'
+                                                            subTitle='Set Voice Channels'
+                                                            menuOptions={vcSelectObj.shownOptions}
+                                                            multiSelect={true}
+                                                            placeHolder='Select multiple channels'
+                                                            selectValues={vcSelectObj.selectValues}
+                                                            setSelectValues={updateVcSelectValues}
+                                                            optionsVisible={vcSelectObj.optionsVisible}
+                                                            setOptionsVisible={toggleVcOptionsVisible}
+                                                            searchText={vcSelectObj.searchText}
+                                                            setSearchText={updateVcSearchText}
+                                                            isChannelMenu={true}
+                                                            isVoiceMenu={true}
+                                                        />
+                                                        <SelectMenu
+                                                            title='Restricted Text Channels'
+                                                            id='rtc'
+                                                            subTitle='Set Text Channels'
+                                                            menuOptions={tcSelectObj.shownOptions}
+                                                            multiSelect={true}
+                                                            placeHolder='Select multiple channels'
+                                                            selectValues={tcSelectObj.selectValues}
+                                                            setSelectValues={updateTcSelectValues}
+                                                            optionsVisible={tcSelectObj.optionsVisible}
+                                                            setOptionsVisible={toggleTcOptionsVisible}
+                                                            searchText={tcSelectObj.searchText}
+                                                            setSearchText={updateTcSearchText}
+                                                            isChannelMenu={true}
+                                                        />
+                                                        <SelectMenu
+                                                            title='Log Channel'
+                                                            id='lc'
+                                                            subTitle='Set the channel for Robertify logs to be sent'
+                                                            menuOptions={lcSelectObj.shownOptions}
+                                                            multiSelect={false}
+                                                            placeHolder='Select a channel'
+                                                            selectValues={lcSelectObj.selectValues}
+                                                            setSelectValues={updateLcSelectValues}
+                                                            optionsVisible={lcSelectObj.optionsVisible}
+                                                            setOptionsVisible={toggleLcOptionsVisible}
+                                                            searchText={lcSelectObj.searchText}
+                                                            setSearchText={updateLcSearchText}
+                                                            isChannelMenu={true}
+                                                        />
+                                                        <SelectMenu
+                                                            title='Theme'
+                                                            id='theme'
+                                                            subTitle='Set the color theme for Roberify'
+                                                            menuOptions={themeSelectObj.shownOptions}
+                                                            multiSelect={false}
+                                                            placeHolder='Select a channel'
+                                                            selectValues={themeSelectObj.selectValues}
+                                                            setSelectValues={updateThemeSelectValues}
+                                                            optionsVisible={themeSelectObj.optionsVisible}
+                                                            setOptionsVisible={toggleThemeOptionsVisible}
+                                                            searchText={themeSelectObj.searchText}
+                                                            setSearchText={updateThemeSearchText}
+                                                            isPremium={true}
+                                                            isDisabled={!hasVoted}
+                                                        />
+                                                    </div>
+                                                    <hr className='serverDash--divider' />
+                                                    <h2 className='serverDash--controlPanel-title'>Permissions</h2>
+                                                    <div className='serverDash--controlPanel-management'>
+                                                        <SelectMenu
+                                                            title='Admin Roles'
+                                                            id='adminRoles'
+                                                            subTitle='Set the roles to have the Administrator permission!'
+                                                            menuOptions={adminSelectObj.shownOptions}
+                                                            multiSelect={true}
+                                                            placeHolder='Select multiple roles'
+                                                            selectValues={adminSelectObj.selectValues}
+                                                            setSelectValues={updateAdminSelectValues}
+                                                            optionsVisible={adminSelectObj.optionsVisible}
+                                                            setOptionsVisible={toggleAdminOptionsVisible}
+                                                            searchText={adminSelectObj.searchText}
+                                                            setSearchText={updateAdminSearchText}
+                                                        />
+                                                        <SelectMenu
+                                                            title='DJ Roles'
+                                                            id='djRoles'
+                                                            subTitle='Set the roles to have the DJ permission!'
+                                                            menuOptions={djSelectObj.shownOptions}
+                                                            multiSelect={true}
+                                                            placeHolder='Select multiple roles'
+                                                            selectValues={djSelectObj.selectValues}
+                                                            setSelectValues={updateDjSelectValues}
+                                                            optionsVisible={djSelectObj.optionsVisible}
+                                                            setOptionsVisible={toggleDjOptionsVisible}
+                                                            searchText={djSelectObj.searchText}
+                                                            setSearchText={updateDjSearchText}
+                                                        />
+                                                        <SelectMenu
+                                                            title='Polls Roles'
+                                                            id='pollsRoles'
+                                                            subTitle='Set the roles to have the permission to make polls!'
+                                                            menuOptions={pollsSelectObj.shownOptions}
+                                                            multiSelect={true}
+                                                            placeHolder='Select multiple roles'
+                                                            selectValues={pollsSelectObj.selectValues}
+                                                            setSelectValues={updatePollsSelectValues}
+                                                            optionsVisible={pollsSelectObj.optionsVisible}
+                                                            setOptionsVisible={togglePollsOptionsVisible}
+                                                            searchText={pollsSelectObj.searchText}
+                                                            setSearchText={updatePollsSearchText}
+                                                        />
+                                                        <SelectMenu
+                                                            title='Ban Roles'
+                                                            id='banRoles'
+                                                            subTitle='Set the roles to have the permission to ban users from using Robertify!'
+                                                            menuOptions={banRolesSelectObj.shownOptions}
+                                                            multiSelect={true}
+                                                            placeHolder='Select multiple roles'
+                                                            selectValues={banRolesSelectObj.selectValues}
+                                                            setSelectValues={updateBanRolesSelectValues}
+                                                            optionsVisible={banRolesSelectObj.optionsVisible}
+                                                            setOptionsVisible={toggleBanRolesOptionsVisible}
+                                                            searchText={banRolesSelectObj.searchText}
+                                                            setSearchText={updateBanRolesSearchText}
+                                                        />
+                                                        <SelectMenu
+                                                            title='Theme Roles'
+                                                            id='themeRoles'
+                                                            subTitle='Set the roles to have the permission to change Robertify&apos;s theme!'
+                                                            menuOptions={themeRolesSelectObj.shownOptions}
+                                                            multiSelect={true}
+                                                            placeHolder='Select multiple roles'
+                                                            selectValues={themeRolesSelectObj.selectValues}
+                                                            setSelectValues={updateThemeRolesSelectValues}
+                                                            optionsVisible={themeRolesSelectObj.optionsVisible}
+                                                            setOptionsVisible={toggleThemeRolesOptionsVisible}
+                                                            searchText={themeRolesSelectObj.searchText}
+                                                            setSearchText={updateThemeRolesSearchText}
+                                                        />
+                                                        <SelectMenu
+                                                            title='8Ball Roles'
+                                                            id='8ballRoles'
+                                                            subTitle='Set the roles to have the permission to modify 8ball responses!'
+                                                            menuOptions={eightBallRolesSelectObj.shownOptions}
+                                                            multiSelect={true}
+                                                            placeHolder='Select multiple roles'
+                                                            selectValues={eightBallRolesSelectObj.selectValues}
+                                                            setSelectValues={updateEightBallRolesSelectValues}
+                                                            optionsVisible={eightBallRolesSelectObj.optionsVisible}
+                                                            setOptionsVisible={toggleEightBallRolesOptionsVisible}
+                                                            searchText={eightBallRolesSelectObj.searchText}
+                                                            setSearchText={updateEightBallRolesSearchText}
+                                                        />
+                                                    </div>
+                                                    <hr className='serverDash--divider' />
+                                                    <h2 className='serverDash--controlPanel-title'>Management Toggles</h2>
+                                                    <div className='serverDash--controlPanel-toggles'>
+                                                        <Toggle label='Autoplay' subTitle='Should Robertify play recommended tracks in the event of a finished queue?' isActive={managementTogglesState.autoplay} setActive={() => toggleManagementState('autoplay', true)} isDisabled={hasVoted ? false : true} isPremium={true} />
+                                                        <Toggle label='24/7 Mode' subTitle='Should Robertify never leave a voice channel it connects to?' isActive={managementTogglesState.twenty_four_seven} setActive={() => toggleManagementState('twenty_four_seven', true)} isDisabled={hasVoted ? false : true} isPremium={true} />
+                                                    </div>
+                                                    <hr className='serverDash--divider' />
+                                                    <h2 className='serverDash--controlPanel-title'>Toggles</h2>
+                                                    <div className='serverDash--controlPanel-toggles'>
+                                                        <Toggle label='Restricted Voice Channels' subTitle='Should Robertify only be allowed to play in specific voice channels?' isActive={togglesState.restricted_voice_channels} setActive={() => toggleState('restricted_voice_channels')} />
+                                                        <Toggle label='Restricted Text Channels' subTitle='Should Robertify commands only be allowed to be used in a specific channel?' isActive={togglesState.restricted_text_channels} setActive={() => toggleState('restricted_text_channels')}/>
+                                                        <Toggle label='Show Requester' subTitle='Toggle if you want the song requester to be visible in now playing messages' isActive={togglesState.show_requester} setActive={() => toggleState('show_requester')}/>
+                                                        <Toggle label='8ball' subTitle='Toggle if you want the 8ball module to be enabled in this server' isActive={togglesState['8ball']} setActive={() => toggleState('8ball')}/>
+                                                        <Toggle label='Polls' subTitle='Toggle if you want polls to be enabled in this server' isActive={togglesState.polls} setActive={() => toggleState('polls')}/>
+                                                        <Toggle label='Tips' subTitle='Toggle if you want tips to be enabled in this server' isActive={togglesState.tips} setActive={() => toggleState('tips')}/>
+                                                        <Toggle label='Vote Skips' subTitle='Toggle if you want vote skips to be enabled in this server' isActive={togglesState.vote_skips} setActive={() => toggleState('vote_skips')}/>
+                                                        <Toggle label='Announce Messages' subTitle='Toggle if you want Now Playing messages to be announced' isActive={togglesState.announce_messages} setActive={() => toggleState('announce_messages')}/>
+                                                    </div>
+                                                    <hr className='serverDash--divider' />
+                                                    <h2 className='serverDash--controlPanel-title'>DJ Toggles</h2>
+                                                    <div className='serverDash--controlPanel-toggles'>
+                                                        {djToggles}
+                                                    </div>
+                                                    <hr className='serverDash--divider' />
+                                                    <h2 className='serverDash--controlPanel-title'>Log Toggles</h2>
+                                                    <div className='serverDash--controlPanel-toggles'>
+                                                        {logToggles}
+                                                    </div>
+                                                    <hr className='serverDash--divider' />
+                                                    <h2 className='serverDash--controlPanel-title'>8ball</h2>
+                                                    <div className='serverDash--controlPanel-8ball'>
+                                                        <TextOptionList
+                                                            options={eightBallResponses}
+                                                            addOption={addEightBallResponse}
+                                                            removeOption={removeEightBallResponse}
+                                                            inputValue={eightBallInput}
+                                                            setInputValue={setEightBallInput}
+                                                            placeholder='Add an 8ball response...'
+                                                            noResponsesMsg='You have no custom responses...'
+                                                        />
+                                                    </div>
+                                                    <hr className='serverDash--divider' />
+                                                    <div className='serverDash--footer-buttons'>
+                                                        <button className='button-md danger' onClick={reset}>
+                                                            <div className='relative w-[1.25rem] h-[1.25rem] self-center'>
+                                                                <Image src='https://i.robertify.me/images/pup8a.png' alt='Reset Button' layout='fill' />
+                                                            </div>
+                                                            Reset
+                                                        </button>
+                                                        <button className={`button-md primary ${!refreshAllowed && 'cursor-notAllowed'}`} onClick={refresh}>
+                                                            <div className='relative w-[1.25rem] h-[1.25rem] self-center'>
+                                                                <Image src='https://i.robertify.me/images/v1u8p.png' alt='Refresh Button' layout='fill' />
+                                                            </div>
+                                                            Refresh
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                :
+                                                <div></div>
+                                    }
                                 </div>
-                                Refresh
-                            </button>
-                        </div>
+                        }
                     </div>
                 </div>
                 <div className={`banner-lg bg-dark sticky-bottom ${changeMade ? 'active' : 'inactive'} z-50`}>
@@ -1973,7 +2063,6 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
         const guildInfo = await fetchDiscordGuildInfo(context.req, context.params.id.toString())
 
         await robertifyAPI.setAccessToken();
-        const dbGuildInfo = await robertifyAPI.getGuildInfo(context.params.id.toString());
 
         const { access } = guildInfo;
 
@@ -1982,13 +2071,13 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
                 token: info.props.token || null,
                 userInfo: info.props.userInfo || null,
                 guildInfo: info.props.guildInfo.filter(obj => obj.id === context.params.id)[0] || null,
-                dbGuildInfo: dbGuildInfo || null,
                 fullGuildInfo: access ? null : guildInfo,
                 hasAccess: access !== false,
                 localHostName: process.env.LOCAL_API_HOSTNAME,
                 hostedHostName: process.env.HOSTED_API_HOSTNAME,
                 hostedMasterPassword: process.env.API_MASTER_PASSWORD,
                 botID: atob(process.env.DISCORD_BOT_TOKEN.split('.')[0]),
+                botID2: atob(process.env.DISCORD_BOT_TWO_TOKEN.split('.')[0]),
                 hasVoted: hasVoted ?? false
             }
         }
@@ -2000,13 +2089,13 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
                         token: info.props.token || null,
                         userInfo: info.props.userInfo || null,
                         guildInfo: info.props.guildInfo.filter(obj => obj.id === context.params.id)[0] || null,
-                        dbGuildInfo: null,
                         fullGuildInfo: null,
                         hasAccess: false,
                         localHostName: process.env.LOCAL_API_HOSTNAME,
                         hostedHostName: process.env.HOSTED_API_HOSTNAME,
                         hostedMasterPassword: process.env.API_MASTER_PASSWORD,
                         botID: atob(process.env.DISCORD_BOT_TOKEN.split('.')[0]),
+                        botID2: atob(process.env.DISCORD_BOT_TWO_TOKEN.split('.')[0]),
                         hasVoted: hasVoted ?? false
                     }
                 }
@@ -2016,10 +2105,24 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
             return {
                 props: {
                     guildInfo: null,
-                    dbGuildInfo: null,
                     fullGuildInfo: null
                 }
             }
         }
+    }
+}
+
+const useBotGuildInfo = (botId: string, guildId: string, apiMasterPassword: string) => {
+    const fetcher = url => axios.get(url, {
+        headers: {
+            ['master-password']: apiMasterPassword
+        }
+    }).then(res => res.data);
+    const { data, error } = useSWR(`/api/guilds/${botId}/${guildId}`, fetcher);
+
+    return {
+        botGuildInfo: data,
+        isLoading: !error && !data,
+        isError: error
     }
 }
