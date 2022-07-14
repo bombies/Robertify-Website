@@ -625,16 +625,16 @@ export default function GuildPage({ token, userInfo, guildInfo, fullGuildInfo, h
     });
     const guild = discordInfoState.guildInfo;
 
-    const roleNamesSorted = fullGuildInfo ? fullGuildInfo.roles.map(roleObj => (
+    const roleNamesSorted = fullGuildInfo ? fullGuildInfo.roles ? fullGuildInfo.roles.map(roleObj => (
         {
             name: roleObj.name,
             id: roleObj.id,
             icon: <div className="circle" style={{ backgroundColor: `#${parseInt(roleObj.color || 10592673, 10).toString(16).padStart(6, '0')}`, width: '1rem', height: '1rem' }}></div>
         }
-    )).sort((a: any, b: any) => a.name.localeCompare(b.name)) : null;
-    const categories = fullGuildInfo ? fullGuildInfo.channels.filter(channelObj => channelObj.type === 4) : null;
-    const textChannels = fullGuildInfo ? fullGuildInfo.channels.filter(channelObj => channelObj.type === 0) : null;
-    const voiceChannels = fullGuildInfo ? fullGuildInfo.channels.filter(channelObj => channelObj.type === 2) : null;
+    )).sort((a: any, b: any) => a.name.localeCompare(b.name)) : null : null;
+    const categories = fullGuildInfo ? fullGuildInfo.channels ? fullGuildInfo.channels.filter(channelObj => channelObj.type === 4) : null : null;
+    const textChannels = fullGuildInfo ? fullGuildInfo.channels ? fullGuildInfo.channels.filter(channelObj => channelObj.type === 0) : null : null;
+    const voiceChannels = fullGuildInfo ? fullGuildInfo.channels ? fullGuildInfo.channels.filter(channelObj => channelObj.type === 2) : null : null;
     const textChannelsSorted = sortChannelsByCategory(categories, textChannels);
     const voiceChannelsSorted = sortChannelsByCategory(categories, voiceChannels);
 
