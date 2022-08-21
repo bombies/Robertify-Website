@@ -60,7 +60,7 @@ function sortGuilds(guildInfo): any[] {
 }
 
 export default function Premium(props: Props) {
-    const [ premiumServers, setPremiumServers ] = useState(props.premiumInfo.premium_servers);
+    const [ premiumServers, setPremiumServers ] = useState(props.premiumInfo ? props.premiumInfo.premium_servers : []);
     const [ selectedServers, setSelectedServers ] = useState([]);
     const [ selectedRemovalServers, setSelectedRemovalServers ] = useState([]);
     const [ dataChanged, setDataChanged ] = useState(false);
