@@ -34,5 +34,7 @@ yarn-error.log*
 
 # Sentry
 .sentryclirc
+sentry.server.config.js
+sentry.client.config.js
 
 .idea
