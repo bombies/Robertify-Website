@@ -42,7 +42,7 @@
     "@types/js-cookie": "^3.0.2",
     "@types/node": "^18.8.3",
     "@types/paypal__checkout-server-sdk": "^1.0.4",
-    "@types/react": "^18.0.15",
+    "@types/react": "^18.0.21",
     "autoprefixer": "^10.4.12",
     "eslint": "8.25.0",
     "eslint-config-next": "12.3.1",
