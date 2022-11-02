@@ -10,7 +10,6 @@ import { robertifyAPI } from "../../../utils/RobertifyAPI";
 import {GetServerSideProps, GetServerSidePropsContext} from "next";
 import Image from "next/image";
 import DashboardHeader from "../../../components/dashboard/DashboardHeader";
-import {useQuery} from "react-query";
 import useSWR from 'swr';
 import axios from "axios";
 

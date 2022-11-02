@@ -7,7 +7,7 @@ import GenericCard from "../components/GenericCard";
 import Button from "../components/Button";
 import Image from "next/image";
 import {robertifyAPI} from "../utils/RobertifyAPI";
-import {useMutation} from "react-query";
+import {useMutation} from "@tanstack/react-query";
 import WorkerButton from "../components/WorkerButton";
 import {useEffect, useState} from "react";
 import SelectCard from "../components/SelectCard";
