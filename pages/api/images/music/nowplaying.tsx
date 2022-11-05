@@ -2,16 +2,16 @@ import {NextApiRequest} from "next";
 import {ImageResponse} from "@vercel/og";
 import {getParamFromSearch} from "../../../../utils/APIUtils";
 
-const getMontserratBold = fetch(new URL('../../../../assets/fonts/montserrat/Montserrat-Bold.ttf', import.meta.url))
+const getMontserratBold = fetch(new URL('../../../../assets/fonts/montserrat/Montserrat-Bold.ttf', import.meta.url).toString())
     .then(res => res.arrayBuffer());
 
-const getMontserratRegular = fetch(new URL('../../../../assets/fonts/montserrat/Montserrat-Regular.ttf', import.meta.url))
+const getMontserratRegular = fetch(new URL('../../../../assets/fonts/montserrat/Montserrat-Regular.ttf', import.meta.url).toString())
     .then(res => res.arrayBuffer());
 
-const getMontserratLight = fetch(new URL('../../../../assets/fonts/montserrat/Montserrat-Light.ttf', import.meta.url))
+const getMontserratLight = fetch(new URL('../../../../assets/fonts/montserrat/Montserrat-Light.ttf', import.meta.url).toString())
     .then(res => res.arrayBuffer());
 
-const getMontserratMedium = fetch(new URL('../../../../assets/fonts/montserrat/Montserrat-Medium.ttf', import.meta.url))
+const getMontserratMedium = fetch(new URL('../../../../assets/fonts/montserrat/Montserrat-Medium.ttf', import.meta.url).toString())
     .then(res => res.arrayBuffer());
 
 const handler = async (req: NextApiRequest) => {
