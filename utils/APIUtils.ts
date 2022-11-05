@@ -4,6 +4,19 @@ import {DiscordInfo} from "./Types";
 import {IncomingMessage} from "http";
 import {NextApiRequestCookies} from "next/dist/server/api-utils";
 
+type ParamSearchObject = {
+    searchParams: URLSearchParams,
+    paramName: string,
+    limit?: number,
+    defaultResult?: string
+}
+
+export const getParamFromSearch = (options: ParamSearchObject): string => {
+    const { searchParams, paramName, limit, defaultResult } = options;
+    const result = searchParams.get(paramName);
+    return result?.slice(0, limit ?? result.length) ?? (defaultResult ?? '');
+}
+
 export async function fetchDiscordUserInfo(req: IncomingMessage & {cookies: NextApiRequestCookies}) {
     const token: string = req.cookies['login-token'];
     const discordKey: string = token;
