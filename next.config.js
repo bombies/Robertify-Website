@@ -71,6 +71,10 @@ moduleExports = {
         permanent: false
       }
     ]
+  },
+  sentry: {
+    hideSourceMaps: true,
+    autoInstrumentServerFunctions: false
   }
 }
 
