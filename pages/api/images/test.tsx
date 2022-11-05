@@ -1,8 +1,11 @@
 import {getParamFromSearch} from "../../../utils/APIUtils";
-import {NextApiRequest} from "next";
+import {NextApiRequest, NextApiResponse} from "next";
 import {ImageResponse} from "@vercel/og";
 
-const handler = async (req: NextApiRequest) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+    if (req.method !== 'GET')
+        return res.status(400).json({ error: `You cannot ${req.method} this route!` })
+
     const { searchParams } = new URL(req.url ?? '');
 
     const title = getParamFromSearch({
