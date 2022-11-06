@@ -85,9 +85,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                         </h1>
                         <img
                             style={{
-                                objectFit: 'cover'
+                                objectFit: 'cover',
+                                width: '150px',
+                                height: '150px'
                             }}
-                            src={albumImage} width={150} height={150} alt=''
+                            src={albumImage} alt=''
                             tw='rounded-2xl border-2 border-opacity-50 border-neutral-200'
                         />
                     </div>
