@@ -8,17 +8,22 @@ const path = require('path');
 const loaderUtils = require('loader-utils');
 
 // based on https://github.com/vercel/next.js/blob/0af3b526408bae26d6b3f8cab75c4229998bf7cb/packages/next/build/webpack/config/blocks/css/loaders/getCssModuleLocalIdent.ts
-const hashOnlyIdent = (context, _, exportName) =>
-    loaderUtils
-        .getHashDigest(
-            Buffer.from(
-                `filePath:$#className:$`,
-            ),
-            'md4',
-            'base64',
-            6,
-        )
-        .replace(/^(-?\d|--)/, '_$1');
+const hashOnlyIdent = (context, _, exportName) => {
+  return loaderUtils
+      .getHashDigest(
+          Buffer.from(
+              `filePath:${path
+                  .relative(context.rootContext, context.resourcePath)
+                  .replace(/\\+/g, '/')}#className:${exportName}`
+          ),
+          'md4',
+          'base64',
+          6
+      )
+      .replace(/^(-?\d|--)/, '_$1')
+      .replaceAll('+', '_')
+      .replaceAll('/', '_')
+}
 
 
 /** @type {import('next').NextConfig} */
@@ -45,6 +50,8 @@ moduleExports = {
 
     return config;
   },
+  reactStrictMode: true,
+  swcMinify: true,
   images: {
     domains: ['i.robertify.me', 'i.imgur.com', 'cdn.discordapp.com']
   },
@@ -72,10 +79,10 @@ moduleExports = {
       }
     ]
   },
-  sentry: {
-    hideSourceMaps: true,
-    autoInstrumentServerFunctions: false
-  }
+  // sentry: {
+  //   hideSourceMaps: true,
+  //   autoInstrumentServerFunctions: false
+  // }
 }
 
 const sentryWebpackPluginOptions = {
@@ -92,4 +99,4 @@ const sentryWebpackPluginOptions = {
 
 // Make sure adding Sentry options is the last code to run before exporting, to
 // ensure that your source maps include changes from all other Webpack plugins
-module.exports = withSentryConfig(moduleExports, sentryWebpackPluginOptions);
+module.exports = moduleExports;

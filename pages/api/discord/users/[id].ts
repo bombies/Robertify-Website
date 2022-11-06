@@ -19,7 +19,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200).json(JSON.parse(userData));
 }
 
-export default withSentry(handler);
+export default handler;
 
 export const config = {
     api: {
