@@ -65,11 +65,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     width: '200%',
                 }} tw='absolute' src={albumImage} alt='' />
                 <div tw='flex flex-col px-16 py-12 w-full h-full'>
-                    <div tw='flex h-full w-full justify-between px-6'>
-                        <h1 tw='flex flex-col text-white'>
-                            <span style={{ fontFamily: '"MontserratRegular'}} tw='uppercase mb-6'>Robertify is now playing</span>
-                            <span style={{ fontFamily: '"MontserratBold"'}} tw='text-6xl'>{songTitle}</span>
-                            <span style={{ fontFamily: '"MontserratMedium"'}} tw='text-4xl text-green-500'>{artistName}</span>
+                    <div tw='flex w-full justify-between px-6'>
+                        <h1 
+                            style={{
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden'
+                            }}
+                            tw='flex flex-col text-white w-3/4'
+                        >
+                            <span style={{ fontFamily: '"MontserratRegular'}} tw='uppercase mb-2 text-lg'>Robertify is now playing</span>
+                            <span style={{ 
+                                fontFamily: '"MontserratBold"',
+                                textOverflow: 'ellipsis',
+                            }} tw='text-6xl w-full'>{songTitle}</span>
+                            <span style={{ 
+                                fontFamily: '"MontserratMedium"',
+                                textOverflow: 'ellipsis', 
+                            }} tw='text-4xl text-green-500 w-full'>{artistName}</span>
                         </h1>
                         <img
                             style={{
