@@ -71,7 +71,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                                 whiteSpace: 'nowrap',
                                 overflow: 'hidden'
                             }}
-                            tw='flex flex-col text-white w-3/4'
+                            tw='flex flex-col text-white w-[78%]'
                         >
                             <span style={{ fontFamily: '"MontserratRegular'}} tw='uppercase mb-2 text-lg'>Robertify is now playing</span>
                             <span style={{ 
