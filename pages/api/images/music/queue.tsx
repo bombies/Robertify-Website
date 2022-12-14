@@ -104,34 +104,38 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                         whiteSpace: 'nowrap',
                         overflow: 'hidden'
                     }}
-                    key={`${obj.track_name}#${obj.track_artist}`}
+                    key={`${obj.track_index}#${obj.track_name}#${obj.track_artist}`}
                     tw='w-full py-2'
                 >
                     <td style={{
-                        fontFamily: '"MontserratMedium"',
+                        fontFamily: '"MontserratBold"',
                         textOverflow: 'ellipsis',
-                    }} tw=' w-2/5 text-2xl p-2'>{obj.track_name}</td>
+                    }} tw=' w-1/6 text-2xl p-2'>{obj.track_index}</td>
                     <td style={{
                         fontFamily: '"MontserratMedium"',
                         textOverflow: 'ellipsis',
-                    }} tw='w-2/5 text-2xl p-2'>{obj.track_artist}</td>
+                    }} tw=' w-2/6 text-2xl p-2'>{obj.track_name}</td>
+                    <td style={{
+                        fontFamily: '"MontserratMedium"',
+                        textOverflow: 'ellipsis',
+                    }} tw='w-2/6 text-2xl p-2'>{obj.track_artist}</td>
                     <td style={{
                         fontFamily: '"MontserratMedium"',
                         textOverflow: 'ellipsis',
                         textAlign: 'right'
-                    }} tw='w-1/5 text-2xl p-2'>{new Date(Number(obj.track_duration)).toISOString().slice(14, 19)}</td>
+                    }} tw='w-1/6 text-2xl p-2'>{new Date(Number(obj.track_duration)).toISOString().slice(14, 19)}</td>
                 </tr>
             )
         })
         
         return new ImageResponse(
             (
-                <div tw='flex flex-col bg-neutral-800 h-full w-full p-12'>
+                <div tw='flex flex-col bg-neutral-800 h-full w-full p-6'>
                     <h1 tw='flex items-center mb-6'>
                         <span tw='text-6xl text-white mr-5'>Queue</span>
                         <span tw='text-3xl text-green-400'>{`(Page ${jsonTracks.page})`}</span>
                     </h1>
-                    <div tw='flex flex-col bg-neutral-900 rounded-2xl h-7/8 w-full p-12'>
+                    <div tw='flex flex-col bg-neutral-900 rounded-2xl h-7/8 w-full p-6'>
                         <table tw='text-white w-full h-full'>
                             <tbody tw='flex flex-col w-full'>
                                 {generateTrackList}
