@@ -65,7 +65,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     })
 
     const userObj: Requester = user ? JSON.parse(user) : undefined;
-    console.log(userObj.user_image);
 
     return new ImageResponse(
         (
