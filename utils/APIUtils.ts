@@ -14,7 +14,7 @@ type ParamSearchObject = {
 export const getParamFromSearch = (options: ParamSearchObject): string => {
     const { searchParams, paramName, limit, defaultResult } = options;
     const result = searchParams.get(paramName);
-    return result?.slice(0, limit ?? result.length) ?? (defaultResult ?? '');
+    return result?.slice(0, limit ?? result.length) ?? (defaultResult ?? undefined);
 }
 
 export async function fetchDiscordUserInfo(req: IncomingMessage & {cookies: NextApiRequestCookies}) {

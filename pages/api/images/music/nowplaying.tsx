@@ -14,6 +14,11 @@ const getMontserratLight = fetch(new URL('../../../../assets/fonts/montserrat/Mo
 const getMontserratMedium = fetch(new URL('../../../../assets/fonts/montserrat/Montserrat-Medium.ttf', import.meta.url).toString())
     .then(res => res.arrayBuffer());
 
+type Requester = {
+    user_name: string,
+    user_image: string,
+}
+
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method !== 'GET')
         return res.status(400).json({ error: `You cannot ${req.method} this route!` })
@@ -52,7 +57,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         searchParams: searchParams,
         paramName: 'current_time',
         defaultResult: '1'
+    });
+
+    const user = getParamFromSearch({
+        searchParams: searchParams,
+        paramName: 'requester',
     })
+
+    const userObj: Requester = user ? JSON.parse(user) : undefined;
+    console.log(userObj.user_image);
 
     return new ImageResponse(
         (
@@ -93,14 +106,31 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                             tw='rounded-2xl border-2 border-opacity-50 border-neutral-200'
                         />
                     </div>
-                    <div tw='flex w-full justify-between text-white'>
-                        <p style={{ fontFamily: '"MontserratRegular'}}>0:00</p>
-                        <div tw='flex w-3/4 self-center h-[.35rem] border-[0.25px] border-white rounded-full'>
-                            <div style={{ width: `${(Number(currentTime) / Number(duration)) * 100}%`}} tw='flex h-full bg-white rounded-full'></div>
-                        </div>
-                        <p style={{ fontFamily: '"MontserratRegular'}}>{new Date(Number(duration)).toISOString().slice(14, 19)}</p>
-                    </div>
-
+                    {
+                        userObj ?
+                            <div tw='flex flex-col'>
+                                <div tw='flex'>
+                                    <p style={{ fontFamily: '"MontserratRegular'}} tw='text-white text-2xl mr-2'>Requested by {userObj.user_name}</p>
+                                    <img
+                                        style={{
+                                            objectFit: 'cover',
+                                            width: '32px',
+                                            height: '32px',
+                                        }}
+                                        src={userObj.user_image || 'https://support.discord.com/hc/user_images/l12c7vKVRCd-XLIdDkLUDg.png'} alt=''
+                                        tw='rounded-full border-2 border-opacity-50 border-neutral-200 self-center'
+                                    />
+                                </div>
+                            </div>
+                            :
+                            <div tw='flex w-full justify-between text-white'>
+                                <p style={{ fontFamily: '"MontserratRegular'}}>0:00</p>
+                                <div tw='flex w-3/4 self-center h-[.35rem] border-[0.25px] border-white rounded-full'>
+                                    <div style={{ width: `${(Number(currentTime) / Number(duration)) * 100}%`}} tw='flex h-full bg-white rounded-full'></div>
+                                </div>
+                                <p style={{ fontFamily: '"MontserratRegular'}}>{new Date(Number(duration)).toISOString().slice(14, 19)}</p>
+                            </div>
+                    }
                 </div>
             </div>
         ),
