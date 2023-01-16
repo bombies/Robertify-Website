@@ -45,7 +45,7 @@
     "@types/paypal__checkout-server-sdk": "^1.0.4",
     "@types/react": "^18.0.21",
     "autoprefixer": "^10.4.12",
-    "eslint": "8.26.0",
+    "eslint": "8.32.0",
     "eslint-config-next": "^13.0.2",
     "postcss": "^8.4.18"
   }
