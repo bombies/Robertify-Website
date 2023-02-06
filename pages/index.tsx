@@ -27,7 +27,11 @@ export default function Home({ token, discordInfo, discordLoginLink }: Props) {
 
     return (
         <Layout token={token} discordInfo={discordInfo} discordLoginLink={discordLoginLink} title='Robertify - Home Page'>
-            <Hero title='Robertify' subTitle='A discord music bot that with a multitude of features that will fit your liking!' buttons={heroButtons}/>
+            <Hero
+                title='Robertify'
+                subTitle='A discord music bot that with a multitude of features that will fit your liking!'
+                buttons={heroButtons}
+            />
             <div className='mainContent'>
                 <div className='aboutUs !bg-neutral-800' id='aboutUs'>
                     <img className='aboutUs--img' src='https://i.robertify.me/images/vnjjd.png' alt='Logo' />
@@ -91,8 +95,9 @@ export default function Home({ token, discordInfo, discordLoginLink }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({req}: GetServerSidePropsContext) => {
-    const data = await fetchDiscordUserInfo(req);
-    const discordLoginLink = `https://discord.com/api/oauth2/authorize?client_id=${atob(process.env.DISCORD_BOT_TOKEN.split('.')[0])}&redirect_uri=${encodeURI(process.env.LOCAL_API_HOSTNAME + '/callback/discord')}&response_type=code&scope=identify%20guilds`;
+    const token = req.cookies['login-token'];
+    const data = await fetchDiscordUserInfo(token);
+    const discordLoginLink = `https://discord.com/api/oauth2/authorize?client_id=${atob(process.env.DISCORD_BOT_TOKEN.split('.')[0])}&redirect_uri=${encodeURI(process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME + '/callback/discord')}&response_type=code&scope=identify%20guilds`;
 
     return {
         props: {

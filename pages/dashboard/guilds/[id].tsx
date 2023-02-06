@@ -2055,11 +2055,12 @@ export default function GuildPage({ token, userInfo, guildInfo, fullGuildInfo, h
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
-    const info = await fetchAllDiscordUserInfo(context.req);
+    const token = context.req.cookies['login-token'];
+    const info = await fetchAllDiscordUserInfo(token);
     const hasVoted = info.props.userInfo ? await userHasVoted(info.props.userInfo.id) : false;
 
     try {
-        const guildInfo = await fetchDiscordGuildInfo(context.req, context.params.id.toString())
+        const guildInfo = await fetchDiscordGuildInfo(token, context.params.id.toString())
 
         await robertifyAPI.setAccessToken();
 
@@ -2072,8 +2073,8 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
                 guildInfo: info.props.guildInfo.filter(obj => obj.id === context.params.id)[0] || null,
                 fullGuildInfo: access ? null : guildInfo,
                 hasAccess: access !== false,
-                localHostName: process.env.LOCAL_API_HOSTNAME,
-                hostedHostName: process.env.HOSTED_API_HOSTNAME,
+                localHostName: process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME,
+                hostedHostName: process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME,
                 hostedMasterPassword: process.env.API_MASTER_PASSWORD,
                 botID: atob(process.env.DISCORD_BOT_TOKEN.split('.')[0]),
                 botID2: atob(process.env.DISCORD_BOT_TWO_TOKEN.split('.')[0]),
@@ -2090,8 +2091,8 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
                         guildInfo: info.props.guildInfo.filter(obj => obj.id === context.params.id)[0] || null,
                         fullGuildInfo: null,
                         hasAccess: false,
-                        localHostName: process.env.LOCAL_API_HOSTNAME,
-                        hostedHostName: process.env.HOSTED_API_HOSTNAME,
+                        localHostName: process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME,
+                        hostedHostName: process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME,
                         hostedMasterPassword: process.env.API_MASTER_PASSWORD,
                         botID: atob(process.env.DISCORD_BOT_TOKEN.split('.')[0]),
                         botID2: atob(process.env.DISCORD_BOT_TWO_TOKEN.split('.')[0]),

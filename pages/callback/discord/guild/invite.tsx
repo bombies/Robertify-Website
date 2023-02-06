@@ -35,7 +35,7 @@ export async function getStaticProps() {
         props: { 
             discordClientID: process.env.DISCORD_CLIENT_ID,
             discordClientSecret: process.env.DISCORD_CLIENT_SECRET,
-            localAPIHostname: process.env.LOCAL_API_HOSTNAME
+            localAPIHostname: process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME
         }
     }
 }

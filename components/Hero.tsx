@@ -23,14 +23,14 @@ interface Props {
 
 export default function Hero(props: Props) {
     let buttonKey: number = 0, imgButtonKey: number = 0;
-    const buttonsObj = props.buttons ? props.buttons.map(button => !button.isNextButton ? <a key={buttonKey++} className='px-6 py-3 bg-lime-500 rounded-lg uppercase text-white font-med text-3xl phone:text-xl drop-shadow-lg transition-all ease-in-out duration-500 hover:scale-105 hover:bg-lime-400 hover:drop-shadow-xl' href={button.href}>{button.name}</a> : <Link  href={button.href}><span className='px-6 py-3 bg-lime-500 rounded-lg uppercase text-white font-med text-3xl phone:text-xl drop-shadow-lg transition-all ease-in-out duration-500 cursor-pointer hover:scale-105 hover:bg-lime-400 hover:drop-shadow-xl'>{button.name}</span></Link>) : '';
+    const buttonsObj = props.buttons ? props.buttons.map(button => <Link className='transition-slow hover:scale-105' key={buttonKey++} href={button.href}><span className='px-6 py-3 bg-lime-500 rounded-lg uppercase text-white font-med text-3xl phone:text-xl drop-shadow-lg cursor-pointer transition-slow hover:bg-lime-400 hover:drop-shadow-xl'>{button.name}</span></Link>) : '';
     const imageButtonsObj = props.imageButtons ? props.imageButtons.map(button => <a key={imgButtonKey++} className='hero--img-button' href={button.href} target={'_blank'} rel={'noreferrer'}><img className='hero--img-button-img' src={button.src} alt={button.alt} />{button.name}</a>) : ''
 
     return (
         <div className='hero'>
             <h1 className='uppercase transition-all ease-in-out duration-1000 font-bold text-9xl phone:text-5xl drop-shadow-2xl hover:text-lime-300'>{props.title}</h1>
             {props.subTitle && <h3 className='max-w-[42.625rem] font-light text-3xl phone:text-xl mx-auto mb-6'>{props.subTitle}</h3>}
-            <div className='hero--buttons'>{buttonsObj}</div>
+            <div className='flex gap-4 justify-center'>{buttonsObj}</div>
             <div className="hero--img-buttons">{imageButtonsObj}</div>
         </div>
     );

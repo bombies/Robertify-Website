@@ -17,18 +17,18 @@ export const getParamFromSearch = (options: ParamSearchObject): string => {
     return result?.slice(0, limit ?? result.length) ?? (defaultResult ?? undefined);
 }
 
-export async function fetchDiscordUserInfo(req: IncomingMessage & {cookies: NextApiRequestCookies}) {
-    const token: string = req.cookies['login-token'];
+export async function fetchDiscordUserInfo(token: string) {
     const discordKey: string = token;
+    const masterPassword = process.env.API_MASTER_PASSWORD;
 
     if (!token)
         return {
             props: {}
         }
 
-    const res = await axios.get(`${process.env.LOCAL_API_HOSTNAME}/api/discord`, {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME}/api/discord`, {
         headers: {
-            'master-password': process.env.API_MASTER_PASSWORD
+            'master-password': masterPassword
         }, 
         params: {
             id: discordKey
@@ -47,10 +47,11 @@ export async function fetchDiscordUserInfo(req: IncomingMessage & {cookies: Next
     
     try {
         // Checking cache first
-        const cachedData = await axios.get(`${process.env.LOCAL_API_HOSTNAME}/api/discord/users/${discordKey}`, {
+        const cachedData = await axios.get(`${process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME}/api/discord/users/${discordKey}`, {
             headers: {
-                'master-password': process.env.API_MASTER_PASSWORD
-            }
+                'master-password': masterPassword
+            },
+            timeout: 10 * 1000,
         });
 
         // Cache hit
@@ -58,7 +59,7 @@ export async function fetchDiscordUserInfo(req: IncomingMessage & {cookies: Next
             const discordUserData: DiscordInfo = cachedData.data;
             return { 
                 props: {
-                    token: req.cookies['login-token'] || '',
+                    token: token,
                     discordInfo: {...discordUserData}
                 }
             };
@@ -74,18 +75,18 @@ export async function fetchDiscordUserInfo(req: IncomingMessage & {cookies: Next
         const discordUserData: DiscordInfo = discordData.data;
 
         // Posting to cache
-        axios.post(`${process.env.LOCAL_API_HOSTNAME}/api/discord/users/`, {
+        axios.post(`${process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME}/api/discord/users/`, {
             id: discordKey,
             user_info: {...discordUserData}
         }, {
             headers: {
-                'master-password': process.env.API_MASTER_PASSWORD
+                'master-password': masterPassword
             }
         })
 
         return { 
             props: {
-                token: req.cookies['login-token'] || '',
+                token: token || '',
                 discordInfo: {...discordUserData}
             }
         };
@@ -99,8 +100,7 @@ export async function fetchDiscordUserInfo(req: IncomingMessage & {cookies: Next
     }
 }
 
-export async function fetchDiscordUserGuildInfo(req: IncomingMessage & {cookies: NextApiRequestCookies}) {
-    const token = req.cookies['login-token'];
+export async function fetchDiscordUserGuildInfo(token: string) {
     const discordKey = token;
         
     if (!token)
@@ -109,7 +109,7 @@ export async function fetchDiscordUserGuildInfo(req: IncomingMessage & {cookies:
         }
 
     try {
-        const res = await axios.get(`${process.env.LOCAL_API_HOSTNAME}/api/discord`, {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME}/api/discord`, {
             headers: {
                 'master-password': process.env.API_MASTER_PASSWORD
             }, 
@@ -128,7 +128,7 @@ export async function fetchDiscordUserGuildInfo(req: IncomingMessage & {cookies:
                 }
             }
 
-        const userData = await fetchDiscordUserInfo(req);
+        const userData = await fetchDiscordUserInfo(token);
         if (!userData)
             return {
                 props: {
@@ -141,7 +141,7 @@ export async function fetchDiscordUserGuildInfo(req: IncomingMessage & {cookies:
         
         let cachedData;
         try {
-            cachedData = await axios.get(`${process.env.LOCAL_API_HOSTNAME}/api/discord/users/guilds/${userData.props.discordInfo.id}`, {
+            cachedData = await axios.get(`${process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME}/api/discord/users/guilds/${userData.props.discordInfo.id}`, {
                 headers: {
                     'master-password': process.env.API_MASTER_PASSWORD
                 }}
@@ -171,7 +171,7 @@ export async function fetchDiscordUserGuildInfo(req: IncomingMessage & {cookies:
         });
 
         // Post guild data to cache
-        axios.post(`${process.env.LOCAL_API_HOSTNAME}/api/discord/users/guilds`, {
+        axios.post(`${process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME}/api/discord/users/guilds`, {
             user_id: userData.props.discordInfo.id,
             guilds: [...discordData.data]
         }, {
@@ -197,8 +197,7 @@ export async function fetchDiscordUserGuildInfo(req: IncomingMessage & {cookies:
     }
 }
 
-export async function fetchAllDiscordUserInfo(req: IncomingMessage & {cookies: NextApiRequestCookies}) {
-    const token = req.cookies['login-token'];
+export async function fetchAllDiscordUserInfo(token: string) {
     const discordKey = token;
         
     if (!token)
@@ -207,7 +206,7 @@ export async function fetchAllDiscordUserInfo(req: IncomingMessage & {cookies: N
         }
 
     try {
-        const res = await axios.get(`${process.env.LOCAL_API_HOSTNAME}/api/discord`, {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME}/api/discord`, {
             headers: {
                 'master-password': process.env.API_MASTER_PASSWORD
             }, 
@@ -226,7 +225,7 @@ export async function fetchAllDiscordUserInfo(req: IncomingMessage & {cookies: N
                 }
             }
 
-        const userData = await fetchDiscordUserInfo(req);
+        const userData = await fetchDiscordUserInfo(token);
         if (!userData)
             return {
                 props: {
@@ -238,7 +237,7 @@ export async function fetchAllDiscordUserInfo(req: IncomingMessage & {cookies: N
         // Checking cache first
         let cachedData;
         try {
-            cachedData = await axios.get(`${process.env.LOCAL_API_HOSTNAME}/api/discord/users/guilds/${userData.props.discordInfo.id}`, {
+            cachedData = await axios.get(`${process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME}/api/discord/users/guilds/${userData.props.discordInfo.id}`, {
                 headers: {
                     'master-password': process.env.API_MASTER_PASSWORD
                 }}
@@ -279,7 +278,7 @@ export async function fetchAllDiscordUserInfo(req: IncomingMessage & {cookies: N
                 permissions: dataObj.permissions
             }))
 
-            await axios.post(`${process.env.LOCAL_API_HOSTNAME}/api/discord/users/guilds`, {
+            await axios.post(`${process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME}/api/discord/users/guilds`, {
                 user_id: userData.props.discordInfo.id,
                 guilds: [...dataToPost]
             }, {
@@ -293,7 +292,7 @@ export async function fetchAllDiscordUserInfo(req: IncomingMessage & {cookies: N
 
         return { 
             props: {
-                token: req.cookies['login-token'] || '',
+                token: token || '',
                 userInfo: {...userData.props.discordInfo},
                 guildInfo: [...discordData.data]
             }
@@ -309,8 +308,7 @@ export async function fetchAllDiscordUserInfo(req: IncomingMessage & {cookies: N
     }
 }
 
-export async function fetchDiscordGuildInfo(req: IncomingMessage & {cookies: NextApiRequestCookies}, guildId: string) {
-    const token = req.cookies['login-token'];
+export async function fetchDiscordGuildInfo(token: string, guildId: string) {
     const discordKey = token;
         
     if (!token)
@@ -319,7 +317,7 @@ export async function fetchDiscordGuildInfo(req: IncomingMessage & {cookies: Nex
         }
 
     try {
-        const res = await axios.get(`${process.env.LOCAL_API_HOSTNAME}/api/discord`, {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME}/api/discord`, {
             headers: {
                 'master-password': process.env.API_MASTER_PASSWORD
             }, 
@@ -341,7 +339,7 @@ export async function fetchDiscordGuildInfo(req: IncomingMessage & {cookies: Nex
         // Try checking cache first
         let cachedData;
         try {
-            cachedData = await axios.get(`${process.env.LOCAL_API_HOSTNAME}/api/discord/guilds/${guildId}`, {
+            cachedData = await axios.get(`${process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME}/api/discord/guilds/${guildId}`, {
                 headers: {
                     'master-password': process.env.API_MASTER_PASSWORD
                 }
@@ -377,7 +375,7 @@ export async function fetchDiscordGuildInfo(req: IncomingMessage & {cookies: Nex
             else throw ex;
         }
         
-        axios.post(`${process.env.LOCAL_API_HOSTNAME}/api/discord/guilds`, {
+        axios.post(`${process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME}/api/discord/guilds`, {
             ...discordData.data,
             channels: [...discordChannelData.data]
         }, {

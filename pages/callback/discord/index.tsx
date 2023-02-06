@@ -73,7 +73,7 @@ export const getStaticProps: GetStaticProps = async () => {
             discordClientID: process.env.DISCORD_CLIENT_ID,
             discordClientSecret: process.env.DISCORD_CLIENT_SECRET,
             apiMasterPassword: process.env.API_MASTER_PASSWORD,
-            localAPIHostname: process.env.LOCAL_API_HOSTNAME
+            localAPIHostname: process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME
         }
     }
 }

@@ -1,19 +1,28 @@
-
 import jsCookie from 'js-cookie';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import {useRouter} from 'next/router';
+import {useEffect, useState} from 'react';
 import GuildCard from '../../components/dashboard/GuildCard';
 import Layout from '../../components/Layout';
-import { fetchAllDiscordUserInfo } from '../../utils/APIUtils';
+import {
+    fetchAllDiscordUserInfo,
+    fetchDiscordGuildInfo,
+    fetchDiscordUserGuildInfo,
+    fetchDiscordUserInfo
+} from '../../utils/APIUtils';
+import {useQuery} from "@tanstack/react-query";
+import {ImSpinner} from "react-icons/all";
+import Spinner from "../../components/Spinner";
+import {GetServerSideProps, GetServerSidePropsContext} from "next";
 
 function sortGuilds(guildInfo) {
-    const alphabeticalSort = [...guildInfo].sort((a,b) => {
+    if (!guildInfo)
+        return [];
+    return [...guildInfo].sort((a, b) => {
         if (
             !a.isOwner && !b.isOwner &&
-            (Number(a.permissions) & (1 << 5)) !== (1 << 5)  &&
+            (Number(a.permissions) & (1 << 5)) !== (1 << 5) &&
             (Number(a.permissions) & (1 << 3)) !== (1 << 3) &&
-            (Number(b.permissions) & (1 << 5)) !== (1 << 5)  &&
+            (Number(b.permissions) & (1 << 5)) !== (1 << 5) &&
             (Number(b.permissions) & (1 << 3)) !== (1 << 3)
         )
             return a.name.localeCompare(b.name)
@@ -23,35 +32,45 @@ function sortGuilds(guildInfo) {
         else if (b.isOwner && !a.isOwner)
             return 1;
         else if (
-            ((Number(a.permissions) & (1 << 5)) === (1 << 5) || (Number(a.permissions) & (1 << 3)) === (1 << 3)) 
+            ((Number(a.permissions) & (1 << 5)) === (1 << 5) || (Number(a.permissions) & (1 << 3)) === (1 << 3))
             && ((Number(b.permissions) & (1 << 5)) !== (1 << 5) && (Number(b.permissions) & (1 << 3)) !== (1 << 3))
         )
             return -1;
         else if (
-            ((Number(b.permissions) & (1 << 5)) === (1 << 5) || (Number(b.permissions) & (1 << 3)) === (1 << 3)) 
+            ((Number(b.permissions) & (1 << 5)) === (1 << 5) || (Number(b.permissions) & (1 << 3)) === (1 << 3))
             && ((Number(a.permissions) & (1 << 5)) !== (1 << 5) && (Number(a.permissions) & (1 << 3)) !== (1 << 3))
         )
             return 1;
         else return 0;
     });
-    return alphabeticalSort;
 }
 
-export default function Dashboard({ token, discordInfo, guildsInfo }) {
+export default function Dashboard({ login_token, discord_info }) {
     const router = useRouter();
-
-    useEffect(() => {
-        if (guildsInfo) {
-            if (!Object.keys(guildsInfo).length) {
-                jsCookie.remove('login-token');
-                router.push('/')
-            }
+    const discordInfo = useQuery({
+        queryKey: ['all_discord_info'],
+        queryFn: async () => {
+            return fetchDiscordUserGuildInfo(login_token)
         }
-    }, [])
+    });
+
+    // useEffect(() => {
+    //     const guildsInfo = discordInfo.data?.props.guildInfo;
+    //     if (guildsInfo && !discordInfo.isLoading) {
+    //         console.log("Loaded and yielded no result.")
+    //         if (!Object.keys(guildsInfo).length) {
+    //             router.push('/').then(() => {
+    //                 console.log("Loaded and yielded no result.")
+    //             })
+    //         }
+    //     } else {
+    //         console.log("Probably still loading");
+    //     }
+    // }, [discordInfo])
 
     let guildInfoParsed;
-    if (guildsInfo) {
-        guildInfoParsed = sortGuilds(guildsInfo);
+    if (discordInfo.data) {
+        guildInfoParsed = sortGuilds(discordInfo.data.props.guildInfo);
         guildInfoParsed = guildInfoParsed.map(guildObj => <GuildCard
             key={guildObj.id} 
             guildID={guildObj.id}
@@ -63,7 +82,7 @@ export default function Dashboard({ token, discordInfo, guildsInfo }) {
     }
 
     const [ pageState, setPageState ] = useState({
-        discordInfo: discordInfo,
+        discordInfo: discord_info,
         guildsInfo: guildInfoParsed,
         searchText: ''
     });
@@ -81,14 +100,19 @@ export default function Dashboard({ token, discordInfo, guildsInfo }) {
     }
 
     useEffect(() => {
-        if (!discordInfoState) {
-            jsCookie.remove('login-token');
-            router.push('/');
+        if (!discordInfoState && !discordInfo.isLoading) {
+            router.push('/').then(() => {
+                console.log("Loaded and yielded no result.")
+            });
+        } else {
+            if (!discordInfo.isLoading) {
+                console.log('Finished loading', discordInfo.data)
+            } else console.log("Probably still loading");
         }
     }, [discordInfoState, pageState.guildsInfo]);
 
     return (
-        <Layout token={token} discordInfo={discordInfoState} title='Robertify - Dashboard' showLogin={true}>
+        <Layout token={login_token} discordInfo={discord_info} title='Robertify - Dashboard'>
             <main className='guildCards--body'>
                 <h1 className='text-6xl phone:text-3xl uppercase font-bold text-center text-lime-400'>Your Servers</h1>
                 <h2 className='text-2xl phone:text-lg text-center text-neutral-400 my-5 italic'>Configure any one to your heart&apos;s desire...</h2>
@@ -99,22 +123,27 @@ export default function Dashboard({ token, discordInfo, guildsInfo }) {
                     value={pageState.searchText}
                     onInput={updateSearchText}
                 />
-                <div className='guildCards'>
-                    {pageState.guildsInfo}
-                </div>
+                {
+                    discordInfo.isLoading ?
+                        <Spinner size={3} /> :
+                        <div className='guildCards'>
+                            {pageState.guildsInfo}
+                        </div>
+                }
+
             </main>
         </Layout>
     )
 }
 
-export async function getServerSideProps({ req, res }) {
-    const info = await fetchAllDiscordUserInfo(req)
+export const getServerSideProps: GetServerSideProps = async ({req}: GetServerSidePropsContext) => {
+    const token = req.cookies['login-token'];
+    const data = await fetchDiscordUserInfo(token);
 
     return {
         props: {
-            token: info.props.token || null,
-            discordInfo: info.props.userInfo || null,
-            guildsInfo: info.props.guildInfo || null
+            login_token: token || '',
+            discord_info: data.props.discordInfo || null,
         }
     }
 }

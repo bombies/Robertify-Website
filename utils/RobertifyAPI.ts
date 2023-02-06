@@ -1,17 +1,22 @@
 import axios from "axios";
+import {Exception} from "sass";
 
 class RobertifyAPI {
     private readonly username: string;
     private masterPassword: string;
     private uri: string;
     private accessToken: string;
+    private readonly AUTH_HEADER: string;
+    private readonly DEFAULT_TIMEOUT: number;
 
     constructor() {
         this.username = 'bombies';
         this.masterPassword = process.env.API_MASTER_PASSWORD
-        this.uri = process.env.HOSTED_API_HOSTNAME
+        this.uri = process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME
         this.accessToken = null;
-        this.setAccessToken().then();
+        this.AUTH_HEADER = "Authorization";
+        this.DEFAULT_TIMEOUT = 10 * 1000;
+        this.setAccessToken();
     }
 
     async setAccessToken() {
@@ -28,23 +33,23 @@ class RobertifyAPI {
      * @returns {Promise<String>} AccessToken
      */
     async getAccessToken(): Promise<string> {
-        const res = await axios.post(`${this.uri}/login`, {
-            user_name: this.username,
-            master_password: this.masterPassword
-        })
+        const res = await axios.post(`${this.uri}/auth/login`, {
+            username: this.username,
+            password: this.masterPassword
+        }, { timeout: this.DEFAULT_TIMEOUT })
 
         const data = res.data;
-        const { token } = data;
-        if (!token)
+        const { access_token } = data;
+        if (!access_token)
             throw new Error(data.message);
-        return token;
+        return access_token;
     }
 
     private async getAccessTokenWithParams(uri: string, masterPassword: string) {
-        const res = await axios.post(`${uri}/login`, {
-            user_name: this.username,
-            master_password: masterPassword
-        })
+        const res = await axios.post(`${uri}/auth/login`, {
+            username: this.username,
+            password: masterPassword
+        }, { timeout: this.DEFAULT_TIMEOUT })
 
         const data = res.data;
         const { token } = data;
@@ -56,8 +61,9 @@ class RobertifyAPI {
     async getCommandInfo(): Promise<{ id: number, name: string, description: string, category: string  }[]> {
         const res = await axios.get(`${this.uri}/commands`, {
             headers: {
-                'auth-token': this.accessToken
-            }
+                [this.AUTH_HEADER]: this.getBearerToken()
+            },
+            timeout: this.DEFAULT_TIMEOUT,
         })
         return res.data;
     }
@@ -65,8 +71,9 @@ class RobertifyAPI {
     private getGuildInfoRequest(botId: string, guildId: string) {
         return axios.get(`${this.uri}/guilds/${botId}/${guildId}`, {
             headers: {
-                'auth-token': this.accessToken
-            }
+                [this.AUTH_HEADER]: this.getBearerToken()
+            },
+            timeout: this.DEFAULT_TIMEOUT,
         });
     }
 
@@ -83,8 +90,9 @@ class RobertifyAPI {
             ...body
         }, {
             headers: {
-                'auth-token': accessToken
-            } 
+                [this.AUTH_HEADER]: this.getBearerToken()
+            },
+            timeout: this.DEFAULT_TIMEOUT,
         });
         return res.data;
     }
@@ -93,8 +101,9 @@ class RobertifyAPI {
         try {
             const userInfo = await axios.get(`${this.uri}/premium/${userID}`, {
                 headers: {
-                    'auth-token': this.accessToken
-                }
+                    [this.AUTH_HEADER]: this.getBearerToken()
+                },
+                timeout: this.DEFAULT_TIMEOUT,
             });
 
             if (userInfo.status === 404)
@@ -111,8 +120,9 @@ class RobertifyAPI {
         try {
             await axios.patch(`${this.uri}/premium/guilds/${userID}`, premiumServers, {
                 headers: {
-                    'auth-token': this.accessToken
-                }
+                    [this.AUTH_HEADER]: this.getBearerToken()
+                },
+                timeout: this.DEFAULT_TIMEOUT,
             })
         }  catch (ex) {
             console.error(ex);
@@ -123,13 +133,20 @@ class RobertifyAPI {
         try {
             await axios.post(`${uri}/premium/guilds/${userID}`, premiumServers, {
                 headers: {
-                    'auth-token': accessToken
-                }
+                    [this.AUTH_HEADER]: this.getBearerToken()
+                },
+                timeout: this.DEFAULT_TIMEOUT,
             })
         }  catch (ex) {
             console.error(ex);
         }
     }
+
+    private getBearerToken() {
+        if (!this.accessToken)
+            throw new Error('The access token hasn\'t been set so I can\'t provide the bearer token!');
+        return "Bearer " + this.accessToken;
+    }
 }
 
-export let robertifyAPI = new RobertifyAPI();
+export const robertifyAPI = new RobertifyAPI();

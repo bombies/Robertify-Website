@@ -157,12 +157,13 @@ export default function Commands({ commands, token, discordInfo, discordLoginLin
 }
 
 export const getServerSideProps: GetServerSideProps =async ({ req, res }) => {
+    const token = req.cookies['login-token'];
     let commands: Command[] = [], realProps: { props: {token?: string, discordInfo?: any}};
-    const discordLoginLink = `https://discord.com/api/oauth2/authorize?client_id=${atob(process.env.DISCORD_BOT_TOKEN.split('.')[0])}&redirect_uri=${encodeURI(process.env.LOCAL_API_HOSTNAME + '/callback/discord')}&response_type=code&scope=identify%20guilds`;
+    const discordLoginLink = `https://discord.com/api/oauth2/authorize?client_id=${atob(process.env.DISCORD_BOT_TOKEN.split('.')[0])}&redirect_uri=${encodeURI(process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME + '/callback/discord')}&response_type=code&scope=identify%20guilds`;
     try {
         await robertifyAPI.setAccessToken()
         commands = await robertifyAPI.getCommandInfo();
-        realProps = await fetchDiscordUserInfo(req);
+        realProps = await fetchDiscordUserInfo(token);
     } catch (ex) {
         console.log(ex);
     }
