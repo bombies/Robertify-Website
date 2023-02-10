@@ -21,7 +21,7 @@
     "discord-oauth2": "^2.11.0",
     "flowbite": "^1.5.3",
     "flowbite-react": "^0.2.0",
-    "html-react-parser": "^3.0.4",
+    "html-react-parser": "^3.0.8",
     "ioredis": "^5.3.0",
     "js-cookie": "^3.0.1",
     "loader-utils": "^3.2.1",
