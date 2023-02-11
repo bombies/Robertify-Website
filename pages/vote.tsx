@@ -6,13 +6,13 @@ export default function Vote({ token, discordInfo, discordLoginLink }) {
     const buttons = [
         {
             href: 'https://top.gg/bot/893558050504466482/vote',
-            src: `${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/guuhj.png`,
+            src: `${process.env.NEXT_PUBLIC_HOSTED_IMAGE_SERVER_HOSTNAME}/images/guuhj.png`,
             alt: 'Top.gg Vote Button',
             name: 'Top.gg'
         },
         {
             href: 'https://discordbotlist.com/bots/robertify/upvote',
-            src: `${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/2uc7i.png`,
+            src: `${process.env.NEXT_PUBLIC_HOSTED_IMAGE_SERVER_HOSTNAME}/images/2uc7i.png`,
             alt: 'Discord Bot List Vote Button',
             name: 'Discord Bot List'
         }

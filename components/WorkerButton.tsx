@@ -19,7 +19,7 @@ export default function WorkerButton(props: Props) {
             {props.isWorking ?
                 <div className='self-center'>
                     <div className='relative w-6 h-6 animate-spin'>
-                        <Image src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/b4t1n.png`} alt='' fill={true} />
+                        <Image src={`${process.env.NEXT_PUBLIC_HOSTED_IMAGE_SERVER_HOSTNAME}/images/b4t1n.png`} alt='' fill={true} />
                     </div>
                 </div>
                 :

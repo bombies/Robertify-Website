@@ -59,7 +59,7 @@ export default function SelectMenu({
             </div>
             <div className={`${className} menu ${isDisabled ? 'cursor-notAllowed' : ''}`} onClick={setOptionsVisible}>
                 <p className={`${className} menu-selected ${isDisabled ? 'cursor-notAllowed' : ''}`}>{ !selectValues.length ? placeHolder : selectValues.length === 1 ? selectValues[0].name : `${selectValues.length} options selected` }</p>
-                <img className={`${className} dropDown ${isDisabled ? 'cursor-notAllowed' : ''}`} src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/zxqvx.png`} alt='Drop down icon' />
+                <img className={`${className} dropDown ${isDisabled ? 'cursor-notAllowed' : ''}`} src={`${process.env.NEXT_PUBLIC_HOSTED_IMAGE_SERVER_HOSTNAME}/images/zxqvx.png`} alt='Drop down icon' />
             </div>
             <div id={`${className}-menuOptionsContainer#${id}`} className={`${className} menu-optionsContainer ${optionsVisible ? 'active' : ''} ${isDisabled ? 'cursor-notAllowed' : ''}`}>
                 <input className={`${className} menu-options-search`} type='text' placeholder='Search...' value={searchText} onChange={search} />

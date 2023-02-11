@@ -44,7 +44,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const albumImage = getParamFromSearch({
         searchParams: searchParams,
         paramName: 'album_image',
-        defaultResult: '${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/syy1c.jpg'
+        defaultResult: `${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/syy1c.jpg`
     });
 
     const duration = getParamFromSearch({

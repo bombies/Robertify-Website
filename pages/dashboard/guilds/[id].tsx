@@ -1520,7 +1520,7 @@ export default function GuildPage({ token, userInfo, guildInfo, fullGuildInfo, h
         return true;
     }
 
-    const guildIcon = guild ? guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.${guild.icon.startsWith('a_') ? 'gif' : 'png'}?size=512` : `${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/rykx6.png` : null;
+    const guildIcon = guild ? guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.${guild.icon.startsWith('a_') ? 'gif' : 'png'}?size=512` : `${process.env.NEXT_PUBLIC_HOSTED_IMAGE_SERVER_HOSTNAME}/images/rykx6.png` : null;
 
     const [ refreshAllowed,  setRefreshAllowed ] = useState(true);
 
@@ -1755,7 +1755,7 @@ export default function GuildPage({ token, userInfo, guildInfo, fullGuildInfo, h
                     <Link href='/dashboard'>
                         <div className='serverDash--backLink'>
                             <div className='relative w-[1.5rem] h-[1.5rem] self-center'>
-                                <Image src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/t5he5.png`} alt='Go back' fill={true} />
+                                <Image src={`${process.env.NEXT_PUBLIC_HOSTED_IMAGE_SERVER_HOSTNAME}/images/t5he5.png`} alt='Go back' fill={true} />
                             </div>
                             <a>Go back to your servers</a>
                         </div>
@@ -1770,12 +1770,12 @@ export default function GuildPage({ token, userInfo, guildInfo, fullGuildInfo, h
                         <h1 className='z-10'>{guild.name}</h1>
                     </div>
                     <div className='flex gap-2'>
-                        <DashboardHeader text='Robertify' isSelected={selectedBot === 1} icon={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/xl21e.png`} onClick={() => {
+                        <DashboardHeader text='Robertify' isSelected={selectedBot === 1} icon={`${process.env.NEXT_PUBLIC_HOSTED_IMAGE_SERVER_HOSTNAME}/images/xl21e.png`} onClick={() => {
                             if (changeMade)
                                 return;
                             setSelectedBot(1)
                         }} />
-                        <DashboardHeader text='Robertify 2' isSelected={selectedBot === 2} icon={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/uuaxp.png`} onClick={() => {
+                        <DashboardHeader text='Robertify 2' isSelected={selectedBot === 2} icon={`${process.env.NEXT_PUBLIC_HOSTED_IMAGE_SERVER_HOSTNAME}/images/uuaxp.png`} onClick={() => {
                             if (changeMade)
                                 return;
                             setSelectedBot(2)
@@ -1791,7 +1791,7 @@ export default function GuildPage({ token, userInfo, guildInfo, fullGuildInfo, h
                                 <div className='h-64 flex justify-center'>
                                     <div className='self-center'>
                                         <div className='relative w-12 h-12 animate-spin'>
-                                            <Image src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/b4t1n.png`} alt='' fill={true} />
+                                            <Image src={`${process.env.NEXT_PUBLIC_HOSTED_IMAGE_SERVER_HOSTNAME}/images/b4t1n.png`} alt='' fill={true} />
                                         </div>
                                     </div>
                                 </div>
@@ -2013,13 +2013,13 @@ export default function GuildPage({ token, userInfo, guildInfo, fullGuildInfo, h
                                                     <div className='serverDash--footer-buttons'>
                                                         <button className='button-md danger' onClick={reset}>
                                                             <div className='relative w-[1.25rem] h-[1.25rem] self-center'>
-                                                                <Image src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/pup8a.png`} alt='Reset Button' fill={true} />
+                                                                <Image src={`${process.env.NEXT_PUBLIC_HOSTED_IMAGE_SERVER_HOSTNAME}/images/pup8a.png`} alt='Reset Button' fill={true} />
                                                             </div>
                                                             Reset
                                                         </button>
                                                         <button className={`button-md primary ${!refreshAllowed && 'cursor-notAllowed'}`} onClick={refresh}>
                                                             <div className='relative w-[1.25rem] h-[1.25rem] self-center'>
-                                                                <Image src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/v1u8p.png`} alt='Refresh Button' fill={true} />
+                                                                <Image src={`${process.env.NEXT_PUBLIC_HOSTED_IMAGE_SERVER_HOSTNAME}/images/v1u8p.png`} alt='Refresh Button' fill={true} />
                                                             </div>
                                                             Refresh
                                                         </button>
@@ -2037,13 +2037,13 @@ export default function GuildPage({ token, userInfo, guildInfo, fullGuildInfo, h
                     <div className='serverDash--unsaved-buttons'>
                         <button className='button-md secondary' onClick={discard}>
                             <div className='relative w-[1.25rem] h-[1.25rem] self-center'>
-                                <Image src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/pup8a.png`} alt='Discard Button' fill={true} />
+                                <Image src={`${process.env.NEXT_PUBLIC_HOSTED_IMAGE_SERVER_HOSTNAME}/images/pup8a.png`} alt='Discard Button' fill={true} />
                             </div>
                             Discard
                         </button>
                         <button className='button-md primary' onClick={save}>
                             <div className='relative w-[1.25rem] h-[1.25rem] self-center'>
-                                <Image src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/htbv7.png`} alt='Save Button' fill={true} />
+                                <Image src={`${process.env.NEXT_PUBLIC_HOSTED_IMAGE_SERVER_HOSTNAME}/images/htbv7.png`} alt='Save Button' fill={true} />
                             </div>
                             Save
                         </button>

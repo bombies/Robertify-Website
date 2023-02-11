@@ -86,7 +86,7 @@ export default function Layout(props: Props) {
                 <div className='flex cursor-pointer transition-all duration-1000 ease-in-out hover:scale-110'>
                     <Link href='/'>
                         <div className='w-24 h-24 phone:w-16 phone:h-16 mr-5 relative'>
-                            <Image src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/ni48h.png`} fill={true} alt='Logo' />
+                            <Image src={`${process.env.NEXT_PUBLIC_HOSTED_IMAGE_SERVER_HOSTNAME}/images/ni48h.png`} fill={true} alt='Logo' />
                         </div>
                     </Link>
                     <h1 className='self-center uppercase text-2xl phone:text-sm tracking-[.25em]'><Link href='/'><span className='text-white font-med'>Robertify</span></Link></h1>
@@ -114,7 +114,7 @@ export default function Layout(props: Props) {
                                 <div className='nav--user'>
                                     <p className='nav--user-welcome laptop:hidden' onClick={toggleUserPopout}>Welcome back, <span className='text-lime-500'>{discordInfoObj.username}</span></p>
                                     <div onClick={toggleUserPopout} className='mx-auto w-16 h-16 relative rounded-full z-0'>
-                                        <Image src={discordAvatar || `${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/rykx6.png`} fill={true} alt='Discord User Icon' className='rounded-full z-0' />
+                                        <Image src={discordAvatar || `${process.env.NEXT_PUBLIC_HOSTED_IMAGE_SERVER_HOSTNAME}/images/rykx6.png`} fill={true} alt='Discord User Icon' className='rounded-full z-0' />
                                     </div>
                                 </div>
                             : ''
@@ -129,7 +129,7 @@ export default function Layout(props: Props) {
                 {discordInfoObj && 
                     <div className={`nav--user-popout${ userPopoutShown  ? ' active' : ''} justify-center`}>
                         <div className='mx-auto w-32 h-32 phone:w-24 phone:h-24 relative rounded-full'>
-                            <Image src={discordAvatar || `${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/rykx6.png`} fill={true} alt='Discord User Icon' className='rounded-full' />
+                            <Image src={discordAvatar || `${process.env.NEXT_PUBLIC_HOSTED_IMAGE_SERVER_HOSTNAME}/images/rykx6.png`} fill={true} alt='Discord User Icon' className='rounded-full' />
                         </div>
                         {/*<img loading='lazy' decoding='async' className={'nav--user-popout-icon'} src={discordAvatar} alt='Discord User Icon' />*/}
                         <p className='nav--user-popout-icon-username phone:text-sm'>{`${discordInfoObj.username}#${discordInfoObj.discriminator}`}</p>
@@ -149,18 +149,18 @@ export default function Layout(props: Props) {
                     <footer className={props.stickyFooter ? 'sticky-bottom' : ''}>
                         <div>
                             <div className='relative w-52 h-52 phone:w-16 phone:h-16 m-auto'>
-                                <Image src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/ni48h.png`} alt='Footer' fill={true} />
+                                <Image src={`${process.env.NEXT_PUBLIC_HOSTED_IMAGE_SERVER_HOSTNAME}/images/ni48h.png`} alt='Footer' fill={true} />
                             </div>
                             <p className='text-sm phone:text-[.55rem] text-center text-neutral-300'>Copyright ©️ Robertify 2022</p>
                             <div className='flex justify-center gap-x-8 phone:gap-x-2 pt-5 phone:pt-2'>
                                 <a className='transition-all duration-500 ease-in-out hover:brightness-125' href='https://github.com/bombies/Robertify-Bot' target={'_blank'} rel={'noreferrer'}>
                                     <div className='w-8 h-8 phone:w-5 phone:h-5 relative'>
-                                        <Image src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/3ythy.png`} alt='GitHub' fill={true} />
+                                        <Image src={`${process.env.NEXT_PUBLIC_HOSTED_IMAGE_SERVER_HOSTNAME}/images/3ythy.png`} alt='GitHub' fill={true} />
                                     </div>
                                 </a>
                                 <a className='w-8 phone:w-5 transition-all duration-500 ease-in-out hover:brightness-125' href='https://robertify.me/invite' target={'_blank'} rel={'noreferrer'}>
                                     <div className='w-8 h-8 phone:w-5 phone:h-5 relative'>
-                                        <Image src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/2n1nb.png`} alt='Discord' fill={true} />
+                                        <Image src={`${process.env.NEXT_PUBLIC_HOSTED_IMAGE_SERVER_HOSTNAME}/images/2n1nb.png`} alt='Discord' fill={true} />
                                     </div>
                                 </a>
                             </div>

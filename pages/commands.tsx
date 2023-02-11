@@ -109,10 +109,10 @@ export default function Commands({ commands, token, discordInfo, discordLoginLin
             <main>
                 <div className='commands--about !bg-neutral-800 phone:block phone:p-7'>
                     <div className='commands--about-images phone:!flex phone:flex-row phone:justify-center'>
-                        <img src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/hjw5n.png`} alt='Favourite Tracks' />
+                        <img src={`${process.env.NEXT_PUBLIC_HOSTED_IMAGE_SERVER_HOSTNAME}/images/hjw5n.png`} alt='Favourite Tracks' />
                         <span />
                         <span />
-                        <img src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/jg8ua.png`} alt='Themes' />
+                        <img src={`${process.env.NEXT_PUBLIC_HOSTED_IMAGE_SERVER_HOSTNAME}/images/jg8ua.png`} alt='Themes' />
                     </div>
                     <div className='m-auto phone:m-0'>
                         <h3 className='uppercase text-lime-400 font-med text-4xl phone:text-xl drop-shadow-lg phone:mt-6 phone:text-center'>Your capability is astounding</h3>
