@@ -24,7 +24,7 @@ export default function FAQ({ token, discordInfo, discordLoginLink }: Props) {
             </main>
             <div className='bg-neutral-800 py-10 flex justify-center gap-x-32 laptop:gap-x-16 phone:gap-x-8 phone:px-5'>
                 <div className='relative w-64 h-64 laptop:w-32 laptop:w-32 drop-shadow-xl ease-in-out duration-1000 hover:scale-105'>
-                    <Image src='https://i.robertify.me/images/l8pdz.png' alt='Support Icon' layout='fill' />
+                    <Image src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/l8pdz.png`} alt='Support Icon' fill={true} />
                 </div>
                 <p className='text-left self-center text-2xl max-w-lg drop-shadow-lg laptop:text-lg laptop:max-w-sm'>Need direct support from someone on our team? Join the <Link href='/support'><span className='text-lime-500 ease-in-out duration-500 hover:brightness-125 cursor-pointer'>support server</span></Link>!</p>
             </div>
@@ -39,7 +39,7 @@ export default function FAQ({ token, discordInfo, discordLoginLink }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req }: GetServerSidePropsContext) => {
-    const data = await fetchDiscordUserInfo(req);
+    const data = await fetchDiscordUserInfo(req.cookies['login-token']);
     const discordLoginLink = `https://discord.com/api/oauth2/authorize?client_id=${atob(process.env.DISCORD_BOT_TOKEN.split('.')[0])}&redirect_uri=${encodeURI(process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME + '/callback/discord')}&response_type=code&scope=identify%20guilds`;
 
     return {

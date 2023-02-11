@@ -33,7 +33,7 @@ export default function TextOptionList(props: Props) {
     const parsedOptions = props.options.map(option => 
         <div key={option} className={`${className} optionContainer`}>
             <p>{option}</p>
-            <img src='https://i.robertify.me/images/mwafd.png' alt='Remove Option' onClick={() => { setError(null); props.removeOption(option) }}/>
+            <Image src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/mwafd.png`} alt='Remove Option' onClick={() => { setError(null); props.removeOption(option) }} fill={true} />
         </div>
     )
 
@@ -45,7 +45,7 @@ export default function TextOptionList(props: Props) {
             <div className={`${className} optionSubmitters`}>
                 <input className='placeholder-neutral-500' type='text' placeholder={props.placeholder} value={props.inputValue} onChange={(event) => { setError(null); props.setInputValue(event.target.value) }} />
                 <div onClick={() => { setError(null); addNewOption(props.inputValue) }} className='relative w-8 h-8 self-center'>
-                    <Image src='https://i.robertify.me/images/t7mco.png' alt='Add Option' layout='fill' />
+                    <Image src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/t7mco.png`} alt='Add Option' fill={true} />
                 </div>
             </div>
             { error && <p className={`${className} error`}>{`Error: ${error}`}</p> }

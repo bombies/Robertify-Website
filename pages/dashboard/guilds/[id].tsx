@@ -355,7 +355,7 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
                 localeObj = {
                     id: 'english',
                     name: "English (UK)",
-                    icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/AeDZp1s.png' alt='English Locale' layout='fill'/></div>
+                    icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/AeDZp1s.png' alt='English Locale' fill={true}/></div>
                 };
                 break;
             }
@@ -363,7 +363,7 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
                 localeObj = {
                     id: 'spanish',
                     name: "Spanish",
-                    icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/ml1NNba.png' alt='Spanish Locale' layout='fill'/></div>
+                    icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/ml1NNba.png' alt='Spanish Locale' fill={true}/></div>
                 };
                 break;
             }
@@ -371,7 +371,7 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
                 localeObj = {
                     id: 'portuguese',
                     name: "Portuguese",
-                    icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/WLMDtE6.png' alt='Portuguese Locale' layout='fill'/></div>
+                    icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/WLMDtE6.png' alt='Portuguese Locale' fill={true}/></div>
                 };
                 break;
             }
@@ -379,7 +379,7 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
                 localeObj = {
                     id: 'russian',
                     name: "Russian",
-                    icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/bcnN2W8.png' alt='Russian Locale' layout='fill'/></div>
+                    icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/bcnN2W8.png' alt='Russian Locale' fill={true}/></div>
                 };
                 break;
             }
@@ -387,14 +387,14 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
                 localeObj = {
                     id: 'dutch',
                     name: "Dutch",
-                    icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/vUQ8kA8.png' alt='Dutch Locale' layout='fill'/></div>
+                    icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/vUQ8kA8.png' alt='Dutch Locale' fill={true}/></div>
                 }
             }
             case "french": {
                 localeObj = {
                     id: 'french',
                     name: "French",
-                    icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/RB4Seme.png' alt='Dutch Locale' layout='fill'/></div>
+                    icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/RB4Seme.png' alt='Dutch Locale' fill={true}/></div>
                 };
                 break;
             }
@@ -402,7 +402,7 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
                 localeObj = {
                     id: 'german',
                     name: "German",
-                    icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/enouegk.png' alt='German Locale' layout='fill'/></div>
+                    icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/enouegk.png' alt='German Locale' fill={true}/></div>
                 };
                 break;
             }
@@ -410,7 +410,7 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
                 localeObj = {
                     id: 'english',
                     name: "English (UK)",
-                    icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/AeDZp1s.png' alt='English Locale' layout='fill'/></div>
+                    icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/AeDZp1s.png' alt='English Locale' fill={true}/></div>
                 };
                 break;
             }
@@ -419,7 +419,7 @@ function getOriginalDataObject(dbGuildInfo, fullGuildInfo): OriginalData {
         localeObj = {
             id: 'english',
             name: "English (UK)",
-            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/AeDZp1s.png' alt='English Locale' layout='fill'/></div>
+            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/AeDZp1s.png' alt='English Locale' fill={true}/></div>
         };
     }
 
@@ -724,37 +724,37 @@ export default function GuildPage({ token, userInfo, guildInfo, fullGuildInfo, h
         {
             id: 'english',
             name: "English (UK)",
-            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/AeDZp1s.png' alt='English Locale' layout='fill'/></div>
+            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/AeDZp1s.png' alt='English Locale' fill={true}/></div>
         },
         {
             id: 'spanish',
             name: "Spanish",
-            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/ml1NNba.png' alt='Spanish Locale' layout='fill'/></div>
+            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/ml1NNba.png' alt='Spanish Locale' fill={true}/></div>
         },
         {
             id: 'portuguese',
             name: "Portuguese",
-            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/WLMDtE6.png' alt='Portuguese Locale' layout='fill'/></div>
+            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/WLMDtE6.png' alt='Portuguese Locale' fill={true}/></div>
         },
         {
             id: 'russian',
             name: "Russian",
-            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/bcnN2W8.png' alt='Russian Locale' layout='fill'/></div>
+            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/bcnN2W8.png' alt='Russian Locale' fill={true}/></div>
         },
         {
             id: 'dutch',
             name: "Dutch",
-            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/vUQ8kA8.png' alt='Dutch Locale' layout='fill'/></div>
+            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/vUQ8kA8.png' alt='Dutch Locale' fill={true}/></div>
         },
         {
             id: 'french',
             name: "French",
-            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/RB4Seme.png' alt='French Locale' layout='fill'/></div>
+            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/RB4Seme.png' alt='French Locale' fill={true}/></div>
         },
         {
             id: 'german',
             name: "German",
-            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/enouegk.png' alt='German Locale' layout='fill'/></div>
+            icon: <div className='relative w-8 h-8'><Image src='https://i.imgur.com/enouegk.png' alt='German Locale' fill={true}/></div>
         }
     ], []);
 
@@ -1520,7 +1520,7 @@ export default function GuildPage({ token, userInfo, guildInfo, fullGuildInfo, h
         return true;
     }
 
-    const guildIcon = guild ? guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.${guild.icon.startsWith('a_') ? 'gif' : 'png'}?size=512` : 'https://i.robertify.me/images/rykx6.png' : null;
+    const guildIcon = guild ? guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.${guild.icon.startsWith('a_') ? 'gif' : 'png'}?size=512` : `${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/rykx6.png` : null;
 
     const [ refreshAllowed,  setRefreshAllowed ] = useState(true);
 
@@ -1755,27 +1755,27 @@ export default function GuildPage({ token, userInfo, guildInfo, fullGuildInfo, h
                     <Link href='/dashboard'>
                         <div className='serverDash--backLink'>
                             <div className='relative w-[1.5rem] h-[1.5rem] self-center'>
-                                <Image src='https://i.robertify.me/images/t5he5.png' alt='Go back' layout='fill' />
+                                <Image src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/t5he5.png`} alt='Go back' fill={true} />
                             </div>
                             <a>Go back to your servers</a>
                         </div>
                     </Link>
                     <div className='relative serverDash--guildBanner !bg-neutral-800'>
                         <div className='absolute w-full h-full z-0 top-0 blur-[5px] opacity-60 brightness-[25%]'>
-                            <Image src={guildIcon.replaceAll('gif', 'png')} alt='Guild Icon' layout='fill' objectFit='cover' className='' />
+                            <Image src={guildIcon.replaceAll('gif', 'png')} alt='Guild Icon' fill={true} objectFit='cover' className='' />
                         </div>
                         <div className='relative w-32 h-32 self-center rounded-full shadow-xl border-2 border-lime-500 ml-6'>
-                            <Image src={guildIcon} alt='Guild Icon' layout='fill' objectFit='cover' className='rounded-full shadow-xl' />
+                            <Image src={guildIcon} alt='Guild Icon' fill={true} objectFit='cover' className='rounded-full shadow-xl' />
                         </div>
                         <h1 className='z-10'>{guild.name}</h1>
                     </div>
                     <div className='flex gap-2'>
-                        <DashboardHeader text='Robertify' isSelected={selectedBot === 1} icon='https://i.robertify.me/images/xl21e.png' onClick={() => {
+                        <DashboardHeader text='Robertify' isSelected={selectedBot === 1} icon={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/xl21e.png`} onClick={() => {
                             if (changeMade)
                                 return;
                             setSelectedBot(1)
                         }} />
-                        <DashboardHeader text='Robertify 2' isSelected={selectedBot === 2} icon='https://i.robertify.me/images/uuaxp.png' onClick={() => {
+                        <DashboardHeader text='Robertify 2' isSelected={selectedBot === 2} icon={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/uuaxp.png`} onClick={() => {
                             if (changeMade)
                                 return;
                             setSelectedBot(2)
@@ -1791,7 +1791,7 @@ export default function GuildPage({ token, userInfo, guildInfo, fullGuildInfo, h
                                 <div className='h-64 flex justify-center'>
                                     <div className='self-center'>
                                         <div className='relative w-12 h-12 animate-spin'>
-                                            <Image src='https://i.robertify.me/images/b4t1n.png' alt='' layout='fill' />
+                                            <Image src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/b4t1n.png`} alt='' fill={true} />
                                         </div>
                                     </div>
                                 </div>
@@ -2013,13 +2013,13 @@ export default function GuildPage({ token, userInfo, guildInfo, fullGuildInfo, h
                                                     <div className='serverDash--footer-buttons'>
                                                         <button className='button-md danger' onClick={reset}>
                                                             <div className='relative w-[1.25rem] h-[1.25rem] self-center'>
-                                                                <Image src='https://i.robertify.me/images/pup8a.png' alt='Reset Button' layout='fill' />
+                                                                <Image src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/pup8a.png`} alt='Reset Button' fill={true} />
                                                             </div>
                                                             Reset
                                                         </button>
                                                         <button className={`button-md primary ${!refreshAllowed && 'cursor-notAllowed'}`} onClick={refresh}>
                                                             <div className='relative w-[1.25rem] h-[1.25rem] self-center'>
-                                                                <Image src='https://i.robertify.me/images/v1u8p.png' alt='Refresh Button' layout='fill' />
+                                                                <Image src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/v1u8p.png`} alt='Refresh Button' fill={true} />
                                                             </div>
                                                             Refresh
                                                         </button>
@@ -2037,13 +2037,13 @@ export default function GuildPage({ token, userInfo, guildInfo, fullGuildInfo, h
                     <div className='serverDash--unsaved-buttons'>
                         <button className='button-md secondary' onClick={discard}>
                             <div className='relative w-[1.25rem] h-[1.25rem] self-center'>
-                                <Image src='https://i.robertify.me/images/pup8a.png' alt='Discard Button' layout='fill' />
+                                <Image src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/pup8a.png`} alt='Discard Button' fill={true} />
                             </div>
                             Discard
                         </button>
                         <button className='button-md primary' onClick={save}>
                             <div className='relative w-[1.25rem] h-[1.25rem] self-center'>
-                                <Image src='https://i.robertify.me/images/htbv7.png' alt='Save Button' layout='fill' />
+                                <Image src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/htbv7.png`} alt='Save Button' fill={true} />
                             </div>
                             Save
                         </button>

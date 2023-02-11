@@ -41,7 +41,7 @@ export default function SelectMenu({
                 categoryObj.channels.map(channel =>
                     <div key={channel.id} className={`${className} option ${selectValues.includes(channel) ? 'active' : ''}`} onClick={(event) => setSelectValues(event, optionsVisible, channel)}>
                         <div className='relative w-4 h-4'>
-                            <Image src={isVoiceMenu ? 'https://i.imgur.com/KLccEa8.png' : 'https://i.imgur.com/4g770gD.png'} alt='' layout='fill' />
+                            <Image src={isVoiceMenu ? 'https://i.imgur.com/KLccEa8.png' : 'https://i.imgur.com/4g770gD.png'} alt='' fill={true} />
                         </div>
                         <p>{channel.name}</p>
                         {multiSelect && <div key={nanoid(8)} className={`${className} option-checkbox ${selectValues.includes(channel) ? 'active' : ''}`}></div>}
@@ -59,7 +59,7 @@ export default function SelectMenu({
             </div>
             <div className={`${className} menu ${isDisabled ? 'cursor-notAllowed' : ''}`} onClick={setOptionsVisible}>
                 <p className={`${className} menu-selected ${isDisabled ? 'cursor-notAllowed' : ''}`}>{ !selectValues.length ? placeHolder : selectValues.length === 1 ? selectValues[0].name : `${selectValues.length} options selected` }</p>
-                <img className={`${className} dropDown ${isDisabled ? 'cursor-notAllowed' : ''}`} src='https://i.robertify.me/images/zxqvx.png' alt='Drop down icon' />
+                <img className={`${className} dropDown ${isDisabled ? 'cursor-notAllowed' : ''}`} src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/zxqvx.png`} alt='Drop down icon' />
             </div>
             <div id={`${className}-menuOptionsContainer#${id}`} className={`${className} menu-optionsContainer ${optionsVisible ? 'active' : ''} ${isDisabled ? 'cursor-notAllowed' : ''}`}>
                 <input className={`${className} menu-options-search`} type='text' placeholder='Search...' value={searchText} onChange={search} />

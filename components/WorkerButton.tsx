@@ -19,14 +19,14 @@ export default function WorkerButton(props: Props) {
             {props.isWorking ?
                 <div className='self-center'>
                     <div className='relative w-6 h-6 animate-spin'>
-                        <Image src='https://i.robertify.me/images/b4t1n.png' alt='' layout='fill' />
+                        <Image src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/b4t1n.png`} alt='' fill={true} />
                     </div>
                 </div>
                 :
                 <div className='flex gap-2'>
                     {props.icon &&
                         <div className='relative w-6 h-6 self-center'>
-                            <Image src={props.icon} alt='' layout='fill'/>
+                            <Image src={props.icon} alt='' fill={true}/>
                         </div>
                     }
                     <p className='self-center text-xl'>{props.text}</p>

@@ -14,7 +14,7 @@ export default function DashboardHeader(props: Props) {
             {
                 props.icon &&
                 <div className='relative w-8 h-8 self-center rounded-full'>
-                    <Image src={props.icon} alt='' layout='fill' className='rounded-full' />
+                    <Image src={props.icon} alt='' fill={true} className='rounded-full' />
                 </div>
             }
             <p className='text-center self-center'>{props.text}</p>

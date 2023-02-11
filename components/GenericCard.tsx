@@ -29,7 +29,7 @@ export default function GenericCard(props: Props) {
         <div className={`w-full bg-neutral-900 p-5 rounded-xl drop-shadow-lg ${props.maxHeight || ''}`}>
             {props.coverImage &&
                 <div className='relative rounded-t-xl drop-shadow-lg w-full h-1/3'>
-                    <Image src={props.coverImage} alt='' layout='fill' objectFit='cover' className='rounded-t-xl' />
+                    <Image src={props.coverImage} alt='' fill={true} objectFit='cover' className='rounded-t-xl' />
                 </div>
             }
             <h1 className={`mt-6 uppercase font-bold text-3xl ${props.titleColor || ''}`}>{props.title}</h1>
@@ -38,7 +38,7 @@ export default function GenericCard(props: Props) {
             {content && <p className='mt-3 overflow-x-auto text-ellipsis overflow-ellipsis h-1/4'>{content}</p>}
             {props.contentImg &&
                 <div className='relative h-[15rem] rounded-xl mt-6 drop-shadow-lg'>
-                    <Image src={props.contentImg} alt='' layout='fill' objectFit='contain' className='rounded-xl' />
+                    <Image src={props.contentImg} alt='' fill={true} objectFit='contain' className='rounded-xl' />
                 </div>
             }
             <div className='flex justify-center gap-2 place-content-center mt-4' >

@@ -3,7 +3,7 @@ import {Tooltip} from "flowbite-react";
 import Image from "next/image";
 
 export default function GuildCard({ guildID, guildIcon = null, guildName, isOwner = false,  guildPermissions = 0 }) {
-    const icon: string = guildIcon ? `https://cdn.discordapp.com/icons/${guildID}/${guildIcon}.${guildIcon.startsWith('a_') ? 'gif' : 'webp'}?size=512` : 'https://i.robertify.me/images/rykx6.png';
+    const icon: string = guildIcon ? `https://cdn.discordapp.com/icons/${guildID}/${guildIcon}.${guildIcon.startsWith('a_') ? 'gif' : 'webp'}?size=512` : `${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/rykx6.png`;
 
     // Bitwise operations to check if the user has MANAGE_GUILD
     let isModerator: boolean = isOwner ? false : (guildPermissions & (1 << 5)) === (1 << 5);
@@ -22,7 +22,7 @@ export default function GuildCard({ guildID, guildIcon = null, guildName, isOwne
                     <div className='flex gap-x-2 z-10 absolute left-4 top-3'>
                         <Tooltip content='Server Owner' trigger='hover' style='dark' placement='right'>
                             <div className='w-4 h-4 self-center relative'>
-                                <Image src='https://i.robertify.me/images/gmqf5.png' layout='fill' alt='Server Owner' />
+                                <Image src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/gmqf5.png`} fill={true} alt='Server Owner' />
                             </div>
                         </Tooltip>
                     </div>
@@ -30,13 +30,13 @@ export default function GuildCard({ guildID, guildIcon = null, guildName, isOwne
                         <div className='flex gap-x-2 z-10 absolute left-4 top-3'>
                             <Tooltip content='Server Administrator' trigger='hover' style='dark' placement='right'>
                                 <div className='w-4 h-4 self-center relative'>
-                                    <Image src='https://i.robertify.me/images/bhg1n.png' layout='fill' alt='Server Administrator' />
+                                    <Image src={`${process.env.NEXT_PUBLIC_IMAGE_SERVER_HOSTNAME}/images/bhg1n.png`} fill={true} alt='Server Administrator' />
                                 </div>
                             </Tooltip>
                         </div>
                 }
                 <div className='shadow-[0_4px_10px_rgba(0,0,0,0.35)] w-full h-full object-cover z-0 relative'>
-                    <Image src={icon} layout='fill' alt={`${guildName} Guild Icon`} className='object-cover' />
+                    <Image src={icon} fill={true} alt={`${guildName} Guild Icon`} className='object-cover' />
                 </div>
             </div>
             <div className='guildCard--text'>

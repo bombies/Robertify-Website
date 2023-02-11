@@ -59,7 +59,7 @@ export default function ArticleBubble(props: Props) {
                 {
                     props.contentImg &&
                     <div className='relative h-[20rem] rounded-lg drop-shadow-lg mt-6 ease-in-out duration-1000 hover:scale-125 z-10'>
-                        <Image src={props.contentImg} alt='Article Bubble Content' layout='fill' objectFit='contain' className='rounded-lg' />
+                        <Image src={props.contentImg} alt='Article Bubble Content' fill={true} objectFit='contain' className='rounded-lg' />
                     </div>
                 }
             </div>

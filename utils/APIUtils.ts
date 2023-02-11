@@ -182,7 +182,7 @@ export async function fetchDiscordUserGuildInfo(token: string) {
 
         return { 
             props: {
-                token: req.cookies['login-token'] || '',
+                token: token || '',
                 guildInfo: [...discordData.data]
             }
         };
