@@ -26,7 +26,7 @@
     "js-cookie": "^3.0.1",
     "loader-utils": "^3.2.1",
     "mongoose": "^6.7.1",
-    "nanoid": "^4.0.0",
+    "nanoid": "^4.0.1",
     "next": "^13.0.2",
     "nextjs-progressbar": "^0.0.16",
     "prisma": "^4.5.0",
