@@ -3,23 +3,20 @@ import {Suspense} from "react";
 
 
 const getRandomJoke = async () => {
-    const res = await WebClient.get('https://icanhazdadjoke.com/');
-
-    if (!res.data)
-        throw new Error("Couldn't fetch random joke!");
+    const res = await WebClient.instance()
+        .get('https://icanhazdadjoke.com/');
     return res.data;
 }
 
 async function RandomDadJoke() {
     const joke = await getRandomJoke();
     return (
-        <div className='p-6 bg-white/50 rounded-xl backdrop-blur-lg'>
             <p className='text-3xl'>{joke.joke}</p>
-        </div>
     );
 }
 
 export default async function Home() {
+
 
     return (
         <main className='h-screen flex default-bg'>
@@ -29,9 +26,11 @@ export default async function Home() {
                 <p className='text-5xl font-semibold text-neutral-200'>Unfortunately this website is under construction. :(</p>
                 <p className='text-5xl font-semibold text-neutral-200'>We know you're sad, so enjoy this dad joke instead!</p>
                 <br/>
-                <Suspense fallback={<p className='text-3xl'>Dad joke loading...</p>}>
-                    <RandomDadJoke />
-                </Suspense>
+                <div className='p-6 bg-white/50 rounded-xl backdrop-blur-lg'>
+                    <Suspense fallback={<p className='text-3xl'>Dad joke loading...</p>}>
+                        <RandomDadJoke />
+                    </Suspense>
+                </div>
             </div>
         </main>
     )
