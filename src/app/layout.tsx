@@ -24,10 +24,10 @@ export default function RootLayout({
                 <h1  className='uppercase font-black text-3xl self-center text-primary'>Robertify</h1>
             </div>
             <div className='self-center mx-auto flex gap-16'>
-                <Link href='/invite'>INVITE</Link>
-                <Link href='/commands'>COMMANDS</Link>
-                <Link href='/vote'>VOTE</Link>
-                <Link href='/support'>SUPPORT</Link>
+                <Link href='/'>INVITE</Link>
+                <Link href='/'>COMMANDS</Link>
+                <Link href='/'>VOTE</Link>
+                <Link href='/'>SUPPORT</Link>
             </div>
             <Button
                 className='self-center'
