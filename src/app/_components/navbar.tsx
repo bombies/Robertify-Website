@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Button from "../../components/Button";
 import {useEffect, useState} from "react";
+import {useDiscordData} from "./discord-data-context";
 
 export default function NavBar() {
     const [ isOpen, setOpen ] = useState(false);
@@ -11,6 +12,7 @@ export default function NavBar() {
         window.innerWidth,
         window.innerHeight
     ]);
+    const [ discordData, ] = useDiscordData();
 
     useEffect(() => {
         const handleWindowResize = () => {
