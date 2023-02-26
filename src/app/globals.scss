@@ -61,3 +61,11 @@ body {
   background: url("https://i.imgur.com/pBkAhvI.jpeg");
 }
 
+a {
+  transition: all ease-in-out $transition-faster;
+}
+
+a:hover {
+  color: #00D615;
+}
+
