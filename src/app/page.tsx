@@ -25,6 +25,7 @@ export default async function Home() {
                 <br/>
                 <div className='p-6 bg-white/50 rounded-xl backdrop-blur-lg'>
                     <Suspense fallback={<p className='text-3xl'>Dad joke is loading...</p>}>
+                        {/*@ts-ignore*/}
                         <RandomDadJoke />
                     </Suspense>
                 </div>
