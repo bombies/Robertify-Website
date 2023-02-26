@@ -1,6 +1,5 @@
-import WebClient from '../utils/web-client';
+import WebClient from "../utils/web-client";
 import {Suspense} from "react";
-
 
 const getRandomJoke = async () => {
     const res = await WebClient.instance()
@@ -11,13 +10,11 @@ const getRandomJoke = async () => {
 async function RandomDadJoke() {
     const joke = await getRandomJoke();
     return (
-            <p className='text-3xl'>{joke.joke}</p>
+        <p className='text-3xl'>{joke.joke}</p>
     );
 }
 
 export default async function Home() {
-
-
     return (
         <main className='h-screen flex default-bg'>
             <div className='m-auto text-center pointer-events-none'>
@@ -27,7 +24,7 @@ export default async function Home() {
                 <p className='text-5xl font-semibold text-neutral-200'>We know you're sad, so enjoy this dad joke instead!</p>
                 <br/>
                 <div className='p-6 bg-white/50 rounded-xl backdrop-blur-lg'>
-                    <Suspense fallback={<p className='text-3xl'>Dad joke loading...</p>}>
+                    <Suspense fallback={<p className='text-3xl'>Dad joke is loading...</p>}>
                         <RandomDadJoke />
                     </Suspense>
                 </div>
