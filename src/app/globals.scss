@@ -58,8 +58,11 @@ body {
 }
 
 .default-bg {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
   background-size: cover;
-  background: url("https://i.imgur.com/pBkAhvI.jpeg") no-repeat fixed center center;
+  background: url("https://i.imgur.com/pBkAhvI.jpeg") no-repeat;
 }
 
 a {
