@@ -69,3 +69,16 @@ a:hover {
   color: #00D615;
 }
 
+::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(82, 82, 82);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #292929;
+}
+
