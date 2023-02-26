@@ -6,6 +6,14 @@ module.exports = {
     "src/components/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
+    screens: {
+      laptop: {'max': '1280px'},
+      tablet: {'max': '1025px'},
+      phone: {'max': '615px'},
+      'laptop-min': {'min': '1280px'},
+      'tablet-min': {'min': '1025px'},
+      'phone-min': {'min': '615px'},
+    },
     extend: {
       colors: {
         primary: "#00D615",
@@ -29,4 +37,5 @@ module.exports = {
     },
   },
   plugins: [],
+  darkMode: 'class'
 }
