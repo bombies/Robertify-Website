@@ -57,6 +57,7 @@ export default function NavBar() {
                         className='self-center'
                         width={8}
                         height={3}
+                        href={'/'}
                     >Login</Button>
                 </div>
             }
