@@ -1,6 +1,7 @@
 import './globals.scss'
 import Link from "next/link";
 import Image from "next/image";
+import Button from '../components/Button';
 
 export const metadata = {
     title: 'Robertify',
@@ -28,6 +29,11 @@ export default function RootLayout({
                 <Link href='/vote'>VOTE</Link>
                 <Link href='/support'>SUPPORT</Link>
             </div>
+            <Button
+                className='self-center'
+                width={8}
+                height={3}
+            >Login</Button>
         </nav>
         {children}
         </body>
