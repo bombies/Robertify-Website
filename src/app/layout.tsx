@@ -1,7 +1,5 @@
 import './globals.scss'
-import Link from "next/link";
-import Image from "next/image";
-import Button from '../components/Button';
+import NavBar from './_components/navbar'
 
 export const metadata = {
     title: 'Robertify',
@@ -16,25 +14,7 @@ export default function RootLayout({
     return (
         <html lang="en">
         <body>
-        <nav className='flex w-full h-20 overflow-hidden p-6'>
-            <div className='flex cursor-pointer hover:scale-105 transition-fast'>
-                <div className='relative w-16 h-16 self-center'>
-                    <Image src='https://i.imgur.com/fwG8qA5.png' alt='Robertify Logo' fill={true} />
-                </div>
-                <h1  className='uppercase font-black text-3xl self-center text-primary'>Robertify</h1>
-            </div>
-            <div className='self-center mx-auto flex gap-16'>
-                <Link href='/'>INVITE</Link>
-                <Link href='/'>COMMANDS</Link>
-                <Link href='/'>VOTE</Link>
-                <Link href='/'>SUPPORT</Link>
-            </div>
-            <Button
-                className='self-center'
-                width={8}
-                height={3}
-            >Login</Button>
-        </nav>
+        <NavBar/>
         {children}
         </body>
         </html>
