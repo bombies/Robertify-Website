@@ -2,7 +2,7 @@
 
 import {useRouter} from "next/navigation";
 import {useTransition} from "react";
-import Button, {ButtonType} from "../../components/Button";
+import Button from "../../components/Button";
 import Spinner from "../../components/Spinner";
 
 export function RefreshJoke() {

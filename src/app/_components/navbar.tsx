@@ -30,11 +30,14 @@ export default function NavBar() {
 
     return (
         <nav>
-            <div className='invisible tablet:visible transition-fast absolute top-5 left-5 flex flex-col gap-[.15rem] z-50 w-8 h-12 cursor-pointer' onClick={toggleOpen}>
-                <div className={'rounded-full h-[.25rem] transition-fast ' + (isOpen ? 'bg-primary' : 'bg-white')}></div>
-                <div className={'rounded-full h-[.25rem] transition-fast ' + (isOpen ? 'bg-primary' : 'bg-white')}></div>
-                <div className={'rounded-full h-[.25rem] transition-fast ' + (isOpen ? 'bg-primary' : 'bg-white')}></div>
-            </div>
+            {
+                windowSize[0] <= 1025 &&
+                <div className='transition-fast absolute top-5 left-5 flex flex-col gap-[.15rem] z-50 w-8 h-12 cursor-pointer' onClick={toggleOpen}>
+                    <div className={'rounded-full h-[.25rem] transition-fast ' + (isOpen ? 'bg-primary' : 'bg-white')}></div>
+                    <div className={'rounded-full h-[.25rem] transition-fast ' + (isOpen ? 'bg-primary' : 'bg-white')}></div>
+                    <div className={'rounded-full h-[.25rem] transition-fast ' + (isOpen ? 'bg-primary' : 'bg-white')}></div>
+                </div>
+            }
             {
                 (isOpen || (windowSize[0] > 1025)) &&
                 <div className={'flex tablet:flex-col w-full h-20 tablet:h-fit tablet:absolute z-40 bg-white overflow-hidden p-6 transition-fast' }>
