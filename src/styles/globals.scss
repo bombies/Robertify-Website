@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+$transition-slowest: 1000ms;
+$transition-slow: 700ms;
+$transition-medium: 500ms;
+$transition-fast: 300ms;
+$transition-faster: 100ms;
+$transition-fastest: 75ms;
+
+:root {
+  --main-content-padding-left: 15rem;
+  --main-content-padding-left-2: 15rem;
+  --green: #70FF6D;
+  --toggle-transition-time: .2s
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: #000000;
+}
+
+.transition-slow {
+  transition: all ease-in-out $transition-slow;
+}
+
+.transition-slowest {
+  transition: all ease-in-out $transition-slowest;
+}
+
+.transition-medium {
+  transition: all ease-in-out $transition-medium;
+}
+
+.transition-fast {
+  transition: all ease-in-out $transition-fast;
+}
+
+.transition-faster {
+  transition: all ease-in-out $transition-faster;
+}
+
+.transition-fastest {
+  transition: all ease-in-out $transition-fastest;
+}
+
+.default-bg {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background: url("https://i.imgur.com/pBkAhvI.jpeg") no-repeat;
+}
+
+a {
+  transition: all ease-in-out $transition-faster;
+}
+
+a:hover {
+  color: #00D615;
+}
+
+::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(82, 82, 82);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #292929;
+}
+

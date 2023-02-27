@@ -1,6 +1,7 @@
 import './globals.scss'
 import NavBar from './_components/navbar'
 import {DiscordDataProvider} from "./_components/discord-data-context";
+import React from "react";
 
 export const metadata = {
     title: 'Robertify',

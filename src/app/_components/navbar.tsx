@@ -59,7 +59,7 @@ export default function NavBar() {
                         className='self-center'
                         width={8}
                         height={3}
-                        href={'/'}
+                        href={process.env.NEXT_PUBLIC_DISCORD_LOGIN_LINK}
                     >Login</Button>
                 </div>
             }
