@@ -5,6 +5,18 @@ import Link from "next/link";
 import Button from "../../components/Button";
 import {useEffect, useState} from "react";
 import {useDiscordData} from "./discord-data-context";
+import WebClient from "@/utils/web-client";
+import jsCookie from "js-cookie";
+
+const getDiscordData = async () => {
+    return (await WebClient.instance()
+        .get(`/api/discord/users/${jsCookie.get('login-token')}`, {
+            headers: {
+                'Authorization': process.env.API_MASTER_PASSWORD
+            }
+        }))
+        .data;
+}
 
 export default function NavBar() {
     const [ isOpen, setOpen ] = useState(false);
@@ -12,9 +24,15 @@ export default function NavBar() {
         window.innerWidth,
         window.innerHeight
     ]);
-    const [ discordData, ] = useDiscordData();
+    const [ discordData, setDiscordData ] = useDiscordData();
 
     useEffect(() => {
+        getDiscordData().then(data => {
+            const actualData = data.data;
+            if (actualData)
+                setDiscordData(actualData);
+        })
+
         const handleWindowResize = () => {
             setWindowSize([window.innerWidth, window.innerHeight]);
         }
@@ -29,6 +47,8 @@ export default function NavBar() {
     const toggleOpen = () => {
         setOpen(lastVal => !lastVal);
     }
+
+    console.log('discordData', discordData);
 
     return (
         <nav>

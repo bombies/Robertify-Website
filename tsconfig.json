@@ -20,7 +20,7 @@
         "name": "next"
       }
     ],
-    "baseUrl": "./robertify-website",
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }

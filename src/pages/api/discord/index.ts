@@ -1,44 +1,38 @@
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
-import APIUtils, { ResponseBuilder } from "../../../utils/api/APIUtils";
-import { DiscordUsersRedisManager } from "../../../utils/api/redis/managers/discord-users.redis-manager";
+import {DiscordUsersRedisManager} from "@/utils/api/redis/managers/discord-users.redis-manager";
 import {NextApiRequest, NextApiResponse} from "next";
+import DiscordAccessRedisManager from "@/utils/api/redis/managers/discord-access.redis-manager";
+import {HTTPMethod, MethodHandler} from "@/utils/api/MethodHandler";
 
-async function POST(req: NextApiRequest, res: NextApiResponse) {
-    return await new ResponseBuilder(req, res)
-        .setAdminRoute()
-        .setLogic(async (req, res, apiUtils) => {
-            const { id, data } = req.body;
-            await new DiscordUsersRedisManager().putOne(id, data);
-            return apiUtils.prepareResponse(StatusCodes.CREATED, ReasonPhrases.CREATED, { id: id})
-        })
-        .execute();
-}
+class RouteHandler extends MethodHandler {
+    constructor(req: NextApiRequest, res: NextApiResponse) {
+        super(req, res);
+    }
 
-async function GET(req: NextApiRequest, res: NextApiResponse) {
-    return await new ResponseBuilder(req, res)
-        .setAdminRoute()
-        .setLogic(async (req, res, apiUtils) => {
-            const { id } = req.body;
-            try {
+    async GET(): Promise<void> {
+        return await this.getResponseBuilder()
+            .setAdminRoute()
+            .setLogic(async (req) => {
+                const { id } = req.body;
                 const data = await new DiscordUsersRedisManager().findOne(id);
-                return apiUtils.prepareResponse(StatusCodes.OK, ReasonPhrases.OK, data)
-            } catch (ex) {
-                return apiUtils.prepareResponse(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND)
-            }
-        })
-        .execute();
+                return data ? this.prepareResponse(StatusCodes.OK, ReasonPhrases.OK, data) : this.prepareResponse(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND)
+            })
+            .execute();
+    }
+
+    async POST(): Promise<void> {
+        return await this.getResponseBuilder()
+            .setAdminRoute()
+            .setLogic(async (req) => {
+                const { id, data } = req.body;
+                await new DiscordAccessRedisManager().putOne(id, data);
+                return this.prepareResponse(StatusCodes.CREATED, ReasonPhrases.CREATED, { id: id })
+            })
+            .execute();
+    }
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    switch (req.method) {
-        case 'POST': {
-            return await POST(req, res);
-        }
-        case 'GET': {
-            return await GET(req, res);
-        }
-        default: {
-            return APIUtils.invalidMethod(res);
-        }
-    }
+    const routeHandler = new RouteHandler(req, res);
+    return await routeHandler.handle([HTTPMethod.GET, HTTPMethod.POST]);
 }

@@ -8,7 +8,7 @@ export class RedisManager {
     });
     protected cacheID: string;
 
-    public constructor(cacheID: string) {
+    protected constructor(cacheID: string) {
         this.cacheID = cacheID + "#";
     }
 
@@ -22,9 +22,7 @@ export class RedisManager {
 
     protected async get<T>(identifier: string): Promise<T> {
         const str = await RedisManager.redis.get(this.cacheID + identifier)
-        if (!str)
-            throw new Error('Invalid identifier!');
-        return str ? JSON.parse(str) : {};
+        return str ? JSON.parse(str) : undefined;
     }
 
     protected async getAll<T>() {
@@ -57,10 +55,8 @@ export class RedisManager {
     }
 
     protected async getRaw<T>(identifier: string): Promise<T> {
-        const str = await RedisManager.redis.get(identifier)
-        if (!str)
-            throw new Error('Invalid identifier!');
-        return JSON.parse(str);
+        const str = await RedisManager.redis.get(identifier);
+        return str ? JSON.parse(str) : undefined;
     }
 
     protected async del(identifier: string) {
