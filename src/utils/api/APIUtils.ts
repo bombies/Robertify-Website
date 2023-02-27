@@ -40,9 +40,7 @@ export default class APIUtils {
     public verifyMasterPassword() {
         const inputPass = this.req.headers.authorization;
         const masterPass = process.env.API_MASTER_PASSWORD;
-        if (inputPass === masterPass)
-            return true;
-        else return false;
+        return inputPass === masterPass;
     }
 
     public prepareResponse(status: StatusCodes, message?: string, data?: any) {
