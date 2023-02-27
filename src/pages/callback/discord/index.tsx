@@ -69,7 +69,7 @@ export default function Callback(props: Props) {
                     .then(res => res.data)
                     .then((data) => {
                         console.log(data);
-                        // router.push('/')
+                        router.push('/');
                     })
                     .catch(err => console.error(err))
             })
