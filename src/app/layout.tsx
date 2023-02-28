@@ -16,7 +16,6 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-        <body>
         <DarkModeProvider initialDarkModeState={false}>
             <DiscordDataProvider initialDiscordData={undefined}>
                 {/* @ts-expect-error Async Server Component */}
@@ -24,7 +23,6 @@ export default function RootLayout({
                 {children}
             </DiscordDataProvider>
         </DarkModeProvider>
-        </body>
         </html>
     )
 }

@@ -18,23 +18,10 @@ async function RandomDadJoke() {
 
 export default async function Home() {
     return (
-        <main className={'min-h-screen flex default-bg'}>
-            <div className='m-auto text-center pointer-events-none laptop:p-32 tablet:p-16 phone:p-8'>
-                <p className='text-9xl m-8 drop-shadow-lg animate-wave-normal w-fit mx-auto'>👋</p>
-                <p className='text-7xl font-bold text-white mb-5 drop-shadow-lg'>Hey there!</p>
-                <p className='text-5xl laptop:text-4xl font-semibold text-neutral-200'>Unfortunately this website is under construction. :(</p>
-                <p className='text-5xl laptop:text-4xl font-semibold text-neutral-200'>We know you&apos;re sad, so enjoy this dad joke instead!</p>
-                <br/>
-                <div className='p-6 bg-white/50 dark:bg-neutral-800/50 mx-2 rounded-xl backdrop-blur-lg pointer-events-auto'>
-                    <DadJokeProvider initialDadJoke={''}>
-                        <Suspense fallback={<p className='text-3xl dark:text-white'>Dad joke is loading...</p>}>
-                            {/*@ts-ignore*/}
-                            <RandomDadJoke />
-                            <br/>
-                            <RefreshJoke></RefreshJoke>
-                        </Suspense>
-                    </DadJokeProvider>
-                </div>
+        <main className={'min-h-screen'}>
+            <div className='m-auto default-bg text-center pointer-events-none p-32 phone:px-8 phone:py-32'>
+                <h1 className='text-white font-black uppercase text-7xl phone:text-5xl tracking-[0.5rem] phone:tracking-[0.25rem] mb-6'>Robertify</h1>
+                <h3 className='text-white text-3xl tracking-wide'>A next-gen music bot</h3>
             </div>
         </main>
     )
