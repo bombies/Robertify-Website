@@ -2,11 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import {DiscordInfo, useDiscordData} from "@/app/_components/discord-data-context";
 import NavUserProfile from "@/app/_components/nav/nav-user-profile";
 import DarkModeSwitcher from "@/app/_components/nav/dark-mode-switcher";
 import Button from "@/components/button/Button";
+import login from '/public/login.svg';
 
 export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
     const [isOpen, setOpen] = useState(false);
@@ -14,8 +15,9 @@ export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
         window.innerWidth,
         window.innerHeight
     ]);
+
+
     const [, setDiscordInfo] = useDiscordData();
-    const miniUserViewRef = useRef(null);
 
     useEffect(() => {
         if (discordInfo)
@@ -77,7 +79,9 @@ export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
                                     width={8}
                                     height={3}
                                     href={process.env.NEXT_PUBLIC_DISCORD_LOGIN_LINK}
-                                >Login</Button>
+                                    label='Login'
+                                    icon={login}
+                                />
                                 :
                                 <NavUserProfile/>
                         }

@@ -5,6 +5,7 @@ import Link from "next/link";
 import Spinner from "@/components/Spinner";
 import {useDarkMode} from "@/app/_components/dark-mode-context";
 import {ButtonType} from "@/components/button/ButtonType";
+import Image, {StaticImageData} from "next/image";
 
 const getButtonStyle = (darkMode: boolean, type?: ButtonType): string => {
     switch (type) {
@@ -29,7 +30,9 @@ const getButtonStyle = (darkMode: boolean, type?: ButtonType): string => {
     }
 }
 
-interface Props extends React.PropsWithChildren {
+interface Props {
+    label: string,
+    icon?: string | StaticImageData,
     type?: ButtonType;
     width?: number;
     height?: number;
@@ -50,6 +53,17 @@ export default function Button(props: Props) {
         height: props.height ? props.height + 'rem' : "inherit",
     };
 
+    const children = (
+        <div className='flex gap-[.25rem] justify-center'>
+            {props.icon &&
+                <div className='relative w-5 h-5 self-center'>
+                    <Image src={props.icon} alt='' fill={true} />
+                </div>
+            }
+            <p>{props.label}</p>
+        </div>
+    )
+
     return (
         <>
             {
@@ -59,7 +73,7 @@ export default function Button(props: Props) {
                           href={props.href}
                     >
                         <div className='flex justify-center self-center gap-4'>
-                            {props.children}
+                            {children}
                         </div>
                     </Link>
                     :
@@ -70,7 +84,7 @@ export default function Button(props: Props) {
                             type={props.submit === true ? 'submit' : 'button'}
                     >
                         <div className={'flex justify-center p-2 gap-4' + ((props.type === ButtonType.INVERTED || props.type === ButtonType.SECONDARY) ? ' text-primary' : '')}>
-                            {props.isWorking ? <Spinner size={.75} /> : props.children}
+                            {props.isWorking ? <Spinner size={.75} /> : children}
                         </div>
                     </button>
             }

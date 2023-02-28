@@ -2,12 +2,9 @@
 
 import {useDiscordData} from "@/app/_components/discord-data-context";
 import Image from "next/image";
-import {Dispatch, MutableRefObject, SetStateAction, useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import LogoutButton from "@/app/_components/nav/logout-button";
-
-const handleOutsideClick = (ref: MutableRefObject<any>, miniViewRef: MutableRefObject<any>, setState: Dispatch<SetStateAction<boolean>>) => {
-
-}
+import logout from '/public/logout.svg';
 
 export default function NavUserProfile() {
     const [expanded, setExpanded] = useState(false);

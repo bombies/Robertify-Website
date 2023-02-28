@@ -5,6 +5,7 @@ import {useTransition} from "react";
 import {useDiscordData} from "@/app/_components/discord-data-context";
 import jsCookie from "js-cookie";
 import Button from "@/components/button/Button";
+import logoutIcon from '/public/logout.svg';
 
 export default function LogoutButton() {
     const router = useRouter();
@@ -29,9 +30,9 @@ export default function LogoutButton() {
                 onClick={logout}
                 disabled={isPending}
                 isWorking={isPending}
-            >
-                Logout
-            </Button>
+                label='Logout'
+                icon={logoutIcon}
+            />
         </div>
     )
 }
