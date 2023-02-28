@@ -4,7 +4,7 @@ import {NextApiRequest, NextApiResponse} from "next";
 export class ResponseBuilder {
     private logicHandler?: (req: NextApiRequest, res: NextApiResponse, apiUtils: APIUtils) => Promise<void>;
     private adminRoute: boolean
-    private apiUtils: APIUtils;
+    private readonly apiUtils: APIUtils;
     constructor(private readonly req: NextApiRequest, private readonly res: NextApiResponse) {
         this.adminRoute = false;
         this.apiUtils = new APIUtils(req, res);

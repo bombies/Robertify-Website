@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {DiscordInfo, useDiscordData} from "@/app/_components/discord-data-context";
 import Button from "@/components/Button";
 import NavUserProfile from "@/app/_components/nav/nav-user-profile";
@@ -15,6 +15,7 @@ export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
         window.innerHeight
     ]);
     const [, setDiscordData] = useDiscordData();
+    const miniUserViewRef = useRef(null);
 
     useEffect(() => {
         if (discordInfo)
