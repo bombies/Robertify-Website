@@ -62,8 +62,8 @@ export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
                     </Link>
                     <div
                         className='self-center mx-auto flex gap-16 tablet:gap-8 tablet:text-center tablet:flex-col tablet:mb-6 dark:text-white'>
-                        <Link href='/invite'>INVITE</Link>
-                        <Link href='/'>COMMANDS</Link>
+                        <Link href={process.env.NEXT_PUBLIC_DISCORD_INVITE_LINK || ''} >INVITE</Link>
+                        <Link href='/commands'>COMMANDS</Link>
                         <Link href='/'>VOTE</Link>
                         <Link href='/'>SUPPORT</Link>
                     </div>
