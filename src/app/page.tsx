@@ -1,6 +1,10 @@
 import WebClient from "../utils/web-client";
 import Button from "@/components/button/Button";
 import {ButtonType} from "@/components/button/ButtonType";
+import BasicContent from "@/app/_components/baisc-content";
+import Image from "next/image";
+import reqChannel from '/public/reqchannel.png';
+import features from '/public/features.png';
 
 const getRandomJoke = async () => {
     const res = await WebClient.instance()
@@ -26,8 +30,26 @@ export default async function Home() {
                     <Button label='LEARN MORE' className='phone:mx-auto' type={ButtonType.INVERTED} width={10} height={3} href={process.env.NEXT_PUBLIC_DISCORD_INVITE_LINK} />
                 </div>
             </div>
-            <div className='p-64'>
-                <h1>Customizable Request Channel</h1>
+
+            <div className='p-32 laptop:p-16 tablet:p-4 phone:p-2'>
+                <BasicContent
+                    title='Customizable Request Channel'
+                    description='Interact with your music in a unique and fashionable way! The request channel comes with player control buttons which allow for the easy control of Robertify&apos;s player. These buttons can even be toggled on or off, catering to your needs.'
+
+                >
+                    <div className='relative w-[30rem] laptop:h-[20rem] h-[30rem] laptop:w-[20rem] self-center'>
+                        <Image src={reqChannel} alt='' fill={true} />
+                    </div>
+                </BasicContent>
+                <BasicContent
+                    title='So many more features...'
+                    description='There are over 60 commands Robertify offers. With fun features like 8ball ranging to robust audio commands like searching and setting favourite tracks, it&apos;s all up to you to take advantage of them!'
+                    childrenAlign='left'
+                >
+                    <div className='relative w-[36rem] laptop:w-[26rem] h-[30rem] laptop:h-[20rem] self-center'>
+                        <Image src={features} alt='' fill={true} />
+                    </div>
+                </BasicContent>
             </div>
         </main>
     )
