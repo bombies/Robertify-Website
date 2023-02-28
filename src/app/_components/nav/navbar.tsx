@@ -68,7 +68,7 @@ export default function NavBar({ discordInfo }: { discordInfo?: DiscordInfo }) {
                                 href={process.env.NEXT_PUBLIC_DISCORD_LOGIN_LINK}
                             >Login</Button>
                             :
-                            <NavUserProfile discordInfo={discordInfo} />
+                            <NavUserProfile />
                     }
                 </div>
             }

@@ -31,7 +31,7 @@ export default function LogoutButton() {
                 disabled={isPending}
             >
                 {isPending && (
-                    <Spinner size={.5}/>
+                    <Spinner size={.5} />
                 )}
                 Logout
             </Button>
