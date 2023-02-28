@@ -7,14 +7,14 @@ export default class DiscordAccessRedisManager extends RedisManager {
     }
 
     public async putOne(id: string, info: any) {
-        return this.setex(id, info, 86400);
+        return await this.setex(id, info, 86400);
     }
 
     public async findOne(id: string) {
-        return this.get<any>(id);
+        return await this.get<any>(id);
     }
 
     public async deleteOne(id: string) {
-        return this.del(id);
+        return await this.del(id);
     }
 }

@@ -50,12 +50,9 @@ export default function Callback(props: Props) {
             'redirect_uri': `${props.localAPIHostname}/callback/discord`
         }
 
-        console.log(data);
-
         const axiosInstance = WebClient.instance();
         axiosInstance.post('https://discord.com/api/v10/oauth2/token?=', new URLSearchParams(data).toString(), config)
             .then(res => {
-                console.log(res);
                 const id = nanoid(8);
                 jsCookie.set('login-token', id)
                 return {id: id, data: {...res.data}}
@@ -68,7 +65,6 @@ export default function Callback(props: Props) {
                 })
                     .then(res => res.data)
                     .then((data) => {
-                        console.log(data);
                         router.push('/');
                     })
                     .catch(err => console.error(err))

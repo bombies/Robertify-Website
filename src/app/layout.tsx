@@ -1,7 +1,7 @@
 import './globals.scss'
-import NavBar from './_components/navbar'
-import {DiscordDataProvider} from "./_components/discord-data-context";
 import React from "react";
+import NavbarContainer from "@/app/_components/nav/navbar-container";
+import {DiscordDataProvider} from "@/app/_components/discord-data-context";
 
 export const metadata = {
     title: 'Robertify',
@@ -17,7 +17,8 @@ export default function RootLayout({
         <html lang="en">
         <body>
         <DiscordDataProvider initialDiscordData={undefined}>
-            <NavBar/>
+            {/* @ts-expect-error Async Server Component */}
+            <NavbarContainer />
             {children}
         </DiscordDataProvider>
         </body>

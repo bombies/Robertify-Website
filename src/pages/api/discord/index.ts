@@ -1,5 +1,4 @@
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
-import {DiscordUsersRedisManager} from "@/utils/api/redis/managers/discord-users.redis-manager";
 import {NextApiRequest, NextApiResponse} from "next";
 import DiscordAccessRedisManager from "@/utils/api/redis/managers/discord-access.redis-manager";
 import {HTTPMethod, MethodHandler} from "@/utils/api/MethodHandler";
@@ -14,7 +13,7 @@ class RouteHandler extends MethodHandler {
             .setAdminRoute()
             .setLogic(async (req) => {
                 const { id } = req.body;
-                const data = await new DiscordUsersRedisManager().findOne(id);
+                const data = await new DiscordAccessRedisManager().findOne(id);
                 return data ? this.prepareResponse(StatusCodes.OK, ReasonPhrases.OK, data) : this.prepareResponse(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND)
             })
             .execute();

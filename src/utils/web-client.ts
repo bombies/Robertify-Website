@@ -10,7 +10,8 @@ class WebClient {
                 "User-Agent": 'Robertify Website (https://github.com/bombies/Robertify-Website)',
             },
             timeout: 5 * 1000,
-            ...options
+            ...options,
+            baseURL: process.env.LOCAL_API_HOSTNAME
         });
     }
 

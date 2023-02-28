@@ -2,23 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import Button from "../../components/Button";
 import {useEffect, useState} from "react";
-import {useDiscordData} from "./discord-data-context";
-import WebClient from "@/utils/web-client";
-import jsCookie from "js-cookie";
+import {DiscordInfo, useDiscordData} from "@/app/_components/discord-data-context";
+import Button from "@/components/Button";
+import NavUserProfile from "@/app/_components/nav/nav-user-profile";
 
-const getDiscordData = async () => {
-    return (await WebClient.instance()
-        .get(`/api/discord/users/${jsCookie.get('login-token')}`, {
-            headers: {
-                'Authorization': process.env.API_MASTER_PASSWORD
-            }
-        }))
-        .data;
-}
-
-export default function NavBar() {
+export default function NavBar({ discordInfo }: { discordInfo?: DiscordInfo }) {
     const [ isOpen, setOpen ] = useState(false);
     const [ windowSize, setWindowSize ] = useState<[number, number]>([
         window.innerWidth,
@@ -27,11 +16,8 @@ export default function NavBar() {
     const [ discordData, setDiscordData ] = useDiscordData();
 
     useEffect(() => {
-        getDiscordData().then(data => {
-            const actualData = data.data;
-            if (actualData)
-                setDiscordData(actualData);
-        })
+        if (discordInfo)
+            setDiscordData(discordInfo);
 
         const handleWindowResize = () => {
             setWindowSize([window.innerWidth, window.innerHeight]);
@@ -48,8 +34,6 @@ export default function NavBar() {
         setOpen(lastVal => !lastVal);
     }
 
-    console.log('discordData', discordData);
-
     return (
         <nav>
             {
@@ -62,7 +46,7 @@ export default function NavBar() {
             }
             {
                 (isOpen || (windowSize[0] > 1025)) &&
-                <div className={'flex tablet:flex-col w-full h-20 tablet:h-fit tablet:absolute z-40 bg-white overflow-hidden p-6 transition-fast' }>
+                <div className={'flex tablet:flex-col w-full h-20 tablet:h-fit tablet:absolute z-40 bg-white p-6 transition-fast' }>
                     <Link href='/' className={'flex self-center cursor-pointer hover:scale-105 transition-fast'}>
                         <div className='relative w-16 h-16 self-center'>
                             <Image src='https://i.imgur.com/fwG8qA5.png' alt='Robertify Logo' fill={true} />
@@ -75,15 +59,19 @@ export default function NavBar() {
                         <Link href='/'>VOTE</Link>
                         <Link href='/'>SUPPORT</Link>
                     </div>
-                    <Button
-                        className='self-center'
-                        width={8}
-                        height={3}
-                        href={process.env.NEXT_PUBLIC_DISCORD_LOGIN_LINK}
-                    >Login</Button>
+                    {
+                        !discordInfo ?
+                            <Button
+                                className='self-center'
+                                width={8}
+                                height={3}
+                                href={process.env.NEXT_PUBLIC_DISCORD_LOGIN_LINK}
+                            >Login</Button>
+                            :
+                            <NavUserProfile discordInfo={discordInfo} />
+                    }
                 </div>
             }
-
         </nav>
     )
 }
