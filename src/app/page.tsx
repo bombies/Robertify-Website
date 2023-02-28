@@ -12,7 +12,7 @@ const getRandomJoke = async () => {
 async function RandomDadJoke() {
     const joke = await getRandomJoke();
     return (
-        <p className='text-3xl tablet:text-2xl'>{joke.joke}</p>
+        <p className='text-3xl tablet:text-2xl dark:text-white'>{joke.joke}</p>
     );
 }
 
@@ -25,9 +25,9 @@ export default async function Home() {
                 <p className='text-5xl laptop:text-4xl font-semibold text-neutral-200'>Unfortunately this website is under construction. :(</p>
                 <p className='text-5xl laptop:text-4xl font-semibold text-neutral-200'>We know you're sad, so enjoy this dad joke instead!</p>
                 <br/>
-                <div className='p-6 bg-white/50 mx-2 rounded-xl backdrop-blur-lg pointer-events-auto'>
+                <div className='p-6 bg-white/50 dark:bg-neutral-800/50 mx-2 rounded-xl backdrop-blur-lg pointer-events-auto'>
                     <DadJokeProvider initialDadJoke={''}>
-                        <Suspense fallback={<p className='text-3xl'>Dad joke is loading...</p>}>
+                        <Suspense fallback={<p className='text-3xl dark:text-white'>Dad joke is loading...</p>}>
                             {/*@ts-ignore*/}
                             <RandomDadJoke />
                             <br/>

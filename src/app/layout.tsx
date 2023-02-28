@@ -2,6 +2,7 @@ import './globals.scss'
 import React from "react";
 import NavbarContainer from "@/app/_components/nav/navbar-container";
 import {DiscordDataProvider} from "@/app/_components/discord-data-context";
+import {DarkModeProvider} from "@/app/_components/dark-mode-context";
 
 export const metadata = {
     title: 'Robertify',
@@ -16,11 +17,13 @@ export default function RootLayout({
     return (
         <html lang="en">
         <body>
-        <DiscordDataProvider initialDiscordData={undefined}>
-            {/* @ts-expect-error Async Server Component */}
-            <NavbarContainer />
-            {children}
-        </DiscordDataProvider>
+        <DarkModeProvider initialDarkModeState={false}>
+            <DiscordDataProvider initialDiscordData={undefined}>
+                {/* @ts-expect-error Async Server Component */}
+                <NavbarContainer/>
+                {children}
+            </DiscordDataProvider>
+        </DarkModeProvider>
         </body>
         </html>
     )

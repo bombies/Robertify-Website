@@ -27,7 +27,7 @@ export default function NavUserProfile() {
                     <p className='self-center text-primary font-semibold'>{discordData?.username}#{discordData?.discriminator}</p>
                 </div>
                 <div
-                    className='absolute mt-4 mr-2 left-[-3rem] z-50 w-72 p-6 h-fit bg-neutral-100 rounded-xl drop-shadow-lg transition-faster border-[1px] border-primary pointer-events-none'
+                    className='absolute dark:bg-neutral-800 mt-4 mr-2 left-[-3rem] z-50 w-72 p-6 h-fit bg-neutral-100 rounded-xl drop-shadow-lg transition-faster border-[1px] border-primary pointer-events-none'
                     style={{
                         display: expanded ? 'inherit' : 'none'
                     }}
