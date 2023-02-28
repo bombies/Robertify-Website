@@ -44,7 +44,7 @@ export default class APIUtils {
     }
 
     public prepareResponse(status: StatusCodes, message?: string, data?: any) {
-        return this.res.json({data: data || {}, status: status, message: message || 'There was no message provided.'});
+        return this.res.json({data: data, status: status, message: message || 'There was no message provided.'});
     }
 
     public prepareInvalidPasswordResponse() {

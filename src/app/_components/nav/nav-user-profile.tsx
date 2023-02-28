@@ -7,12 +7,12 @@ import LogoutButton from "@/app/_components/nav/logout-button";
 
 export default function NavUserProfile() {
     const [ expanded, setExpanded ] = useState(false);
-    const [ discordData ] = useDiscordData()
+    const [ discordInfo, ] = useDiscordData()
     const toggleExpanded = () => {
         setExpanded(prev => !prev);
     }
 
-    const avatar = discordData ? `https://cdn.discordapp.com/avatars/${discordData.id}/${discordData.avatar}.${discordData.avatar.startsWith('a_') ? 'gif' : 'webp'}?size=512` : 'https://i.imgur.com/fwG8qA5.png';
+    const avatar = discordInfo ? `https://cdn.discordapp.com/avatars/${discordInfo.id}/${discordInfo.avatar}.${discordInfo.avatar.startsWith('a_') ? 'gif' : 'webp'}?size=512` : 'https://i.imgur.com/fwG8qA5.png';
 
     return (
         <div className='mx-auto'>
@@ -24,7 +24,7 @@ export default function NavUserProfile() {
                     <div className='relative w-8 h-8 self-center'>
                         <Image src={avatar} alt='Discord User Avatar' fill={true} className='rounded-full' />
                     </div>
-                    <p className='self-center text-primary font-semibold'>{discordData?.username}#{discordData?.discriminator}</p>
+                    <p className='self-center text-primary font-semibold'>{discordInfo?.username}#{discordInfo?.discriminator}</p>
                 </div>
                 <div
                     className='absolute dark:bg-neutral-800 mt-4 mr-2 left-[-3rem] z-50 w-56 p-6 h-fit bg-neutral-100 rounded-xl drop-shadow-lg transition-faster border-[1px] border-primary pointer-events-none'
@@ -33,12 +33,12 @@ export default function NavUserProfile() {
                     }}
                 >
                     {
-                        discordData &&
+                        discordInfo &&
                         <div>
                             <div className='relative w-24 h-24 mb-4 self-center border-2 border-primary rounded-full drop-shadow-md mx-auto'>
                                 <Image src={avatar} alt='Discord User Avatar' fill={true} className='rounded-full' />
                             </div>
-                            <p className='self-center text-primary text-center text-xl drop-shadow-md font-semibold'>{discordData?.username}#{discordData?.discriminator}</p>
+                            <p className='self-center text-primary text-center text-xl drop-shadow-md font-semibold'>{discordInfo?.username}#{discordInfo?.discriminator}</p>
                         </div>
                     }
                     <LogoutButton />
