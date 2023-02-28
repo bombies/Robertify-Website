@@ -4,9 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import {useEffect, useRef, useState} from "react";
 import {DiscordInfo, useDiscordData} from "@/app/_components/discord-data-context";
-import Button from "@/components/Button";
 import NavUserProfile from "@/app/_components/nav/nav-user-profile";
 import DarkModeSwitcher from "@/app/_components/nav/dark-mode-switcher";
+import Button from "@/components/button/Button";
 
 export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
     const [isOpen, setOpen] = useState(false);

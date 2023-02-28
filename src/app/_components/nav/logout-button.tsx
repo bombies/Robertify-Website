@@ -3,9 +3,8 @@
 import {useRouter} from "next/navigation";
 import {useTransition} from "react";
 import {useDiscordData} from "@/app/_components/discord-data-context";
-import Button from "@/components/Button";
-import Spinner from "@/components/Spinner";
 import jsCookie from "js-cookie";
+import Button from "@/components/button/Button";
 
 export default function LogoutButton() {
     const router = useRouter();

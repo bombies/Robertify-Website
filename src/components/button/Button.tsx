@@ -1,33 +1,30 @@
 'use client';
 
-import React, {CSSProperties, MouseEventHandler} from "react";
+import React, {MouseEventHandler} from "react";
 import Link from "next/link";
 import Spinner from "@/components/Spinner";
+import {useDarkMode} from "@/app/_components/dark-mode-context";
+import {ButtonType} from "@/components/button/ButtonType";
 
-
-export enum ButtonType {
-    PRIMARY,
-    SECONDARY,
-    WARNING,
-    DANGER,
-}
-
-const getButtonStyle = (type?: ButtonType): CSSProperties => {
+const getButtonStyle = (darkMode: boolean, type?: ButtonType): string => {
     switch (type) {
         case ButtonType.PRIMARY: {
-            return { backgroundColor: '#00D615' }
+            return "bg-primary";
         }
         case ButtonType.SECONDARY: {
-            return { backgroundColor: 'transparent', borderWidth: '1px', borderColor: '#00D615', color: '#00D615' }
+            return "bg-transparent border-[1px] border-primary text-primary";
         }
         case ButtonType.WARNING: {
-            return { backgroundColor: '#ffa700' }
+            return "bg-warning";
         }
         case ButtonType.DANGER: {
-            return { backgroundColor: '#ff2c2c' }
+            return "bg-danger";
+        }
+        case ButtonType.INVERTED: {
+            return "bg-white dark:bg-neutral-800 text-primary";
         }
         default: {
-            return { backgroundColor: '#00D615' }
+            return "bg-primary"
         }
     }
 }
@@ -45,11 +42,12 @@ interface Props extends React.PropsWithChildren {
 }
 
 export default function Button(props: Props) {
-    const className = '!cursor-pointer transition-fast hover:!scale-105 rounded-lg !text-white ' + props.className || '';
+    const [ darkMode ] = useDarkMode();
+
+    const className = '!cursor-pointer transition-fast hover:!scale-105 rounded-lg !text-white ' + getButtonStyle(darkMode, props.type) + ' ' + (props.className || '');
     const styleObj = {
         width: props.width ? props.width + 'rem' : "inherit",
         height: props.height ? props.height + 'rem' : "inherit",
-        ...getButtonStyle(props.type)
     };
 
     return (
@@ -71,7 +69,7 @@ export default function Button(props: Props) {
                             onClick={props.onClick}
                             type={props.submit === true ? 'submit' : 'button'}
                     >
-                        <div className='flex justify-center p-2 gap-4'>
+                        <div className={'flex justify-center p-2 gap-4' + ((props.type === ButtonType.INVERTED || props.type === ButtonType.SECONDARY) ? ' text-primary' : '')}>
                             {props.isWorking ? <Spinner size={.75} /> : props.children}
                         </div>
                     </button>
