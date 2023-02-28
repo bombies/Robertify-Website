@@ -18,12 +18,10 @@ export function RefreshJoke() {
         <Button
             onClick={refreshJoke}
             disabled={isPending}
+            isWorking={isPending}
             width={10}
             height={3}
         >
-            {isPending && (
-                <Spinner size={1}/>
-            )}
             Refresh Joke
         </Button>
     )

@@ -29,10 +29,8 @@ export default function LogoutButton() {
                 className='text-center pointer-events-auto'
                 onClick={logout}
                 disabled={isPending}
+                isWorking={isPending}
             >
-                {isPending && (
-                    <Spinner size={.5} />
-                )}
                 Logout
             </Button>
         </div>

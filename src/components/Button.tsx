@@ -1,9 +1,8 @@
 'use client';
 
 import React, {CSSProperties, MouseEventHandler} from "react";
-import {Simulate} from "react-dom/test-utils";
-import submit = Simulate.submit;
 import Link from "next/link";
+import Spinner from "@/components/Spinner";
 
 
 export enum ButtonType {
@@ -42,6 +41,7 @@ interface Props extends React.PropsWithChildren {
     disabled?: boolean;
     onClick?: MouseEventHandler<HTMLButtonElement>
     href?: string;
+    isWorking?: boolean;
 }
 
 export default function Button(props: Props) {
@@ -72,7 +72,7 @@ export default function Button(props: Props) {
                             type={props.submit === true ? 'submit' : 'button'}
                     >
                         <div className='flex justify-center p-2 gap-4'>
-                            {props.children}
+                            {props.isWorking ? <Spinner size={.75} /> : props.children}
                         </div>
                     </button>
             }
