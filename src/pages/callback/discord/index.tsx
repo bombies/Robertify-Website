@@ -72,7 +72,7 @@ export default function Callback(props: Props) {
             .catch(err => {
                 console.error(err);
             })
-    }, []);
+    }, [code, error, props.discordClientID, props.discordClientSecret, props.apiMasterPassword, props.localAPIHostname]);
 
     return (
         <main></main>

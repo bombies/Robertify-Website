@@ -6,10 +6,22 @@ import {Dispatch, MutableRefObject, SetStateAction, useEffect, useRef, useState}
 import LogoutButton from "@/app/_components/nav/logout-button";
 
 const handleOutsideClick = (ref: MutableRefObject<any>, miniViewRef: MutableRefObject<any>, setState: Dispatch<SetStateAction<boolean>>) => {
+
+}
+
+export default function NavUserProfile() {
+    const [expanded, setExpanded] = useState(false);
+    const [discordInfo,] = useDiscordData()
+    const wrapperRef = useRef<any>(null);
+    const miniViewRef = useRef<any>(null);
+    const toggleExpanded = () => {
+        setExpanded(prev => !prev);
+    }
+
     useEffect(() => {
         const handle = (event: MouseEvent) => {
-            if (ref.current && (!ref.current.contains(event.target) && !miniViewRef.current.contains(event.target))) {
-                setState(false);
+            if (wrapperRef.current && (!wrapperRef.current.contains(event.target) && !miniViewRef.current.contains(event.target))) {
+                setExpanded(false);
             }
         }
 
@@ -17,19 +29,7 @@ const handleOutsideClick = (ref: MutableRefObject<any>, miniViewRef: MutableRefO
         return () => {
             document.removeEventListener('mousedown', handle);
         }
-    }, [ref])
-}
-
-export default function NavUserProfile() {
-    const [expanded, setExpanded] = useState(false);
-    const [discordInfo,] = useDiscordData()
-    const wrapperRef = useRef(null);
-    const miniViewRef = useRef(null);
-    const toggleExpanded = () => {
-        setExpanded(prev => !prev);
-    }
-
-    handleOutsideClick(wrapperRef, miniViewRef, setExpanded);
+    }, [wrapperRef, miniViewRef]);
 
     const avatar = discordInfo ? `https://cdn.discordapp.com/avatars/${discordInfo.id}/${discordInfo.avatar}.${discordInfo.avatar.startsWith('a_') ? 'gif' : 'webp'}?size=512` : 'https://i.imgur.com/fwG8qA5.png';
 

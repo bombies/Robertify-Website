@@ -23,7 +23,7 @@ export default async function Home() {
                 <p className='text-9xl m-8 drop-shadow-lg animate-wave-normal w-fit mx-auto'>👋</p>
                 <p className='text-7xl font-bold text-white mb-5 drop-shadow-lg'>Hey there!</p>
                 <p className='text-5xl laptop:text-4xl font-semibold text-neutral-200'>Unfortunately this website is under construction. :(</p>
-                <p className='text-5xl laptop:text-4xl font-semibold text-neutral-200'>We know you're sad, so enjoy this dad joke instead!</p>
+                <p className='text-5xl laptop:text-4xl font-semibold text-neutral-200'>We know you&apos;re sad, so enjoy this dad joke instead!</p>
                 <br/>
                 <div className='p-6 bg-white/50 dark:bg-neutral-800/50 mx-2 rounded-xl backdrop-blur-lg pointer-events-auto'>
                     <DadJokeProvider initialDadJoke={''}>

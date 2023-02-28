@@ -14,12 +14,12 @@ export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
         window.innerWidth,
         window.innerHeight
     ]);
-    const [, setDiscordData] = useDiscordData();
+    const [, setDiscordInfo] = useDiscordData();
     const miniUserViewRef = useRef(null);
 
     useEffect(() => {
         if (discordInfo)
-            setDiscordData(discordInfo);
+            setDiscordInfo(discordInfo);
 
         const handleWindowResize = () => {
             setWindowSize([window.innerWidth, window.innerHeight]);
@@ -30,7 +30,7 @@ export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
         return () => {
             window.removeEventListener('resize', handleWindowResize);
         }
-    }, [])
+    }, [discordInfo, setDiscordInfo])
 
     const toggleOpen = () => {
         setOpen(lastVal => !lastVal);
