@@ -26,6 +26,9 @@ export default async function Home() {
                     <Button label='LEARN MORE' className='phone:mx-auto' type={ButtonType.INVERTED} width={10} height={3} href={process.env.NEXT_PUBLIC_DISCORD_INVITE_LINK} />
                 </div>
             </div>
+            <div className='p-64'>
+                <h1>Customizable Request Channel</h1>
+            </div>
         </main>
     )
 }

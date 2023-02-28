@@ -3,6 +3,7 @@ import React from "react";
 import NavbarContainer from "@/app/_components/nav/navbar-container";
 import {DiscordDataProvider} from "@/app/_components/discord-data-context";
 import {DarkModeProvider} from "@/app/_components/dark-mode-context";
+import Footer from "@/app/_components/footer/footer";
 
 export const metadata = {
     title: 'Robertify',
@@ -21,6 +22,7 @@ export default function RootLayout({
                 {/* @ts-expect-error Async Server Component */}
                 <NavbarContainer/>
                 {children}
+                <Footer/>
             </DiscordDataProvider>
         </DarkModeProvider>
         </html>

@@ -65,14 +65,6 @@ body {
   background: url("https://i.imgur.com/pBkAhvI.jpeg") no-repeat;
 }
 
-a {
-  transition: all ease-in-out $transition-faster;
-}
-
-a:hover {
-  color: #00D615;
-}
-
 ::-webkit-scrollbar {
   width: 0.5rem;
 }
