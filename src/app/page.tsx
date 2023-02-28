@@ -20,7 +20,7 @@ export default async function Home() {
     return (
         <main className={'min-h-screen flex default-bg'}>
             <div className='m-auto text-center pointer-events-none laptop:p-32 tablet:p-16 phone:p-8'>
-                <p className='text-9xl m-8 drop-shadow-lg animate-wave-normal'>👋</p>
+                <p className='text-9xl m-8 drop-shadow-lg animate-wave-normal w-fit mx-auto'>👋</p>
                 <p className='text-7xl font-bold text-white mb-5 drop-shadow-lg'>Hey there!</p>
                 <p className='text-5xl laptop:text-4xl font-semibold text-neutral-200'>Unfortunately this website is under construction. :(</p>
                 <p className='text-5xl laptop:text-4xl font-semibold text-neutral-200'>We know you're sad, so enjoy this dad joke instead!</p>
