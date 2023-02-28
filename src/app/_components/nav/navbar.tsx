@@ -72,7 +72,7 @@ export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
                         {
                             !discordInfo ?
                                 <Button
-                                    className='self-center'
+                                    className='self-center mx-auto'
                                     width={8}
                                     height={3}
                                     href={process.env.NEXT_PUBLIC_DISCORD_LOGIN_LINK}
