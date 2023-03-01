@@ -37,6 +37,10 @@ module.exports = {
       boxShadow: {
         'glow-primary-md': '0 0px 6px -1px #00D615, 0 2px 4px -2px #00D615)',
         'glow-primary-lg': '0 0px 15px -3px #00D615, 0 4px 6px -4px #00D615'
+      },
+      dropShadow: {
+        'glow-primary-md': '0 4px 3px rgb(0 214 21 / 0.25)',
+        'glow-primary-lg': '0 4px 10px rgb(0 214 21 / 0.25)'
       }
     },
   },

@@ -1,10 +1,10 @@
 import WebClient from "../utils/web-client";
 import Button from "@/components/button/Button";
 import {ButtonType} from "@/components/button/ButtonType";
-import BasicContent from "@/app/_components/baisc-content";
 import Image from "next/image";
 import reqChannel from '/public/reqchannel.png';
 import features from '/public/features.png';
+import BasicContent from "@/components/baisc-content";
 
 const getRandomJoke = async () => {
     const res = await WebClient.instance()

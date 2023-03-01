@@ -8,7 +8,7 @@ export default function Footer() {
         <div className='bg-neutral-200 dark:bg-neutral-900 p-24 tablet:p-16 flex justify-between gap-4'>
             <div>
                 <div className='relative w-16 h-16 mb-6'>
-                    <Image src='https://i.imgur.com/fwG8qA5.png' alt='' fill={true} className='drop-shadow-lg' />
+                    <Image src='https://i.imgur.com/fwG8qA5.png' alt='' fill={true} className='dark:drop-shadow-glow-primary-lg' />
                 </div>
                 <p className='text-neutral-400 dark:text-neutral-500 max-w-xs font-light text-sm'>A discord music bot that with a multitude of features that will fit your liking.</p>
             </div>

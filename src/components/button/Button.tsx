@@ -10,7 +10,7 @@ import Image, {StaticImageData} from "next/image";
 const getButtonStyle = (darkMode: boolean, type?: ButtonType): string => {
     switch (type) {
         case ButtonType.PRIMARY: {
-            return "bg-primary";
+            return "bg-primary shadow-lg dark:shadow-primary/40 shadow-transparent";
         }
         case ButtonType.SECONDARY: {
             return "bg-transparent border-[1px] border-primary text-primary";
@@ -25,7 +25,7 @@ const getButtonStyle = (darkMode: boolean, type?: ButtonType): string => {
             return "bg-white dark:bg-neutral-800 text-primary";
         }
         default: {
-            return "bg-primary"
+            return "bg-primary shadow-lg dark:shadow-primary/40 shadow-transparent"
         }
     }
 }
