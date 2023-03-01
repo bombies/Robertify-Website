@@ -16,7 +16,6 @@ export function DarkModeProvider({
     const [ darkMode, setDarkModeState ] = useState<boolean>(initialDarkModeState);
 
     useEffect(() => {
-        console.log('Dark mode changed', initialDarkModeState, darkMode)
         dispatch(setDarkMode(darkMode));
     }, [darkMode])
 
