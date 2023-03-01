@@ -8,6 +8,7 @@ import NavUserProfile from "@/app/_components/nav/nav-user-profile";
 import DarkModeSwitcher from "@/app/_components/nav/dark-mode-switcher";
 import Button from "@/components/button/Button";
 import login from '/public/login.svg';
+import HyperLink from "@/components/hyperlink";
 
 export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
     const [isOpen, setOpen] = useState(false);
@@ -65,10 +66,10 @@ export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
                     </Link>
                     <div
                         className='self-center mx-auto flex gap-16 tablet:gap-8 tablet:text-center tablet:flex-col tablet:mb-6 dark:text-white'>
-                        <Link href={process.env.NEXT_PUBLIC_DISCORD_INVITE_LINK || ''} >INVITE</Link>
-                        <Link href='/commands'>COMMANDS</Link>
-                        <Link href='/'>VOTE</Link>
-                        <Link href='/'>SUPPORT</Link>
+                        <HyperLink href={process.env.NEXT_PUBLIC_DISCORD_INVITE_LINK || ''} >INVITE</HyperLink>
+                        <HyperLink href='/commands'>COMMANDS</HyperLink>
+                        <HyperLink href='/'>VOTE</HyperLink>
+                        <HyperLink href='/'>SUPPORT</HyperLink>
                     </div>
                     <div className='flex gap-4'>
                         <DarkModeSwitcher/>
