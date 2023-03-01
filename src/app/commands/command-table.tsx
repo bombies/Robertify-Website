@@ -65,7 +65,7 @@ export default function CommandTable(props: Props) {
                 shadow
                 noMargin
                 align='center'
-                rowsPerPage={10}
+                rowsPerPage={15}
             />
         </Table>
     )
