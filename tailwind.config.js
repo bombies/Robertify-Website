@@ -32,7 +32,12 @@ module.exports = {
           '50%': { transform: 'rotate(10deg)' },
           '75%': { transform: 'rotate(0deg)' },
           '100%': { transform: 'rotate(-10deg)' },
-        }
+        },
+        shimmer: {
+          '100%': {
+            transform: 'translateX(100%)',
+          },
+        },
       },
       boxShadow: {
         'glow-primary-md': '0 0px 6px -1px #00D615, 0 2px 4px -2px #00D615)',
