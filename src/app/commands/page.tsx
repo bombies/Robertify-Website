@@ -6,7 +6,7 @@ export default async function CommandsPage() {
     return (
         <main className='min-h-screen'>
             <HeadingSection heading='Commands' subheading='So... many... commands...' />
-            <div className='py-12 px-24'>
+            <div className='py-12 px-24 tablet:px-12 phone:px-4'>
                 <Suspense fallback={<div>Loading...</div>}>
                     {/* @ts-expect-error Async Server Component */}
                     <CommandTableContext/>
