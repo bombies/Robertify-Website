@@ -44,7 +44,7 @@ export default function NavUserProfile() {
                 </div>
                 <div
                     ref={wrapperRef}
-                    className='absolute dark:bg-neutral-800 mt-4 mr-2 left-[-3rem] z-50 w-56 p-6 h-fit bg-neutral-100 rounded-xl drop-shadow-lg transition-faster border-[1px] border-primary'
+                    className='absolute dark:bg-neutral-800/80 mt-4 mr-2 left-[-3rem] z-50 w-56 p-6 h-fit bg-neutral-100/80 shadow-md backdrop-blur-md rounded-xl drop-shadow-lg transition-faster border-[1px] border-primary'
                     style={{
                         display: expanded ? 'inherit' : 'none'
                     }}
@@ -53,10 +53,10 @@ export default function NavUserProfile() {
                         discordInfo &&
                         <div>
                             <div
-                                className='relative w-24 h-24 mb-4 self-center border-2 border-primary rounded-full drop-shadow-md mx-auto'>
+                                className='relative w-24 h-24 mb-4 self-center border-2 border-primary rounded-full shadow-glow-primary-lg mx-auto mb-6'>
                                 <Image src={avatar} alt='Discord User Avatar' fill={true} className='rounded-full'/>
                             </div>
-                            <p className='self-center text-primary text-center text-xl drop-shadow-md font-semibold pointer-events-none'>{discordInfo?.username}#{discordInfo?.discriminator}</p>
+                            <p className='self-center text-primary text-center text-xl drop-shadow-md font-semibold pointer-events-none mb-6'>{discordInfo?.username}#{discordInfo?.discriminator}</p>
                         </div>
                     }
                     <LogoutButton/>
