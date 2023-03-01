@@ -1,30 +1,26 @@
 import './globals.scss'
 import React from "react";
 import NavbarContainer from "@/app/_components/nav/navbar-container";
-import {DiscordDataProvider} from "@/app/_components/discord-data-context";
-import {DarkModeProvider} from "@/app/_components/dark-mode-context";
 import Footer from "@/app/_components/footer/footer";
+import Providers from "@/app/_components/providers";
+import storeWrapper from "@/utils/redux/redux-store";
 
 export const metadata = {
     title: 'Robertify',
     description: 'A next-gen music bot',
 }
 
-export default function RootLayout({
-                                       children,
-                                   }: {
-    children: React.ReactNode
-}) {
+type Props = React.PropsWithChildren;
+
+export default function RootLayout(props: Props) {
     return (
         <html lang="en">
-        <DarkModeProvider initialDarkModeState={false}>
-            <DiscordDataProvider initialDiscordData={undefined}>
-                {/* @ts-expect-error Async Server Component */}
-                <NavbarContainer/>
-                {children}
-                <Footer/>
-            </DiscordDataProvider>
-        </DarkModeProvider>
+        <Providers>
+            {/* @ts-expect-error Async Server Component */}
+            <NavbarContainer/>
+            {props.children}
+            <Footer/>
+        </Providers>
         </html>
     )
 }

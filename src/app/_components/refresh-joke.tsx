@@ -2,8 +2,7 @@
 
 import {useRouter} from "next/navigation";
 import {useTransition} from "react";
-import Button from "../../components/Button";
-import Spinner from "../../components/Spinner";
+import Button from "@/components/button/Button";
 
 export function RefreshJoke() {
     const router = useRouter();
@@ -21,8 +20,7 @@ export function RefreshJoke() {
             isWorking={isPending}
             width={10}
             height={3}
-        >
-            Refresh Joke
-        </Button>
+            label='Refresh Joke'
+        />
     )
 }

@@ -1,21 +1,27 @@
 'use client';
 
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+import {useAppDispatch, useAppSelector} from "@/utils/redux/redux-store";
+import {selectDarkModeState, setDarkMode} from "@/utils/redux/slices/dark-mode-slice";
 
 const DarkModeContext = React.createContext<[boolean, React.Dispatch<React.SetStateAction<boolean>>] | undefined>(undefined);
 
 export function DarkModeProvider({
-    children,
-    initialDarkModeState
+    children
                                  }: {
-    children: React.ReactNode,
-    initialDarkModeState: boolean
+    children: React.ReactNode
 }) {
-    const [ darkMode, setDarkMode ] = useState<boolean>(false);
-    const data = initialDarkModeState || darkMode;
+    const dispatch = useAppDispatch();
+    const initialDarkModeState = useAppSelector(selectDarkModeState);
+    const [ darkMode, setDarkModeState ] = useState<boolean>(initialDarkModeState);
+
+    useEffect(() => {
+        console.log('Dark mode changed', initialDarkModeState, darkMode)
+        dispatch(setDarkMode(darkMode));
+    }, [darkMode])
 
     return (
-        <DarkModeContext.Provider value={[data, setDarkMode]}>
+        <DarkModeContext.Provider value={[darkMode, setDarkModeState]}>
             <body className={`${darkMode ? 'dark bg-neutral-800' : ''}`}>
                 {children}
             </body>

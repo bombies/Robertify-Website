@@ -72,7 +72,7 @@ export default function Button(props: Props) {
                           style={styleObj}
                           href={props.href}
                     >
-                        <div className='flex justify-center self-center gap-4'>
+                        <div className={'flex justify-center self-center gap-4' + ((props.type === ButtonType.INVERTED || props.type === ButtonType.SECONDARY) ? ' text-primary' : '')}>
                             {children}
                         </div>
                     </Link>
