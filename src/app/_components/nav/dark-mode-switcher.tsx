@@ -4,10 +4,8 @@ import {useDarkMode} from "@/app/_components/dark-mode-context";
 import moon from '/public/moon.svg';
 import sun from '/public/sun.svg';
 import Image from "next/image";
-import {useAppDispatch} from "@/utils/redux/redux-store";
 
 export default function DarkModeSwitcher() {
-    const dispatch = useAppDispatch();
     const [ darkMode, setDarkMode ] = useDarkMode();
     const toggleDarkMode = () => {
         setDarkMode(prev => !prev);

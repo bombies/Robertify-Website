@@ -3,7 +3,7 @@ import {HTTPMethod, MethodHandler} from "@/utils/api/MethodHandler";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import DiscordAccessRedisManager from "@/utils/api/redis/managers/discord-access.redis-manager";
 import {DiscordUsersRedisManager} from "@/utils/api/redis/managers/discord-users.redis-manager";
-import WebClient from "@/utils/web-client";
+import WebClient from "@/utils/api/web-client";
 
 class RouteHandler extends MethodHandler {
     constructor(req: NextApiRequest, res: NextApiResponse) {
@@ -31,7 +31,7 @@ class RouteHandler extends MethodHandler {
 
                 // A not so beautiful cache miss
                 // Contacting Discord's API for the data.
-                const fetchedData = (await WebClient.instance()
+                const fetchedData = (await WebClient.getInstance()
                     .get('https://discord.com/api/v10/users/@me', {
                         headers: {
                             'Authorization': `Bearer ${discordAccessData.access_token}`

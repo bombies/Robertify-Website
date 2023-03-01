@@ -57,12 +57,12 @@ export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
             {
                 (isOpen || (windowSize[0] > 1025)) &&
                 <div
-                    className={'flex tablet:flex-col dark:bg-neutral-800 w-full h-20 tablet:h-fit tablet:absolute z-40 bg-white p-6 transition-fast'}>
-                    <Link href='/' className={'flex self-center cursor-pointer hover:scale-105 transition-fast'}>
+                    className={'flex tablet:flex-col dark:bg-neutral-900 w-full h-20 tablet:h-fit tablet:absolute z-40 bg-neutral-100 p-6 transition-fast'}>
+                    <Link href='/' className={'flex gap-4 justify-center cursor-pointer hover:scale-105 transition-fast'}>
                         <div className='relative w-16 h-16 self-center'>
                             <Image src='https://i.imgur.com/fwG8qA5.png' alt='Robertify Logo' fill={true}/>
                         </div>
-                        <h1 className='uppercase font-black text-3xl self-center text-primary'>Robertify</h1>
+                        <h1 className='uppercase font-black text-3xl self-center tracking-widest text-primary my-auto'>Robertify</h1>
                     </Link>
                     <div
                         className='self-center mx-auto flex gap-16 tablet:gap-8 tablet:text-center tablet:flex-col tablet:mb-6 dark:text-white'>

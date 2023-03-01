@@ -1,6 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AppState} from "@/utils/redux/redux-store";
-import {HYDRATE} from "next-redux-wrapper";
 
 export interface DarkModeState {
     value: boolean;
@@ -23,14 +22,6 @@ export const darkModeSlice = createSlice({
             state.value = action.payload;
         }
     },
-    extraReducers: {
-        [HYDRATE]: (state, action) => {
-            return {
-                ...state,
-                ...action.payload
-            }
-        }
-    }
 });
 
 export const { toggleDarkMode, setDarkMode } = darkModeSlice.actions;

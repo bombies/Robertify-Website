@@ -1,7 +1,7 @@
 import {useRouter} from "next/router";
 import {useEffect} from "react";
 import {GetStaticProps} from "next";
-import WebClient from "../../../utils/web-client";
+import WebClient from "../../../utils/api/web-client";
 import {nanoid} from "nanoid";
 import jsCookie from 'js-cookie';
 
@@ -50,7 +50,7 @@ export default function Callback(props: Props) {
             'redirect_uri': `${props.localAPIHostname}/callback/discord`
         }
 
-        const axiosInstance = WebClient.instance();
+        const axiosInstance = WebClient.getInstance();
         axiosInstance.post('https://discord.com/api/v10/oauth2/token?=', new URLSearchParams(data).toString(), config)
             .then(res => {
                 const id = nanoid(8);
