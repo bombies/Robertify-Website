@@ -6,6 +6,7 @@ import {useDiscordData} from "@/app/_components/discord-data-context";
 import jsCookie from "js-cookie";
 import Button from "@/components/button/Button";
 import logoutIcon from '/public/logout.svg';
+import {ButtonType} from "@/components/button/ButtonType";
 
 export default function LogoutButton() {
     const router = useRouter();
@@ -32,6 +33,7 @@ export default function LogoutButton() {
                 isWorking={isPending}
                 label='Logout'
                 icon={logoutIcon}
+                type={ButtonType.DANGER}
             />
         </div>
     )

@@ -4,7 +4,9 @@ import {useDiscordData} from "@/app/_components/discord-data-context";
 import Image from "next/image";
 import {useEffect, useRef, useState} from "react";
 import LogoutButton from "@/app/_components/nav/logout-button";
-import logout from '/public/logout.svg';
+import Button from "@/components/button/Button";
+import {ButtonType} from "@/components/button/ButtonType";
+import serverIcon from '/public/server.svg';
 
 export default function NavUserProfile() {
     const [expanded, setExpanded] = useState(false);
@@ -59,7 +61,17 @@ export default function NavUserProfile() {
                             <p className='self-center text-primary text-center text-xl dark:drop-shadow-glow-primary-lg font-semibold pointer-events-none mb-6'>{discordInfo?.username}#{discordInfo?.discriminator}</p>
                         </div>
                     }
-                    <LogoutButton/>
+                    <div className='space-y-3'>
+                        <Button
+                            centered
+                            width={6}
+                            height={2.5}
+                            icon={serverIcon}
+                            label='Servers'
+                            type={ButtonType.PRIMARY}
+                        />
+                        <LogoutButton/>
+                    </div>
                 </div>
             </div>
         </div>
