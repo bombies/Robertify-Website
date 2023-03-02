@@ -1,10 +1,6 @@
 import HeadingSection from "@/components/heading-section";
 import Button from "@/components/button/Button";
 import {ButtonType} from "@/components/button/ButtonType";
-import BasicContent from "@/components/baisc-content";
-import Image from "next/image";
-import reqChannel from "../../public/reqchannel.png";
-import features from "../../public/features.png";
 
 export default function Loading() {
     return (
