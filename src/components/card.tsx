@@ -10,6 +10,7 @@ interface Props extends React.PropsWithChildren {
     onClick?: MouseEventHandler<HTMLDivElement>
     size?: CardSize;
     className?: string;
+    centered?: boolean;
 }
 
 export const parseCardSize = (size?: CardSize) => {
@@ -26,7 +27,7 @@ export default function Card(props: Props) {
     return (
         <div
             onClick={props.onClick}
-            className={'bg-neutral-200/50 dark:bg-neutral-900/50 backdrop-blur-lg rounded-xl shadow-lg py-3 px-6 phone:px-3 ' + (parseCardSize(props.size)) + ' ' + (props.className || '') + (typeof props.hoverable !== 'undefined' ? ' transition-fast hover:scale-105' : '')}
+            className={'bg-neutral-200/50 dark:bg-neutral-900/50 backdrop-blur-lg rounded-xl shadow-lg p-6 phone:p-3 ' + (parseCardSize(props.size)) + ' ' + (props.className || '') + (typeof props.hoverable !== 'undefined' ? ' transition-fast hover:scale-105' : '') + (typeof props.centered !== 'undefined' ? ' mx-auto' : '')}
             >
             {props.title && (
                 <h3 className='font-semibold text-primary dark:drop-shadow-glow-primary-lg phone:text-lg'>{props.title}</h3>
