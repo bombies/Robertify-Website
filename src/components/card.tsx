@@ -1,6 +1,6 @@
 import React, {MouseEventHandler} from "react";
 
-export type CardSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl';
+export type CardSize = 'xs' | 'sm' | 'md' | 'lg';
 
 interface Props extends React.PropsWithChildren {
     title?: string;
