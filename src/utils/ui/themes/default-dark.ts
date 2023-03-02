@@ -4,9 +4,9 @@ const darkTheme = createTheme({
     type: 'dark',
     theme: {
         colors: {
-            // background colors (light)
-            background: "$black",
-            backgroundAlpha: "rgba(0,0,0,0.8)", // used for semi-transparent backgrounds like the navbar
+            // background colors (dark)
+            background: "rgb(38,38,38)",
+            backgroundAlpha: "rgba(38,38,38,0.8)", // used for semi-transparent backgrounds like the navbar
             foreground: "$white",
             backgroundContrast: "$white",
 

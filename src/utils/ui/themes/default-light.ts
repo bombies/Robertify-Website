@@ -6,8 +6,8 @@ const lightTheme = createTheme({
         colors: {
 
             // background colors (light)
-            background: "$white",
-            backgroundAlpha: "rgba(255, 255, 255, 0.8)", // used for semi-transparent backgrounds like the navbar
+            background: "rgb(250,250,250)",
+            backgroundAlpha: "rgba(250, 250, 250, 0.8)", // used for semi-transparent backgrounds like the navbar
             foreground: "$black",
             backgroundContrast: "$white",
 
