@@ -6,7 +6,7 @@ export default function Loading() {
         <main>
             <HeadingSection heading='Terms of Service' />
             <div className='p-12 phone:p-3 flex flex-col gap-y-6 mx-auto justify-center'>
-                <SkeletonCard size='lg' />
+                <SkeletonCard centered size='lg' />
             </div>
         </main>
     )
