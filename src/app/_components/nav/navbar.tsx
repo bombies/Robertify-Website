@@ -23,7 +23,9 @@ export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
     useEffect(() => {
         if (discordInfo)
             setDiscordInfo(discordInfo);
+    }, [discordInfo, setDiscordInfo])
 
+    useEffect(() => {
         const handleWindowResize = () => {
             setWindowSize([window.innerWidth, window.innerHeight]);
         }
@@ -33,7 +35,7 @@ export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
         return () => {
             window.removeEventListener('resize', handleWindowResize);
         }
-    }, [discordInfo, setDiscordInfo])
+    }, [])
 
     const toggleOpen = () => {
         setOpen(lastVal => !lastVal);
@@ -69,7 +71,7 @@ export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
                         <HyperLink href={process.env.NEXT_PUBLIC_DISCORD_INVITE_LINK || ''} >INVITE</HyperLink>
                         <HyperLink href='/commands'>COMMANDS</HyperLink>
                         <HyperLink href='/'>VOTE</HyperLink>
-                        <HyperLink href='/'>SUPPORT</HyperLink>
+                        <HyperLink href='/support'>SUPPORT</HyperLink>
                     </div>
                     <div className='flex gap-4'>
                         <DarkModeSwitcher/>
