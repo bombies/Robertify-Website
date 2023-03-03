@@ -55,3 +55,16 @@ export default class APIUtils {
         return res.json({ data: {}, status: StatusCodes.BAD_REQUEST, message: 'Invalid HTTP method!' });
     }
 }
+
+type ParamSearchObject = {
+    searchParams: URLSearchParams,
+    paramName: string,
+    limit?: number,
+    defaultResult?: string
+}
+
+export const getParamFromSearch = (options: ParamSearchObject): string => {
+    const { searchParams, paramName, limit, defaultResult } = options;
+    const result = searchParams.get(paramName);
+    return result?.slice(0, limit ?? result.length) ?? (defaultResult ?? '');
+}
