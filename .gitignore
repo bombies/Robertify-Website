@@ -27,14 +27,14 @@ yarn-error.log*
 
 # local env files
 .env*.local
-.env
 
 # vercel
 .vercel
 
-# Sentry
-.sentryclirc
-sentry.server.config.js
-sentry.client.config.js
+# typescript
+*.tsbuildinfo
+next-env.d.ts
 
-.idea
+
+#sentry
+sentry.*.config.js
