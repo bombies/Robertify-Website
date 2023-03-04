@@ -47,7 +47,7 @@ export default function Callback(props: Props) {
             'client_secret': props.discordClientSecret,
             'grant_type': 'authorization_code',
             'code': code,
-            'redirect_uri': `${props.localAPIHostname}/callback/discord`
+            'redirect_uri': process.env.NEXT_PUBLIC_DISCORD_LOGIN_REDIRECT_URI!
         }
 
         const axiosInstance = WebClient.getInstance();
