@@ -59,7 +59,6 @@ export class ExternalWebClient extends WebClient {
     public static async instance(options?: CreateAxiosDefaults<any>) {
         if (!options) {
             if (this.INSTANCE) {
-                console.log('Instance existed.', this.INSTANCE.instance.defaults.baseURL)
                 return this.INSTANCE.instance;
             }
             const client = new ExternalWebClient({
