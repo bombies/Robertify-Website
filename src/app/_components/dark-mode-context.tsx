@@ -20,7 +20,7 @@ export function DarkModeProvider({
     useEffect(() => {
         dispatch(setDarkMode(darkMode));
         setTheme(darkMode ? 'dark' : 'light')
-    }, [darkMode])
+    }, [darkMode, dispatch, setTheme])
 
     return (
         <DarkModeContext.Provider value={[darkMode, setDarkModeState]}>
