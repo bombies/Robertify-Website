@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import APIUtils, {ResponseBuilder} from "@/utils/api/APIUtils";
+import ApiUtils, {ResponseBuilder} from "@/utils/api/api-utils";
 import {StatusCodes} from "http-status-codes";
 
 export enum HTTPMethod {
@@ -10,10 +10,10 @@ export enum HTTPMethod {
 }
 
 export abstract class MethodHandler {
-    private apiUtils: APIUtils;
+    private apiUtils: ApiUtils;
 
     protected constructor(private readonly req: NextApiRequest, private readonly res: NextApiResponse) {
-        this.apiUtils = new APIUtils(req, res);
+        this.apiUtils = new ApiUtils(req, res);
     }
 
     public async GET(): Promise<void> {
@@ -41,7 +41,7 @@ export abstract class MethodHandler {
     }
 
     public invalidMethod() {
-        return APIUtils.invalidMethod(this.res);
+        return ApiUtils.invalidMethod(this.res);
     }
 
     public async handle(allowedMethods: HTTPMethod[]) {

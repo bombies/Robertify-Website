@@ -33,12 +33,20 @@ class WebClient {
     }
 }
 
-export class ExternalWebClient extends WebClient {
+export class ExternalWebClient {
+    protected readonly instance: AxiosInstance;
     protected static INSTANCE?: ExternalWebClient;
 
-    private constructor(options?: CreateAxiosDefaults<any>) {
-        super({
-            ...options
+    constructor(private options?: CreateAxiosDefaults<any>) {
+        this.instance = axios.create({
+            headers: {
+                Accept: 'application/json',
+                "User-Agent": 'Robertify Website (https://github.com/bombies/Robertify-Website)',
+                'Authorization': process.env.API_MASTER_PASSWORD
+            },
+            timeout: 5 * 1000,
+            ...options,
+            baseURL: process.env.EXTERN_API_HOSTNAME,
         });
     }
 
@@ -56,29 +64,6 @@ export class ExternalWebClient extends WebClient {
         }, 12 * 60 * 60 * 1000)
     }
 
-    public static async instance(options?: CreateAxiosDefaults<any>) {
-        if (!options) {
-            if (this.INSTANCE) {
-                return this.INSTANCE.instance;
-            }
-            const client = new ExternalWebClient({
-                baseURL: process.env.EXTERN_API_HOSTNAME,
-            });
-            this.INSTANCE = client;
-            await ExternalWebClient.setAccessToken(client);
-            client.startTokenRefresh();
-            return client.instance;
-        } else {
-            const client = new ExternalWebClient({
-                ...options,
-                baseURL: process.env.EXTERN_API_HOSTNAME
-            });
-            await ExternalWebClient.setAccessToken(client);
-            client.startTokenRefresh();
-            return client.instance;
-        }
-    }
-
     private static async setAccessToken(client: ExternalWebClient) {
         const accessToken = await client.getAccessToken();
         client.instance.interceptors.request.use(config => {
@@ -86,5 +71,31 @@ export class ExternalWebClient extends WebClient {
             return config;
         });
     }
+
+    public static async getInstance(options?: CreateAxiosDefaults<any>) {
+        if (!options) {
+            if (this.INSTANCE)
+                return this.INSTANCE.instance;
+
+            const client = new ExternalWebClient();
+            this.INSTANCE = client;
+
+            await ExternalWebClient.setAccessToken(client);
+            client.startTokenRefresh();
+
+            return client.instance;
+        }
+
+        // Options provided
+        const client = new ExternalWebClient({
+            ...options
+        });
+
+        await ExternalWebClient.setAccessToken(client);
+        client.startTokenRefresh();
+
+        return client.instance;
+    }
 }
+
 export default WebClient;

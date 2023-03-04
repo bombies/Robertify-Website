@@ -1,5 +1,5 @@
 import {ImageResponse} from "@vercel/og";
-import {getParamFromSearch} from "@/utils/api/APIUtils";
+import {getParamFromSearch} from "@/utils/api/api-utils";
 
 export const config = {
     runtime: 'edge',

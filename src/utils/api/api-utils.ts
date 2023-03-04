@@ -2,12 +2,12 @@ import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {NextApiRequest, NextApiResponse} from "next";
 
 export class ResponseBuilder {
-    private logicHandler?: (req: NextApiRequest, res: NextApiResponse, apiUtils: APIUtils) => Promise<void>;
+    private logicHandler?: (req: NextApiRequest, res: NextApiResponse, apiUtils: ApiUtils) => Promise<void>;
     private adminRoute: boolean
-    private readonly apiUtils: APIUtils;
+    private readonly apiUtils: ApiUtils;
     constructor(private readonly req: NextApiRequest, private readonly res: NextApiResponse) {
         this.adminRoute = false;
-        this.apiUtils = new APIUtils(req, res);
+        this.apiUtils = new ApiUtils(req, res);
     }
 
     public setAdminRoute() {
@@ -15,7 +15,7 @@ export class ResponseBuilder {
         return this;
     }
 
-    public setLogic(logicCallback: (req: NextApiRequest, res: NextApiResponse, apiUtils: APIUtils) => Promise<void>) {
+    public setLogic(logicCallback: (req: NextApiRequest, res: NextApiResponse, apiUtils: ApiUtils) => Promise<void>) {
         this.logicHandler = logicCallback;
         return this;
     }
@@ -34,7 +34,7 @@ export class ResponseBuilder {
     }
 }
 
-export default class APIUtils {
+export default class ApiUtils {
     constructor(private readonly req: NextApiRequest, private readonly res: NextApiResponse) {}
 
     public verifyMasterPassword() {

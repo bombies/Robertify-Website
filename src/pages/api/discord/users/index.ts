@@ -1,6 +1,6 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import {HTTPMethod, MethodHandler} from "@/utils/api/MethodHandler";
-import {ResponseBuilder} from "@/utils/api/APIUtils";
+import {HTTPMethod, MethodHandler} from "@/utils/api/method-handler";
+import {ResponseBuilder} from "@/utils/api/api-utils";
 import {DiscordUsersRedisManager} from "@/utils/api/redis/managers/discord-users.redis-manager";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 

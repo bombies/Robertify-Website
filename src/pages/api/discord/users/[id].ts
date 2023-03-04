@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import {HTTPMethod, MethodHandler} from "@/utils/api/MethodHandler";
+import {HTTPMethod, MethodHandler} from "@/utils/api/method-handler";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import DiscordAccessRedisManager from "@/utils/api/redis/managers/discord-access.redis-manager";
 import {DiscordUsersRedisManager} from "@/utils/api/redis/managers/discord-users.redis-manager";

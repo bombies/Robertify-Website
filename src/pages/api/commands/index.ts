@@ -1,7 +1,7 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import {HTTPMethod, MethodHandler} from "@/utils/api/MethodHandler";
-import {ExternalWebClient} from "@/utils/api/web-client";
+import {HTTPMethod, MethodHandler} from "@/utils/api/method-handler";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
+import {ExternalWebClient} from "@/utils/api/web-client";
 
 class RouteHandler extends MethodHandler {
     constructor(req: NextApiRequest, res: NextApiResponse) {
@@ -12,7 +12,7 @@ class RouteHandler extends MethodHandler {
         return this.getResponseBuilder()
             .setAdminRoute()
             .setLogic(async () => {
-                const externWebClient = await ExternalWebClient.instance();
+                const externWebClient = await ExternalWebClient.getInstance();
                 if (!externWebClient)
                     return this.prepareResponse(StatusCodes.INTERNAL_SERVER_ERROR, "The external Web Client is null!");
                 const data = (await externWebClient.get('/commands')).data;

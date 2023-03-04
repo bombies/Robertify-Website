@@ -1,5 +1,5 @@
 import CommandTable from "@/app/commands/command-table";
-import WebClient, {ExternalWebClient} from "@/utils/api/web-client";
+import {ExternalWebClient} from "@/utils/api/web-client";
 
 export type CommandData = {
     id: number | string,
@@ -9,9 +9,13 @@ export type CommandData = {
 }
 
 const getCommandData = async ()  => {
-    const externWebClient = await ExternalWebClient.instance();
+    const externWebClient = await ExternalWebClient.getInstance();
     if (!externWebClient) return undefined
-    return (await externWebClient.get('/commands')).data;
+    try {
+        return (await externWebClient.get('/commands')).data;
+    } catch (e: any) {
+        console.error("There was an error attempting to fetch command info:", e.response.data)
+    }
 }
 
 export default async function CommandTableContext() {

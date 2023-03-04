@@ -1,4 +1,4 @@
-import {getParamFromSearch} from "@/utils/api/APIUtils";
+import {getParamFromSearch} from "@/utils/api/api-utils";
 import {ImageResponse} from "@vercel/og";
 
 export const config = {

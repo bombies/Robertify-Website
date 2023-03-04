@@ -1,7 +1,7 @@
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {NextApiRequest, NextApiResponse} from "next";
 import DiscordAccessRedisManager from "@/utils/api/redis/managers/discord-access.redis-manager";
-import {HTTPMethod, MethodHandler} from "@/utils/api/MethodHandler";
+import {HTTPMethod, MethodHandler} from "@/utils/api/method-handler";
 
 class RouteHandler extends MethodHandler {
     constructor(req: NextApiRequest, res: NextApiResponse) {
