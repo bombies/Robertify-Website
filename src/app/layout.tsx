@@ -14,7 +14,7 @@ type Props = React.PropsWithChildren;
 
 export default function RootLayout(props: Props) {
     return (
-        <html lang="en">
+        <html suppressHydrationWarning  lang="en">
         <Providers>
             <ProgressBar />
             {/* @ts-expect-error Async Server Component */}
@@ -23,5 +23,6 @@ export default function RootLayout(props: Props) {
             <Footer/>
         </Providers>
         </html>
+
     )
 }

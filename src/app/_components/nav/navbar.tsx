@@ -9,33 +9,40 @@ import DarkModeSwitcher from "@/app/_components/nav/dark-mode-switcher";
 import Button from "@/components/button/Button";
 import login from '/public/login.svg';
 import HyperLink from "@/components/hyperlink";
+import {getWindowSize} from "@/utils/client-utils";
+
+const useDeviceSize = () => {
+    const [windowSize, setWindowSize] = useState<[number, number]>(getWindowSize());
+
+    const handleWindowResize = () => {
+        setWindowSize([window.innerWidth, window.innerHeight]);
+    }
+
+    useEffect(() => {
+    }, [windowSize])
+
+
+    useEffect(() => {
+        window.addEventListener('resize', handleWindowResize);
+        handleWindowResize();
+
+        return () => {
+            window.removeEventListener('resize', handleWindowResize);
+        }
+    }, [])
+
+    return [ windowSize[0], windowSize[1] ];
+}
 
 export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
     const [isOpen, setOpen] = useState(false);
-    const [windowSize, setWindowSize] = useState<[number, number]>([
-        window.innerWidth,
-        window.innerHeight
-    ]);
-
-
+    const [ windowWidth, windowHeight ] = useDeviceSize();
     const [, setDiscordInfo] = useDiscordData();
 
     useEffect(() => {
         if (discordInfo)
             setDiscordInfo(discordInfo);
     }, [discordInfo, setDiscordInfo])
-
-    useEffect(() => {
-        const handleWindowResize = () => {
-            setWindowSize([window.innerWidth, window.innerHeight]);
-        }
-
-        window.addEventListener('resize', handleWindowResize);
-
-        return () => {
-            window.removeEventListener('resize', handleWindowResize);
-        }
-    }, [])
 
     const toggleOpen = () => {
         setOpen(lastVal => !lastVal);
@@ -44,7 +51,7 @@ export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
     return (
         <nav>
             {
-                windowSize[0] <= 1025 &&
+                windowWidth <= 1025 &&
                 <div
                     className='transition-fast absolute top-5 left-5 flex flex-col gap-[.15rem] z-50 w-8 h-12 cursor-pointer'
                     onClick={toggleOpen}>
@@ -57,7 +64,7 @@ export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
                 </div>
             }
             {
-                (isOpen || (windowSize[0] > 1025)) &&
+                (isOpen || (windowWidth > 1025)) &&
                 <div
                     className={'flex tablet:flex-col dark:bg-neutral-900 w-full h-20 tablet:h-fit tablet:absolute z-40 bg-neutral-100 p-6 transition-fast'}>
                     <Link href='/' className={'flex gap-4 justify-center cursor-pointer hover:scale-105 transition-fast'}>

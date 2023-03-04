@@ -24,9 +24,9 @@ export function DarkModeProvider({
 
     return (
         <DarkModeContext.Provider value={[darkMode, setDarkModeState]}>
-            <body className={`${darkMode ? 'dark !bg-neutral-800' : '!bg-neutral-50'}`}>
+            <div className={`${darkMode ? 'dark !bg-neutral-800' : '!bg-neutral-50'}`}>
                 {children}
-            </body>
+            </div>
         </DarkModeContext.Provider>
     )
 }

@@ -1,5 +1,5 @@
 import CommandTable from "@/app/commands/command-table";
-import WebClient from "@/utils/api/web-client";
+import WebClient, {ExternalWebClient} from "@/utils/api/web-client";
 
 export type CommandData = {
     id: number | string,
@@ -9,12 +9,13 @@ export type CommandData = {
 }
 
 const getCommandData = async ()  => {
-    const webClient = WebClient.getInstance();
-    return (await webClient.get('/api/commands')).data;
+    const externWebClient = await ExternalWebClient.instance();
+    if (!externWebClient) return undefined
+    return (await externWebClient.get('/commands')).data;
 }
 
 export default async function CommandTableContext() {
-    const data = (await getCommandData())?.data;
+    const data = await getCommandData();
     const columns = [
         { name: 'COMMAND', uid: 'command'},
         { name: 'DESCRIPTION', uid: 'description'},

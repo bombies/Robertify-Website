@@ -1,6 +1,6 @@
 'use client';
 
-import {Table, css} from "@nextui-org/react";
+import {Table} from "@nextui-org/react";
 import {CommandData} from "@/app/commands/command-table-context";
 import React from "react";
 
@@ -52,7 +52,7 @@ export default function CommandTable(props: Props) {
                     </Table.Column>
                 )}
             </Table.Header>
-            <Table.Body items={props.data}>
+            <Table.Body items={props.data || []}>
                 {(command: CommandData) => (
                     <Table.Row>
                         {(columnKey) => (

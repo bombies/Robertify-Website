@@ -12,13 +12,14 @@ class WebClient {
                 'Authorization': process.env.API_MASTER_PASSWORD
             },
             timeout: 5 * 1000,
-            baseURL: process.env.LOCAL_API_HOSTNAME,
             ...options,
         });
     }
 
     public static getInstance(options?: CreateAxiosDefaults<any>) {
-        if (!options && !this.INSTANCE) {
+        if (!options) {
+            if (this.INSTANCE)
+                return this.INSTANCE.instance;
             const client = new WebClient({
                 baseURL: process.env.LOCAL_API_HOSTNAME
             });
@@ -56,7 +57,11 @@ export class ExternalWebClient extends WebClient {
     }
 
     public static async instance(options?: CreateAxiosDefaults<any>) {
-        if (!options && !this.INSTANCE) {
+        if (!options) {
+            if (this.INSTANCE) {
+                console.log('Instance existed.', this.INSTANCE.instance.defaults.baseURL)
+                return this.INSTANCE.instance;
+            }
             const client = new ExternalWebClient({
                 baseURL: process.env.EXTERN_API_HOSTNAME,
             });
@@ -65,17 +70,13 @@ export class ExternalWebClient extends WebClient {
             client.startTokenRefresh();
             return client.instance;
         } else {
-            if (!options)
-                return this.INSTANCE?.instance;
-            else {
-                const client = new ExternalWebClient({
-                    ...options,
-                    baseURL: process.env.EXTERN_API_HOSTNAME
-                });
-                await ExternalWebClient.setAccessToken(client);
-                client.startTokenRefresh();
-                return client.instance;
-            }
+            const client = new ExternalWebClient({
+                ...options,
+                baseURL: process.env.EXTERN_API_HOSTNAME
+            });
+            await ExternalWebClient.setAccessToken(client);
+            client.startTokenRefresh();
+            return client.instance;
         }
     }
 

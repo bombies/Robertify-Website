@@ -8,8 +8,8 @@ import {useServerInsertedHTML} from "next/navigation";
 import {CssBaseline, NextUIProvider} from "@nextui-org/react";
 import {SSRProvider} from "@react-aria/ssr";
 import darkTheme from "@/utils/ui/themes/default-dark";
-import {ThemeProvider} from "next-themes";
 import lightTheme from "@/utils/ui/themes/default-light";
+import {ThemeProvider} from "next-themes";
 
 type Props = PropsWithChildren;
 
@@ -20,6 +20,7 @@ export default function Providers({children}: Props) {
 
 
     return (
+        <body>
         <SSRProvider>
             <ReduxProvider>
                 <ThemeProvider
@@ -40,5 +41,6 @@ export default function Providers({children}: Props) {
                 </ThemeProvider>
             </ReduxProvider>
         </SSRProvider>
+        </body>
     );
 }
