@@ -23,6 +23,7 @@ jobs:
       - name: Install Dependencies
         run: |
           echo "Installing node dependencies..."
+          cd /resources/api
           npm i
       - name: Start API
         run: |
