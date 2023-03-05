@@ -5,10 +5,26 @@ import {FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER, persistReducer, persi
 import storage from "redux-persist/lib/storage";
 import {createWrapper} from "next-redux-wrapper";
 
+const createNoopStorage = () => {
+    return {
+        getItem(_key: any) {
+            return Promise.resolve(null);
+        },
+        setItem(_key: any, value: any) {
+            return Promise.resolve(value);
+        },
+        removeItem(_key: any) {
+            return Promise.resolve();
+        },
+    };
+};
+
+const strg = (typeof window !== 'undefined') ? storage : createNoopStorage();
+
 const persistConfig = {
     key: 'root',
     version: 1,
-    storage
+    storage: strg,
 }
 
 const rootReducer = combineReducers({
