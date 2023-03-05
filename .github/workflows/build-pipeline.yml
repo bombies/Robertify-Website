@@ -11,6 +11,12 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
+      - name: Clone Repository
+        uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: |
+          echo "Installing node dependencies..."
+          npm i
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
@@ -28,15 +34,10 @@ jobs:
       - name: Start API
         run: |
           echo "Starting the API..."
+          cd resources/api
           npm run start:prod
         env:
           PORT: 4000
-      - name: Clone Repository
-        uses: actions/checkout@v2
-      - name: Install Dependencies
-        run: |
-          echo "Installing node dependencies..."
-          npm i
       - name: Building...
         run: |
           echo "Building project..."
