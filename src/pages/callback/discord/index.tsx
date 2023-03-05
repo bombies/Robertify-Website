@@ -87,10 +87,10 @@ export default function Callback(props: Props) {
 export const getStaticProps: GetStaticProps = async () => {
     return {
         props: {
-            discordClientID: process.env.DISCORD_CLIENT_ID,
-            discordClientSecret: process.env.DISCORD_CLIENT_SECRET,
-            apiMasterPassword: process.env.API_MASTER_PASSWORD,
-            localAPIHostname: process.env.LOCAL_API_HOSTNAME
+            discordClientID: process.env.DISCORD_CLIENT_ID || null,
+            discordClientSecret: process.env.DISCORD_CLIENT_SECRET || null,
+            apiMasterPassword: process.env.API_MASTER_PASSWORD || null,
+            localAPIHostname: process.env.LOCAL_API_HOSTNAME || null
         }
     }
 }

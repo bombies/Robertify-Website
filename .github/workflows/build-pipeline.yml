@@ -13,6 +13,10 @@ jobs:
     steps:
       - name: Clone Repository
         uses: actions/checkout@v2
+      - name: Clone API Repository
+        uses: actions/checkout@v2
+        with:
+          repository: bombies/Robertify-API
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
