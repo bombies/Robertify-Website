@@ -35,6 +35,7 @@ jobs:
         run: |
           echo "Starting the API..."
           cd resources/api
+          npm run build
           npm run start:prod
         env:
           PORT: 4000
