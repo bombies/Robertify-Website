@@ -39,6 +39,8 @@ jobs:
           npm run start:prod
         env:
           PORT: 4000
+          API_SECRET_KEY: dummyKey
+          MASTER_PASSWORD: masterPassword
       - name: Building...
         run: |
           echo "Building project..."
