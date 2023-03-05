@@ -1,6 +1,4 @@
 import HeadingSection from "@/components/heading-section";
-import {Suspense} from "react";
-import CommandTableContext from "@/app/commands/command-table-context";
 import SkeletonTable from "@/components/skeletons/skeleton-table";
 
 export default function Loading() {

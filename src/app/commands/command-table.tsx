@@ -1,8 +1,8 @@
 'use client';
 
 import {Table} from "@nextui-org/react";
-import {CommandData} from "@/app/commands/command-table-context";
 import React from "react";
+import {CommandData} from "@/app/commands/page";
 
 type Props = {
     data: CommandData[],
