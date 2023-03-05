@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: debian-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Clone Repository
         uses: actions/checkout@v2
