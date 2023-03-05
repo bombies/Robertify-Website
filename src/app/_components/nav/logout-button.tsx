@@ -19,6 +19,7 @@ export default function LogoutButton() {
 
         startTransition(() => {
             router.refresh();
+            router.push('/');
         })
     }
 

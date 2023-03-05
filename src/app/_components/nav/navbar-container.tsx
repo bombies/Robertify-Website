@@ -6,11 +6,7 @@ const getDiscordData = async (token?: string) => {
     if (!token)
         return {};
     const axiosResponse = await WebClient.getInstance()
-        .get(`/api/discord/users/${token}`, {
-            headers: {
-                'Authorization': process.env.API_MASTER_PASSWORD
-            }
-        });
+        .get(`/api/discord/users/${token}`);
     return axiosResponse.data;
 }
 

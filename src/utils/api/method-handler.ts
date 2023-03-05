@@ -16,19 +16,19 @@ export abstract class MethodHandler {
         this.apiUtils = new ApiUtils(req, res);
     }
 
-    public async GET(): Promise<void> {
+    protected async GET(): Promise<void> {
         return
     };
 
-    public async POST(): Promise<void> {
+    protected async POST(): Promise<void> {
         return
     };
 
-    public async PATCH(): Promise<void> {
+    protected async PATCH(): Promise<void> {
         return
     };
 
-    public async DELETE(): Promise<void> {
+    protected async DELETE(): Promise<void> {
         return
     };
 
@@ -40,7 +40,7 @@ export abstract class MethodHandler {
         return this.apiUtils.prepareResponse(status, message, data);
     }
 
-    public invalidMethod() {
+    private invalidMethod() {
         return ApiUtils.invalidMethod(this.res);
     }
 

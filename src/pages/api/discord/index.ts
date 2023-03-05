@@ -8,7 +8,7 @@ class RouteHandler extends MethodHandler {
         super(req, res);
     }
 
-    async GET(): Promise<void> {
+    protected async GET(): Promise<void> {
         return await this.getResponseBuilder()
             .setAdminRoute()
             .setLogic(async (req) => {
@@ -19,7 +19,7 @@ class RouteHandler extends MethodHandler {
             .execute();
     }
 
-    async POST(): Promise<void> {
+    protected async POST(): Promise<void> {
         return await this.getResponseBuilder()
             .setAdminRoute()
             .setLogic(async (req) => {

@@ -68,6 +68,7 @@ export default function NavUserProfile() {
                             height={2.5}
                             icon={serverIcon}
                             label='Servers'
+                            href='/dashboard'
                             type={ButtonType.PRIMARY}
                         />
                         <LogoutButton/>

@@ -1,5 +1,7 @@
 import axios, {AxiosInstance, CreateAxiosDefaults} from "axios";
 
+
+
 class WebClient {
     protected readonly instance: AxiosInstance;
     protected static INSTANCE?: WebClient;
@@ -95,6 +97,35 @@ export class ExternalWebClient {
         client.startTokenRefresh();
 
         return client.instance;
+    }
+}
+
+export class DiscordWebClient {
+    protected readonly instance: AxiosInstance;
+    protected static INSTANCE?: DiscordWebClient;
+
+    constructor(accessToken: string, private options?: CreateAxiosDefaults<any>) {
+        this.instance = axios.create({
+            headers: {
+                Accept: 'application/json',
+                "User-Agent": 'Robertify Website (https://github.com/bombies/Robertify-Website)',
+                'Authorization': 'Bearer ' + accessToken
+            },
+            timeout: 5 * 1000,
+            ...options,
+            baseURL: 'https://discord.com/api/v10/',
+        });
+    }
+
+    public static getInstance(accessToken: string, options?: CreateAxiosDefaults<any>) {
+        if (!options) {
+            if (this.INSTANCE)
+                return this.INSTANCE.instance;
+            const client = new DiscordWebClient(accessToken);
+            this.INSTANCE = client;
+            return client.instance;
+        }
+        return new DiscordWebClient(accessToken, options).instance;
     }
 }
 

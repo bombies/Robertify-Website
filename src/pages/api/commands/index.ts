@@ -8,7 +8,7 @@ class RouteHandler extends MethodHandler {
         super(req, res);
     }
 
-    async GET(): Promise<void> {
+    protected async GET(): Promise<void> {
         return this.getResponseBuilder()
             .setAdminRoute()
             .setLogic(async () => {
