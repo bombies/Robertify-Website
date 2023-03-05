@@ -2,14 +2,15 @@ name: Build Pipeline
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-      branches: [main]
+    branches: [ main ]
 
 jobs:
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
+  build:
+    name: Build
+    runs-on: debian-latest
+    needs: [ lint ]
     steps:
       - name: Clone Repository
         uses: actions/checkout@v2
@@ -21,17 +22,6 @@ jobs:
         run: |
           echo "Installing node dependencies..."
           npm i
-      - name: Linting...
-        run: |
-          echo "Linting project..."
-          npm run lint
-        env:
-          CI: true
-  build:
-    name: Build
-    runs-on: debian-latest
-    needs: [lint]
-    steps:
       - name: Building...
         run: |
           echo "Building project..."
