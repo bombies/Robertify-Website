@@ -3,7 +3,7 @@ name: Build Pipeline
 on:
   push:
     branches: [main]
-  test_pull_request:
+  pull_request:
       branches: [main]
 
 jobs:
