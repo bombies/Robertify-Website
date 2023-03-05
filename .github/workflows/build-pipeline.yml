@@ -10,7 +10,6 @@ jobs:
   build:
     name: Build
     runs-on: debian-latest
-    needs: [ lint ]
     steps:
       - name: Clone Repository
         uses: actions/checkout@v2
