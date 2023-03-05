@@ -21,30 +21,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 18
-      - name: Clone API Repository
-        uses: actions/checkout@v2
-        with:
-          repository: bombies/Robertify-API
-          path: resources/api
-      - name: Install Dependencies
-        run: |
-          echo "Installing node dependencies..."
-          cd resources/api
-          npm i
-      - name: Start API
-        run: |
-          echo "Starting the API..."
-          cd resources/api
-          npm run build
-          npm run start:prod
-        env:
-          PORT: 4000
-          API_SECRET_KEY: dummyKey
-          MASTER_PASSWORD: masterPassword
       - name: Building...
         run: |
           echo "Building project..."
           npm run build
         env:
           CI: true
-          EXTERN_API_HOSTNAME: http://localhost:4000
+          EXTERN_API_HOSTNAME: https://api.robertify.me

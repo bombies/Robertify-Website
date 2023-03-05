@@ -46,7 +46,7 @@ export class ExternalWebClient {
             },
             timeout: 5 * 1000,
             ...options,
-            baseURL: process.env.EXTERN_API_HOSTNAME || 'https://api.robertify.me',
+            baseURL: process.env.EXTERN_API_HOSTNAME,
         });
     }
 
