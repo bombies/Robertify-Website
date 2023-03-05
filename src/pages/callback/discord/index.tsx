@@ -36,6 +36,11 @@ export default function Callback(props: Props) {
             return;
         }
 
+        if (!props.discordClientID || !props.discordClientSecret || !process.env.NEXT_PUBLIC_DISCORD_LOGIN_REDIRECT_URI || !props.apiMasterPassword || !props.localAPIHostname) {
+            router.push('/');
+            return;
+        }
+
         const config = {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
