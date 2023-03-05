@@ -22,11 +22,10 @@ jobs:
         with:
           node-version: 18
           cache: npm
-        run: |
-          npm ci
       - name: Linting...
         run: |
           echo "Linting project..."
+          npm ci
           npm run lint
         env:
           CI: true
