@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: bombies/Robertify-API
-          path: resources/api
+          path: /resources/api
       - name: Install Dependencies
         run: |
           echo "Installing node dependencies..."
