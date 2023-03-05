@@ -28,3 +28,4 @@ jobs:
         env:
           CI: true
           EXTERN_API_HOSTNAME: https://api.robertify.me
+          EXTERN_API_MASTER_PASSWORD: ${{ secrets.HOSTED_API_MASTER_PASSWORD }}
