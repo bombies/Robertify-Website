@@ -7,25 +7,26 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
-    name: Build
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - name: Clone Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Install Dependencies
         run: |
           echo "Installing node dependencies..."
           npm i
       - name: Setup Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 18
-      - name: Building...
+          cache: npm
         run: |
-          echo "Building project..."
-          npm run build
+          npm ci
+      - name: Linting...
+        run: |
+          echo "Linting project..."
+          npm run lint
         env:
           CI: true
-          EXTERN_API_HOSTNAME: https://api.robertify.me
-          EXTERN_API_MASTER_PASSWORD: ${{ secrets.HOSTED_API_MASTER_PASSWORD }}
