@@ -15,13 +15,38 @@ type Props = {
 const filterGuilds = (guilds: JSX.Element[], filter: string) => {
     if (!filter || filter === '')
         return guilds;
-    return guilds.filter(guild => guild.props.name.toLowerCase().startsWith(filter.toLowerCase()))
-        .sort((a, b) => a.props.name.toLowerCase().localeCompare(b.props.name.toLowerCase()));
+    return guilds.filter(guild => guild.props.name.toLowerCase().startsWith(filter.toLowerCase()));
+}
+
+const isServerAdmin = (guild: DiscordUserGuild) => {
+    return (Number(guild.permissions) & (1 << 5)) === (1 << 5) || (Number(guild.permissions) & (1 << 3)) === (1 << 3);
+}
+
+const sortGuilds = (guilds: DiscordUserGuild[]) => {
+    return guilds.sort((a, b) => {
+        if (!a.owner && !b.owner && !isServerAdmin(a) && !isServerAdmin(b))
+            return a.name.localeCompare(b.name)
+
+        if (a.owner && !b.owner)
+            return -1;
+        else if (b.owner && !a.owner)
+            return 1;
+        else if (
+            isServerAdmin(a)
+            && !isServerAdmin(b)
+        )
+            return -1;
+        else if (
+            isServerAdmin(b)
+            && !isServerAdmin(a)
+        )
+            return 1;
+        else return 0;
+    });
 }
 
 export default function GuildGrid(props: Props) {
-    const guildCards = props.guilds?.map(guild => <GuildCard key={guild.id} id={guild.id} name={guild.name} icon={guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.${guild.icon.startsWith('a_') ? 'gif' : 'webp'}?size=512` : undefined} />)
-        .sort((a, b) => a.props.name.toLowerCase().localeCompare(b.props.name.toLowerCase()));
+    const guildCards = sortGuilds(props.guilds)?.map(guild => <GuildCard key={guild.id} id={guild.id} name={guild.name} icon={guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.${guild.icon.startsWith('a_') ? 'gif' : 'webp'}?size=512` : undefined} />)
     const [ visibleGuilds, setVisibleGuilds ] = useState(guildCards);
     const [ searchValue, setSearchValue ] = useState('');
 
