@@ -9,7 +9,7 @@ export default function ReduxProvider({children}: PropsWithChildren) {
     return (
         <Provider store={store}>
             <PersistGate persistor={persistor} loading={null}>
-                {() => (children)}
+                {children}
             </PersistGate>
         </Provider>
     );
