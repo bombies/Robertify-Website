@@ -9,34 +9,9 @@ import DarkModeSwitcher from "@/app/_components/nav/dark-mode-switcher";
 import Button from "@/components/button/Button";
 import login from '/public/login.svg';
 import HyperLink from "@/components/hyperlink";
-import {getWindowSize} from "@/utils/client-utils";
-
-const useDeviceSize = () => {
-    const [windowSize, setWindowSize] = useState<[number, number]>(getWindowSize());
-
-    const handleWindowResize = () => {
-        setWindowSize([window.innerWidth, window.innerHeight]);
-    }
-
-    useEffect(() => {
-    }, [windowSize])
-
-
-    useEffect(() => {
-        window.addEventListener('resize', handleWindowResize);
-        handleWindowResize();
-
-        return () => {
-            window.removeEventListener('resize', handleWindowResize);
-        }
-    }, [])
-
-    return [ windowSize[0], windowSize[1] ];
-}
 
 export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
     const [isOpen, setOpen] = useState(false);
-    const [ windowWidth, windowHeight ] = useDeviceSize();
     const [, setDiscordInfo] = useDiscordData();
 
     useEffect(() => {
@@ -50,23 +25,19 @@ export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
 
     return (
         <nav>
-            {
-                windowWidth <= 1025 &&
+            <div
+                className='invisible tablet:visible transition-fast absolute top-5 left-5 flex flex-col gap-[.15rem] z-50 w-8 h-12 cursor-pointer'
+                onClick={toggleOpen}>
                 <div
-                    className='transition-fast absolute top-5 left-5 flex flex-col gap-[.15rem] z-50 w-8 h-12 cursor-pointer'
-                    onClick={toggleOpen}>
-                    <div
-                        className={'rounded-full h-[.25rem] transition-fast ' + (isOpen ? 'bg-primary' : 'bg-white dark:bg-neutral-600')}></div>
-                    <div
-                        className={'rounded-full h-[.25rem] transition-fast ' + (isOpen ? 'bg-primary' : 'bg-white dark:bg-neutral-600')}></div>
-                    <div
-                        className={'rounded-full h-[.25rem] transition-fast ' + (isOpen ? 'bg-primary' : 'bg-white dark:bg-neutral-600')}></div>
-                </div>
-            }
-            {
-                (isOpen || (windowWidth > 1025)) &&
+                    className={'rounded-full h-[.25rem] transition-fast ' + (isOpen ? 'bg-primary' : 'bg-white dark:bg-neutral-600')}></div>
                 <div
-                    className={'flex tablet:flex-col dark:bg-neutral-900 w-full h-20 tablet:h-fit tablet:absolute z-40 bg-neutral-100 p-6 transition-fast'}>
+                    className={'rounded-full h-[.25rem] transition-fast ' + (isOpen ? 'bg-primary' : 'bg-white dark:bg-neutral-600')}></div>
+                <div
+                    className={'rounded-full h-[.25rem] transition-fast ' + (isOpen ? 'bg-primary' : 'bg-white dark:bg-neutral-600')}></div>
+            </div>
+            {
+                <div
+                    className={`flex tablet:flex-col dark:bg-neutral-900 w-full h-20 tablet:h-fit tablet:absolute z-40 bg-neutral-100 p-6 transition-fast ${isOpen ? 'tablet:visible' : 'tablet:invisible tablet:opacity-0'}`}>
                     <Link href='/' className={'flex gap-4 justify-center cursor-pointer hover:scale-105 transition-fast'}>
                         <div className='relative w-16 h-16 self-center'>
                             <Image src='https://i.imgur.com/fwG8qA5.png' alt='Robertify Logo' fill={true}/>
