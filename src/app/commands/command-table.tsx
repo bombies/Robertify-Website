@@ -9,7 +9,12 @@ type Props = {
     columns: { name: string, uid: string }[]
 }
 
+const removeDuplicates = (arr: any[]) => {
+    return arr.filter((val, i) => arr.indexOf(val) === i);
+}
+
 export default function CommandTable(props: Props) {
+    props.data = removeDuplicates(props.data);
     const renderCell = (command: CommandData, columnKey: React.Key) => {
         // @ts-ignore
         const cellValue = command[columnKey];
@@ -56,7 +61,7 @@ export default function CommandTable(props: Props) {
                 {(command: CommandData) => (
                     <Table.Row>
                         {(columnKey) => (
-                            <Table.Cell>{renderCell(command, columnKey)}</Table.Cell>
+                            <Table.Cell key={command.id}>{renderCell(command, columnKey)}</Table.Cell>
                         )}
                     </Table.Row>
                 )}
