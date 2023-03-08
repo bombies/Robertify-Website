@@ -29,15 +29,15 @@ export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
                 className='invisible tablet:visible transition-fast absolute top-5 left-5 flex flex-col gap-[.15rem] z-50 w-8 h-12 cursor-pointer'
                 onClick={toggleOpen}>
                 <div
-                    className={'rounded-full h-[.25rem] transition-fast ' + (isOpen ? 'bg-primary' : 'bg-white dark:bg-neutral-600')}></div>
+                    className={'rounded-full h-[.25rem] transition-fast ' + (isOpen ? 'bg-primary' : 'bg-white dark:bg-neutral-900')}></div>
                 <div
-                    className={'rounded-full h-[.25rem] transition-fast ' + (isOpen ? 'bg-primary' : 'bg-white dark:bg-neutral-600')}></div>
+                    className={'rounded-full h-[.25rem] transition-fast ' + (isOpen ? 'bg-primary' : 'bg-white dark:bg-neutral-900')}></div>
                 <div
-                    className={'rounded-full h-[.25rem] transition-fast ' + (isOpen ? 'bg-primary' : 'bg-white dark:bg-neutral-600')}></div>
+                    className={'rounded-full h-[.25rem] transition-fast ' + (isOpen ? 'bg-primary' : 'bg-white dark:bg-neutral-900')}></div>
             </div>
             {
                 <div
-                    className={`flex tablet:flex-col dark:bg-neutral-900 w-full h-20 tablet:h-fit tablet:absolute z-40 bg-neutral-100 p-6 transition-fast ${isOpen ? 'tablet:visible' : 'tablet:invisible tablet:opacity-0'}`}>
+                    className={`flex tablet:flex-col dark:bg-dark/50 backdrop-blur-lg w-full h-20 tablet:h-fit tablet:absolute z-40 bg-neutral-100 p-6 transition-fast ${isOpen ? 'tablet:visible' : 'tablet:invisible tablet:opacity-0'}`}>
                     <Link href='/' className={'flex gap-4 justify-center cursor-pointer hover:scale-105 transition-fast'}>
                         <div className='relative w-16 h-16 self-center'>
                             <Image src='https://i.imgur.com/fwG8qA5.png' alt='Robertify Logo' fill={true}/>

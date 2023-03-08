@@ -22,7 +22,7 @@ const getButtonStyle = (darkMode: boolean, type?: ButtonType): string => {
             return "bg-danger shadow-lg dark:shadow-danger/40 shadow-transparent";
         }
         case ButtonType.INVERTED: {
-            return "bg-white dark:bg-neutral-800 text-primary shadow-lg dark:shadow-neutral-800/40 shadow-transparent";
+            return "bg-white dark:bg-dark text-primary shadow-lg dark:shadow-neutral-800/40 shadow-transparent";
         }
         default: {
             return "bg-primary shadow-lg dark:shadow-primary/40 shadow-transparent"
