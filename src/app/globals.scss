@@ -58,6 +58,7 @@ body, p, h1, h3 {
 }
 
 .default-bg {
+  z-index: 1;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
