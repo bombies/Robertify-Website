@@ -46,7 +46,14 @@ const sortGuilds = (guilds: DiscordUserGuild[]) => {
 }
 
 export default function GuildGrid(props: Props) {
-    const guildCards = sortGuilds(props.guilds)?.map(guild => <GuildCard key={guild.id} id={guild.id} name={guild.name} icon={guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.webp?size=512` : undefined} />)
+    const guildCards = sortGuilds(props.guilds)?.map(guild => <GuildCard
+        key={guild.id}
+        id={guild.id}
+        name={guild.name}
+        icon={guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.webp?size=512` : undefined}
+        isOwner={guild.owner}
+        isAdmin={isServerAdmin(guild)}
+    />)
     const [ visibleGuilds, setVisibleGuilds ] = useState(guildCards);
     const [ searchValue, setSearchValue ] = useState('');
 

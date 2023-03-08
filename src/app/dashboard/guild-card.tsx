@@ -1,10 +1,15 @@
 import Card from "@/components/card";
 import Image from "next/image";
+import crownIcon from '/public/crown.svg';
+import shieldIcon from '/public/shield.svg';
+import {Tooltip} from "@nextui-org/react";
 
 type Props = {
     id: string,
     icon?: string,
-    name: string
+    name: string,
+    isOwner?: boolean,
+    isAdmin?: boolean,
 }
 
 export default function GuildCard(props: Props) {
@@ -21,6 +26,20 @@ export default function GuildCard(props: Props) {
                 backgroundSize: 'cover'
             }}
         >
+            {
+                (props.isOwner || props.isAdmin) &&
+                <Tooltip
+                    className='absolute right-[-10px] top-[-10px] z-10'
+                    content={props.isOwner ? 'Server Owner' : 'Server Administrator'}
+                    color='primary'
+                    placement='topEnd'
+                >
+                    <div className='w-6 h-6'>
+                        <Image src={props.isOwner ? crownIcon : shieldIcon} alt='' />
+                    </div>
+                </Tooltip>
+
+            }
             <div className='rounded-xl w-full h-full dark:bg-dark/90 bg-neutral-200/50 backdrop-blur-md flex justify-between align-middle  p-6'>
                 <h3 className='text-primary text-xl font-semibold w-1/2 self-center whitespace-nowrap overflow-hidden overflow-ellipsis'>{props.name}</h3>
                 <div className='relative w-16 h-16 rounded-full border-2 border-primary'>
