@@ -70,7 +70,7 @@ export default function GuildGrid(props: Props) {
             </div>
             {
                 visibleGuilds.length ?
-                    <div className='grid grid-cols-3 dark:bg-neutral-900/50 bg-neutral-600/5 backdrop-blur-lg rounded-xl p-6 laptop-big:grid-cols-2 phone:grid-cols-1  mt-6 place-items-center gap-6 phone:gap-3'>
+                    <div className='grid grid-cols-3 dark:bg-neutral-900/50 bg-neutral-600/5 backdrop-blur-lg rounded-xl p-6 phone:p-3 laptop-big:grid-cols-2 phone:grid-cols-1  mt-6 place-items-center gap-6 phone:gap-3 w-2/3 tablet: w-5/6 mx-auto'>
                         {visibleGuilds}
                     </div>
                     :
