@@ -77,7 +77,7 @@ class RouteHandler extends MethodHandler {
 
                 const fetchedData = (
                     await DiscordWebClient.getInstance(discordAccessData.access_token)
-                    .get('https://discord.com/api/v10/users/@me/guilds')
+                    .get('/users/@me/guilds')
                 )?.data;
                 return this.prepareResponse(StatusCodes.OK, ReasonPhrases.OK, fetchedData);
             })
