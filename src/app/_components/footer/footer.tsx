@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export default function Footer() {
     return (
-        <div className='bg-neutral-200 dark:bg-neutral-900 p-24 tablet:p-16 flex justify-between gap-4'>
+        <div className='bg-neutral-200 dark:bg-dark/50 backdrop-blur-lg p-24 tablet:p-16 flex justify-between gap-4'>
             <div>
                 <div className='relative w-16 h-16 mb-6'>
                     <Image src='https://i.imgur.com/fwG8qA5.png' alt='' fill={true} className='dark:drop-shadow-glow-primary-lg' />

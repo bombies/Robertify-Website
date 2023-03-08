@@ -46,7 +46,7 @@ export default function NavUserProfile() {
                 </div>
                 <div
                     ref={wrapperRef}
-                    className='absolute dark:bg-neutral-800/80 shadow-lg dark:shadow-primary/50 shadow-primary/0 mt-4 mr-2 left-[-3rem] z-50 w-56 p-6 h-fit bg-neutral-100/80 shadow-md backdrop-blur-md rounded-xl transition-faster border-[1px] border-primary'
+                    className='absolute dark:bg-dark/80 shadow-lg dark:shadow-primary/50 shadow-primary/0 mt-4 mr-2 left-[-3rem] z-50 w-56 p-6 h-fit bg-neutral-100/80 shadow-md backdrop-blur-xl rounded-xl transition-faster border-[1px] border-primary'
                     style={{
                         display: expanded ? 'inherit' : 'none'
                     }}
