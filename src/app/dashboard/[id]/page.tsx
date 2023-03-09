@@ -29,6 +29,8 @@ export default async function GuildDashboard({ params }: { params: { id: string 
     if (botGuildInfo.data.statusCode === 404)
         botGuildInfo = undefined
 
+    // Update
+
     return (
         <main className='w-full min-h-screen p-24'>
             <GuildDashboardContext
