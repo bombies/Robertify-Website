@@ -5,11 +5,12 @@ import SkeletonContentProvider from "@/components/skeletons/SkeletonContentProvi
 type Props = {
     size?: CardSize,
     centered?: boolean,
+    className?: string,
 }
 
 export default function SkeletonCard(props: Props) {
     return (
-        <SkeletonProvider centered={props.centered} className={parseCardSize(props.size)}>
+        <SkeletonProvider centered={props.centered} className={parseCardSize(props.size) + ' ' + props.className}>
             <div className='space-y-6'>
                 <SkeletonContentProvider className='h-4 w-4/5' />
                 <div className='space-y-3'>

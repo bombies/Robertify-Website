@@ -12,7 +12,7 @@ type Props = {
     localAPIHostname: string,
 }
 
-const getQuery = (key: string, path: string) => {
+export const getQuery = (key: string, path: string) => {
     const queries = path.split('?');
     if (queries.length < 2)
         return undefined;
@@ -87,10 +87,10 @@ export default function Callback(props: Props) {
 export const getStaticProps: GetStaticProps = async () => {
     return {
         props: {
-            discordClientID: process.env.DISCORD_CLIENT_ID || null,
+            discordClientID: process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID || null,
             discordClientSecret: process.env.DISCORD_CLIENT_SECRET || null,
             apiMasterPassword: process.env.API_MASTER_PASSWORD || null,
-            localAPIHostname: process.env.LOCAL_API_HOSTNAME || null
+            localAPIHostname: process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME || null
         }
     }
 }

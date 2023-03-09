@@ -23,14 +23,14 @@ class WebClient {
             if (this.INSTANCE)
                 return this.INSTANCE.instance;
             const client = new WebClient({
-                baseURL: process.env.LOCAL_API_HOSTNAME
+                baseURL: process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME
             });
             this.INSTANCE = client;
             return client.instance;
         }
         return new WebClient({
             ...options,
-            baseURL: process.env.LOCAL_API_HOSTNAME
+            baseURL: process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME
         }).instance;
     }
 }
@@ -104,12 +104,12 @@ export class DiscordWebClient {
     protected readonly instance: AxiosInstance;
     protected static INSTANCE?: DiscordWebClient;
 
-    constructor(accessToken: string, private options?: CreateAxiosDefaults<any>) {
+    constructor(accessToken?: string, private options?: CreateAxiosDefaults<any>) {
         this.instance = axios.create({
             headers: {
                 Accept: 'application/json',
                 "User-Agent": 'Robertify Website (https://github.com/bombies/Robertify-Website)',
-                'Authorization': 'Bearer ' + accessToken
+                'Authorization':  accessToken ? 'Bearer ' + accessToken : 'Bot ' + process.env.DISCORD_BOT_TOKEN,
             },
             timeout: 5 * 1000,
             ...options,
@@ -117,7 +117,7 @@ export class DiscordWebClient {
         });
     }
 
-    public static getInstance(accessToken: string, options?: CreateAxiosDefaults<any>) {
+    public static getInstance(accessToken?: string, options?: CreateAxiosDefaults<any>) {
         if (!options) {
             if (this.INSTANCE)
                 return this.INSTANCE.instance;

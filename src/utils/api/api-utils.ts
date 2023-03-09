@@ -1,5 +1,6 @@
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {NextApiRequest, NextApiResponse} from "next";
+import {AxiosError} from "axios";
 
 export class ResponseBuilder {
     private logicHandler?: (req: NextApiRequest, res: NextApiResponse, apiUtils: ApiUtils) => Promise<void>;
@@ -28,6 +29,9 @@ export class ResponseBuilder {
                 return this.apiUtils.prepareInvalidPasswordResponse();
             return await this.logicHandler(this.req, this.res, this.apiUtils);
         } catch (ex) {
+            if (ex instanceof AxiosError)
+                return this.apiUtils.prepareResponse(ex.status || 500, ex.message, ex.response?.data)
+
             console.error(ex);
             return this.apiUtils.prepareResponse(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR);
         }
