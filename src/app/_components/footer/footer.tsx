@@ -8,7 +8,7 @@ export default function Footer() {
         <div className='bg-neutral-200 dark:bg-dark/50 backdrop-blur-lg p-24 tablet:p-16 flex justify-between gap-4'>
             <div>
                 <div className='relative w-16 h-16 mb-6'>
-                    <Image src='https://i.imgur.com/fwG8qA5.png' alt='' fill={true} className='dark:drop-shadow-glow-primary-lg' />
+                    <Image draggable={false} src='https://i.imgur.com/fwG8qA5.png' alt='' fill={true} className='dark:drop-shadow-glow-primary-lg' />
                 </div>
                 <p className='text-neutral-400 dark:text-neutral-500 max-w-xs font-light text-sm'>A discord music bot that with a multitude of features that will fit your liking.</p>
             </div>
@@ -23,7 +23,6 @@ export default function Footer() {
                     <HyperLink href='https://github.com/bombies/Robertify-Bot'>GitHub</HyperLink>
                 </FooterGroup>
             </div>
-
         </div>
     )
 }

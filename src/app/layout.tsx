@@ -22,9 +22,9 @@ export default function RootLayout(props: Props) {
             <div className='dark:visible opacity-50 blur-xl invisible fixed w-full h-full z-[0]'>
                 <Image draggable={false} className='blur-xl z-[0]' src={glow} alt='' fill={true} />
             </div>
-            {/* @ts-expect-error Async Server Component */}
-            <NavbarContainer/>
             <div className='z-[1]'>
+                {/* @ts-expect-error Async Server Component */}
+                <NavbarContainer/>
                 {props.children}
             </div>
             <Footer/>

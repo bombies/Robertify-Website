@@ -17,7 +17,7 @@ export default function DarkModeSwitcher() {
             onClick={toggleDarkMode}
         >
             <div className='relative w-5 h-5'>
-                <Image src={darkMode ? sun : moon} alt='Dark mode toggle' fill={true} />
+                <Image draggable={false} src={darkMode ? sun : moon} alt='Dark mode toggle' fill={true} />
             </div>
         </div>
     )

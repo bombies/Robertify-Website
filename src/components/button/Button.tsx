@@ -58,7 +58,7 @@ export default function Button(props: Props) {
         <div className={'flex gap-[.25rem] justify-center'}>
             {props.icon &&
                 <div className='relative w-5 h-5 self-center'>
-                    <Image src={props.icon} alt='' fill={true} />
+                    <Image draggable={false} src={props.icon} alt='' fill={true} />
                 </div>
             }
             <p className='text-center'>{props.label}</p>

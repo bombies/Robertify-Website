@@ -22,7 +22,7 @@ export default async function Home() {
 
                 >
                     <div className='relative w-[30rem] laptop:h-[20rem] h-[30rem] laptop:w-[20rem] self-center'>
-                        <Image src={reqChannel} alt='' fill={true} />
+                        <Image draggable={false} src={reqChannel} alt='' fill={true} />
                     </div>
                 </BasicContent>
                 <BasicContent
@@ -31,7 +31,7 @@ export default async function Home() {
                     childrenAlign='left'
                 >
                     <div className='relative w-[36rem] laptop:w-[26rem] h-[30rem] laptop:h-[20rem] self-center'>
-                        <Image src={features} alt='' fill={true} />
+                        <Image draggable={false} src={features} alt='' fill={true} />
                     </div>
                 </BasicContent>
             </div>
