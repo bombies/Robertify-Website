@@ -8,8 +8,6 @@ export default function Callback() {
     const error = getQuery("error", router.asPath);
     const guildId = getQuery("guild_id", router.asPath);
 
-    // Hello!
-
     useEffect(() => {
         if (error) {
             router.push('/dashboard');
