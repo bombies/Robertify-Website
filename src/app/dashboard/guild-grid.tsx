@@ -48,17 +48,6 @@ const sortGuilds = (guilds: DiscordUserGuild[]) => {
 }
 
 export default function GuildGrid(props: Props) {
-    if (!props.guilds) {
-        return (
-            <Card
-                centered
-                size='lg'
-                title='No servers founds...'
-                description="Uh oh! It seems I couldn't find any servers you're in. :("
-            />
-        )
-    }
-
     const guildCards = sortGuilds(props.guilds)?.map(guild => <GuildCard
         key={guild.id}
         id={guild.id}

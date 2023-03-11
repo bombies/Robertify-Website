@@ -2,9 +2,10 @@ import GuildGrid from "@/app/dashboard/guild-grid";
 import WebClient from "@/utils/api/web-client";
 import {cookies} from "next/headers";
 import {AxiosError} from "axios";
+import Card from "@/components/card";
 
 const getUserGuilds = async (token?: string) => {
-    try{
+    try {
         return (await WebClient.getInstance()
             .get(`/api/discord/users/${token}/guilds`))?.data;
     } catch (e: any) {
@@ -21,8 +22,18 @@ export default async function Dashboard() {
 
     return (
         <main className='p-12 min-h-screen'>
-            <h1 className='text-primary text-5xl phone:text-3xl dark:drop-shadow-glow-primary-lg text-center mb-6'>Welcome to your dashboard</h1>
-            <GuildGrid guilds={guilds} />
+            <h1 className='text-primary text-5xl phone:text-3xl dark:drop-shadow-glow-primary-lg text-center mb-6'>Welcome
+                to your dashboard</h1>
+            {
+                guilds ? <GuildGrid guilds={guilds}/> :
+                    <Card
+                        centered
+                        size='lg'
+                        title='No servers founds...'
+                        description="Uh oh! It seems I couldn't find any servers you're in. :("
+                    />
+            }
+
         </main>
     )
 }
