@@ -26,17 +26,17 @@ export default function GuildDashboardContext(props: Props) {
 
     return (
         <div>
-            <div className='mx-auto mb-12 p-12 bg-primary/10 shadow-md dark:bg-neutral-900/90 w-3/4 h-42 backdrop-blur-xl rounded-2xl border-2 border-primary/90'>
+            <div className='mx-auto mb-12 tablet:p-6 p-12 bg-primary/10 shadow-md dark:bg-neutral-900/90 w-3/4 h-42 backdrop-blur-xl rounded-2xl border-2 border-primary/90'>
                 <Link href='/dashboard'>
                     <div className='flex gap-4 hover:scale-[100.25%] transition-fast mb-12'>
                         <div className='relative w-8 h-8'>
                             <Image draggable={false} src={backIcon} alt='' fill={true} />
                         </div>
-                        <p className='relative self-center text-primary font-semibold text-xl'>Return to your servers</p>
+                        <p className='relative self-center text-primary font-semibold text-xl phone:text-sm'>Return to your servers</p>
                     </div>
                 </Link>
                 <div className='flex gap-12'>
-                    <div className='relative w-32 h-32 rounded-full border-2 border-primary'>
+                    <div className='relative w-32 h-32 phone:w-16 phone:h-16 rounded-full border-2 border-primary'>
                         <Image
                             draggable={false}
                             className='rounded-full'
@@ -45,12 +45,12 @@ export default function GuildDashboardContext(props: Props) {
                             fill={true}
                         />
                     </div>
-                    <h1 className='text-5xl font-bold text-primary self-center'>{props.discordGuildInfo.name}</h1>
+                    <h1 className='text-5xl phone:text-xl font-bold text-primary self-center'>{props.discordGuildInfo.name}</h1>
                 </div>
             </div>
-            <div className='mx-auto mb-12 p-12 bg-primary/10 shadow-md dark:bg-neutral-900/90 w-3/4 min-h-42 backdrop-blur-xl rounded-2xl border-2 border-primary/90'>
+            <div className='mx-auto mb-12 p-12 tablet:p-6  bg-primary/10 shadow-md dark:bg-neutral-900/90 w-3/4 min-h-42 backdrop-blur-xl rounded-2xl border-2 border-primary/90'>
                 <DashboardSection title='Management'>
-                    <div className='grid grid-cols-2 gap-6'>
+                    <div className='grid grid-cols-2 tablet:grid-cols-1 gap-6'>
                         <DashboardSectionContent
                             title='DJ Roles'
                             description='Set DJ roles.'

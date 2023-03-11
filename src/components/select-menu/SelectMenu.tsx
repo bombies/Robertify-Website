@@ -22,17 +22,17 @@ interface Props {
 const parseMenuSize = (size?: ComponentSize) => {
     switch (size) {
         case 'xs':
-            return 'w-[15rem] tablet:w-[10rem] phone:w-[5rem]';
+            return 'w-[15rem] tablet:w-[10rem]';
         case 'sm':
-            return 'w-[20rem] tablet:w-[15rem] phone:w-[10rem]';
+            return 'w-[20rem] tablet:w-[15rem]';
         case 'md':
-            return 'w-[25rem] tablet:w-[20rem] phone:w-[15rem]';
+            return 'w-[25rem] tablet:w-[20rem]';
         case 'lg':
-            return 'w-[30rem] tablet:w-[25rem] phone:w-[20rem]';
+            return 'w-[30rem] tablet:w-[25rem]';
         case 'xl':
             return 'w-[40rem] tablet:w-[35rem] phone:w-[30rem]';
         default:
-            return 'w-[15rem] tablet:w-[10rem] phone:w-[5rem]';
+            return 'w-[15rem] tablet:w-[10rem]';
     }
 }
 

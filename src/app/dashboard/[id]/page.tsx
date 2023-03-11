@@ -32,7 +32,7 @@ export default async function GuildDashboard({ params }: { params: { id: string 
     // Update
 
     return (
-        <main className='w-full min-h-screen p-24'>
+        <main className='w-full min-h-screen p-24 tablet:px-6 phone:px-3'>
             <GuildDashboardContext
                 id={id}
                 discordGuildInfo={discordGuildInfo?.data}
