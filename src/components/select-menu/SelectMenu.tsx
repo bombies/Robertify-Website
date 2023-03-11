@@ -69,13 +69,13 @@ const generateCategoryElement = (content: { category?: string, items: SelectMenu
                     <Image src={item.icon} alt='' fill={true}/>
                 </div>
             }
-            <p className={'dark:text-neutral-400 text-neutral-700 hover:!text-primary transition-fast select-none' + (isItemSelected(item) ? ' !text-primary' : '')}>{item.label}</p>
+            <p className={'dark:text-neutral-400 text-neutral-700 hover:!text-primary transition-fast select-none whitespace-nowrap overflow-hidden text-ellipsis' + (isItemSelected(item) ? ' !text-primary' : '')}>{item.label}</p>
         </div>
     ))
 
     return (
         <div>
-            <h4 className='dark:text-neutral-400 text-neutral-700 text-center uppercase font-semibold text-sm my-3 select-none'>{content.category}</h4>
+            <h4 className='dark:text-neutral-400 text-neutral-700 text-center uppercase font-semibold text-sm my-3 select-none whitespace-nowrap overflow-hidden text-ellipsis'>{content.category}</h4>
             {itemElements}
         </div>
     )

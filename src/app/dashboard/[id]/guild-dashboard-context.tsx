@@ -89,7 +89,7 @@ export default function GuildDashboardContext(props: Props) {
                                     },
                                     {
                                         category: 'Kings',
-                                        label: 'We',
+                                        label: 'We with a long name that will probably overflow',
                                         value: '1234434'
                                     },
                                 ]}
