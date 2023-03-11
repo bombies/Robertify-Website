@@ -2,9 +2,9 @@ name: Build Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, dev, features/**, fix/** ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, dev, features/**, fix/** ]
 
 jobs:
   lint:
