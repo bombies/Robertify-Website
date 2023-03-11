@@ -10,12 +10,14 @@ export type SelectMenuContent = {
     value: string,
     icon?: string | StaticImageData,
     category?: string,
+    selected?: boolean,
 }
 
 interface Props {
     content?: SelectMenuContent[],
     placeholder?: string,
-    size?: ComponentSize
+    size?: ComponentSize,
+    multiSelect?: boolean
 }
 
 const parseMenuSize = (size?: ComponentSize) => {
@@ -82,7 +84,7 @@ const generateCategoryElement = (content: { category?: string, items: SelectMenu
 
 export default function SelectMenu(props: Props) {
     const [expanded, setExpanded] = useState(false);
-    const [selected, setSelected] = useState<SelectMenuContent[] | undefined>(undefined);
+    const [selected, setSelected] = useState<SelectMenuContent[] | undefined>(props.content?.filter(item => item.selected === true));
     const itemsWithCategories = parseCategories(props.content);
     const toggleExpanded = () => setExpanded(prev => !prev);
     const handleSelect = (value: SelectMenuContent) => {
@@ -91,7 +93,10 @@ export default function SelectMenu(props: Props) {
                 return [value];
             if (prev.includes(value))
                 return prev.filter(item => item !== value);
-            else return [...prev, value];
+            else if (props.multiSelect !== undefined)
+                return [...prev, value];
+            else
+                return [value]
         })
     }
     const categories = itemsWithCategories.map(category => generateCategoryElement(category, handleSelect, selected))

@@ -57,6 +57,7 @@ export default function GuildDashboardContext(props: Props) {
                             contentAlign='below'
                         >
                             <SelectMenu
+                                multiSelect
                                 placeholder='Select a role...'
                                 content={[
                                     {
