@@ -58,7 +58,7 @@ export default function GuildDashboardContext(props: Props) {
                         >
                             <SelectMenu
                                 multiSelect
-                                placeholder='Select a role...'
+                                placeholder='Select multiple roles'
                                 content={[
                                     {
                                         label: 'Owner',
@@ -97,22 +97,33 @@ export default function GuildDashboardContext(props: Props) {
                             />
                         </DashboardSectionContent>
                         <DashboardSectionContent
-                            title='DJ Roles'
-                            description='Set DJ roles.'
+                            title='Restricted Voice Channels'
+                            description='Set voice channels.'
+                            contentAlign='below'
                         >
-
+                            <SelectMenu
+                                multiSelect
+                                placeholder='Select multiple channels'
+                            />
                         </DashboardSectionContent>
                         <DashboardSectionContent
-                            title='DJ Roles'
-                            description='Set DJ roles.'
+                            title='Restricted Text Channels'
+                            description='Set text channels'
+                            contentAlign='below'
                         >
-
+                            <SelectMenu
+                                multiSelect
+                                placeholder='Select multiple channels'
+                            />
                         </DashboardSectionContent>
                         <DashboardSectionContent
-                            title='DJ Roles'
-                            description='Set DJ roles.'
+                            title='Log Channel'
+                            description='Set tge channel for Robertify logs to be sent'
+                            contentAlign='below'
                         >
-
+                            <SelectMenu
+                                placeholder='Select a channel'
+                            />
                         </DashboardSectionContent>
                     </div>
                 </DashboardSection>

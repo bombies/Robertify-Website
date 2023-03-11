@@ -76,7 +76,7 @@ const generateCategoryElement = (content: { category?: string, items: SelectMenu
 
     return (
         <div>
-            <h4 className='dark:text-neutral-400 text-neutral-700 text-center uppercase font-semibold text-sm my-3 select-none whitespace-nowrap overflow-hidden text-ellipsis'>{content.category}</h4>
+            {content.category && <h4 className='dark:text-neutral-400 text-neutral-700 text-center uppercase font-semibold text-sm my-3 select-none whitespace-nowrap overflow-hidden text-ellipsis'>{content.category}</h4>}
             {itemElements}
         </div>
     )
