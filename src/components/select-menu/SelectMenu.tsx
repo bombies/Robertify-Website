@@ -1,10 +1,9 @@
 'use client';
 
-import React, {ReactElement, useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {ComponentSize} from "@/components/card";
 import Image, {StaticImageData} from "next/image";
 import dropDownIcon from '/public/drop-down.svg';
-import {it} from "node:test";
 
 export type SelectMenuContent = {
     label: string,
