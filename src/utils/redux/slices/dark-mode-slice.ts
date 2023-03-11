@@ -7,7 +7,7 @@ export interface DarkModeState {
 }
 
 const initialState: DarkModeState = {
-    value: false,
+    value: true,
     status: 'idle'
 };
 

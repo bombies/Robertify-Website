@@ -24,7 +24,7 @@ export default function Providers({children}: Props) {
         <SSRProvider>
             <ReduxProvider>
                 <ThemeProvider
-                    defaultTheme="light"
+                    defaultTheme="dark"
                     attribute='class'
                     value={{
                         light: lightTheme.className,
