@@ -26,7 +26,7 @@ export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
     return (
         <nav className='relative z-50'>
             <div
-                className='invisible tablet:visible transition-fast absolute top-5 left-5 flex flex-col gap-[.15rem] w-8 h-12 cursor-pointer'
+                className='z-[51] invisible tablet:visible transition-fast absolute top-5 left-5 flex flex-col gap-[.15rem] w-8 h-12 cursor-pointer'
                 onClick={toggleOpen}>
                 <div
                     className={'rounded-full h-[.25rem] transition-fast ' + (isOpen ? 'bg-primary' : 'bg-white dark:bg-neutral-900')}></div>
