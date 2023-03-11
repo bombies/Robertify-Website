@@ -1,9 +1,9 @@
 import SkeletonProvider from "@/components/skeletons/SkeletonProvider";
-import {CardSize, parseCardSize} from "@/components/card";
+import {ComponentSize, parseCardSize} from "@/components/card";
 import SkeletonContentProvider from "@/components/skeletons/SkeletonContentProvider";
 
 type Props = {
-    size?: CardSize,
+    size?: ComponentSize,
     centered?: boolean,
     className?: string,
 }

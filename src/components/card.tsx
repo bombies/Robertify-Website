@@ -1,7 +1,7 @@
 import React, {CSSProperties, MouseEventHandler} from "react";
 import Link from "next/link";
 
-export type CardSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type ComponentSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 interface Props extends React.PropsWithChildren {
     title?: string;
@@ -9,14 +9,14 @@ interface Props extends React.PropsWithChildren {
     spacers?: boolean;
     hoverable?: boolean;
     onClick?: MouseEventHandler<HTMLDivElement>
-    size?: CardSize;
+    size?: ComponentSize;
     className?: string;
     centered?: boolean;
     href?: string;
     style?: CSSProperties;
 }
 
-export const parseCardSize = (size?: CardSize) => {
+export const parseCardSize = (size?: ComponentSize) => {
     switch (size) {
         case 'xs': return 'w-[20rem] tablet:w-[15rem] phone:w-[10rem]';
         case 'sm': return 'w-[30rem] tablet:w-[20rem] phone:w-[15rem]';

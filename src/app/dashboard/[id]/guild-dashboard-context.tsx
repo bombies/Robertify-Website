@@ -5,6 +5,9 @@ import {useRouter} from "next/navigation";
 import Image from "next/image";
 import backIcon from '/public/go-back.svg';
 import Link from "next/link";
+import DashboardSection from "@/app/dashboard/[id]/DashboardSection";
+import DashboardSectionContent from "@/app/dashboard/[id]/DashboardSectionContent";
+import SelectMenu from "@/components/select-menu/SelectMenu";
 
 type Props = {
     id: string,
@@ -23,8 +26,7 @@ export default function GuildDashboardContext(props: Props) {
 
     return (
         <div>
-
-            <div className='mx-auto mb-12 p-12 bg-neutral-200/90 dark:bg-neutral-900/90 w-3/4 h-42 backdrop-blur-xl rounded-2xl border-2 border-primary/90'>
+            <div className='mx-auto mb-12 p-12 bg-primary/10 shadow-md dark:bg-neutral-900/90 w-3/4 h-42 backdrop-blur-xl rounded-2xl border-2 border-primary/90'>
                 <Link href='/dashboard'>
                     <div className='flex gap-4 hover:scale-[100.25%] transition-fast mb-12'>
                         <div className='relative w-8 h-8'>
@@ -45,6 +47,74 @@ export default function GuildDashboardContext(props: Props) {
                     </div>
                     <h1 className='text-5xl font-bold text-primary self-center'>{props.discordGuildInfo.name}</h1>
                 </div>
+            </div>
+            <div className='mx-auto mb-12 p-12 bg-primary/10 shadow-md dark:bg-neutral-900/90 w-3/4 min-h-42 backdrop-blur-xl rounded-2xl border-2 border-primary/90'>
+                <DashboardSection title='Management'>
+                    <div className='grid grid-cols-2 gap-6'>
+                        <DashboardSectionContent
+                            title='DJ Roles'
+                            description='Set DJ roles.'
+                            contentAlign='below'
+                        >
+                            <SelectMenu
+                                placeholder='Select a role...'
+                                content={[
+                                    {
+                                        label: 'Owner',
+                                        value: '1234434'
+                                    },
+                                    {
+                                        label: 'Admin',
+                                        value: '1234434'
+                                    },
+                                    {
+                                        category: 'Losers',
+                                        label: 'Pleb',
+                                        value: '1234434'
+                                    },
+                                    {
+                                        category: 'Losers',
+                                        label: 'Super Pleb',
+                                        value: '1234434'
+                                    },
+                                    {
+                                        category: 'Kings',
+                                        label: 'Me',
+                                        value: '1234434'
+                                    },
+                                    {
+                                        category: 'Kings',
+                                        label: 'You',
+                                        value: '1234434'
+                                    },
+                                    {
+                                        category: 'Kings',
+                                        label: 'We',
+                                        value: '1234434'
+                                    },
+                                ]}
+                            />
+                        </DashboardSectionContent>
+                        <DashboardSectionContent
+                            title='DJ Roles'
+                            description='Set DJ roles.'
+                        >
+
+                        </DashboardSectionContent>
+                        <DashboardSectionContent
+                            title='DJ Roles'
+                            description='Set DJ roles.'
+                        >
+
+                        </DashboardSectionContent>
+                        <DashboardSectionContent
+                            title='DJ Roles'
+                            description='Set DJ roles.'
+                        >
+
+                        </DashboardSectionContent>
+                    </div>
+                </DashboardSection>
             </div>
         </div>
     )

@@ -1,0 +1,146 @@
+'use client';
+
+import React, {ReactElement, useEffect, useRef, useState} from "react";
+import {ComponentSize} from "@/components/card";
+import Image, {StaticImageData} from "next/image";
+import dropDownIcon from '/public/drop-down.svg';
+import {it} from "node:test";
+
+export type SelectMenuContent = {
+    label: string,
+    value: string,
+    icon?: string | StaticImageData,
+    category?: string,
+}
+
+interface Props {
+    content?: SelectMenuContent[],
+    placeholder?: string,
+    size?: ComponentSize
+}
+
+const parseMenuSize = (size?: ComponentSize) => {
+    switch (size) {
+        case 'xs':
+            return 'w-[15rem] tablet:w-[10rem] phone:w-[5rem]';
+        case 'sm':
+            return 'w-[20rem] tablet:w-[15rem] phone:w-[10rem]';
+        case 'md':
+            return 'w-[25rem] tablet:w-[20rem] phone:w-[15rem]';
+        case 'lg':
+            return 'w-[30rem] tablet:w-[25rem] phone:w-[20rem]';
+        case 'xl':
+            return 'w-[40rem] tablet:w-[35rem] phone:w-[30rem]';
+        default:
+            return 'w-[15rem] tablet:w-[10rem] phone:w-[5rem]';
+    }
+}
+
+const parseCategories = (content?: SelectMenuContent[]): { category?: string, items: SelectMenuContent[] }[] => {
+    if (!content)
+        return [];
+
+    const categories = content.map(item => item.category)
+        .filter((val, i, arr) => arr.indexOf(val) === i);
+    return categories.map(category => {
+        return {
+            category: category,
+            items: content.filter(item => item.category === category)
+        }
+    })
+}
+
+const generateCategoryElement = (content: { category?: string, items: SelectMenuContent[] }, handleSelect: (val: SelectMenuContent) => void, selectedItems?: SelectMenuContent[]) => {
+    const isItemSelected = (item: SelectMenuContent) => {
+        return selectedItems?.includes(item);
+    }
+
+    const itemElements = content.items.map(item => (
+        <div
+            key={`${content.category}#${item.label}#${item.value}`}
+            className='flex justify-between cursor-pointer'
+            onClick={() => {
+                handleSelect(item)
+            }}
+        >
+            {
+                item.icon &&
+                <div className='relative w-4 h-4'>
+                    <Image src={item.icon} alt='' fill={true}/>
+                </div>
+            }
+            <p className={'dark:text-neutral-400 text-neutral-700 hover:!text-primary transition-fast select-none' + (isItemSelected(item) ? ' !text-primary' : '')}>{item.label}</p>
+        </div>
+    ))
+
+    return (
+        <div>
+            <h4 className='dark:text-neutral-400 text-neutral-700 text-center uppercase font-semibold text-sm my-3 select-none'>{content.category}</h4>
+            {itemElements}
+        </div>
+    )
+}
+
+export default function SelectMenu(props: Props) {
+    const [expanded, setExpanded] = useState(false);
+    const [selected, setSelected] = useState<SelectMenuContent[] | undefined>(undefined);
+    const itemsWithCategories = parseCategories(props.content);
+    const toggleExpanded = () => setExpanded(prev => !prev);
+    const handleSelect = (value: SelectMenuContent) => {
+        setSelected(prev => {
+            if (!prev)
+                return [value];
+            if (prev.includes(value))
+                return prev.filter(item => item !== value);
+            else return [...prev, value];
+        })
+    }
+    const categories = itemsWithCategories.map(category => generateCategoryElement(category, handleSelect, selected))
+
+    const wrapperRef = useRef<any>(null);
+    const optionsViewRef = useRef<any>(null);
+
+    useEffect(() => {
+        const handle = (event: MouseEvent) => {
+            if (wrapperRef.current && (!wrapperRef.current?.contains(event.target) && !optionsViewRef.current?.contains(event.target))) {
+                setExpanded(false);
+            }
+        }
+
+        document.addEventListener('mousedown', handle);
+        return () => {
+            document.removeEventListener('mousedown', handle);
+        }
+    }, [wrapperRef, optionsViewRef]);
+
+    return (
+        <div
+            className={'relative ' + parseMenuSize(props.size)}
+        >
+            <div
+                ref={wrapperRef}
+                onClick={toggleExpanded}
+                className='flex justify-between cursor-pointer p-3 bg-neutral-200 dark:bg-dark rounded-xl shadow-md'
+            >
+                <p unselectable='on'
+                   className='text-neutral-700 select-none whitespace-nowrap overflow-hidden text-ellipsis'
+                >
+                    {selected ? ( selected.length > 0 ? selected.map(item => item.label).toLocaleString() : (props.placeholder || '') ) : (props.placeholder || '')}
+                </p>
+                <div
+                    className={'self-center relative w-6 h-6 transition-fast select-none ' + (expanded ? 'rotate-180' : '')}>
+                    <Image draggable={false} src={dropDownIcon} alt='' fill={true}/>
+                </div>
+            </div>
+            {
+                expanded &&
+                <div
+                    ref={optionsViewRef}
+                    className={'absolute z-50 left-0 mt-4 max-h-48 overflow-auto p-4 bg-neutral-200 dark:bg-dark rounded-xl shadow-md transition-faster ' + parseMenuSize(props.size)}>
+                    {categories.length !== 0 ? categories :
+                        <p className='text-neutral-700 select-none'>There are no items...</p>}
+                </div>
+            }
+        </div>
+    )
+}
