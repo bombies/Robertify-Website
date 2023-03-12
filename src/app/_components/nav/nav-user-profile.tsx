@@ -30,7 +30,7 @@ export default function NavUserProfile() {
         }
     }, [wrapperRef, miniViewRef]);
 
-    const avatar = discordInfo ? `https://cdn.discordapp.com/avatars/${discordInfo.id}/${discordInfo.avatar}.${discordInfo.avatar.startsWith('a_') ? 'gif' : 'webp'}?size=512` : 'https://i.imgur.com/fwG8qA5.png';
+    const avatar = discordInfo && discordInfo.avatar ? `https://cdn.discordapp.com/avatars/${discordInfo.id}/${discordInfo.avatar}.${discordInfo.avatar.startsWith('a_') ? 'gif' : 'webp'}?size=512` : 'https://i.imgur.com/vVJ4UgG.png';
 
     return (
         <div ref={miniViewRef} className='mx-auto'>
