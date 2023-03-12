@@ -7,8 +7,10 @@ import backIcon from '/public/go-back.svg';
 import Link from "next/link";
 import DashboardSection from "@/app/dashboard/[id]/DashboardSection";
 import DashboardSectionContent from "@/app/dashboard/[id]/DashboardSectionContent";
-import SelectMenu from "@/components/select-menu/SelectMenu";
+import SelectMenu, {SelectMenuContent} from "@/components/select-menu/SelectMenu";
 import {useDiscordDataRequired} from "@/app/_components/discord-data-context";
+import {useEffect, useState} from "react";
+import {compare} from "@/utils/general-utils";
 
 type Props = {
     id: string,
@@ -19,6 +21,14 @@ type Props = {
 
 export default function GuildDashboardContext(props: Props) {
     const router = useRouter();
+    const [currentData, setCurrentData] = useState(props.robertifyGuildInfo)
+    const [changesMade, setChangesMade] = useState(false);
+    const elementParser = new RobertifyGuildElementParser(props.robertifyGuildInfo, props.discordGuildInfo, props.discordGuildChannels)
+
+    useEffect(() => {
+        setChangesMade(compareData(currentData, props.robertifyGuildInfo))
+    }, [currentData])
+
     if (!useDiscordDataRequired())
         return (<div></div>)
 
@@ -29,7 +39,8 @@ export default function GuildDashboardContext(props: Props) {
 
     return (
         <div>
-            <div className='mx-auto mb-12 tablet:p-6 p-12 bg-primary/10 shadow-md dark:bg-neutral-900 w-3/4 h-42 rounded-2xl border-2 border-primary/90'>
+            <div
+                className='mx-auto mb-12 tablet:p-6 p-12 bg-primary/10 shadow-md dark:bg-neutral-900 w-3/4 h-42 rounded-2xl border-2 border-primary/90'>
                 <Link href='/dashboard'>
                     <div className='flex gap-4 hover:scale-[100.25%] transition-fast mb-12'>
                         <div className='relative w-8 h-8'>
@@ -41,7 +52,8 @@ export default function GuildDashboardContext(props: Props) {
                                 sizes='2rem'
                             />
                         </div>
-                        <p className='relative self-center text-primary font-semibold text-xl phone:text-sm'>Return to your servers</p>
+                        <p className='relative self-center text-primary font-semibold text-xl phone:text-sm'>Return to
+                            your servers</p>
                     </div>
                 </Link>
                 <div className='flex gap-12'>
@@ -57,7 +69,8 @@ export default function GuildDashboardContext(props: Props) {
                     <h1 className='text-5xl phone:text-xl font-bold text-primary self-center'>{props.discordGuildInfo.name}</h1>
                 </div>
             </div>
-            <div className='mx-auto mb-12 p-12 tablet:p-6  bg-primary/10 shadow-md dark:bg-neutral-900 w-3/4 min-h-42 rounded-2xl border-2 border-primary/90'>
+            <div
+                className='mx-auto mb-12 p-12 tablet:p-6  bg-primary/10 shadow-md dark:bg-neutral-900 w-3/4 min-h-42 rounded-2xl border-2 border-primary/90'>
                 <DashboardSection title='Management'>
                     <div className='grid grid-cols-2 tablet:grid-cols-1 gap-6'>
                         <DashboardSectionContent
@@ -68,6 +81,7 @@ export default function GuildDashboardContext(props: Props) {
                             <SelectMenu
                                 multiSelect
                                 placeholder='Select multiple roles'
+                                size='sm'
                                 content={[
                                     {
                                         label: 'Owner',
@@ -113,6 +127,8 @@ export default function GuildDashboardContext(props: Props) {
                             <SelectMenu
                                 multiSelect
                                 placeholder='Select multiple channels'
+                                size='sm'
+                                content={elementParser.generateVoiceChannelContent()}
                             />
                         </DashboardSectionContent>
                         <DashboardSectionContent
@@ -123,15 +139,19 @@ export default function GuildDashboardContext(props: Props) {
                             <SelectMenu
                                 multiSelect
                                 placeholder='Select multiple channels'
+                                size='sm'
+                                content={elementParser.generateTextChannelContent()}
                             />
                         </DashboardSectionContent>
                         <DashboardSectionContent
                             title='Log Channel'
-                            description='Set tge channel for Robertify logs to be sent'
+                            description='Set the channel for Robertify logs to be sent'
                             contentAlign='below'
                         >
                             <SelectMenu
                                 placeholder='Select a channel'
+                                size='sm'
+                                content={elementParser.generateTextChannelContent()}
                             />
                         </DashboardSectionContent>
                     </div>
@@ -139,4 +159,67 @@ export default function GuildDashboardContext(props: Props) {
             </div>
         </div>
     )
+}
+
+class RobertifyGuildElementParser {
+    constructor(
+        private readonly robertifyGuild: RobertifyGuild,
+        private readonly discordGuild: DiscordGuild,
+        private readonly guildChannels: DiscordGuildChannel[]
+    ) {}
+
+    public generateTextChannelContent() {
+        return this.generateChannelContent('text');
+    }
+
+    public generateVoiceChannelContent() {
+        return this.generateChannelContent('voice');
+    }
+
+    private generateChannelContent(channelType: 'voice' | 'text'): SelectMenuContent[] {
+        const convertToSelectMenuContent = (obj: {category: string | undefined, channels: DiscordGuildChannel[]}): SelectMenuContent[] => {
+            return obj.channels.map<SelectMenuContent>(channel => {
+                return {
+                    category: obj.category,
+                    label: channel.name || '',
+                    value: channel.id
+                }
+            })
+        }
+
+        const raw = this.extractChannelsWithCategories(channelType);
+        const contents = raw.map(rawObj => convertToSelectMenuContent(rawObj));
+        return contents.reduce((previousValue, currentValue, index) => ([
+            ...previousValue, ...currentValue
+        ]), [])
+    }
+
+    private extractChannelsWithCategories(channelType: 'voice' | 'text') {
+        const noCategoryChannels = this.guildChannels.filter(channel => !channel.parent_id && (channel.type === (channelType === 'voice' ? 2 : 0)))
+
+        return [
+            ...this.guildChannels.filter(channel => channel.type === 4)
+                .map(category => {
+                    return {
+                        name: category.name,
+                        id: category.id
+                    }
+                })
+                .map(category => {
+                    return {
+                        category: category.name,
+                        channels: this.guildChannels.filter(channel => (channel.type === (channelType === 'voice' ? 2 : 0)) && channel.parent_id === category.id)
+                    }
+                })
+                .filter(categoryObj => categoryObj.channels.length !== 0),
+            {
+                category: undefined,
+                channels: [...noCategoryChannels]
+            }
+        ]
+    }
+}
+
+const compareData = (cur: RobertifyGuild, original: RobertifyGuild) => {
+    return compare(cur, original);
 }

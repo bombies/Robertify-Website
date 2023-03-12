@@ -17,7 +17,8 @@ interface Props {
     content?: SelectMenuContent[],
     placeholder?: string,
     size?: ComponentSize,
-    multiSelect?: boolean
+    multiSelect?: boolean,
+    displayCategories?: boolean
 }
 
 const parseMenuSize = (size?: ComponentSize) => {
@@ -51,7 +52,7 @@ const parseCategories = (content?: SelectMenuContent[]): { category?: string, it
     })
 }
 
-const generateCategoryElement = (content: { category?: string, items: SelectMenuContent[] }, handleSelect: (val: SelectMenuContent) => void, selectedItems?: SelectMenuContent[]) => {
+const generateCategoryElement = (content: { category?: string, items: SelectMenuContent[] }, handleSelect: (val: SelectMenuContent) => void, selectedItems?: SelectMenuContent[], displayCategories?: boolean) => {
     const isItemSelected = (item: SelectMenuContent) => {
         return selectedItems?.includes(item);
     }
@@ -76,7 +77,7 @@ const generateCategoryElement = (content: { category?: string, items: SelectMenu
 
     return (
         <div>
-            {content.category && <h4 className='dark:text-neutral-400 text-neutral-700 text-center uppercase font-semibold text-sm my-3 select-none whitespace-nowrap overflow-hidden text-ellipsis'>{content.category}</h4>}
+            { displayCategories !== false && <h4 className='dark:text-neutral-600 text-neutral-700 text-center uppercase font-semibold text-sm my-3 select-none whitespace-nowrap overflow-hidden text-ellipsis'>{content.category || 'No Category'}</h4>}
             {itemElements}
         </div>
     )
@@ -99,7 +100,7 @@ export default function SelectMenu(props: Props) {
                 return [value]
         })
     }
-    const categories = itemsWithCategories.map(category => generateCategoryElement(category, handleSelect, selected))
+    const categories = itemsWithCategories.map(category => generateCategoryElement(category, handleSelect, selected, props.displayCategories))
 
     const wrapperRef = useRef<any>(null);
     const optionsViewRef = useRef<any>(null);
