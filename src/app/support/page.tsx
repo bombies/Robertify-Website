@@ -91,7 +91,7 @@ export default function Support() {
                         <Button label='Support Server'
                                 icon={discordIcon}
                                 width={10} height={3}
-                                href={process.env.NEXT_PUBLIC_DISCORD_INVITE_LINK}
+                                href='https://discord.gg/98dD6NbfDU'
                         />
                     </Card>
                 </div>
