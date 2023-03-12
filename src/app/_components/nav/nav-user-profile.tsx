@@ -40,7 +40,13 @@ export default function NavUserProfile() {
                     onClick={toggleExpanded}
                 >
                     <div className='relative w-8 h-8 self-center'>
-                        <Image src={avatar} alt='Discord User Avatar' fill={true} className='rounded-full'/>
+                        <Image
+                            src={avatar}
+                            alt='Discord User Avatar'
+                            fill={true}
+                            className='rounded-full'
+                            sizes='2rem'
+                        />
                     </div>
                     <p className='self-center text-primary font-semibold dark:drop-shadow-glow-primary-lg'>{discordInfo?.username}#{discordInfo?.discriminator}</p>
                 </div>
@@ -56,7 +62,13 @@ export default function NavUserProfile() {
                         <div>
                             <div
                                 className='relative w-24 h-24 mb-4 self-center border-2 border-primary rounded-full shadow-lg  shadow-primary/0 mx-auto mb-6'>
-                                <Image src={avatar} alt='Discord User Avatar' fill={true} className='rounded-full'/>
+                                <Image
+                                    src={avatar}
+                                    alt='Discord User Avatar'
+                                    fill={true}
+                                    className='rounded-full'
+                                    sizes='6rem'
+                                />
                             </div>
                             <p className='self-center text-primary text-center text-xl dark:drop-shadow-glow-primary-lg font-semibold pointer-events-none mb-6'>{discordInfo?.username}#{discordInfo?.discriminator}</p>
                         </div>
