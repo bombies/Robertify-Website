@@ -8,7 +8,7 @@ import Link from "next/link";
 import DashboardSection from "@/app/dashboard/[id]/DashboardSection";
 import DashboardSectionContent from "@/app/dashboard/[id]/DashboardSectionContent";
 import SelectMenu from "@/components/select-menu/SelectMenu";
-import {discordDataRequired} from "@/app/_components/discord-data-context";
+import {useDiscordDataRequired} from "@/app/_components/discord-data-context";
 
 type Props = {
     id: string,
@@ -18,10 +18,9 @@ type Props = {
 }
 
 export default function GuildDashboardContext(props: Props) {
-    if (!discordDataRequired())
-        return (<div></div>)
-
     const router = useRouter();
+    if (!useDiscordDataRequired())
+        return (<div></div>)
 
     if (!props.discordGuildInfo || !props.robertifyGuildInfo || !props.discordGuildChannels) {
         router.push(`https://discord.com/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&permissions=269479308656&scope=bot%20applications.commands&redirect_uri=${encodeURI(`${process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot%20applications.commands&guild_id=${props.id}&disable_guild_select=true`);

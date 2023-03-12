@@ -22,7 +22,7 @@ export default function Error({
         if (error.message.includes("not logged in"))
             return router.push('/');
         console.error(error)
-    }, []);
+    }, [error, router]);
 
     if (!discordData || error.message.includes("not logged in")) {
         return (<main></main>)

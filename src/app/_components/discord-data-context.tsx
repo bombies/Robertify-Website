@@ -48,14 +48,14 @@ export function useDiscordData() {
     return context;
 }
 
-export function discordDataRequired() {
+export function useDiscordDataRequired() {
     const router = useRouter();
     const [ discordInfo ] = useDiscordData();
 
     useEffect(() => {
         if (!discordInfo)
             router.push('/')
-    }, [discordInfo])
+    }, [discordInfo, router])
 
     return discordInfo;
 }

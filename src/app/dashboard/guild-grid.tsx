@@ -1,13 +1,13 @@
 'use client';
 
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import Image from "next/image";
 import searchIcon from "../../../public/search.svg";
 import InputContext from "@/components/input-context";
 import GuildCard from "@/app/dashboard/guild-card";
 import Card from "@/components/card";
 import {DiscordUserGuild} from "@/pages/api/discord/users/[id]/guilds";
-import {discordDataRequired} from "@/app/_components/discord-data-context";
+import {useDiscordDataRequired} from "@/app/_components/discord-data-context";
 
 type Props = {
     guilds?: DiscordUserGuild[],
@@ -50,23 +50,25 @@ const sortGuilds = (guilds: DiscordUserGuild[]) => {
 }
 
 export default function GuildGrid(props: Props) {
-    if (!discordDataRequired())
-        return (<div></div>)
-
-    const guildCards = props.guilds ? sortGuilds(props.guilds)?.map(guild => <GuildCard
-        key={guild.id}
-        id={guild.id}
-        name={guild.name}
-        icon={guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.webp?size=512` : undefined}
-        isOwner={guild.owner}
-        isAdmin={isServerAdmin(guild)}
-    />) : []
+    const guildCards = useMemo(() => {
+        return props.guilds ? sortGuilds(props.guilds)?.map(guild => <GuildCard
+            key={guild.id}
+            id={guild.id}
+            name={guild.name}
+            icon={guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.webp?size=512` : undefined}
+            isOwner={guild.owner}
+            isAdmin={isServerAdmin(guild)}
+        />) : []
+    }, [props.guilds])
     const [visibleGuilds, setVisibleGuilds] = useState(guildCards);
     const [searchValue, setSearchValue] = useState('');
 
     useEffect(() => {
         setVisibleGuilds(filterGuilds(guildCards, searchValue));
-    }, [searchValue])
+    }, [searchValue, guildCards])
+
+    if (!useDiscordDataRequired())
+        return (<div></div>)
 
     return (
         <div>
