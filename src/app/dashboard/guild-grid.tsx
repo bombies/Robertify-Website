@@ -73,7 +73,14 @@ export default function GuildGrid(props: Props) {
                     value={searchValue}
                     size='xl'
                     placeholder='Search...'
-                    contentRight={<div className='relative w-6 h-6'><Image src={searchIcon} alt='' fill={true}/></div>}
+                    contentRight={<div className='relative w-6 h-6'>
+                        <Image
+                            src={searchIcon}
+                            alt=''
+                            fill={true}
+                            sizes='1.5rem'
+                        />
+                    </div>}
                     aria-label='search-input'
                 />
             </div>

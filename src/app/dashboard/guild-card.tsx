@@ -37,7 +37,12 @@ export default function GuildCard(props: Props) {
                     placement='topEnd'
                 >
                     <div className='w-6 h-6'>
-                        <Image draggable={false} src={props.isOwner ? crownIcon : shieldIcon} alt='' />
+                        <Image
+                            draggable={false}
+                            src={props.isOwner ? crownIcon : shieldIcon}
+                            alt=''
+                            sizes='1.5rem'
+                        />
                     </div>
                 </Tooltip>
 
@@ -47,7 +52,14 @@ export default function GuildCard(props: Props) {
             >
                 <h3 className='text-primary text-xl font-semibold w-1/2 self-center whitespace-nowrap overflow-hidden overflow-ellipsis'>{props.name}</h3>
                 <div className='relative w-16 h-16 rounded-full border-2 border-primary'>
-                    <Image draggable={false} src={props.icon || 'https://i.imgur.com/k14Qfh5.png'} alt='' className='rounded-full' fill={true} />
+                    <Image
+                        draggable={false}
+                        src={props.icon || 'https://i.imgur.com/k14Qfh5.png'}
+                        alt=''
+                        className='rounded-full'
+                        fill={true}
+                        sizes='4rem'
+                    />
                 </div>
             </div>
         </Card>

@@ -30,7 +30,13 @@ export default function GuildDashboardContext(props: Props) {
                 <Link href='/dashboard'>
                     <div className='flex gap-4 hover:scale-[100.25%] transition-fast mb-12'>
                         <div className='relative w-8 h-8'>
-                            <Image draggable={false} src={backIcon} alt='' fill={true} />
+                            <Image
+                                draggable={false}
+                                src={backIcon}
+                                alt=''
+                                fill={true}
+                                sizes='2rem'
+                            />
                         </div>
                         <p className='relative self-center text-primary font-semibold text-xl phone:text-sm'>Return to your servers</p>
                     </div>
