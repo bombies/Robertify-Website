@@ -33,8 +33,8 @@ export default function RootLayout(props: Props) {
                 {/* @ts-expect-error Async Server Component */}
                 <NavbarContainer/>
                 {props.children}
+                <Footer/>
             </div>
-            <Footer/>
         </Providers>
         </html>
 
