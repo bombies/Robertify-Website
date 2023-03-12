@@ -102,7 +102,6 @@ export class ExternalWebClient {
 
 export class DiscordWebClient {
     protected readonly instance: AxiosInstance;
-    protected static BEARER_INSTANCE?: DiscordWebClient;
     protected static BOT_INSTANCE?: DiscordWebClient;
 
     constructor(accessToken?: string, private options?: CreateAxiosDefaults<any>) {
@@ -126,11 +125,7 @@ export class DiscordWebClient {
             this.BOT_INSTANCE = client;
             return client.instance;
         } else if (!options) {
-            if (this.BEARER_INSTANCE)
-                return this.BEARER_INSTANCE.instance;
-            const client = new DiscordWebClient(accessToken);
-            this.BEARER_INSTANCE = client;
-            return client.instance;
+            return new DiscordWebClient(accessToken).instance;
         } else return new DiscordWebClient(accessToken, options).instance;
     }
 }
