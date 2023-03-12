@@ -19,11 +19,12 @@ export default function Error({
     const router = useRouter();
 
     useEffect(() => {
+        if (error.message.includes("not logged in"))
+            return router.push('/');
         console.error(error)
     }, []);
 
-    if (!discordData) {
-        router.push('/')
+    if (!discordData || error.message.includes("not logged in")) {
         return (<main></main>)
     }
 

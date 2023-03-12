@@ -8,6 +8,7 @@ import Link from "next/link";
 import DashboardSection from "@/app/dashboard/[id]/DashboardSection";
 import DashboardSectionContent from "@/app/dashboard/[id]/DashboardSectionContent";
 import SelectMenu from "@/components/select-menu/SelectMenu";
+import {discordDataRequired} from "@/app/_components/discord-data-context";
 
 type Props = {
     id: string,
@@ -17,6 +18,9 @@ type Props = {
 }
 
 export default function GuildDashboardContext(props: Props) {
+    if (!discordDataRequired())
+        return (<div></div>)
+
     const router = useRouter();
 
     if (!props.discordGuildInfo || !props.robertifyGuildInfo || !props.discordGuildChannels) {

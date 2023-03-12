@@ -18,22 +18,14 @@ const getUserGuilds = async (token?: string) => {
 }
 
 export default async function Dashboard() {
-    const guilds = (await getUserGuilds(cookies().get('login-token')?.value))?.data;
-
+    const token = cookies().get('login-token')?.value;
+    const guilds = (await getUserGuilds(token))?.data;
     return (
         <main className='p-12 phone:px-6 min-h-screen'>
-            <h1 className='text-primary text-5xl phone:text-3xl dark:drop-shadow-glow-primary-lg text-center mb-6'>Welcome
-                to your dashboard</h1>
-            {
-                guilds ? <GuildGrid guilds={guilds}/> :
-                    <Card
-                        centered
-                        size='lg'
-                        title='No servers founds...'
-                        description="Uh oh! It seems I couldn't find any servers you're in. :("
-                    />
-            }
-
+            <h1 className='text-primary text-5xl phone:text-3xl dark:drop-shadow-glow-primary-lg text-center mb-6'>
+                Welcome to your dashboard
+            </h1>
+            <GuildGrid guilds={guilds}/>
         </main>
     )
 }

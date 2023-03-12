@@ -1,6 +1,7 @@
 'use client';
 
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+import {useRouter} from "next/navigation";
 
 export type DiscordInfo = {
     id: string,
@@ -45,4 +46,16 @@ export function useDiscordData() {
     if (!context)
         throw new Error('useDiscordData must be used within a DiscordDataProvider');
     return context;
+}
+
+export function discordDataRequired() {
+    const router = useRouter();
+    const [ discordInfo ] = useDiscordData();
+
+    useEffect(() => {
+        if (!discordInfo)
+            router.push('/')
+    }, [discordInfo])
+
+    return discordInfo;
 }
