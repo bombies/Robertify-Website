@@ -14,8 +14,8 @@ type Props = {
 }
 
 export default function FAQCard(props: Props) {
-    const [ expanded, setExpanded ] = useState(false);
-    const [ darkMode ] = useDarkMode();
+    const [expanded, setExpanded] = useState(false);
+    const [darkMode] = useDarkMode();
     const closeCard = () => {
         setExpanded(false);
     }
@@ -49,9 +49,15 @@ export default function FAQCard(props: Props) {
                     <p className='text-lg'>{Parser(props.content.replaceAll('\\n', '<br/>'))}</p>
                     {props.contentImg &&
                         <div className='relative w-80 h-80'>
-                            <Image src={props.contentImg} alt='' fill={true} style={{
-                                objectFit: 'scale-down'
-                            }} />
+                            <Image
+                                src={props.contentImg}
+                                alt=''
+                                fill={true}
+                                style={{
+                                    objectFit: 'scale-down'
+                                }}
+                                sizes='20rem'
+                            />
                         </div>
                     }
                 </Modal.Body>
