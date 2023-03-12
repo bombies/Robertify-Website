@@ -20,13 +20,8 @@ export default function GuildCard(props: Props) {
             centered
             size='xs'
             hoverable
-            className='pointer-cursor h-32 !p-0 flex flex-col phone:w-full hover:shadow-primary/10 shadow-primary/0'
+            className='pointer-cursor h-32 !p-0 flex flex-col phone:w-full'
             href={`/dashboard/${props.id}`}
-            style={{
-                backgroundImage: `url(${props.icon || 'https://i.imgur.com/k14Qfh5.png'})`,
-                backgroundRepeat: `no-repeat`,
-                backgroundSize: 'cover'
-            }}
         >
             {
                 (props.isOwner || props.isAdmin) &&
@@ -48,15 +43,14 @@ export default function GuildCard(props: Props) {
 
             }
             <div
-                className='relative rounded-xl w-full h-full dark:bg-dark/90 bg-neutral-200/50 border-2 border-primary/10 transition-fast hover:border-primary/50 backdrop-blur-md flex justify-between align-middle  p-6'
+                className='relative rounded-xl w-full h-full dark:bg-dark/90 bg-neutral-200/50 border-2 border-primary/10 hover:border-primary/50 flex justify-between align-middle p-6 transition-fast'
             >
                 <h3 className='text-primary text-xl font-semibold w-1/2 self-center whitespace-nowrap overflow-hidden overflow-ellipsis'>{props.name}</h3>
                 <div className='relative w-16 h-16 rounded-full border-2 border-primary'>
                     <Image
                         draggable={false}
                         src={props.icon || 'https://i.imgur.com/k14Qfh5.png'}
-                        alt=''
-                        className='rounded-full'
+                        alt='' className='rounded-full'
                         fill={true}
                         sizes='4rem'
                     />

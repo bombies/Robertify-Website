@@ -9,7 +9,8 @@ import Card from "@/components/card";
 import {DiscordUserGuild} from "@/pages/api/discord/users/[id]/guilds";
 
 type Props = {
-    guilds: DiscordUserGuild[]
+    guilds: DiscordUserGuild[],
+    itemsPerPage?: number,
 }
 
 const filterGuilds = (guilds: JSX.Element[], filter: string) => {
@@ -73,21 +74,14 @@ export default function GuildGrid(props: Props) {
                     value={searchValue}
                     size='xl'
                     placeholder='Search...'
-                    contentRight={<div className='relative w-6 h-6'>
-                        <Image
-                            src={searchIcon}
-                            alt=''
-                            fill={true}
-                            sizes='1.5rem'
-                        />
-                    </div>}
+                    contentRight={<div className='relative w-6 h-6'><Image src={searchIcon} alt='' fill={true}/></div>}
                     aria-label='search-input'
                 />
             </div>
             {
                 visibleGuilds.length ?
                     <div
-                        className='grid grid-cols-3 dark:bg-neutral-900/50 bg-neutral-600/5 backdrop-blur-lg rounded-xl p-6 phone:p-3 laptop-big:grid-cols-2 phone:grid-cols-1  mt-6 place-items-center gap-6 phone:gap-3 w-2/3 tablet: w-5/6 mx-auto'>
+                        className='grid grid-cols-4 dark:bg-neutral-900/50 bg-neutral-600/5 rounded-xl p-12 laptop-big:p-6 phone:p-3 laptop-big:grid-cols-3 laptop:grid-cols-2 phone:grid-cols-1  mt-6 place-items-center gap-6 phone:gap-3 w-5/6 tablet:w-full mx-auto'>
                         {visibleGuilds}
                     </div>
                     :

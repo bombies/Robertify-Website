@@ -21,7 +21,7 @@ export default async function Dashboard() {
     const guilds = (await getUserGuilds(cookies().get('login-token')?.value))?.data;
 
     return (
-        <main className='p-12 min-h-screen'>
+        <main className='p-12 phone:px-6 min-h-screen'>
             <h1 className='text-primary text-5xl phone:text-3xl dark:drop-shadow-glow-primary-lg text-center mb-6'>Welcome
                 to your dashboard</h1>
             {
