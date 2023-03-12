@@ -60,14 +60,14 @@ const generateCategoryElement = (content: { category?: string, items: SelectMenu
     const itemElements = content.items.map(item => (
         <div
             key={`${content.category}#${item.label}#${item.value}`}
-            className='flex justify-between cursor-pointer'
+            className='flex gap-4 cursor-pointer'
             onClick={() => {
                 handleSelect(item)
             }}
         >
             {
                 item.icon &&
-                <div className='relative w-4 h-4'>
+                <div className='relative w-4 h-4 self-center'>
                     <Image src={item.icon} alt='' fill={true}/>
                 </div>
             }

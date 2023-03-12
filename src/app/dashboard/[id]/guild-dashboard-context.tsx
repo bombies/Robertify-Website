@@ -11,6 +11,8 @@ import SelectMenu, {SelectMenuContent} from "@/components/select-menu/SelectMenu
 import {useDiscordDataRequired} from "@/app/_components/discord-data-context";
 import {useEffect, useState} from "react";
 import {compare} from "@/utils/general-utils";
+import discordVoiceChannelIcon from '/public/discord-voice-channel.svg';
+import discordTextChannelIcon from '/public/discord-text-channel.svg';
 
 type Props = {
     id: string,
@@ -156,7 +158,8 @@ class RobertifyGuildElementParser {
                 return {
                     category: obj.category,
                     label: channel.name || '',
-                    value: channel.id
+                    value: channel.id,
+                    icon: channelType === 'voice' ? discordVoiceChannelIcon : discordTextChannelIcon
                 }
             })
         }
