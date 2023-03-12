@@ -4,6 +4,20 @@ import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import DiscordAccessRedisManager from "@/utils/api/redis/managers/discord-access.redis-manager";
 import {DiscordWebClient} from "@/utils/api/web-client";
 
+type DiscordRole = {
+    id: string,
+    name: string,
+    color: number,
+    hoist: boolean,
+    icon?: string | null,
+    unicode_emoji?: string | null,
+    position: number,
+    permissions: string,
+    managed: boolean,
+    mentionable: boolean,
+    tags?: any
+}
+
 export type DiscordGuild = {
     id: string,
     name: string,
@@ -18,7 +32,7 @@ export type DiscordGuild = {
     verification_level: number,
     default_message_notifications: number,
     explicit_content_filter: number,
-    roles: any[],
+    roles: DiscordRole[],
     emojis: any[],
     features: any[],
     mfa_level: number,

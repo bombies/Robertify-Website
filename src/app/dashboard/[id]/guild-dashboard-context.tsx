@@ -82,41 +82,8 @@ export default function GuildDashboardContext(props: Props) {
                                 multiSelect
                                 placeholder='Select multiple roles'
                                 size='sm'
-                                content={[
-                                    {
-                                        label: 'Owner',
-                                        value: '1234434'
-                                    },
-                                    {
-                                        label: 'Admin',
-                                        value: '1234434'
-                                    },
-                                    {
-                                        category: 'Losers',
-                                        label: 'Pleb',
-                                        value: '1234434'
-                                    },
-                                    {
-                                        category: 'Losers',
-                                        label: 'Super Pleb',
-                                        value: '1234434'
-                                    },
-                                    {
-                                        category: 'Kings',
-                                        label: 'Me',
-                                        value: '1234434'
-                                    },
-                                    {
-                                        category: 'Kings',
-                                        label: 'You',
-                                        value: '1234434'
-                                    },
-                                    {
-                                        category: 'Kings',
-                                        label: 'We with a long name that will probably overflow',
-                                        value: '1234434'
-                                    },
-                                ]}
+                                content={elementParser.generateRolesContent()}
+                                displayCategories={false}
                             />
                         </DashboardSectionContent>
                         <DashboardSectionContent
@@ -174,6 +141,13 @@ class RobertifyGuildElementParser {
 
     public generateVoiceChannelContent() {
         return this.generateChannelContent('voice');
+    }
+
+    public generateRolesContent(): SelectMenuContent[] {
+        return this.discordGuild.roles.map<SelectMenuContent>(role => ({
+            label: role.name,
+            value: role.id
+        }));
     }
 
     private generateChannelContent(channelType: 'voice' | 'text'): SelectMenuContent[] {
