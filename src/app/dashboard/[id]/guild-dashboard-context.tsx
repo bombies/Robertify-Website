@@ -27,7 +27,7 @@ export default function GuildDashboardContext(props: Props) {
 
     useEffect(() => {
         setChangesMade(compareData(currentData, props.robertifyGuildInfo))
-    }, [currentData])
+    }, [currentData, props.robertifyGuildInfo])
 
     if (!useDiscordDataRequired())
         return (<div></div>)
