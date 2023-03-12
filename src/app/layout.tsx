@@ -29,7 +29,7 @@ export default function RootLayout(props: Props) {
                     sizes='100vw, 100vh'
                 />
             </div>
-            <div className='z-[1]'>
+            <div className='!z-[1] relative'>
                 {/* @ts-expect-error Async Server Component */}
                 <NavbarContainer/>
                 {props.children}
