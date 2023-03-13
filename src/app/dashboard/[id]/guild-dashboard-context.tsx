@@ -1,6 +1,11 @@
 'use client';
 
-import {DiscordGuild, DiscordGuildChannel, RobertifyGuild} from "@/pages/api/discord/users/[id]/guilds";
+import {
+    DiscordGuild,
+    DiscordGuildChannel, DiscordRole,
+    GuildPermissions,
+    RobertifyGuild
+} from "@/pages/api/discord/users/[id]/guilds";
 import {useRouter} from "next/navigation";
 import Image from "next/image";
 import backIcon from '/public/go-back.svg';
@@ -9,7 +14,7 @@ import DashboardSection from "@/app/dashboard/[id]/DashboardSection";
 import DashboardSectionContent from "@/app/dashboard/[id]/DashboardSectionContent";
 import SelectMenu, {SelectMenuContent} from "@/components/select-menu/SelectMenu";
 import {useDiscordDataRequired} from "@/app/_components/discord-data-context";
-import {useEffect, useState} from "react";
+import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {compare} from "@/utils/general-utils";
 import discordVoiceChannelIcon from '/public/discord-voice-channel.svg';
 import discordTextChannelIcon from '/public/discord-text-channel.svg';
@@ -25,19 +30,25 @@ export default function GuildDashboardContext(props: Props) {
     const router = useRouter();
     const [currentData, setCurrentData] = useState(props.robertifyGuildInfo)
     const [changesMade, setChangesMade] = useState(false);
-    const elementParser = new RobertifyGuildElementParser(props.robertifyGuildInfo, props.discordGuildInfo, props.discordGuildChannels)
+    const elementParser = new RobertifyGuildElementParser(
+        currentData,
+        props.discordGuildInfo,
+        props.discordGuildChannels,
+        setCurrentData,
+        setChangesMade,
+    );
+
+    useEffect(() => {
+        if (!props.discordGuildInfo || !props.robertifyGuildInfo || !props.discordGuildChannels)
+            return router.push(`https://discord.com/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&permissions=269479308656&scope=bot%20applications.commands&redirect_uri=${encodeURI(`${process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot%20applications.commands&guild_id=${props.id}&disable_guild_select=true`);
+    }, [])
 
     useEffect(() => {
         setChangesMade(compareData(currentData, props.robertifyGuildInfo))
     }, [currentData, props.robertifyGuildInfo])
 
     if (!useDiscordDataRequired())
-        return (<div></div>)
-
-    if (!props.discordGuildInfo || !props.robertifyGuildInfo || !props.discordGuildChannels) {
-        router.push(`https://discord.com/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&permissions=269479308656&scope=bot%20applications.commands&redirect_uri=${encodeURI(`${process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot%20applications.commands&guild_id=${props.id}&disable_guild_select=true`);
-        return (<div></div>)
-    }
+        return (<div></div>);
 
     return (
         <div>
@@ -84,8 +95,14 @@ export default function GuildDashboardContext(props: Props) {
                                 multiSelect
                                 placeholder='Select multiple roles'
                                 size='sm'
-                                content={elementParser.generateRolesContent()}
+                                content={elementParser.generateRolesContent('permissions')}
                                 displayCategories={false}
+                                handleItemSelect={(item) => {
+                                    elementParser.addDJRole(item.value);
+                                }}
+                                handleItemDeselect={(item) => {
+                                    elementParser.removeDJRole(item.value)
+                                }}
                             />
                         </DashboardSectionContent>
                         <DashboardSectionContent
@@ -134,8 +151,31 @@ class RobertifyGuildElementParser {
     constructor(
         private readonly robertifyGuild: RobertifyGuild,
         private readonly discordGuild: DiscordGuild,
-        private readonly guildChannels: DiscordGuildChannel[]
-    ) {}
+        private readonly guildChannels: DiscordGuildChannel[],
+        private readonly setCurrentData: Dispatch<SetStateAction<RobertifyGuild>>,
+        private readonly setChangesMade: Dispatch<SetStateAction<boolean>>,
+    ) {
+    }
+
+    public addDJRole(id: string) {
+        this.setCurrentData(prev => ({
+            ...prev,
+            permissions: {
+                ...prev.permissions,
+                "1": prev.permissions["1"] ? [...prev.permissions["1"], id] : [id]
+            }
+        }))
+    }
+
+    public removeDJRole(id: string) {
+        this.setCurrentData(prev => ({
+            ...prev,
+            permissions: {
+                ...prev.permissions,
+                "1": prev.permissions["1"] ? prev.permissions["1"]?.filter(permission => permission !== id) : []
+            }
+        }))
+    }
 
     public generateTextChannelContent() {
         return this.generateChannelContent('text');
@@ -145,15 +185,31 @@ class RobertifyGuildElementParser {
         return this.generateChannelContent('voice');
     }
 
-    public generateRolesContent(): SelectMenuContent[] {
+    public generateRolesContent(selectedKey?: keyof RobertifyGuild): SelectMenuContent[] {
+        const isRoleSelected = (role: DiscordRole): boolean => {
+            if (!selectedKey) return false;
+            const obj = this.robertifyGuild[selectedKey];
+            if (!obj) return false;
+
+            switch (selectedKey) {
+                case "permissions": {
+                    const permissions = obj as GuildPermissions;
+                    return permissions["1"] ? permissions["1"].includes(role.id) : false;
+                }
+                default:
+                    return false;
+            }
+        }
+
         return this.discordGuild.roles.map<SelectMenuContent>(role => ({
             label: role.name,
-            value: role.id
+            value: role.id,
+            selected: isRoleSelected(role)
         }));
     }
 
     private generateChannelContent(channelType: 'voice' | 'text'): SelectMenuContent[] {
-        const convertToSelectMenuContent = (obj: {category: string | undefined, channels: DiscordGuildChannel[]}): SelectMenuContent[] => {
+        const convertToSelectMenuContent = (obj: { category: string | undefined, channels: DiscordGuildChannel[] }): SelectMenuContent[] => {
             return obj.channels.map<SelectMenuContent>(channel => {
                 return {
                     category: obj.category,

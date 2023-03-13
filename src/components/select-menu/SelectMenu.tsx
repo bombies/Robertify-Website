@@ -19,6 +19,9 @@ interface Props {
     size?: ComponentSize,
     multiSelect?: boolean,
     displayCategories?: boolean
+    onItemSelect?: (item: SelectMenuContent) => void;
+    handleItemSelect?: (item: SelectMenuContent) => void;
+    handleItemDeselect?: (item: SelectMenuContent) => void;
 }
 
 const parseMenuSize = (size?: ComponentSize) => {
@@ -52,9 +55,15 @@ const parseCategories = (content?: SelectMenuContent[]): { category?: string, it
     })
 }
 
-const generateCategoryElement = (content: { category?: string, items: SelectMenuContent[] }, handleSelect: (val: SelectMenuContent) => void, selectedItems?: SelectMenuContent[], displayCategories?: boolean) => {
+const generateCategoryElement = (
+    content: { category?: string, items: SelectMenuContent[] },
+    handleSelect: (val: SelectMenuContent) => void, selectedItems?: SelectMenuContent[],
+    displayCategories?: boolean,
+    onItemSelect?: (item: SelectMenuContent) => void
+) => {
     const isItemSelected = (item: SelectMenuContent) => {
-        return selectedItems?.includes(item);
+        if (item.selected === true) return true;
+        return selectedItems ?  selectedItems.includes(item) : false;
     }
 
     const itemElements = content.items.map(item => (
@@ -62,7 +71,9 @@ const generateCategoryElement = (content: { category?: string, items: SelectMenu
             key={`${content.category}#${item.label}#${item.value}`}
             className='flex gap-4 cursor-pointer'
             onClick={() => {
-                handleSelect(item)
+                handleSelect(item);
+                if (onItemSelect)
+                    onItemSelect(item);
             }}
         >
             {
@@ -90,14 +101,25 @@ export default function SelectMenu(props: Props) {
     const toggleExpanded = () => setExpanded(prev => !prev);
     const handleSelect = (value: SelectMenuContent) => {
         setSelected(prev => {
-            if (!prev)
+            if (!prev || prev.length === 0) {
+                if (props.handleItemSelect)
+                    props.handleItemSelect(value);
                 return [value];
-            if (prev.includes(value))
-                return prev.filter(item => item !== value);
-            else if (props.multiSelect !== undefined)
+            } if (prev.filter(item => item.value === value.value).length > 0) {
+                if (props.handleItemDeselect)
+                    props.handleItemDeselect(value)
+                return prev.filter(item => item.value !== value.value);
+            } else if (props.multiSelect !== undefined) {
+                if (props.handleItemSelect)
+                    props.handleItemSelect(value);
                 return [...prev, value];
-            else
+            } else {
+                if (props.handleItemDeselect)
+                    props.handleItemDeselect(prev[0])
+                if (props.handleItemSelect)
+                    props.handleItemSelect(value);
                 return [value]
+            }
         })
     }
     const categories = itemsWithCategories.map(category => generateCategoryElement(category, handleSelect, selected, props.displayCategories))

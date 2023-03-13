@@ -4,7 +4,7 @@ import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import DiscordAccessRedisManager from "@/utils/api/redis/managers/discord-access.redis-manager";
 import {DiscordWebClient} from "@/utils/api/web-client";
 
-type DiscordRole = {
+export type DiscordRole = {
     id: string,
     name: string,
     color: number,
@@ -101,7 +101,7 @@ export type DiscordGuildChannel = {
     default_forum_layout?: number,
 }
 
-type DedicatedChannel = {
+export type DedicatedChannel = {
     message_id?: string,
     channel_id?: string,
     config?: {
@@ -119,12 +119,12 @@ type DedicatedChannel = {
     og_announcement_toggle?: boolean,
 };
 
-type RestrictedChannels = {
+export type RestrictedChannels = {
     voice_channels?: string[],
     text_channels?: string[]
 };
 
-type GuildPermissions = {
+export type GuildPermissions = {
     0?: string[],
     1?: string[],
     2?: string[],
