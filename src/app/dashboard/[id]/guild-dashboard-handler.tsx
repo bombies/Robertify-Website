@@ -27,7 +27,10 @@ export default class GuildDashboardHandler {
         return (Object.keys(obj) as (keyof GuildDJToggles)[])
             .sort((a, b) => a.localeCompare(b))
             .map(key => (
-            <DashboardSectionContent title={key}>
+            <DashboardSectionContent
+                key={key}
+                title={key}
+            >
                 <Toggle
                     status={this.getToggle('dj_toggles', key)}
                     onClick={() => this.switchToggle('dj_toggles', key)}
@@ -41,7 +44,10 @@ export default class GuildDashboardHandler {
         return (Object.keys(obj) as (keyof GuildLogToggles)[])
             .sort((a, b) => a.localeCompare(b))
             .map(key => (
-            <DashboardSectionContent title={key.replaceAll('_', ' ')}>
+            <DashboardSectionContent
+                key={key}
+                title={key.replaceAll('_', ' ')}
+            >
                 <Toggle
                     status={this.getToggle('log_toggles', key)}
                     onClick={() => this.switchToggle('log_toggles', key)}

@@ -60,7 +60,7 @@ export default function GuildDashboardContext(props: Props) {
     useEffect(() => {
         if (!props.discordGuildInfo || !props.robertifyGuildInfo || !props.discordGuildChannels)
             return router.push(`https://discord.com/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&permissions=269479308656&scope=bot%20applications.commands&redirect_uri=${encodeURI(`${process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot%20applications.commands&guild_id=${props.id}&disable_guild_select=true`);
-    }, [])
+    }, [!props.discordGuildInfo, !props.robertifyGuildInfo, !props.discordGuildChannels])
 
     useEffect(() => {
         setChangesMade(compareData(currentData, props.robertifyGuildInfo))
