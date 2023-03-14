@@ -1,8 +1,17 @@
-import {DiscordGuild, DiscordGuildChannel, DiscordRole, GuildPermissions, RobertifyGuild} from "@/utils/discord-types";
+import {
+    DiscordGuild,
+    DiscordGuildChannel,
+    DiscordRole, GuildDJToggles, GuildLogToggles,
+    GuildPermissions,
+    GuildToggles,
+    RobertifyGuild
+} from "@/utils/discord-types";
 import {Dispatch, SetStateAction} from "react";
 import {SelectMenuContent} from "@/components/select-menu/SelectMenu";
 import discordVoiceChannelIcon from "../../../../public/discord-voice-channel.svg";
 import discordTextChannelIcon from "../../../../public/discord-text-channel.svg";
+import Toggle from "@/components/toggle";
+import DashboardSectionContent from "@/app/dashboard/[id]/DashboardSectionContent";
 
 export default class GuildDashboardHandler {
     constructor(
@@ -11,6 +20,117 @@ export default class GuildDashboardHandler {
         private readonly guildChannels: DiscordGuildChannel[],
         private readonly setCurrentData: Dispatch<SetStateAction<RobertifyGuild>>
     ) {
+    }
+
+    public generateDJToggleElements() {
+        const obj = this.robertifyGuild.toggles.dj_toggles;
+        return (Object.keys(obj) as (keyof GuildDJToggles)[])
+            .sort((a, b) => a.localeCompare(b))
+            .map(key => (
+            <DashboardSectionContent title={key}>
+                <Toggle
+                    status={this.getToggle('dj_toggles', key)}
+                    onClick={() => this.switchToggle('dj_toggles', key)}
+                />
+            </DashboardSectionContent>
+        ));
+    }
+
+    public generateLogToggleElements() {
+        const obj = this.robertifyGuild.toggles.log_toggles;
+        return (Object.keys(obj) as (keyof GuildLogToggles)[])
+            .sort((a, b) => a.localeCompare(b))
+            .map(key => (
+            <DashboardSectionContent title={key.replaceAll('_', ' ')}>
+                <Toggle
+                    status={this.getToggle('log_toggles', key)}
+                    onClick={() => this.switchToggle('log_toggles', key)}
+                />
+            </DashboardSectionContent>
+        ));
+    }
+
+    public getToggle(toggle: keyof GuildToggles | 'autoplay' | 'twenty_four_seven_mode', innerToggle?: keyof GuildDJToggles | keyof GuildLogToggles) {
+        const obj = this.robertifyGuild.toggles;
+        switch (toggle) {
+            case "dj_toggles": {
+                if (!innerToggle)
+                    return false;
+                const djToggles = obj.dj_toggles;
+                if (!(innerToggle in djToggles))
+                    return false;
+                return djToggles[innerToggle as keyof GuildDJToggles] || false;
+            }
+            case "log_toggles": {
+                if (!innerToggle)
+                    return false;
+                const logToggles = obj.log_toggles;
+                if (!(innerToggle in logToggles))
+                    return false;
+                return logToggles[innerToggle as keyof GuildLogToggles] || false;
+            }
+            case "autoplay": return this.robertifyGuild.autoplay || false;
+            case "twenty_four_seven_mode": return this.robertifyGuild.twenty_four_seven_mode || false;
+            default: return obj[toggle] || false;
+        }
+    }
+
+    public switchToggle(toggle: keyof GuildToggles | 'autoplay' | 'twenty_four_seven_mode', innerToggle?: keyof GuildDJToggles | keyof GuildLogToggles) {
+        switch (toggle) {
+            case "dj_toggles": {
+                if (!innerToggle) return;
+
+                const obj = this.robertifyGuild.toggles;
+                if (!(innerToggle in obj.dj_toggles)) return;
+                return this.setCurrentData(prev => ({
+                    ...prev,
+                    toggles: {
+                        ...prev.toggles,
+                        dj_toggles: {
+                            ...prev.toggles.dj_toggles,
+                            [innerToggle as keyof GuildDJToggles]: !prev.toggles.dj_toggles[innerToggle as keyof GuildDJToggles]
+                        }
+                    }
+                }));
+            }
+            case "log_toggles": {
+                if (!innerToggle) return;
+
+                const obj = this.robertifyGuild.toggles;
+                if (!(innerToggle in obj.log_toggles)) return;
+                return this.setCurrentData(prev => ({
+                    ...prev,
+                    toggles: {
+                        ...prev.toggles,
+                        log_toggles: {
+                            ...prev.toggles.log_toggles,
+                            [innerToggle as keyof GuildLogToggles]: !prev.toggles.log_toggles[innerToggle as keyof GuildLogToggles]
+                        }
+                    }
+                }));
+            }
+            case "autoplay": {
+                return this.setCurrentData(prev => ({
+                    ...prev,
+                    autoplay: !prev.autoplay,
+                }));
+            }
+            case "twenty_four_seven_mode": {
+                return this.setCurrentData(prev => ({
+                    ...prev,
+                    twenty_four_seven_mode: !prev.twenty_four_seven_mode,
+                }));
+            }
+            default: {
+                return this.setCurrentData(prev => ({
+                    ...prev,
+                    toggles: {
+                        ...prev.toggles,
+                        [toggle]: !prev.toggles[toggle]
+                    }
+                }));
+            }
+        }
     }
 
     public addDJRole(id: string) {

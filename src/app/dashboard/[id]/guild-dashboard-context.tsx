@@ -21,6 +21,7 @@ import WebClient from "@/utils/api/web-client";
 import GuildDashboardHandler from "@/app/dashboard/[id]/guild-dashboard-handler";
 import saveIcon from '/public/save.svg';
 import discardIcon from '/public/discard.svg';
+import Toggle from "@/components/toggle";
 
 type Props = {
     id: string,
@@ -145,70 +146,181 @@ export default function GuildDashboardContext(props: Props) {
                 </div>
             </div>
             <div
-                className='mx-auto mb-12 p-12 tablet:p-6  bg-primary/10 shadow-md dark:bg-neutral-900 w-3/4 min-h-42 rounded-2xl border-2 border-primary/90'>
-                <DashboardSection title='Management'>
-                    <div className='grid grid-cols-2 tablet:grid-cols-1 gap-6'>
-                        <DashboardSectionContent
-                            title='DJ Roles'
-                            description='Set DJ roles.'
-                            contentAlign='below'
-                        >
-                            <SelectMenu
-                                multiSelect
-                                placeholder='Select multiple roles'
-                                size='sm'
-                                content={handler.generateRolesContent('permissions')}
-                                displayCategories={false}
-                                handleItemSelect={(item) => {
-                                    handler.addDJRole(item.value);
-                                }}
-                                handleItemDeselect={(item) => {
-                                    handler.removeDJRole(item.value)
-                                }}
-                            />
-                        </DashboardSectionContent>
-                        <DashboardSectionContent
-                            title='Restricted Voice Channels'
-                            description='Set voice channels.'
-                            contentAlign='below'
-                        >
-                            <SelectMenu
-                                multiSelect
-                                placeholder='Select multiple channels'
-                                size='sm'
-                                content={handler.generateVoiceChannelContent('restricted_channels')}
-                                handleItemSelect={item => handler.addRestrictedVoiceChannel(item.value)}
-                                handleItemDeselect={item => handler.removeRestrictedVoiceChannel(item.value)}
-                            />
-                        </DashboardSectionContent>
-                        <DashboardSectionContent
-                            title='Restricted Text Channels'
-                            description='Set text channels'
-                            contentAlign='below'
-                        >
-                            <SelectMenu
-                                multiSelect
-                                placeholder='Select multiple channels'
-                                size='sm'
-                                content={handler.generateTextChannelContent('restricted_channels')}
-                                handleItemSelect={item => handler.addRestrictedTextChannel(item.value)}
-                                handleItemDeselect={item => handler.removeRestrictedTextChannel(item.value)}
-                            />
-                        </DashboardSectionContent>
-                        <DashboardSectionContent
-                            title='Log Channel'
-                            description='Set the channel for Robertify logs to be sent'
-                            contentAlign='below'
-                        >
-                            <SelectMenu
-                                placeholder='Select a channel'
-                                size='sm'
-                                content={handler.generateTextChannelContent('log_channel')}
-                                handleItemSelect={item => handler.addLogChannel(item.value)}
-                                handleItemDeselect={() => handler.removeLogChannel()}
-                            />
-                        </DashboardSectionContent>
-                    </div>
+                className='mx-auto space-y-6 mb-12 p-12 tablet:p-6  bg-primary/10 shadow-md dark:bg-neutral-900 w-3/4 min-h-42 rounded-2xl border-2 border-primary/90'>
+                <DashboardSection
+                    title='Management'
+                    className='grid grid-cols-2 tablet:grid-cols-1 gap-6'
+                >
+                    <DashboardSectionContent
+                        title='DJ Roles'
+                        description='Set DJ roles.'
+                        contentAlign='below'
+                    >
+                        <SelectMenu
+                            multiSelect
+                            placeholder='Select multiple roles'
+                            size='sm'
+                            content={handler.generateRolesContent('permissions')}
+                            displayCategories={false}
+                            handleItemSelect={(item) => {
+                                handler.addDJRole(item.value);
+                            }}
+                            handleItemDeselect={(item) => {
+                                handler.removeDJRole(item.value)
+                            }}
+                        />
+                    </DashboardSectionContent>
+                    <DashboardSectionContent
+                        title='Restricted Voice Channels'
+                        description='Set voice channels.'
+                        contentAlign='below'
+                    >
+                        <SelectMenu
+                            multiSelect
+                            placeholder='Select multiple channels'
+                            size='sm'
+                            content={handler.generateVoiceChannelContent('restricted_channels')}
+                            handleItemSelect={item => handler.addRestrictedVoiceChannel(item.value)}
+                            handleItemDeselect={item => handler.removeRestrictedVoiceChannel(item.value)}
+                        />
+                    </DashboardSectionContent>
+                    <DashboardSectionContent
+                        title='Restricted Text Channels'
+                        description='Set text channels'
+                        contentAlign='below'
+                    >
+                        <SelectMenu
+                            multiSelect
+                            placeholder='Select multiple channels'
+                            size='sm'
+                            content={handler.generateTextChannelContent('restricted_channels')}
+                            handleItemSelect={item => handler.addRestrictedTextChannel(item.value)}
+                            handleItemDeselect={item => handler.removeRestrictedTextChannel(item.value)}
+                        />
+                    </DashboardSectionContent>
+                    <DashboardSectionContent
+                        title='Log Channel'
+                        description='Set the channel for Robertify logs to be sent'
+                        contentAlign='below'
+                    >
+                        <SelectMenu
+                            placeholder='Select a channel'
+                            size='sm'
+                            content={handler.generateTextChannelContent('log_channel')}
+                            handleItemSelect={item => handler.addLogChannel(item.value)}
+                            handleItemDeselect={() => handler.removeLogChannel()}
+                        />
+                    </DashboardSectionContent>
+                </DashboardSection>
+                <DashboardSection
+                    title='Toggles'
+                    className='grid grid-cols-2 tablet:grid-cols-1 gap-6'
+                >
+                    <DashboardSectionContent
+                        title='Restricted Text Channels'
+                        description='Toggle whether you want commands to be restricted to certain channels or not.'
+                    >
+                        <Toggle
+                            status={handler.getToggle('restricted_text_channels')}
+                            onClick={() => handler.switchToggle('restricted_text_channels')}
+                        />
+                    </DashboardSectionContent>
+                    <DashboardSectionContent
+                        title='Restricted Voice Channels'
+                        description='Toggle whether you want Robertify to join specific voice channels or not.'
+                    >
+                        <Toggle
+                            status={handler.getToggle('restricted_voice_channels')}
+                            onClick={() => handler.switchToggle('restricted_voice_channels')}
+                        />
+                    </DashboardSectionContent>
+                    <DashboardSectionContent
+                        title='Announcements'
+                        description='Toggle whether you want song announcements to be made when they have begun playing.'
+                    >
+                        <Toggle
+                            status={handler.getToggle('announce_messages')}
+                            onClick={() => handler.switchToggle('announce_messages')}
+                        />
+                    </DashboardSectionContent>
+                    <DashboardSectionContent
+                        title='Requester'
+                        description='Toggle if you want the requester for songs to be displayed in songs announcements and your request channel.'
+                    >
+                        <Toggle
+                            status={handler.getToggle('show_requester')}
+                            onClick={() => handler.switchToggle('show_requester')}
+                        />
+                    </DashboardSectionContent>
+                    <DashboardSectionContent
+                        title='8 Ball'
+                        description='Toggle whether the 8 ball feature should be enabled or not.'
+                    >
+                        <Toggle
+                            status={handler.getToggle('8ball')}
+                            onClick={() => handler.switchToggle('8ball')}
+                        />
+                    </DashboardSectionContent>
+                    <DashboardSectionContent
+                        title='Polls'
+                        description='Toggle whether the polls feature should be enabled or not.'
+                    >
+                        <Toggle
+                            status={handler.getToggle('polls')}
+                            onClick={() => handler.switchToggle('polls')}
+                        />
+                    </DashboardSectionContent>
+                    <DashboardSectionContent
+                        title='Reminders'
+                        description='Toggle whether the reminders feature should be enabled or not.'
+                    >
+                        <Toggle
+                            status={handler.getToggle('reminders')}
+                            onClick={() => handler.switchToggle('reminders')}
+                        />
+                    </DashboardSectionContent>
+                    <DashboardSectionContent
+                        title='Tips'
+                        description='Toggle whether you want tips to be sent in your channels or not.'
+                    >
+                        <Toggle
+                            status={handler.getToggle('tips')}
+                            onClick={() => handler.switchToggle('tips')}
+                        />
+                    </DashboardSectionContent>
+                    <DashboardSectionContent
+                        title='Vote Skips'
+                        description='Toggle whether you want the vote skip feature to be enabled or not.'
+                    >
+                        <Toggle
+                            status={handler.getToggle('vote_skips')}
+                            onClick={() => handler.switchToggle('vote_skips')}
+                        />
+                    </DashboardSectionContent>
+                    <DashboardSectionContent
+                        title='Auto Play'
+                        description='Toggle whether you auto play should be enabled or not.'
+                    >
+                        <Toggle
+                            status={handler.getToggle('autoplay')}
+                            onClick={() => handler.switchToggle('autoplay')}
+                        />
+                    </DashboardSectionContent>
+                    <DashboardSectionContent
+                        title='24/7 Mode'
+                        description='Toggle whether 24/7 mode should be enabled or not.'
+                    >
+                        <Toggle
+                            status={handler.getToggle('twenty_four_seven_mode')}
+                            onClick={() => handler.switchToggle('twenty_four_seven_mode')}
+                        />
+                    </DashboardSectionContent>
+                </DashboardSection>
+                <DashboardSection title='DJ Toggles' className='grid grid-cols-2 tablet:grid-cols-1 gap-6'>
+                    {handler.generateDJToggleElements()}
+                </DashboardSection>
+                <DashboardSection title='Log Channel Toggles' className='grid grid-cols-2 tablet:grid-cols-1 gap-6'>
+                    {handler.generateLogToggleElements()}
                 </DashboardSection>
             </div>
         </div>
