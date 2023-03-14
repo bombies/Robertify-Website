@@ -15,24 +15,41 @@ import DashboardSection from "@/app/dashboard/[id]/DashboardSection";
 import DashboardSectionContent from "@/app/dashboard/[id]/DashboardSectionContent";
 import SelectMenu, {SelectMenuContent} from "@/components/select-menu/SelectMenu";
 import {useDiscordDataRequired} from "@/app/_components/discord-data-context";
-import {Dispatch, SetStateAction, useEffect, useState} from "react";
+import {Dispatch, SetStateAction, useEffect, useState, useTransition} from "react";
 import {compare} from "@/utils/general-utils";
 import discordVoiceChannelIcon from '/public/discord-voice-channel.svg';
 import discordTextChannelIcon from '/public/discord-text-channel.svg';
 import Button from "@/components/button/Button";
 import {ButtonType} from "@/components/button/ButtonType";
+import WebClient from "@/utils/api/web-client";
 
 type Props = {
     id: string,
     discordGuildInfo: DiscordGuild,
     discordGuildChannels: DiscordGuildChannel[]
-    robertifyGuildInfo: RobertifyGuild,
+    robertifyGuildInfo: RobertifyGuild
+    apiMasterPassword?: string
+}
+
+const POSTChanges = async (apiMasterPassword: string | undefined, guildId: string, guildInfo: RobertifyGuild) => {
+    if (!apiMasterPassword)
+        throw new Error("The API master password is undefined!");
+    return (await WebClient.getInstance({
+        headers: {
+            Accept: 'application/json',
+            'Authorization': apiMasterPassword
+        },
+        timeout: 5 * 1000,
+        baseURL: process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME,
+    }).post(`/api/bot/guilds/${guildId}`, guildInfo))
+        ?.data;
 }
 
 export default function GuildDashboardContext(props: Props) {
     const router = useRouter();
     const [currentData, setCurrentData] = useState(props.robertifyGuildInfo)
     const [changesMade, setChangesMade] = useState(false);
+    const [isTransitioning, startTransition] = useTransition();
     const elementParser = new RobertifyGuildElementParser(
         currentData,
         props.discordGuildInfo,
@@ -56,8 +73,14 @@ export default function GuildDashboardContext(props: Props) {
     const saveChanges = () => {
         if (!changesMade)
             return;
-        props.robertifyGuildInfo = currentData;
-        setChangesMade(false);
+        startTransition(() => {
+            POSTChanges(props.apiMasterPassword, props.robertifyGuildInfo.server_id, currentData)
+                .then((a) => {
+                    props.robertifyGuildInfo = currentData;
+                    setChangesMade(false);
+                })
+                .then(() => router.refresh());
+        });
     }
 
     const discardChanges = () => {
@@ -68,10 +91,13 @@ export default function GuildDashboardContext(props: Props) {
 
     return (
         <div>
-            <div className={'fixed rounded-xl w-5/6 bottom-0 mx-auto bg-primary/50 dark:bg-neutral-900/80 backdrop-blur-sm h-20 z-[51] p-6 flex justify-between transition-fast' + (!changesMade ? ' bottom-[-200px]' : '')}>
-                <p className='text-white dark:text-primary dark:drop-shadow-glow-primary-lg font-semibold text-2xl self-center'>You have unsaved changes!</p>
+            <div
+                className={'fixed rounded-xl w-5/6 bottom-0 mx-auto bg-primary/50 dark:bg-neutral-900/80 backdrop-blur-sm h-20 z-[51] p-6 flex justify-between transition-fast' + (!changesMade ? ' bottom-[-200px]' : '')}>
+                <p className='text-white dark:text-primary dark:drop-shadow-glow-primary-lg font-semibold text-2xl self-center'>You
+                    have unsaved changes!</p>
                 <div className='flex gap-4'>
                     <Button
+                        isWorking={isTransitioning}
                         label='Save'
                         width={8}
                         height={3}

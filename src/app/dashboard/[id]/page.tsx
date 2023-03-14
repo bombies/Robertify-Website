@@ -30,6 +30,7 @@ export default async function GuildDashboard({ params }: { params: { id: string 
         botGuildInfo = undefined
 
     // Update
+    const apiMasterPassword = process.env.API_MASTER_PASSWORD;
 
     return (
         <main className='w-full min-h-screen p-24 tablet:px-6 phone:px-3'>
@@ -38,6 +39,7 @@ export default async function GuildDashboard({ params }: { params: { id: string 
                 discordGuildInfo={discordGuildInfo?.data}
                 discordGuildChannels={discordGuildChannelInfo?.data}
                 robertifyGuildInfo={botGuildInfo?.data}
+                apiMasterPassword={apiMasterPassword}
             />
         </main>
     )
