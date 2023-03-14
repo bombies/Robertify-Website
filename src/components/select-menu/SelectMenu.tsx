@@ -153,7 +153,7 @@ export default function SelectMenu(props: Props) {
             <div
                 ref={wrapperRef}
                 onClick={toggleExpanded}
-                className='flex justify-between cursor-pointer p-3 bg-neutral-200 dark:bg-dark rounded-xl shadow-md'
+                className='flex justify-between cursor-pointer p-3 bg-neutral-100 dark:bg-dark rounded-xl shadow-md'
             >
                 <p unselectable='on'
                    className='text-neutral-700 select-none whitespace-nowrap overflow-hidden text-ellipsis'
