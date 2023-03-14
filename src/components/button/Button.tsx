@@ -67,7 +67,7 @@ export default function Button(props: Props) {
                     />
                 </div>
             }
-            <p className='text-center'>{props.label}</p>
+            <p className='text-center text-white'>{props.label}</p>
         </div>
     )
 

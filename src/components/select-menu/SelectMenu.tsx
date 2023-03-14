@@ -98,6 +98,10 @@ export default function SelectMenu(props: Props) {
     const [expanded, setExpanded] = useState(false);
     const [selected, setSelected] = useState<SelectMenuContent[] | undefined>(props.content?.filter(item => item.selected === true));
     const itemsWithCategories = parseCategories(props.content);
+
+    useEffect(() => {
+        setSelected(props.content?.filter(item => item.selected === true))
+    }, [props.content])
     const toggleExpanded = () => setExpanded(prev => !prev);
     const handleSelect = (value: SelectMenuContent) => {
         setSelected(prev => {

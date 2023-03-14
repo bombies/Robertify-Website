@@ -2,10 +2,11 @@
 
 import {
     DiscordGuild,
-    DiscordGuildChannel, DiscordRole,
+    DiscordGuildChannel,
+    DiscordRole,
     GuildPermissions,
     RobertifyGuild
-} from "@/pages/api/discord/users/[id]/guilds";
+} from "@/pages/api/discord/users/[id]/_types";
 import {useRouter} from "next/navigation";
 import Image from "next/image";
 import backIcon from '/public/go-back.svg';
@@ -18,6 +19,8 @@ import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {compare} from "@/utils/general-utils";
 import discordVoiceChannelIcon from '/public/discord-voice-channel.svg';
 import discordTextChannelIcon from '/public/discord-text-channel.svg';
+import Button from "@/components/button/Button";
+import {ButtonType} from "@/components/button/ButtonType";
 
 type Props = {
     id: string,
@@ -45,13 +48,46 @@ export default function GuildDashboardContext(props: Props) {
 
     useEffect(() => {
         setChangesMade(compareData(currentData, props.robertifyGuildInfo))
-    }, [currentData, props.robertifyGuildInfo])
+    }, [currentData, props.robertifyGuildInfo]);
 
     if (!useDiscordDataRequired())
         return (<div></div>);
 
+    const saveChanges = () => {
+        if (!changesMade)
+            return;
+        props.robertifyGuildInfo = currentData;
+        setChangesMade(false);
+    }
+
+    const discardChanges = () => {
+        if (!changesMade)
+            return;
+        setCurrentData(props.robertifyGuildInfo);
+    }
+
     return (
         <div>
+            <div className={'fixed rounded-xl w-5/6 bottom-0 mx-auto bg-primary/50 dark:bg-neutral-900/80 backdrop-blur-sm h-20 z-[51] p-6 flex justify-between transition-fast' + (!changesMade ? ' bottom-[-200px]' : '')}>
+                <p className='text-white dark:text-primary dark:drop-shadow-glow-primary-lg font-semibold text-2xl self-center'>You have unsaved changes!</p>
+                <div className='flex gap-4'>
+                    <Button
+                        label='Save'
+                        width={8}
+                        height={3}
+                        className='self-center'
+                        onClick={saveChanges}
+                    />
+                    <Button
+                        label='Discard'
+                        type={ButtonType.DANGER}
+                        width={8}
+                        height={3}
+                        className='self-center'
+                        onClick={discardChanges}
+                    />
+                </div>
+            </div>
             <div
                 className='mx-auto mb-12 tablet:p-6 p-12 bg-primary/10 shadow-md dark:bg-neutral-900 w-3/4 h-42 rounded-2xl border-2 border-primary/90'>
                 <Link href='/dashboard'>
@@ -186,6 +222,8 @@ class RobertifyGuildElementParser {
     }
 
     public generateRolesContent(selectedKey?: keyof RobertifyGuild): SelectMenuContent[] {
+        if (!this.discordGuild.roles)
+            return [];
         const isRoleSelected = (role: DiscordRole): boolean => {
             if (!selectedKey) return false;
             const obj = this.robertifyGuild[selectedKey];
@@ -228,6 +266,9 @@ class RobertifyGuildElementParser {
     }
 
     private extractChannelsWithCategories(channelType: 'voice' | 'text') {
+        if (!this.guildChannels)
+            return [];
+
         const noCategoryChannels = this.guildChannels.filter(channel => !channel.parent_id && (channel.type === (channelType === 'voice' ? 2 : 0)))
 
         return [
@@ -254,5 +295,5 @@ class RobertifyGuildElementParser {
 }
 
 const compareData = (cur: RobertifyGuild, original: RobertifyGuild) => {
-    return compare(cur, original);
+    return !compare(cur, original);
 }
