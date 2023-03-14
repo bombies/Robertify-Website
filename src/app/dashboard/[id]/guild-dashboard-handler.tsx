@@ -11,7 +11,7 @@ import {SelectMenuContent} from "@/components/select-menu/SelectMenu";
 import discordVoiceChannelIcon from "../../../../public/discord-voice-channel.svg";
 import discordTextChannelIcon from "../../../../public/discord-text-channel.svg";
 import Toggle from "@/components/toggle";
-import DashboardSectionContent from "@/app/dashboard/[id]/DashboardSectionContent";
+import DashboardSectionContent from "@/app/dashboard/[id]/dashboard-section-content";
 
 export default class GuildDashboardHandler {
     constructor(
