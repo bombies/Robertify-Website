@@ -6,7 +6,7 @@ import searchIcon from "../../../public/search.svg";
 import InputContext from "@/components/input-context";
 import GuildCard from "@/app/dashboard/guild-card";
 import Card from "@/components/card";
-import {DiscordUserGuild} from "@/pages/api/discord/users/[id]/_types";
+import {DiscordUserGuild} from "@/utils/discord-types";
 import {useDiscordDataRequired} from "@/app/_components/discord-data-context";
 
 type Props = {

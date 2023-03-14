@@ -6,7 +6,7 @@ import {
     DiscordRole,
     GuildPermissions,
     RobertifyGuild
-} from "@/pages/api/discord/users/[id]/_types";
+} from "@/utils/discord-types";
 import {useRouter} from "next/navigation";
 import Image from "next/image";
 import backIcon from '/public/go-back.svg';
