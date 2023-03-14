@@ -316,10 +316,18 @@ export default function GuildDashboardContext(props: Props) {
                         />
                     </DashboardSectionContent>
                 </DashboardSection>
-                <DashboardSection title='DJ Toggles' className='grid grid-cols-2 tablet:grid-cols-1 gap-6'>
+                <DashboardSection
+                    title='DJ Toggles'
+                    description='Customize which audio commands you want to be accessible to your DJs only.'
+                    className='grid grid-cols-2 tablet:grid-cols-1 gap-6'
+                >
                     {handler.generateDJToggleElements()}
                 </DashboardSection>
-                <DashboardSection title='Log Channel Toggles' className='grid grid-cols-2 tablet:grid-cols-1 gap-6'>
+                <DashboardSection
+                    title='Log Channel Toggles'
+                    description='Customize which logs should be sent to your log channel.'
+                    className='grid grid-cols-2 tablet:grid-cols-1 gap-6'
+                >
                     {handler.generateLogToggleElements()}
                 </DashboardSection>
             </div>
