@@ -3,8 +3,6 @@
 import {
     DiscordGuild,
     DiscordGuildChannel,
-    DiscordRole,
-    GuildPermissions,
     RobertifyGuild
 } from "@/utils/discord-types";
 import {useRouter} from "next/navigation";
@@ -13,15 +11,14 @@ import backIcon from '/public/go-back.svg';
 import Link from "next/link";
 import DashboardSection from "@/app/dashboard/[id]/DashboardSection";
 import DashboardSectionContent from "@/app/dashboard/[id]/DashboardSectionContent";
-import SelectMenu, {SelectMenuContent} from "@/components/select-menu/SelectMenu";
+import SelectMenu from "@/components/select-menu/SelectMenu";
 import {useDiscordDataRequired} from "@/app/_components/discord-data-context";
-import {Dispatch, SetStateAction, useEffect, useState, useTransition} from "react";
+import {useEffect, useState, useTransition} from "react";
 import {compare} from "@/utils/general-utils";
-import discordVoiceChannelIcon from '/public/discord-voice-channel.svg';
-import discordTextChannelIcon from '/public/discord-text-channel.svg';
 import Button from "@/components/button/Button";
 import {ButtonType} from "@/components/button/ButtonType";
 import WebClient from "@/utils/api/web-client";
+import GuildDashboardHandler from "@/app/dashboard/[id]/guild-dashboard-handler";
 
 type Props = {
     id: string,
@@ -50,12 +47,11 @@ export default function GuildDashboardContext(props: Props) {
     const [currentData, setCurrentData] = useState(props.robertifyGuildInfo)
     const [changesMade, setChangesMade] = useState(false);
     const [isTransitioning, startTransition] = useTransition();
-    const elementParser = new RobertifyGuildElementParser(
+    const handler = new GuildDashboardHandler(
         currentData,
         props.discordGuildInfo,
         props.discordGuildChannels,
-        setCurrentData,
-        setChangesMade,
+        setCurrentData
     );
 
     useEffect(() => {
@@ -75,7 +71,7 @@ export default function GuildDashboardContext(props: Props) {
             return;
         startTransition(() => {
             POSTChanges(props.apiMasterPassword, props.robertifyGuildInfo.server_id, currentData)
-                .then((a) => {
+                .then(() => {
                     props.robertifyGuildInfo = currentData;
                     setChangesMade(false);
                 })
@@ -157,13 +153,13 @@ export default function GuildDashboardContext(props: Props) {
                                 multiSelect
                                 placeholder='Select multiple roles'
                                 size='sm'
-                                content={elementParser.generateRolesContent('permissions')}
+                                content={handler.generateRolesContent('permissions')}
                                 displayCategories={false}
                                 handleItemSelect={(item) => {
-                                    elementParser.addDJRole(item.value);
+                                    handler.addDJRole(item.value);
                                 }}
                                 handleItemDeselect={(item) => {
-                                    elementParser.removeDJRole(item.value)
+                                    handler.removeDJRole(item.value)
                                 }}
                             />
                         </DashboardSectionContent>
@@ -176,7 +172,9 @@ export default function GuildDashboardContext(props: Props) {
                                 multiSelect
                                 placeholder='Select multiple channels'
                                 size='sm'
-                                content={elementParser.generateVoiceChannelContent()}
+                                content={handler.generateVoiceChannelContent()}
+                                handleItemSelect={item => handler.addRestrictedVoiceChannel(item.value)}
+                                // handleItemDeselect={item => handler.removeRestrictedVoiceChannel(item.value)}
                             />
                         </DashboardSectionContent>
                         <DashboardSectionContent
@@ -188,7 +186,9 @@ export default function GuildDashboardContext(props: Props) {
                                 multiSelect
                                 placeholder='Select multiple channels'
                                 size='sm'
-                                content={elementParser.generateTextChannelContent()}
+                                content={handler.generateTextChannelContent()}
+                                handleItemSelect={item => handler.addRestrictedTextChannel(item.value)}
+                                handleItemDeselect={item => handler.removeRestrictedTextChannel(item.value)}
                             />
                         </DashboardSectionContent>
                         <DashboardSectionContent
@@ -199,7 +199,7 @@ export default function GuildDashboardContext(props: Props) {
                             <SelectMenu
                                 placeholder='Select a channel'
                                 size='sm'
-                                content={elementParser.generateTextChannelContent()}
+                                content={handler.generateTextChannelContent()}
                             />
                         </DashboardSectionContent>
                     </div>
@@ -207,117 +207,6 @@ export default function GuildDashboardContext(props: Props) {
             </div>
         </div>
     )
-}
-
-class RobertifyGuildElementParser {
-    constructor(
-        private readonly robertifyGuild: RobertifyGuild,
-        private readonly discordGuild: DiscordGuild,
-        private readonly guildChannels: DiscordGuildChannel[],
-        private readonly setCurrentData: Dispatch<SetStateAction<RobertifyGuild>>,
-        private readonly setChangesMade: Dispatch<SetStateAction<boolean>>,
-    ) {
-    }
-
-    public addDJRole(id: string) {
-        this.setCurrentData(prev => ({
-            ...prev,
-            permissions: {
-                ...prev.permissions,
-                "1": prev.permissions["1"] ? [...prev.permissions["1"], id] : [id]
-            }
-        }))
-    }
-
-    public removeDJRole(id: string) {
-        this.setCurrentData(prev => ({
-            ...prev,
-            permissions: {
-                ...prev.permissions,
-                "1": prev.permissions["1"] ? prev.permissions["1"]?.filter(permission => permission !== id) : []
-            }
-        }))
-    }
-
-    public generateTextChannelContent() {
-        return this.generateChannelContent('text');
-    }
-
-    public generateVoiceChannelContent() {
-        return this.generateChannelContent('voice');
-    }
-
-    public generateRolesContent(selectedKey?: keyof RobertifyGuild): SelectMenuContent[] {
-        if (!this.discordGuild.roles)
-            return [];
-        const isRoleSelected = (role: DiscordRole): boolean => {
-            if (!selectedKey) return false;
-            const obj = this.robertifyGuild[selectedKey];
-            if (!obj) return false;
-
-            switch (selectedKey) {
-                case "permissions": {
-                    const permissions = obj as GuildPermissions;
-                    return permissions["1"] ? permissions["1"].includes(role.id) : false;
-                }
-                default:
-                    return false;
-            }
-        }
-
-        return this.discordGuild.roles.map<SelectMenuContent>(role => ({
-            label: role.name,
-            value: role.id,
-            selected: isRoleSelected(role)
-        }));
-    }
-
-    private generateChannelContent(channelType: 'voice' | 'text'): SelectMenuContent[] {
-        const convertToSelectMenuContent = (obj: { category: string | undefined, channels: DiscordGuildChannel[] }): SelectMenuContent[] => {
-            return obj.channels.map<SelectMenuContent>(channel => {
-                return {
-                    category: obj.category,
-                    label: channel.name || '',
-                    value: channel.id,
-                    icon: channelType === 'voice' ? discordVoiceChannelIcon : discordTextChannelIcon
-                }
-            })
-        }
-
-        const raw = this.extractChannelsWithCategories(channelType);
-        const contents = raw.map(rawObj => convertToSelectMenuContent(rawObj));
-        return contents.reduce((previousValue, currentValue, index) => ([
-            ...previousValue, ...currentValue
-        ]), [])
-    }
-
-    private extractChannelsWithCategories(channelType: 'voice' | 'text') {
-        if (!this.guildChannels)
-            return [];
-
-        const noCategoryChannels = this.guildChannels.filter(channel => !channel.parent_id && (channel.type === (channelType === 'voice' ? 2 : 0)))
-
-        return [
-            ...this.guildChannels.filter(channel => channel.type === 4)
-                .map(category => {
-                    return {
-                        name: category.name,
-                        id: category.id
-                    }
-                })
-                .map(category => {
-                    return {
-                        category: category.name,
-                        channels: this.guildChannels.filter(channel => (channel.type === (channelType === 'voice' ? 2 : 0)) && channel.parent_id === category.id)
-                    }
-                })
-                .filter(categoryObj => categoryObj.channels.length !== 0),
-            {
-                category: undefined,
-                channels: [...noCategoryChannels]
-            }
-        ]
-    }
 }
 
 const compareData = (cur: RobertifyGuild, original: RobertifyGuild) => {
