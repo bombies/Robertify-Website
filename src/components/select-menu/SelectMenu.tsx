@@ -104,20 +104,28 @@ export default function SelectMenu(props: Props) {
     }, [props.content])
     const toggleExpanded = () => setExpanded(prev => !prev);
     const handleSelect = (value: SelectMenuContent) => {
+        console.log('handling selected')
+
         setSelected(prev => {
             if (!prev || prev.length === 0) {
+                console.log('handling empty arr')
                 if (props.handleItemSelect)
                     props.handleItemSelect(value);
                 return [value];
-            } if (prev.filter(item => item.value === value.value).length > 0) {
+            }
+
+            if (prev.filter(item => item.value === value.value).length > 0) {
+                console.log('handling deselect')
                 if (props.handleItemDeselect)
                     props.handleItemDeselect(value)
                 return prev.filter(item => item.value !== value.value);
-            } else if (props.multiSelect !== undefined) {
+            } else if (typeof props.multiSelect !== 'undefined') {
+                console.log('handling multiselect')
                 if (props.handleItemSelect)
                     props.handleItemSelect(value);
                 return [...prev, value];
             } else {
+                console.log('handling single select')
                 if (props.handleItemDeselect)
                     props.handleItemDeselect(prev[0])
                 if (props.handleItemSelect)

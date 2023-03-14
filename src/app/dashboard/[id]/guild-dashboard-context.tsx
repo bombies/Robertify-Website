@@ -172,9 +172,9 @@ export default function GuildDashboardContext(props: Props) {
                                 multiSelect
                                 placeholder='Select multiple channels'
                                 size='sm'
-                                content={handler.generateVoiceChannelContent()}
+                                content={handler.generateVoiceChannelContent('restricted_channels')}
                                 handleItemSelect={item => handler.addRestrictedVoiceChannel(item.value)}
-                                // handleItemDeselect={item => handler.removeRestrictedVoiceChannel(item.value)}
+                                handleItemDeselect={item => handler.removeRestrictedVoiceChannel(item.value)}
                             />
                         </DashboardSectionContent>
                         <DashboardSectionContent
@@ -186,7 +186,7 @@ export default function GuildDashboardContext(props: Props) {
                                 multiSelect
                                 placeholder='Select multiple channels'
                                 size='sm'
-                                content={handler.generateTextChannelContent()}
+                                content={handler.generateTextChannelContent('restricted_channels')}
                                 handleItemSelect={item => handler.addRestrictedTextChannel(item.value)}
                                 handleItemDeselect={item => handler.removeRestrictedTextChannel(item.value)}
                             />
@@ -199,7 +199,9 @@ export default function GuildDashboardContext(props: Props) {
                             <SelectMenu
                                 placeholder='Select a channel'
                                 size='sm'
-                                content={handler.generateTextChannelContent()}
+                                content={handler.generateTextChannelContent('log_channel')}
+                                handleItemSelect={item => handler.addLogChannel(item.value)}
+                                handleItemDeselect={() => handler.removeLogChannel()}
                             />
                         </DashboardSectionContent>
                     </div>

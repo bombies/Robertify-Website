@@ -49,6 +49,17 @@ export default class GuildDashboardHandler {
         return this.removeRestrictedChannel(id, 'text');
     }
 
+    public addLogChannel(id: string) {
+        this.setCurrentData(prev => ({
+            ...prev,
+            log_channel: id
+        }))
+    }
+
+    public removeLogChannel() {
+        return this.addLogChannel("-1");
+    }
+
     private addRestrictedChannel(id: string, channelType: 'text' | 'voice') {
         switch (channelType) {
             case "text": {
@@ -99,12 +110,12 @@ export default class GuildDashboardHandler {
         }
     }
 
-    public generateTextChannelContent() {
-        return this.generateChannelContent('text');
+    public generateTextChannelContent(selectedKey?: keyof RobertifyGuild) {
+        return this.generateChannelContent('text', selectedKey);
     }
 
-    public generateVoiceChannelContent() {
-        return this.generateChannelContent('voice');
+    public generateVoiceChannelContent(selectedKey?: keyof RobertifyGuild) {
+        return this.generateChannelContent('voice', selectedKey);
     }
 
     public generateRolesContent(selectedKey?: keyof RobertifyGuild): SelectMenuContent[] {
@@ -132,14 +143,36 @@ export default class GuildDashboardHandler {
         }));
     }
 
-    private generateChannelContent(channelType: 'voice' | 'text'): SelectMenuContent[] {
+    private generateChannelContent(channelType: 'voice' | 'text', selectedKey?: keyof RobertifyGuild): SelectMenuContent[] {
+        const isChannelSelected = (channel: DiscordGuildChannel) => {
+            if (!selectedKey) return false;
+
+            switch (selectedKey) {
+                case "restricted_channels": {
+                    const obj = this.robertifyGuild.restricted_channels[channelType === 'voice' ? 'voice_channels' : 'text_channels'];
+                    if (!obj || obj.length === 0)
+                        return false;
+                    return obj.includes(channel.id);
+                }
+                case "log_channel": {
+                    if (channelType !== 'text')
+                        return false;
+                    const obj = this.robertifyGuild.log_channel;
+                    if (!obj)
+                        return false;
+                    return obj === channel.id;
+                }
+            }
+        }
+
         const convertToSelectMenuContent = (obj: { category: string | undefined, channels: DiscordGuildChannel[] }): SelectMenuContent[] => {
             return obj.channels.map<SelectMenuContent>(channel => {
                 return {
                     category: obj.category,
                     label: channel.name || '',
                     value: channel.id,
-                    icon: channelType === 'voice' ? discordVoiceChannelIcon : discordTextChannelIcon
+                    icon: channelType === 'voice' ? discordVoiceChannelIcon : discordTextChannelIcon,
+                    selected: isChannelSelected(channel)
                 }
             })
         }
