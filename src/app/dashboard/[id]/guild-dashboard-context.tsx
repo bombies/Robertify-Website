@@ -19,6 +19,8 @@ import Button from "@/components/button/Button";
 import {ButtonType} from "@/components/button/ButtonType";
 import WebClient from "@/utils/api/web-client";
 import GuildDashboardHandler from "@/app/dashboard/[id]/guild-dashboard-handler";
+import saveIcon from '/public/save.svg';
+import discardIcon from '/public/discard.svg';
 
 type Props = {
     id: string,
@@ -95,6 +97,7 @@ export default function GuildDashboardContext(props: Props) {
                     <Button
                         isWorking={isTransitioning}
                         label='Save'
+                        icon={saveIcon}
                         width={8}
                         height={3}
                         className='self-center'
@@ -103,6 +106,7 @@ export default function GuildDashboardContext(props: Props) {
                     <Button
                         label='Discard'
                         type={ButtonType.DANGER}
+                        icon={discardIcon}
                         width={8}
                         height={3}
                         className='self-center'
