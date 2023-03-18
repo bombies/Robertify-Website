@@ -19,6 +19,7 @@ interface Props {
     size?: ComponentSize,
     multiSelect?: boolean,
     displayCategories?: boolean
+    noDeselect?: boolean,
     onItemSelect?: (item: SelectMenuContent) => void;
     handleItemSelect?: (item: SelectMenuContent) => void;
     handleItemDeselect?: (item: SelectMenuContent) => void;
@@ -111,7 +112,7 @@ export default function SelectMenu(props: Props) {
                 return [value];
             }
 
-            if (prev.filter(item => item.value === value.value).length > 0) {
+            if (typeof props.multiSelect !== 'undefined' && prev.filter(item => item.value === value.value).length > 0) {
                 if (props.handleItemDeselect)
                     props.handleItemDeselect(value)
                 return prev.filter(item => item.value !== value.value);
@@ -120,6 +121,9 @@ export default function SelectMenu(props: Props) {
                     props.handleItemSelect(value);
                 return [...prev, value];
             } else {
+                if (typeof props.noDeselect !== 'undefined' && value === prev[0])
+                    return [prev[0]];
+
                 if (props.handleItemDeselect)
                     props.handleItemDeselect(prev[0])
                 if (props.handleItemSelect)

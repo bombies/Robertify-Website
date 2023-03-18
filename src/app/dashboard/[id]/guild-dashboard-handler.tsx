@@ -5,8 +5,8 @@ import {
     GuildDJToggles,
     GuildLogToggles,
     GuildPermissions,
-    GuildToggles,
-    RobertifyGuild
+    GuildToggles, LocaleString,
+    RobertifyGuild, ThemeString
 } from "@/utils/discord-types";
 import {Dispatch, SetStateAction} from "react";
 import {SelectMenuContent} from "@/components/select-menu/SelectMenu";
@@ -14,6 +14,7 @@ import discordVoiceChannelIcon from "../../../../public/discord-voice-channel.sv
 import discordTextChannelIcon from "../../../../public/discord-text-channel.svg";
 import Toggle from "@/components/toggle";
 import DashboardSectionContent from "@/app/dashboard/[id]/dashboard-section-content";
+import {StaticImageData} from "next/image";
 
 export default class GuildDashboardHandler {
     constructor(
@@ -29,16 +30,16 @@ export default class GuildDashboardHandler {
         return (Object.keys(obj) as (keyof GuildDJToggles)[])
             .sort((a, b) => a.localeCompare(b))
             .map(key => (
-            <DashboardSectionContent
-                key={key}
-                title={key}
-            >
-                <Toggle
-                    status={this.getToggle('dj_toggles', key)}
-                    onClick={() => this.switchToggle('dj_toggles', key)}
-                />
-            </DashboardSectionContent>
-        ));
+                <DashboardSectionContent
+                    key={key}
+                    title={key}
+                >
+                    <Toggle
+                        status={this.getToggle('dj_toggles', key)}
+                        onClick={() => this.switchToggle('dj_toggles', key)}
+                    />
+                </DashboardSectionContent>
+            ));
     }
 
     public generateLogToggleElements() {
@@ -46,16 +47,16 @@ export default class GuildDashboardHandler {
         return (Object.keys(obj) as (keyof GuildLogToggles)[])
             .sort((a, b) => a.localeCompare(b))
             .map(key => (
-            <DashboardSectionContent
-                key={key}
-                title={key.replaceAll('_', ' ')}
-            >
-                <Toggle
-                    status={this.getToggle('log_toggles', key)}
-                    onClick={() => this.switchToggle('log_toggles', key)}
-                />
-            </DashboardSectionContent>
-        ));
+                <DashboardSectionContent
+                    key={key}
+                    title={key.replaceAll('_', ' ')}
+                >
+                    <Toggle
+                        status={this.getToggle('log_toggles', key)}
+                        onClick={() => this.switchToggle('log_toggles', key)}
+                    />
+                </DashboardSectionContent>
+            ));
     }
 
     public getToggle(toggle: keyof GuildToggles | 'autoplay' | 'twenty_four_seven_mode', innerToggle?: keyof GuildDJToggles | keyof GuildLogToggles) {
@@ -77,9 +78,12 @@ export default class GuildDashboardHandler {
                     return false;
                 return logToggles[innerToggle as keyof GuildLogToggles] || false;
             }
-            case "autoplay": return this.robertifyGuild.autoplay || false;
-            case "twenty_four_seven_mode": return this.robertifyGuild.twenty_four_seven_mode || false;
-            default: return obj[toggle] || false;
+            case "autoplay":
+                return this.robertifyGuild.autoplay || false;
+            case "twenty_four_seven_mode":
+                return this.robertifyGuild.twenty_four_seven_mode || false;
+            default:
+                return obj[toggle] || false;
         }
     }
 
@@ -184,6 +188,20 @@ export default class GuildDashboardHandler {
         }))
     }
 
+    public setLocale(locale: LocaleString) {
+        this.setCurrentData(prev => ({
+            ...prev,
+            locale: locale
+        }))
+    }
+
+    public setTheme(theme: ThemeString) {
+        this.setCurrentData(prev => ({
+            ...prev,
+            theme: theme
+        }))
+    }
+
     public removeLogChannel() {
         return this.addLogChannel("-1");
     }
@@ -244,6 +262,64 @@ export default class GuildDashboardHandler {
 
     public generateVoiceChannelContent(selectedKey?: keyof RobertifyGuild) {
         return this.generateChannelContent('voice', selectedKey);
+    }
+
+    public generateThemesContent(): SelectMenuContent[] {
+        const isThemeSelected = (theme: string): boolean => {
+            return this.robertifyGuild.theme === theme.toLowerCase().replaceAll(/\s/g, "_");
+        }
+
+        const themes = [
+            'Green', "Red", "Gold", "Yellow", "Orange", "Dark", "Light", "Blue", "Light Blue", "Pink", "Purple", "Mint", "Pastel Yellow", "Pastel Red", "Pastel Purple", "Baby Blue"
+        ]
+
+        return themes.map<SelectMenuContent>(theme => ({
+            label: theme,
+            value: theme.toLowerCase().replaceAll(/\s/g, "_"),
+            selected: isThemeSelected(theme)
+        }));
+    }
+
+    public generateLocaleContent(): SelectMenuContent[]  {
+        type Locale = {
+            locale: LocaleString,
+            icon?: string | StaticImageData
+        }
+
+        const isSelected = (locale: Locale) => {
+            return this.robertifyGuild.locale === locale.locale;
+        }
+
+        const locales: Locale[] = [
+            {
+                locale: 'english',
+            },
+            {
+                locale: 'spanish',
+            },
+            {
+                locale: 'portuguese',
+            },
+            {
+                locale: 'russian',
+            },
+            {
+                locale: 'dutch',
+            },
+            {
+                locale: 'german',
+            },
+            {
+                locale: 'french',
+            },
+        ]
+
+        return locales.map<SelectMenuContent>(locale => ({
+            label: `${locale.locale.charAt(0).toUpperCase()}${locale.locale.substring(1)}`,
+            value: locale.locale,
+            icon: locale.icon,
+            selected: isSelected(locale)
+        }))
     }
 
     public generateRolesContent(selectedKey?: keyof RobertifyGuild): SelectMenuContent[] {

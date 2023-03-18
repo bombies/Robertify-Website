@@ -207,6 +207,9 @@ type GuildBannedUser = {
     banned_at: String
 };
 
+export type LocaleString = "english"|"spanish"|"portuguese"|"russian"|"dutch"|"german"|"french";
+export type ThemeString = "green"|"gold"|"red"|"yellow"|"orange"|"dark"|"light"|"blue"|"light_blue"|"lightblue"|"pink"|"purple"|"mint"|"pastel_yellow"|"pastel_purple"|"pastel_red"|"baby_blue"
+
 export type RobertifyGuild = {
     dedicated_channel: DedicatedChannel;
     restricted_channels: RestrictedChannels;
@@ -215,13 +218,13 @@ export type RobertifyGuild = {
     toggles: GuildToggles;
     eight_ball: string[];
     announcement_channel: string;
-    theme: string;
+    theme: ThemeString;
     server_id: string;
     banned_users: GuildBannedUser[];
     autoplay: boolean;
     log_channel: string;
     twenty_four_seven_mode: boolean;
-    locale: string;
+    locale: LocaleString;
 }
 
 export type DiscordUserGuild = {

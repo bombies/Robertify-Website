@@ -2,8 +2,8 @@
 
 import {
     DiscordGuild,
-    DiscordGuildChannel,
-    RobertifyGuild
+    DiscordGuildChannel, LocaleString,
+    RobertifyGuild, ThemeString
 } from "@/utils/discord-types";
 import {useRouter} from "next/navigation";
 import Image from "next/image";
@@ -151,6 +151,38 @@ export default function GuildDashboardContext(props: Props) {
                     title='Management'
                     className='grid grid-cols-2 tablet:grid-cols-1 gap-6'
                 >
+                    <DashboardSectionContent
+                        title='Theme'
+                        description="Set the bot's theme"
+                        contentAlign='below'
+                    >
+                        <SelectMenu
+                            noDeselect
+                            placeholder='Select a theme'
+                            size='sm'
+                            content={handler.generateThemesContent()}
+                            displayCategories={false}
+                            handleItemSelect={(item) => {
+                                handler.setTheme(item.value as ThemeString)
+                            }}
+                        />
+                    </DashboardSectionContent>
+                    <DashboardSectionContent
+                        title='Language'
+                        description="Set the bot's language"
+                        contentAlign='below'
+                    >
+                        <SelectMenu
+                            noDeselect
+                            placeholder='Select a language'
+                            size='sm'
+                            content={handler.generateLocaleContent()}
+                            displayCategories={false}
+                            handleItemSelect={(item) => {
+                                handler.setLocale(item.value as LocaleString)
+                            }}
+                        />
+                    </DashboardSectionContent>
                     <DashboardSectionContent
                         title='DJ Roles'
                         description='Set DJ roles.'
