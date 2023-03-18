@@ -1,7 +1,9 @@
 import {
     DiscordGuild,
     DiscordGuildChannel,
-    DiscordRole, GuildDJToggles, GuildLogToggles,
+    DiscordRole,
+    GuildDJToggles,
+    GuildLogToggles,
     GuildPermissions,
     GuildToggles,
     RobertifyGuild
@@ -255,7 +257,7 @@ export default class GuildDashboardHandler {
             switch (selectedKey) {
                 case "permissions": {
                     const permissions = obj as GuildPermissions;
-                    return permissions["1"] ? permissions["1"].includes(role.id) : false;
+                    return permissions["1"] ? permissions["1"].includes(role.id.toString()) : false;
                 }
                 default:
                     return false;
