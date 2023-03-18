@@ -15,6 +15,13 @@ import discordTextChannelIcon from "../../../../public/discord-text-channel.svg"
 import Toggle from "@/components/toggle";
 import DashboardSectionContent from "@/app/dashboard/[id]/dashboard-section-content";
 import {StaticImageData} from "next/image";
+import britain from '/public/locale/britain.svg';
+import spain from '/public/locale/spain.svg';
+import portugal from '/public/locale/portugal.svg';
+import france from '/public/locale/france.svg';
+import russia from '/public/locale/russia.svg';
+import netherlands from '/public/locale/netherlands.svg';
+import germany from '/public/locale/germany.svg';
 
 export default class GuildDashboardHandler {
     constructor(
@@ -337,24 +344,31 @@ export default class GuildDashboardHandler {
         const locales: Locale[] = [
             {
                 locale: 'english',
+                icon: britain
             },
             {
                 locale: 'spanish',
+                icon: spain
             },
             {
                 locale: 'portuguese',
+                icon: portugal
             },
             {
                 locale: 'russian',
+                icon: russia
             },
             {
                 locale: 'dutch',
+                icon: netherlands
             },
             {
                 locale: 'german',
+                icon: germany
             },
             {
                 locale: 'french',
+                icon: france
             },
         ]
 
