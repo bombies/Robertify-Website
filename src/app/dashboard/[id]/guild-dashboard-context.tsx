@@ -63,7 +63,8 @@ export default function GuildDashboardContext(props: Props) {
     }, [!props.discordGuildInfo, !props.robertifyGuildInfo, !props.discordGuildChannels])
 
     useEffect(() => {
-        setChangesMade(compareData(currentData, props.robertifyGuildInfo))
+        const b = compareData(currentData, props.robertifyGuildInfo);
+        setChangesMade(b)
     }, [currentData, props.robertifyGuildInfo]);
 
     if (!useDiscordDataRequired())
@@ -78,7 +79,10 @@ export default function GuildDashboardContext(props: Props) {
                     props.robertifyGuildInfo = currentData;
                     setChangesMade(false);
                 })
-                .then(() => router.refresh());
+                .then(() => router.refresh())
+                .catch(err => {
+                    console.error(err)
+                });
         });
     }
 
@@ -365,5 +369,12 @@ export default function GuildDashboardContext(props: Props) {
 }
 
 const compareData = (cur: RobertifyGuild, original: RobertifyGuild) => {
+    if ("_id" in cur)
+        // @ts-ignore
+        delete cur._id;
+    if ("_id" in original)
+        // @ts-ignore
+        delete original._id;
+
     return !compare(cur, original);
 }
