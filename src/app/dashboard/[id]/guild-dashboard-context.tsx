@@ -89,34 +89,31 @@ export default function GuildDashboardContext(props: Props) {
     }
 
     return (
-        <div>
+        <div className='relative'>
             <div
-                className={'fixed rounded-xl w-5/6 bottom-0 mx-auto bg-primary/50 dark:bg-neutral-900/80 backdrop-blur-sm h-20 z-[51] p-6 flex justify-between transition-fast' + (!changesMade ? ' bottom-[-200px]' : '')}>
-                <p className='text-white dark:text-primary dark:drop-shadow-glow-primary-lg font-semibold text-2xl self-center'>You
-                    have unsaved changes!</p>
+                className={'fixed rounded-xl w-full bottom-0 right-0 mx-auto bg-primary/90 dark:bg-neutral-900/80 backdrop-blur-sm h-20 z-[51] p-6 flex phone:gap-2 justify-between transition-fast' + (!changesMade ? ' bottom-[-200px]' : '')}>
+                <p className='text-white dark:text-primary dark:drop-shadow-glow-primary-lg font-semibold text-2xl phone:text-sm self-center'>You
+                    have unsaved changes!
+                </p>
                 <div className='flex gap-4'>
                     <Button
                         isWorking={isTransitioning}
                         label='Save'
                         icon={saveIcon}
-                        width={8}
-                        height={3}
-                        className='self-center'
+                        className='self-center w-[8rem] h-[3rem] phone:w-[6rem]'
                         onClick={saveChanges}
                     />
                     <Button
                         label='Discard'
                         type={ButtonType.DANGER}
                         icon={discardIcon}
-                        width={8}
-                        height={3}
-                        className='self-center'
+                        className='self-center w-[8rem] h-[3rem] phone:w-[6rem]'
                         onClick={discardChanges}
                     />
                 </div>
             </div>
             <div
-                className='mx-auto mb-12 tablet:p-6 p-12 bg-primary/10 shadow-md dark:bg-neutral-900 w-3/4 h-42 rounded-2xl border-2 border-primary/90'>
+                className='mx-auto mb-12 tablet:p-6 p-12 bg-primary/10 shadow-md dark:bg-neutral-900 w-full h-42 rounded-2xl border-2 border-primary/90'>
                 <Link href='/dashboard'>
                     <div className='flex gap-4 hover:scale-[100.25%] transition-fast mb-12'>
                         <div className='relative w-8 h-8'>
@@ -146,10 +143,10 @@ export default function GuildDashboardContext(props: Props) {
                 </div>
             </div>
             <div
-                className='mx-auto space-y-6 mb-12 p-12 tablet:p-6  bg-primary/10 shadow-md dark:bg-neutral-900 w-3/4 min-h-42 rounded-2xl border-2 border-primary/90'>
+                className='mx-auto space-y-6 mb-12 p-12 tablet:p-6  bg-primary/10 shadow-md dark:bg-neutral-900 w-full min-h-42 rounded-2xl border-2 border-primary/90'>
                 <DashboardSection
                     title='Management'
-                    className='grid grid-cols-2 tablet:grid-cols-1 gap-6'
+                    className='grid grid-cols-3 laptop:grid-cols-2 phone:grid-cols-1 gap-6'
                 >
                     <DashboardSectionContent
                         title='Theme'
@@ -351,14 +348,14 @@ export default function GuildDashboardContext(props: Props) {
                 <DashboardSection
                     title='DJ Toggles'
                     description='Customize which audio commands you want to be accessible to your DJs only.'
-                    className='grid grid-cols-2 tablet:grid-cols-1 gap-6'
+                    className='grid grid-cols-3 tablet:grid-cols-2 phone:grid-cols-1 gap-6'
                 >
                     {handler.generateDJToggleElements()}
                 </DashboardSection>
                 <DashboardSection
                     title='Log Channel Toggles'
                     description='Customize which logs should be sent to your log channel.'
-                    className='grid grid-cols-2 tablet:grid-cols-1 gap-6'
+                    className='grid grid-cols-3 tablet:grid-cols-2 phone:grid-cols-1 gap-6'
                 >
                     {handler.generateLogToggleElements()}
                 </DashboardSection>

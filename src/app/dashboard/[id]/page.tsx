@@ -32,7 +32,7 @@ export default async function GuildDashboard({ params }: { params: { id: string 
     const apiMasterPassword = process.env.API_MASTER_PASSWORD;
 
     return (
-        <main className='w-full min-h-screen p-24 tablet:px-6 phone:px-3'>
+        <main className='w-full min-h-screen desktop:p-36 p-24 tablet:px-6 phone:px-3'>
             <GuildDashboardContext
                 id={id}
                 discordGuildInfo={discordGuildInfo?.data}
