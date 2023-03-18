@@ -13,7 +13,7 @@ export default function Toggle(props: Props) {
             onClick={() => {
                 if (props.disabled)
                     return;
-                props.onClick
+                return props.onClick;
             }}
         >
             <div className={'absolute transition-fast h-6 w-6 rounded-full bg-primary shadow-md dark:shadow-primary/30 ' + (props.status ? 'right-0 !bg-white' : 'left-0')}></div>
