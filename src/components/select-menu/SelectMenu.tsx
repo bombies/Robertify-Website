@@ -17,7 +17,12 @@ interface Props {
     content?: SelectMenuContent[],
     placeholder?: string,
     size?: ComponentSize,
-    multiSelect?: boolean
+    multiSelect?: boolean,
+    displayCategories?: boolean
+    noDeselect?: boolean,
+    onItemSelect?: (item: SelectMenuContent) => void;
+    handleItemSelect?: (item: SelectMenuContent) => void;
+    handleItemDeselect?: (item: SelectMenuContent) => void;
 }
 
 const parseMenuSize = (size?: ComponentSize) => {
@@ -51,22 +56,30 @@ const parseCategories = (content?: SelectMenuContent[]): { category?: string, it
     })
 }
 
-const generateCategoryElement = (content: { category?: string, items: SelectMenuContent[] }, handleSelect: (val: SelectMenuContent) => void, selectedItems?: SelectMenuContent[]) => {
+const generateCategoryElement = (
+    content: { category?: string, items: SelectMenuContent[] },
+    handleSelect: (val: SelectMenuContent) => void, selectedItems?: SelectMenuContent[],
+    displayCategories?: boolean,
+    onItemSelect?: (item: SelectMenuContent) => void
+) => {
     const isItemSelected = (item: SelectMenuContent) => {
-        return selectedItems?.includes(item);
+        if (item.selected === true) return true;
+        return selectedItems ?  selectedItems.includes(item) : false;
     }
 
     const itemElements = content.items.map(item => (
         <div
             key={`${content.category}#${item.label}#${item.value}`}
-            className='flex justify-between cursor-pointer'
+            className='flex gap-4 cursor-pointer'
             onClick={() => {
-                handleSelect(item)
+                handleSelect(item);
+                if (onItemSelect)
+                    onItemSelect(item);
             }}
         >
             {
                 item.icon &&
-                <div className='relative w-4 h-4'>
+                <div className='relative w-4 h-4 self-center'>
                     <Image src={item.icon} alt='' fill={true}/>
                 </div>
             }
@@ -76,7 +89,7 @@ const generateCategoryElement = (content: { category?: string, items: SelectMenu
 
     return (
         <div>
-            {content.category && <h4 className='dark:text-neutral-400 text-neutral-700 text-center uppercase font-semibold text-sm my-3 select-none whitespace-nowrap overflow-hidden text-ellipsis'>{content.category}</h4>}
+            { displayCategories !== false && <h4 className='dark:text-neutral-600 text-neutral-700 text-center uppercase font-semibold text-sm my-3 select-none whitespace-nowrap overflow-hidden text-ellipsis'>{content.category || 'No Category'}</h4>}
             {itemElements}
         </div>
     )
@@ -86,20 +99,40 @@ export default function SelectMenu(props: Props) {
     const [expanded, setExpanded] = useState(false);
     const [selected, setSelected] = useState<SelectMenuContent[] | undefined>(props.content?.filter(item => item.selected === true));
     const itemsWithCategories = parseCategories(props.content);
+
+    useEffect(() => {
+        setSelected(props.content?.filter(item => item.selected === true))
+    }, [props.content])
     const toggleExpanded = () => setExpanded(prev => !prev);
     const handleSelect = (value: SelectMenuContent) => {
         setSelected(prev => {
-            if (!prev)
+            if (!prev || prev.length === 0) {
+                if (props.handleItemSelect)
+                    props.handleItemSelect(value);
                 return [value];
-            if (prev.includes(value))
-                return prev.filter(item => item !== value);
-            else if (props.multiSelect !== undefined)
+            }
+
+            if (typeof props.multiSelect !== 'undefined' && prev.filter(item => item.value === value.value).length > 0) {
+                if (props.handleItemDeselect)
+                    props.handleItemDeselect(value)
+                return prev.filter(item => item.value !== value.value);
+            } else if (typeof props.multiSelect !== 'undefined') {
+                if (props.handleItemSelect)
+                    props.handleItemSelect(value);
                 return [...prev, value];
-            else
+            } else {
+                if (typeof props.noDeselect !== 'undefined' && value === prev[0])
+                    return [prev[0]];
+
+                if (props.handleItemDeselect)
+                    props.handleItemDeselect(prev[0])
+                if (props.handleItemSelect)
+                    props.handleItemSelect(value);
                 return [value]
+            }
         })
     }
-    const categories = itemsWithCategories.map(category => generateCategoryElement(category, handleSelect, selected))
+    const categories = itemsWithCategories.map(category => generateCategoryElement(category, handleSelect, selected, props.displayCategories))
 
     const wrapperRef = useRef<any>(null);
     const optionsViewRef = useRef<any>(null);
@@ -124,7 +157,7 @@ export default function SelectMenu(props: Props) {
             <div
                 ref={wrapperRef}
                 onClick={toggleExpanded}
-                className='flex justify-between cursor-pointer p-3 bg-neutral-200 dark:bg-dark rounded-xl shadow-md'
+                className='flex justify-between cursor-pointer p-3 bg-neutral-100 dark:bg-dark rounded-xl shadow-md'
             >
                 <p unselectable='on'
                    className='text-neutral-700 select-none whitespace-nowrap overflow-hidden text-ellipsis'

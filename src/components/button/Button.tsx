@@ -67,7 +67,7 @@ export default function Button(props: Props) {
                     />
                 </div>
             }
-            <p className='text-center'>{props.label}</p>
+            <p className='text-center text-white self-center '>{props.label}</p>
         </div>
     )
 
@@ -79,7 +79,7 @@ export default function Button(props: Props) {
                           style={styleObj}
                           href={props.href}
                     >
-                        <div className={'flex justify-center self-center gap-4' + ((props.type === ButtonType.INVERTED || props.type === ButtonType.SECONDARY) ? ' text-primary' : '')}>
+                        <div className={'flex justify-center self-center gap-4' + ((props.type === ButtonType.INVERTED || props.type === ButtonType.SECONDARY) ? ' text-primary' : '')  + ( props.className ? ` ${props.className}` : '')}>
                             {children}
                         </div>
                     </Link>
@@ -90,7 +90,7 @@ export default function Button(props: Props) {
                             onClick={props.onClick}
                             type={props.submit === true ? 'submit' : 'button'}
                     >
-                        <div className={'flex justify-center p-2 gap-4 mx-auto' + ((props.type === ButtonType.INVERTED || props.type === ButtonType.SECONDARY) ? ' text-primary' : '')}>
+                        <div className={'flex justify-center p-2 gap-4 mx-auto' + ((props.type === ButtonType.INVERTED || props.type === ButtonType.SECONDARY) ? ' text-primary' : '') + ( props.className ? ` ${props.className}` : '')}>
                             {props.isWorking ? <Spinner size={.75} /> : children}
                         </div>
                     </button>

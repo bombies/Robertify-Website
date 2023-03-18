@@ -53,8 +53,8 @@ export function useDiscordDataRequired() {
     const [ discordInfo ] = useDiscordData();
 
     useEffect(() => {
-        if (!discordInfo)
-            router.push('/')
+        // if (!discordInfo)
+        //     router.push('/')
     }, [discordInfo, router])
 
     return discordInfo;
