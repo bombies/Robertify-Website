@@ -128,7 +128,7 @@ export class BotWebClient {
     private startTokenRefresh() {
         setInterval(async () => {
             await BotWebClient.setAccessToken(this);
-        }, 12 * 60 * 60 * 1000)
+        }, 60 * 60 * 1000)
     }
 
     private static async setAccessToken(client: BotWebClient) {
