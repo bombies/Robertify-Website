@@ -81,7 +81,7 @@ const generateCategoryElement = (
             {
                 item.icon &&
                 <div className='relative w-4 h-4 self-center'>
-                    <Image src={item.icon} alt='' fill={true}/>
+                    <Image draggable={false} src={item.icon} alt='' fill={true}/>
                 </div>
             }
             <p className={'dark:text-neutral-400 text-neutral-700 hover:!text-primary transition-fast select-none whitespace-nowrap overflow-hidden text-ellipsis' + (isItemSelected(item) ? ' !text-primary' : '')}>{item.label}</p>
@@ -99,11 +99,17 @@ const generateCategoryElement = (
 export default function SelectMenu(props: Props) {
     const [expanded, setExpanded] = useState(false);
     const [selected, setSelected] = useState<SelectMenuContent[] | undefined>(props.content?.filter(item => item.selected === true));
-    const itemsWithCategories = parseCategories(props.content);
+    const [ searchValue, setSearchValue ] = useState('');
+    const [ visibleItems, setVisibleItems ] = useState(parseCategories(props.content));
 
     useEffect(() => {
         setSelected(props.content?.filter(item => item.selected === true))
     }, [props.content])
+
+    useEffect(() => {
+        setVisibleItems(parseCategories(props.content?.filter(item => item.label.toLowerCase().includes(searchValue))))
+    }, [searchValue])
+
     const toggleExpanded = () => {
         if (props.disabled)
             return;
@@ -140,7 +146,7 @@ export default function SelectMenu(props: Props) {
             }
         })
     }
-    const categories = itemsWithCategories.map(category => generateCategoryElement(category, handleSelect, selected, props.displayCategories))
+    const categories = visibleItems.map(category => generateCategoryElement(category, handleSelect, selected, props.displayCategories))
 
     const wrapperRef = useRef<any>(null);
     const optionsViewRef = useRef<any>(null);
@@ -180,11 +186,23 @@ export default function SelectMenu(props: Props) {
             {
                 expanded &&
                 <div
+                    className='absolute z-50 left-0 mt-4'
                     ref={optionsViewRef}
-                    className={'absolute z-50 left-0 mt-4 max-h-48 overflow-auto p-4 bg-neutral-200 dark:bg-dark rounded-xl shadow-md transition-faster ' + parseMenuSize(props.size)}>
-                    {categories.length !== 0 ? categories :
-                        <p className='text-neutral-700 select-none'>There are no items...</p>}
+                >
+                    <input type='text'
+                           className='p-3 w-full rounded-xl mb-2 bg-neutral-200 dark:bg-dark dark:placeholder-neutral-700 dark:text-white'
+                           placeholder='Search...'
+                           value={searchValue}
+                            onChange={e => {
+                                setSearchValue(e.target.value);
+                            }}
+                    />
+                    <div className={' max-h-48 overflow-auto p-4 bg-neutral-200 dark:bg-dark rounded-xl shadow-md transition-faster ' + parseMenuSize(props.size)}>
+                        {categories.length !== 0 ? categories :
+                            <p className='text-neutral-700 select-none'>There are no items...</p>}
+                    </div>
                 </div>
+
             }
         </div>
     )
