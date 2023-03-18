@@ -23,6 +23,7 @@ interface Props {
     onItemSelect?: (item: SelectMenuContent) => void;
     handleItemSelect?: (item: SelectMenuContent) => void;
     handleItemDeselect?: (item: SelectMenuContent) => void;
+    disabled?: boolean;
 }
 
 const parseMenuSize = (size?: ComponentSize) => {
@@ -103,8 +104,15 @@ export default function SelectMenu(props: Props) {
     useEffect(() => {
         setSelected(props.content?.filter(item => item.selected === true))
     }, [props.content])
-    const toggleExpanded = () => setExpanded(prev => !prev);
+    const toggleExpanded = () => {
+        if (props.disabled)
+            return;
+        setExpanded(prev => !prev);
+    }
     const handleSelect = (value: SelectMenuContent) => {
+        if (props.disabled)
+            return;
+
         setSelected(prev => {
             if (!prev || prev.length === 0) {
                 if (props.handleItemSelect)
@@ -157,7 +165,7 @@ export default function SelectMenu(props: Props) {
             <div
                 ref={wrapperRef}
                 onClick={toggleExpanded}
-                className='flex justify-between cursor-pointer p-3 bg-neutral-100 dark:bg-dark rounded-xl shadow-md'
+                className={'flex justify-between cursor-pointer p-3 bg-neutral-100 dark:bg-dark rounded-xl shadow-md' + (props.disabled ? ' brightness-50' : '')}
             >
                 <p unselectable='on'
                    className='text-neutral-700 select-none whitespace-nowrap overflow-hidden text-ellipsis'

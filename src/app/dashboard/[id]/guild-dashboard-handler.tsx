@@ -25,7 +25,7 @@ export default class GuildDashboardHandler {
     ) {
     }
 
-    public generateDJToggleElements() {
+    public generateDJToggleElements(userHasPermission: boolean) {
         const obj = this.robertifyGuild.toggles.dj_toggles;
         return (Object.keys(obj) as (keyof GuildDJToggles)[])
             .sort((a, b) => a.localeCompare(b))
@@ -37,6 +37,7 @@ export default class GuildDashboardHandler {
                     <Toggle
                         status={this.getToggle('dj_toggles', key)}
                         onClick={() => this.switchToggle('dj_toggles', key)}
+                        disabled={!userHasPermission}
                     />
                 </DashboardSectionContent>
             ));
@@ -66,7 +67,7 @@ export default class GuildDashboardHandler {
         }
     }
 
-    public generateLogToggleElements() {
+    public generateLogToggleElements(userHasPermission: boolean) {
         let obj = this.robertifyGuild.toggles.log_toggles ?? this.genDefaultLogTogglesObject();
         return (Object.keys(obj) as (keyof GuildLogToggles)[])
             .sort((a, b) => a.localeCompare(b))
@@ -78,6 +79,7 @@ export default class GuildDashboardHandler {
                     <Toggle
                         status={this.getToggle('log_toggles', key)}
                         onClick={() => this.switchToggle('log_toggles', key)}
+                        disabled={!userHasPermission}
                     />
                 </DashboardSectionContent>
             ));

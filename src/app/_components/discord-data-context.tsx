@@ -36,10 +36,6 @@ export function DiscordDataProvider({
             setDiscordData(localDiscordInfo ? JSON.parse(localDiscordInfo) as DiscordInfo : undefined);
     }, [setDiscordData])
 
-    useEffect(() => {
-        localStorage.setItem("discord_data", JSON.stringify(discordData));
-    }, [discordData])
-
     return (
         <DiscordDataContext.Provider value={[discordData, setDiscordData]}>
             {children}

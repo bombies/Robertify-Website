@@ -22,12 +22,14 @@ import GuildDashboardHandler from "@/app/dashboard/[id]/guild-dashboard-handler"
 import saveIcon from '/public/save.svg';
 import discardIcon from '/public/discard.svg';
 import Toggle from "@/components/toggle";
+import Card from "@/components/card";
 
 type Props = {
     id: string,
     discordGuildInfo: DiscordGuild,
     discordGuildChannels: DiscordGuildChannel[]
-    robertifyGuildInfo: RobertifyGuild
+    robertifyGuildInfo: RobertifyGuild,
+    userHasPermission: boolean,
     apiMasterPassword?: string
 }
 
@@ -72,6 +74,8 @@ export default function GuildDashboardContext(props: Props) {
         return (<div></div>);
 
     const saveChanges = () => {
+        if (!props.userHasPermission)
+            return;
         if (!changesMade)
             return;
         startTransition(() => {
@@ -88,6 +92,8 @@ export default function GuildDashboardContext(props: Props) {
     }
 
     const discardChanges = () => {
+        if (!props.userHasPermission)
+            return;
         if (!changesMade)
             return;
         setCurrentData(props.robertifyGuildInfo);
@@ -107,6 +113,7 @@ export default function GuildDashboardContext(props: Props) {
                         icon={saveIcon}
                         className='self-center w-[8rem] h-[3rem] phone:w-[6rem]'
                         onClick={saveChanges}
+                        disabled={!props.userHasPermission}
                     />
                     <Button
                         label='Discard'
@@ -114,6 +121,7 @@ export default function GuildDashboardContext(props: Props) {
                         icon={discardIcon}
                         className='self-center w-[8rem] h-[3rem] phone:w-[6rem]'
                         onClick={discardChanges}
+                        disabled={!props.userHasPermission}
                     />
                 </div>
             </div>
@@ -147,8 +155,16 @@ export default function GuildDashboardContext(props: Props) {
                     <h1 className='text-5xl phone:text-xl font-bold text-primary self-center'>{props.discordGuildInfo.name}</h1>
                 </div>
             </div>
-            <div
-                className='mx-auto space-y-6 mb-12 p-12 tablet:p-6  bg-primary/10 shadow-md dark:bg-neutral-900 w-full min-h-42 rounded-2xl border-2 border-primary/90'>
+            <div className='relative mx-auto space-y-6 mb-12 p-12 tablet:p-6 bg-primary/10 shadow-md dark:bg-neutral-900 w-full min-h-42 rounded-2xl border-2 border-primary/90'>
+                { !props.userHasPermission && <div className='absolute w-full h-full bg-dark/80 z-10 top-0 left-0 rounded-2xl p-12 tablet:p-6 phone:p-3'>
+                    <Card
+                        centered
+                        hoverable
+                        size='lg'
+                        title="No Permission"
+                        description="It looks like you don't have enough permission to interact with the dashboard. You need to have administrative permissions in this server to edit bot settings here."
+                    />
+                </div> }
                 <DashboardSection
                     title='Management'
                     className='grid grid-cols-3 laptop:grid-cols-2 phone:grid-cols-1 gap-6'
@@ -167,6 +183,7 @@ export default function GuildDashboardContext(props: Props) {
                             handleItemSelect={(item) => {
                                 handler.setTheme(item.value as ThemeString)
                             }}
+                            disabled={!props.userHasPermission}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -183,6 +200,7 @@ export default function GuildDashboardContext(props: Props) {
                             handleItemSelect={(item) => {
                                 handler.setLocale(item.value as LocaleString)
                             }}
+                            disabled={!props.userHasPermission}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -202,6 +220,7 @@ export default function GuildDashboardContext(props: Props) {
                             handleItemDeselect={(item) => {
                                 handler.removeDJRole(item.value)
                             }}
+                            disabled={!props.userHasPermission}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -216,6 +235,7 @@ export default function GuildDashboardContext(props: Props) {
                             content={handler.generateVoiceChannelContent('restricted_channels')}
                             handleItemSelect={item => handler.addRestrictedVoiceChannel(item.value)}
                             handleItemDeselect={item => handler.removeRestrictedVoiceChannel(item.value)}
+                            disabled={!props.userHasPermission}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -230,6 +250,7 @@ export default function GuildDashboardContext(props: Props) {
                             content={handler.generateTextChannelContent('restricted_channels')}
                             handleItemSelect={item => handler.addRestrictedTextChannel(item.value)}
                             handleItemDeselect={item => handler.removeRestrictedTextChannel(item.value)}
+                            disabled={!props.userHasPermission}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -243,6 +264,7 @@ export default function GuildDashboardContext(props: Props) {
                             content={handler.generateTextChannelContent('log_channel')}
                             handleItemSelect={item => handler.addLogChannel(item.value)}
                             handleItemDeselect={() => handler.removeLogChannel()}
+                            disabled={!props.userHasPermission}
                         />
                     </DashboardSectionContent>
                 </DashboardSection>
@@ -257,6 +279,7 @@ export default function GuildDashboardContext(props: Props) {
                         <Toggle
                             status={handler.getToggle('restricted_text_channels')}
                             onClick={() => handler.switchToggle('restricted_text_channels')}
+                            disabled={!props.userHasPermission}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -266,6 +289,7 @@ export default function GuildDashboardContext(props: Props) {
                         <Toggle
                             status={handler.getToggle('restricted_voice_channels')}
                             onClick={() => handler.switchToggle('restricted_voice_channels')}
+                            disabled={!props.userHasPermission}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -275,6 +299,7 @@ export default function GuildDashboardContext(props: Props) {
                         <Toggle
                             status={handler.getToggle('announce_messages')}
                             onClick={() => handler.switchToggle('announce_messages')}
+                            disabled={!props.userHasPermission}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -284,6 +309,7 @@ export default function GuildDashboardContext(props: Props) {
                         <Toggle
                             status={handler.getToggle('show_requester')}
                             onClick={() => handler.switchToggle('show_requester')}
+                            disabled={!props.userHasPermission}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -293,6 +319,7 @@ export default function GuildDashboardContext(props: Props) {
                         <Toggle
                             status={handler.getToggle('8ball')}
                             onClick={() => handler.switchToggle('8ball')}
+                            disabled={!props.userHasPermission}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -302,6 +329,7 @@ export default function GuildDashboardContext(props: Props) {
                         <Toggle
                             status={handler.getToggle('polls')}
                             onClick={() => handler.switchToggle('polls')}
+                            disabled={!props.userHasPermission}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -311,6 +339,7 @@ export default function GuildDashboardContext(props: Props) {
                         <Toggle
                             status={handler.getToggle('reminders')}
                             onClick={() => handler.switchToggle('reminders')}
+                            disabled={!props.userHasPermission}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -320,6 +349,7 @@ export default function GuildDashboardContext(props: Props) {
                         <Toggle
                             status={handler.getToggle('tips')}
                             onClick={() => handler.switchToggle('tips')}
+                            disabled={!props.userHasPermission}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -329,6 +359,7 @@ export default function GuildDashboardContext(props: Props) {
                         <Toggle
                             status={handler.getToggle('vote_skips')}
                             onClick={() => handler.switchToggle('vote_skips')}
+                            disabled={!props.userHasPermission}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -338,6 +369,7 @@ export default function GuildDashboardContext(props: Props) {
                         <Toggle
                             status={handler.getToggle('autoplay')}
                             onClick={() => handler.switchToggle('autoplay')}
+                            disabled={!props.userHasPermission}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -347,6 +379,7 @@ export default function GuildDashboardContext(props: Props) {
                         <Toggle
                             status={handler.getToggle('twenty_four_seven_mode')}
                             onClick={() => handler.switchToggle('twenty_four_seven_mode')}
+                            disabled={!props.userHasPermission}
                         />
                     </DashboardSectionContent>
                 </DashboardSection>
@@ -355,14 +388,14 @@ export default function GuildDashboardContext(props: Props) {
                     description='Customize which audio commands you want to be accessible to your DJs only.'
                     className='grid grid-cols-3 tablet:grid-cols-2 phone:grid-cols-1 gap-6'
                 >
-                    {handler.generateDJToggleElements()}
+                    {handler.generateDJToggleElements(props.userHasPermission)}
                 </DashboardSection>
                 <DashboardSection
                     title='Log Channel Toggles'
                     description='Customize which logs should be sent to your log channel.'
                     className='grid grid-cols-3 tablet:grid-cols-2 phone:grid-cols-1 gap-6'
                 >
-                    {handler.generateLogToggleElements()}
+                    {handler.generateLogToggleElements(props.userHasPermission)}
                 </DashboardSection>
             </div>
         </div>

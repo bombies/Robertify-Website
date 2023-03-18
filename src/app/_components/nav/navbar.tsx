@@ -15,8 +15,12 @@ export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
     const [, setDiscordInfo] = useDiscordData();
 
     useEffect(() => {
-        if (discordInfo)
-            setDiscordInfo(discordInfo);
+        setDiscordInfo(() => {
+            if (discordInfo)
+                localStorage.setItem("discord_data", JSON.stringify(discordInfo));
+            else localStorage.removeItem("discord_data");
+            return discordInfo;
+        });
     }, [discordInfo, setDiscordInfo])
 
     const toggleOpen = () => {

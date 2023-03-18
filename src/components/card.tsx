@@ -34,7 +34,7 @@ export default function Card(props: Props) {
             className={'bg-neutral-200/50 dark:bg-neutral-900 rounded-xl shadow-lg p-6 phone:p-3 ' + (parseCardSize(props.size)) + ' ' + (props.className || '') + (typeof props.hoverable !== 'undefined' ? ' transition-fast hover:scale-105' : '') + (typeof props.centered !== 'undefined' ? ' mx-auto' : '')}
         >
             {props.title && (
-                <h3 className='font-semibold text-primary dark:drop-shadow-glow-primary-lg phone:text-lg'>{props.title}</h3>
+                <h3 className='font-semibold text-primary dark:drop-shadow-glow-primary-lg text-4xl phone:text-lg'>{props.title}</h3>
             )}
             {props.description && (
                 <p className='whitespace-pre-line overflow-hidden text-ellipsis'>{props.description.replaceAll(/(\\n)|(<br\s?\/>)/g, '\n')}</p>
@@ -53,7 +53,7 @@ export default function Card(props: Props) {
                 style={props.style}
             >
                 {props.title && (
-                    <h3 className='font-semibold text-primary dark:drop-shadow-glow-primary-lg phone:text-lg'>{props.title}</h3>
+                    <h3 className='font-semibold text-primary dark:drop-shadow-glow-primary-lg text-2xl phone:text-lg'>{props.title}</h3>
                 )}
                 {props.description && (
                     <p className='whitespace-pre-line overflow-hidden text-ellipsis'>{props.description.replaceAll(/(\\n)|(<br\s?\/>)/g, '\n')}</p>

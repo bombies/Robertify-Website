@@ -235,3 +235,8 @@ export type DiscordUserGuild = {
     permissions: string,
     features: string[]
 }
+
+export const isServerAdmin = (guild: DiscordUserGuild) => {
+    if (!guild) return false;
+    return (Number(guild.permissions) & (1 << 5)) === (1 << 5) || (Number(guild.permissions) & (1 << 3)) === (1 << 3);
+}

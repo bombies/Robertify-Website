@@ -14,7 +14,7 @@ export default function LogoutButton() {
     const [, setDiscordData] = useDiscordData();
 
     const logout = async () => {
-        setDiscordData(null);
+        setDiscordData(undefined);
         jsCookie.set("login-token", "");
 
         startTransition(() => {

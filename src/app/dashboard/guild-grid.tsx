@@ -6,7 +6,7 @@ import searchIcon from "../../../public/search.svg";
 import InputContext from "@/components/input-context";
 import GuildCard from "@/app/dashboard/guild-card";
 import Card from "@/components/card";
-import {DiscordUserGuild} from "@/utils/discord-types";
+import {DiscordUserGuild, isServerAdmin} from "@/utils/discord-types";
 import {useDiscordDataRequired} from "@/app/_components/discord-data-context";
 
 type Props = {
@@ -18,10 +18,6 @@ const filterGuilds = (guilds: JSX.Element[], filter: string) => {
     if (!filter || filter === '')
         return guilds;
     return guilds.filter(guild => guild.props.name.toLowerCase().startsWith(filter.toLowerCase()));
-}
-
-const isServerAdmin = (guild: DiscordUserGuild) => {
-    return (Number(guild.permissions) & (1 << 5)) === (1 << 5) || (Number(guild.permissions) & (1 << 3)) === (1 << 3);
 }
 
 const sortGuilds = (guilds: DiscordUserGuild[]) => {
