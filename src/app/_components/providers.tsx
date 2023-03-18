@@ -33,7 +33,7 @@ export default function Providers({children}: Props) {
                 >
                     <NextUIProvider>
                         <DarkModeProvider>
-                            <DiscordDataProvider initialDiscordData={undefined}>
+                            <DiscordDataProvider>
                                 {children}
                             </DiscordDataProvider>
                         </DarkModeProvider>

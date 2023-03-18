@@ -22,20 +22,26 @@ export type DiscordInfo = {
     public_flags?: number,
 }
 
-const DiscordDataContext = React.createContext<[DiscordInfo | undefined, React.Dispatch<React.SetStateAction<null | DiscordInfo>>] | undefined>(undefined);
+const DiscordDataContext = React.createContext<[DiscordInfo | undefined, React.Dispatch<React.SetStateAction<undefined | DiscordInfo>>] | undefined>(undefined);
 
 export function DiscordDataProvider({
-                                    children,
-                                    initialDiscordData
-                                }: {
+                                        children
+                                    }: {
     children: React.ReactNode,
-    initialDiscordData?: DiscordInfo
 }) {
-    const [ discordData, setDiscordData ] = useState<null | DiscordInfo>(null);
-    const data = discordData || initialDiscordData;
+    const localDiscordInfo = localStorage.getItem("discord_data");
+    const [discordData, setDiscordData] = useState<undefined | DiscordInfo>(localDiscordInfo ? JSON.parse(localDiscordInfo) as DiscordInfo : undefined);
+    useEffect(() => {
+        const localDiscordInfo = localStorage.getItem("discord_data");
+            setDiscordData(localDiscordInfo ? JSON.parse(localDiscordInfo) as DiscordInfo : undefined);
+    }, [setDiscordData])
+
+    useEffect(() => {
+        localStorage.setItem("discord_data", JSON.stringify(discordData));
+    }, [discordData])
 
     return (
-        <DiscordDataContext.Provider value={[data, setDiscordData]}>
+        <DiscordDataContext.Provider value={[discordData, setDiscordData]}>
             {children}
         </DiscordDataContext.Provider>
     )
@@ -50,11 +56,11 @@ export function useDiscordData() {
 
 export function useDiscordDataRequired() {
     const router = useRouter();
-    const [ discordInfo ] = useDiscordData();
+    const [discordInfo] = useDiscordData();
 
     useEffect(() => {
-        // if (!discordInfo)
-        //     router.push('/')
+        if (!discordInfo)
+            router.push('/')
     }, [discordInfo, router])
 
     return discordInfo;

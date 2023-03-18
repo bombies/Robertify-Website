@@ -12,7 +12,7 @@ import Link from "next/link";
 import DashboardSection from "@/app/dashboard/[id]/dashboard-section";
 import DashboardSectionContent from "@/app/dashboard/[id]/dashboard-section-content";
 import SelectMenu from "@/components/select-menu/SelectMenu";
-import {useDiscordDataRequired} from "@/app/_components/discord-data-context";
+import {useDiscordData, useDiscordDataRequired} from "@/app/_components/discord-data-context";
 import {useEffect, useState, useTransition} from "react";
 import {compare} from "@/utils/general-utils";
 import Button from "@/components/button/Button";
@@ -47,6 +47,7 @@ const POSTChanges = async (apiMasterPassword: string | undefined, guildId: strin
 
 export default function GuildDashboardContext(props: Props) {
     const router = useRouter();
+    const discordData = useDiscordData();
     const [currentData, setCurrentData] = useState(props.robertifyGuildInfo)
     const [changesMade, setChangesMade] = useState(false);
     const [isTransitioning, startTransition] = useTransition();
