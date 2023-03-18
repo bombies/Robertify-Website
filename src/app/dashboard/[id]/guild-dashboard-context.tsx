@@ -73,6 +73,9 @@ export default function GuildDashboardContext(props: Props) {
     if (!useDiscordDataRequired())
         return (<div></div>);
 
+    if (!props.discordGuildInfo || !props.robertifyGuildInfo || !props.discordGuildChannels)
+        return (<div></div>);
+
     const saveChanges = () => {
         if (!props.userHasPermission)
             return;
