@@ -42,8 +42,32 @@ export default class GuildDashboardHandler {
             ));
     }
 
+    private genDefaultLogTogglesObject(): GuildLogToggles {
+        return {
+            queue_add: true,
+            track_move: true,
+            track_loop: true,
+            player_pause: true,
+            track_vote_skip: true,
+            queue_shuffle: true,
+            player_resume: true,
+            volume_change: true,
+            track_seek: true,
+            track_previous: true,
+            track_skip: true,
+            track_rewind: true,
+            bot_disconnected: true,
+            queue_remove: true,
+            filter_toggle: true,
+            player_stop: true,
+            queue_loop: true,
+            queue_clear: true,
+            track_jump: true
+        }
+    }
+
     public generateLogToggleElements() {
-        const obj = this.robertifyGuild.toggles.log_toggles;
+        let obj = this.robertifyGuild.toggles.log_toggles ?? this.genDefaultLogTogglesObject();
         return (Object.keys(obj) as (keyof GuildLogToggles)[])
             .sort((a, b) => a.localeCompare(b))
             .map(key => (
@@ -73,7 +97,7 @@ export default class GuildDashboardHandler {
             case "log_toggles": {
                 if (!innerToggle)
                     return false;
-                const logToggles = obj.log_toggles;
+                const logToggles = obj.log_toggles ?? this.genDefaultLogTogglesObject();
                 if (!(innerToggle in logToggles))
                     return false;
                 return logToggles[innerToggle as keyof GuildLogToggles] || false;
@@ -109,17 +133,35 @@ export default class GuildDashboardHandler {
                 if (!innerToggle) return;
 
                 const obj = this.robertifyGuild.toggles;
-                if (!(innerToggle in obj.log_toggles)) return;
-                return this.setCurrentData(prev => ({
-                    ...prev,
-                    toggles: {
-                        ...prev.toggles,
-                        log_toggles: {
-                            ...prev.toggles.log_toggles,
-                            [innerToggle as keyof GuildLogToggles]: !prev.toggles.log_toggles[innerToggle as keyof GuildLogToggles]
+                if (!(innerToggle in (obj.log_toggles ?? this.genDefaultLogTogglesObject()))) return;
+                return this.setCurrentData(prev => {
+                        if (prev.toggles.log_toggles)
+                            return ({
+                                ...prev,
+                                toggles: {
+                                    ...prev.toggles,
+                                    log_toggles: {
+                                        ...prev.toggles.log_toggles,
+                                        [innerToggle as keyof GuildLogToggles]: !prev.toggles.log_toggles[innerToggle as keyof GuildLogToggles]
+                                    }
+                                }
+                            })
+                        else {
+                            const defaultLogToggles = this.genDefaultLogTogglesObject();
+                            return ({
+                                    ...prev,
+                                    toggles: {
+                                        ...prev.toggles,
+                                        log_toggles: {
+                                            ...defaultLogToggles,
+                                            [innerToggle as keyof GuildLogToggles]: !defaultLogToggles[innerToggle as keyof GuildLogToggles]
+                                        }
+                                    }
+                                }
+                            )
                         }
                     }
-                }));
+                );
             }
             case "autoplay": {
                 return this.setCurrentData(prev => ({
@@ -280,7 +322,7 @@ export default class GuildDashboardHandler {
         }));
     }
 
-    public generateLocaleContent(): SelectMenuContent[]  {
+    public generateLocaleContent(): SelectMenuContent[] {
         type Locale = {
             locale: LocaleString,
             icon?: string | StaticImageData

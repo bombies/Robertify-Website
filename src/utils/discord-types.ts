@@ -196,7 +196,7 @@ export type GuildToggles = {
     tips: boolean,
     global_announcements: boolean,
     reminders?: boolean,
-    log_toggles: GuildLogToggles,
+    log_toggles?: GuildLogToggles,
     dj_toggles: GuildDJToggles
 };
 
