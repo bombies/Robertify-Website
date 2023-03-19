@@ -81,7 +81,7 @@ export default function GuildDashboardContext(props: Props) {
         if (!changesMade)
             return;
         startTransition(() => {
-            POSTChanges(props.apiMasterPassword, props.robertifyGuildInfo.server_id, currentData)
+            POSTChanges(props.apiMasterPassword, props.id, currentData)
                 .then(() => {
                     currentData.autoplay ??= false;
                     currentData.twenty_four_seven_mode ??=  false;
