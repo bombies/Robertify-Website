@@ -48,13 +48,15 @@ const parseCategories = (content?: SelectMenuContent[]): { category?: string, it
         return [];
 
     const categories = content.map(item => item.category)
-        .filter((val, i, arr) => arr.indexOf(val) === i);
-    return categories.map(category => {
-        return {
-            category: category,
-            items: content.filter(item => item.category === category)
-        }
-    })
+        .filter((val, i, arr) => arr.indexOf(val) === i)
+        .map(category => {
+            return {
+                category: category,
+                items: content.filter(item => item.category === category)
+            }
+        });
+    categories.forEach(category => category.items.sort((a, b) => a.label.localeCompare(b.label)))
+    return categories
 }
 
 const generateCategoryElement = (
@@ -64,11 +66,11 @@ const generateCategoryElement = (
     onItemSelect?: (item: SelectMenuContent) => void
 ) => {
     const isItemSelected = (item: SelectMenuContent) => {
-        if (item.selected === true) return true;
-        return selectedItems ?  selectedItems.includes(item) : false;
+        return selectedItems ?  selectedItems.filter(i => i.value === item.value).length > 0 : false;
     }
 
-    const itemElements = content.items.map(item => (
+    const itemElements = content.items.map(item => {
+        return (
         <div
             key={`${content.category}#${item.label}#${item.value}`}
             className='flex gap-4 cursor-pointer'
@@ -86,7 +88,7 @@ const generateCategoryElement = (
             }
             <p className={'dark:text-neutral-400 text-neutral-700 hover:!text-primary transition-fast select-none whitespace-nowrap overflow-hidden text-ellipsis' + (isItemSelected(item) ? ' !text-primary' : '')}>{item.label}</p>
         </div>
-    ))
+    )})
 
     return (
         <div>
@@ -107,7 +109,7 @@ export default function SelectMenu(props: Props) {
     }, [props.content])
 
     useEffect(() => {
-        setVisibleItems(parseCategories(props.content?.filter(item => item.label.toLowerCase().includes(searchValue))))
+        setVisibleItems(searchValue === '' ? parseCategories(props.content) : parseCategories(props.content?.filter(item => item.label.toLowerCase().includes(searchValue.trim()))))
     }, [searchValue])
 
     const toggleExpanded = () => {
@@ -115,6 +117,7 @@ export default function SelectMenu(props: Props) {
             return;
         setExpanded(prev => !prev);
     }
+
     const handleSelect = (value: SelectMenuContent) => {
         if (props.disabled)
             return;
@@ -137,7 +140,6 @@ export default function SelectMenu(props: Props) {
             } else {
                 if (typeof props.noDeselect !== 'undefined' && value === prev[0])
                     return [prev[0]];
-
                 if (props.handleItemDeselect)
                     props.handleItemDeselect(prev[0])
                 if (props.handleItemSelect)
