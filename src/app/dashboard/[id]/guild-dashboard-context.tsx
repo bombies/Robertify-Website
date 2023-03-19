@@ -409,6 +409,5 @@ const compareData = (cur: RobertifyGuild, original: RobertifyGuild) => {
     if ("_id" in original)
         // @ts-ignore
         delete original._id;
-    console.log(cur, original);
     return !compare(cur, original);
 }
