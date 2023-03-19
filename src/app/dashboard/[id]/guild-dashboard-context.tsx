@@ -83,6 +83,8 @@ export default function GuildDashboardContext(props: Props) {
         startTransition(() => {
             POSTChanges(props.apiMasterPassword, props.robertifyGuildInfo.server_id, currentData)
                 .then(() => {
+                    currentData.autoplay ??= false;
+                    currentData.twenty_four_seven_mode ??=  false;
                     props.robertifyGuildInfo = currentData;
                     setChangesMade(false);
                 })
@@ -407,6 +409,6 @@ const compareData = (cur: RobertifyGuild, original: RobertifyGuild) => {
     if ("_id" in original)
         // @ts-ignore
         delete original._id;
-
+    console.log(cur, original);
     return !compare(cur, original);
 }
