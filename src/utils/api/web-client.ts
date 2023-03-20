@@ -16,28 +16,33 @@ class WebClient {
         });
     }
 
-    private async getAccessToken() {
-        const data = (await this.instance.post('/api/auth/login', {
-            password: process.env.API_MASTER_PASSWORD
-        })).data
-        return data?.access_token;
+    private async getAccessToken(masterPassword?: string) {
+        try {
+            const data = (await this.instance.post('/api/auth/login', {
+                password: masterPassword ?? process.env.API_MASTER_PASSWORD
+            })).data
+            return data?.data.access_token;
+        } catch (ex) {
+            console.error("Couldn't get the access token for WebClient.", ex);
+        }
+
     }
 
-    private startTokenRefresh() {
+    private startTokenRefresh(masterPassword?: string) {
         setInterval(async () => {
-            await WebClient.setAccessToken(this);
+            await WebClient.setAccessToken(this, masterPassword);
         }, 5 * 60 * 1000)
     }
 
-    private static async setAccessToken(client: WebClient) {
-        const accessToken = await client.getAccessToken();
+    private static async setAccessToken(client: WebClient, masterPassword?: string) {
+        const accessToken = await client.getAccessToken(masterPassword);
         client.instance.interceptors.request.use(config => {
             config.headers['Authorization'] = "Bearer " + accessToken;
             return config;
         });
     }
 
-    public static async getInstance(options?: CreateAxiosDefaults<any>) {
+    public static async getInstance(masterPassword?: string, options?: CreateAxiosDefaults<any>) {
         if (!options) {
             if (this.INSTANCE)
                 return this.INSTANCE.instance;
@@ -45,8 +50,8 @@ class WebClient {
             const client = new WebClient();
             this.INSTANCE = client;
 
-            await WebClient.setAccessToken(client);
-            client.startTokenRefresh();
+            await WebClient.setAccessToken(client, masterPassword);
+            client.startTokenRefresh(masterPassword);
 
             return client.instance;
         }
@@ -56,8 +61,8 @@ class WebClient {
             ...options
         });
 
-        await WebClient.setAccessToken(client);
-        client.startTokenRefresh();
+        await WebClient.setAccessToken(client, masterPassword);
+        client.startTokenRefresh(masterPassword);
 
         return client.instance;
     }

@@ -40,7 +40,7 @@ export default class ApiUtils {
 
     public verifyJWT() {
         const jwt = this.extractJWT();
-        if (!jwt)
+        if (typeof jwt === 'undefined')
             return false;
         try {
             return !!verify(jwt, process.env.API_SECRET_KEY);
@@ -59,7 +59,7 @@ export default class ApiUtils {
     }
 
     public prepareResponse(status: StatusCodes, message?: string, data?: any) {
-        return this.res.json({data: data, status: status, message: message || 'There was no message provided.'});
+        return this.res.status(status).json({data: data, status: status, message: message || 'There was no message provided.'});
     }
 
     public prepareUnauthorizedResponse() {
