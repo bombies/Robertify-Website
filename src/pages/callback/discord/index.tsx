@@ -4,6 +4,7 @@ import {GetStaticProps} from "next";
 import WebClient from "../../../utils/api/web-client";
 import {nanoid} from "nanoid";
 import jsCookie from 'js-cookie';
+import axios from "axios";
 
 type Props = {
     discordClientID: string,
@@ -55,9 +56,9 @@ export default function Callback(props: Props) {
             'redirect_uri': process.env.NEXT_PUBLIC_DISCORD_LOGIN_REDIRECT_URI!
         }
 
-        WebClient.getInstance()
+        WebClient.getInstance(props.apiMasterPassword)
             .then(axiosInstance => {
-                axiosInstance.post('https://discord.com/api/v10/oauth2/token?=', new URLSearchParams(data).toString(), config)
+                axios.post('https://discord.com/api/v10/oauth2/token?=', new URLSearchParams(data).toString(), config)
                     .then(res => {
                         const id = nanoid(8);
                         jsCookie.set('login-token', id)
@@ -66,7 +67,7 @@ export default function Callback(props: Props) {
                     .then(data => {
                         axiosInstance.post('/api/discord', data)
                             .then(res => res.data)
-                            .then((data) => {
+                            .then(() => {
                                 router.push('/');
                             })
                             .catch(err => console.error(err))
