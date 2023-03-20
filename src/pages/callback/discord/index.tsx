@@ -55,28 +55,27 @@ export default function Callback(props: Props) {
             'redirect_uri': process.env.NEXT_PUBLIC_DISCORD_LOGIN_REDIRECT_URI!
         }
 
-        const axiosInstance = WebClient.getInstance();
-        axiosInstance.post('https://discord.com/api/v10/oauth2/token?=', new URLSearchParams(data).toString(), config)
-            .then(res => {
-                const id = nanoid(8);
-                jsCookie.set('login-token', id)
-                return {id: id, data: {...res.data}}
-            })
-            .then(data => {
-                axiosInstance.post('/api/discord', data, {
-                    headers: {
-                        'Authorization': props.apiMasterPassword
-                    }
-                })
-                    .then(res => res.data)
-                    .then((data) => {
-                        router.push('/');
+        WebClient.getInstance()
+            .then(axiosInstance => {
+                axiosInstance.post('https://discord.com/api/v10/oauth2/token?=', new URLSearchParams(data).toString(), config)
+                    .then(res => {
+                        const id = nanoid(8);
+                        jsCookie.set('login-token', id)
+                        return {id: id, data: {...res.data}}
                     })
-                    .catch(err => console.error(err))
-            })
-            .catch(err => {
-                console.error(err);
-            })
+                    .then(data => {
+                        axiosInstance.post('/api/discord', data)
+                            .then(res => res.data)
+                            .then((data) => {
+                                router.push('/');
+                            })
+                            .catch(err => console.error(err))
+                    })
+                    .catch(err => {
+                        console.error(err);
+                    })
+            });
+
     }, [code, error, props.discordClientID, props.discordClientSecret, props.apiMasterPassword, props.localAPIHostname, router]);
 
     return (

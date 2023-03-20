@@ -8,28 +8,58 @@ class WebClient {
         this.instance = axios.create({
             headers: {
                 Accept: 'application/json',
-                "User-Agent": 'Robertify Website (https://github.com/bombies/Robertify-Website)',
-                'Authorization': process.env.API_MASTER_PASSWORD
+                "User-Agent": 'Robertify Website (https://github.com/bombies/Robertify-Website)'
             },
             timeout: 5 * 1000,
             ...options,
+            baseURL: process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME
         });
     }
 
-    public static getInstance(options?: CreateAxiosDefaults<any>) {
+    private async getAccessToken() {
+        const data = (await this.instance.post('/api/auth/login', {
+            password: process.env.API_MASTER_PASSWORD
+        })).data
+        return data?.access_token;
+    }
+
+    private startTokenRefresh() {
+        setInterval(async () => {
+            await WebClient.setAccessToken(this);
+        }, 5 * 60 * 1000)
+    }
+
+    private static async setAccessToken(client: WebClient) {
+        const accessToken = await client.getAccessToken();
+        client.instance.interceptors.request.use(config => {
+            config.headers['Authorization'] = "Bearer " + accessToken;
+            return config;
+        });
+    }
+
+    public static async getInstance(options?: CreateAxiosDefaults<any>) {
         if (!options) {
             if (this.INSTANCE)
                 return this.INSTANCE.instance;
-            const client = new WebClient({
-                baseURL: process.env.LOCAL_API_HOSTNAME
-            });
+
+            const client = new WebClient();
             this.INSTANCE = client;
+
+            await WebClient.setAccessToken(client);
+            client.startTokenRefresh();
+
             return client.instance;
         }
-        return new WebClient({
-            ...options,
-            baseURL: process.env.LOCAL_API_HOSTNAME
-        }).instance;
+
+        // Options provided
+        const client = new WebClient({
+            ...options
+        });
+
+        await WebClient.setAccessToken(client);
+        client.startTokenRefresh();
+
+        return client.instance;
     }
 }
 

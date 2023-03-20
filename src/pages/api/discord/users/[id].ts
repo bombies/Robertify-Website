@@ -31,7 +31,7 @@ class RouteHandler extends MethodHandler {
 
                 // A not so beautiful cache miss
                 // Contacting Discord's API for the data.
-                const fetchedData = (await WebClient.getInstance()
+                const fetchedData = (await (await WebClient.getInstance())
                     .get('https://discord.com/api/v10/users/@me', {
                         headers: {
                             'Authorization': `Bearer ${discordAccessData.access_token}`

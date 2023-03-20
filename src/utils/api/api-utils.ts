@@ -1,5 +1,6 @@
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {NextApiRequest, NextApiResponse} from "next";
+import {JsonWebTokenError, verify} from "jsonwebtoken";
 
 export class ResponseBuilder {
     private logicHandler?: (req: NextApiRequest, res: NextApiResponse, apiUtils: ApiUtils) => Promise<void>;
@@ -24,8 +25,8 @@ export class ResponseBuilder {
         if (!this.logicHandler)
             throw new Error('The logic error for this Response is undefined!');
         try {
-            if (this.adminRoute && !this.apiUtils.verifyMasterPassword())
-                return this.apiUtils.prepareInvalidPasswordResponse();
+            if (this.adminRoute && !this.apiUtils.verifyJWT())
+                return this.apiUtils.prepareUnauthorizedResponse();
             return await this.logicHandler(this.req, this.res, this.apiUtils);
         } catch (ex) {
             console.error(ex);
@@ -37,17 +38,31 @@ export class ResponseBuilder {
 export default class ApiUtils {
     constructor(private readonly req: NextApiRequest, private readonly res: NextApiResponse) {}
 
-    public verifyMasterPassword() {
-        const inputPass = this.req.headers.authorization;
-        const masterPass = process.env.API_MASTER_PASSWORD;
-        return inputPass === masterPass;
+    public verifyJWT() {
+        const jwt = this.extractJWT();
+        if (!jwt)
+            return false;
+        try {
+            return !!verify(jwt, process.env.API_SECRET_KEY);
+        } catch (e) {
+            if (e instanceof JsonWebTokenError)
+                return false;
+            console.error(e);
+        }
+    }
+
+    public extractJWT() {
+        const auth = this.req.headers.authorization;
+        if (!auth || !auth.includes("Bearer "))
+            return undefined;
+        return auth.split("Bearer ")[1];
     }
 
     public prepareResponse(status: StatusCodes, message?: string, data?: any) {
         return this.res.json({data: data, status: status, message: message || 'There was no message provided.'});
     }
 
-    public prepareInvalidPasswordResponse() {
+    public prepareUnauthorizedResponse() {
         return this.prepareResponse(StatusCodes.FORBIDDEN, ReasonPhrases.FORBIDDEN);
     }
 
@@ -66,5 +81,5 @@ type ParamSearchObject = {
 export const getParamFromSearch = (options: ParamSearchObject): string => {
     const { searchParams, paramName, limit, defaultResult } = options;
     const result = searchParams.get(paramName);
-    return result?.slice(0, limit ?? result.length) ?? (defaultResult ?? '');
+    return result?.slice(0, limit ?? result?.length) ?? (defaultResult ?? '');
 }
