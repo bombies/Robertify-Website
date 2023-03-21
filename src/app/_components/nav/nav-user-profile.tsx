@@ -1,16 +1,16 @@
 'use client';
 
-import {useDiscordData} from "@/app/_components/discord-data-context";
 import Image from "next/image";
 import {useEffect, useRef, useState} from "react";
 import LogoutButton from "@/app/_components/nav/logout-button";
 import Button from "@/components/button/Button";
 import {ButtonType} from "@/components/button/ButtonType";
 import serverIcon from '/public/server.svg';
+import {useSession} from "next-auth/react";
 
 export default function NavUserProfile() {
     const [expanded, setExpanded] = useState(false);
-    const [discordInfo,] = useDiscordData()
+    const discordInfo = useSession().data?.user;
     const wrapperRef = useRef<any>(null);
     const miniViewRef = useRef<any>(null);
     const toggleExpanded = () => {
@@ -33,7 +33,7 @@ export default function NavUserProfile() {
     const avatar = discordInfo && discordInfo.avatar ? `https://cdn.discordapp.com/avatars/${discordInfo.id}/${discordInfo.avatar}.${discordInfo.avatar.startsWith('a_') ? 'gif' : 'webp'}?size=512` : 'https://i.imgur.com/vVJ4UgG.png';
 
     return (
-        <div ref={miniViewRef} className='mx-auto'>
+        <div ref={wrapperRef} className='mx-auto'>
             <div className='relative'>
                 <div
                     className='flex gap-4 cursor-pointer hover:scale-105 transition-faster'
@@ -51,7 +51,7 @@ export default function NavUserProfile() {
                     <p className='self-center text-primary font-semibold dark:drop-shadow-glow-primary-lg'>{discordInfo?.username}#{discordInfo?.discriminator}</p>
                 </div>
                 <div
-                    ref={wrapperRef}
+                    ref={miniViewRef}
                     className='absolute dark:bg-dark/80 shadow-lg dark:shadow-primary/50 shadow-primary/0 mt-4 mr-2 left-[-3rem] z-50 w-56 p-6 h-fit bg-neutral-100/80 shadow-md backdrop-blur-xl rounded-xl transition-faster border-[1px] border-primary'
                     style={{
                         display: expanded ? 'inherit' : 'none'

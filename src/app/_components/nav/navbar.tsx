@@ -2,22 +2,18 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import {useEffect, useState} from "react";
-import {DiscordInfo, useDiscordData} from "@/app/_components/discord-data-context";
+import {useState} from "react";
 import NavUserProfile from "@/app/_components/nav/nav-user-profile";
 import DarkModeSwitcher from "@/app/_components/nav/dark-mode-switcher";
 import Button from "@/components/button/Button";
 import login from '/public/login.svg';
 import HyperLink from "@/components/hyperlink";
+import {signIn, useSession} from "next-auth/react";
+import LoginButton from "@/app/_components/nav/login-button";
 
-export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
+export default function NavBar() {
     const [isOpen, setOpen] = useState(false);
-    const [, setDiscordInfo] = useDiscordData();
-
-    useEffect(() => {
-        if (discordInfo)
-            setDiscordInfo(discordInfo);
-    }, [discordInfo, setDiscordInfo])
+    const discordInfo = useSession().data?.user;
 
     const toggleOpen = () => {
         setOpen(lastVal => !lastVal);
@@ -61,14 +57,7 @@ export default function NavBar({discordInfo}: { discordInfo?: DiscordInfo }) {
                         <DarkModeSwitcher/>
                         {
                             !discordInfo ?
-                                <Button
-                                    className='self-center mx-auto'
-                                    width={8}
-                                    height={3}
-                                    href={process.env.NEXT_PUBLIC_DISCORD_LOGIN_LINK}
-                                    label='Login'
-                                    icon={login}
-                                />
+                                <LoginButton />
                                 :
                                 <NavUserProfile/>
                         }

@@ -2,18 +2,21 @@ import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {NextApiRequest, NextApiResponse} from "next";
 import {JsonWebTokenError, verify} from "jsonwebtoken";
 import {AxiosError} from "axios";
+import {NextRequest, NextResponse} from "next/server";
+import WebClient from "@/utils/api/web-client";
+import {NextURL} from "next/dist/server/web/next-url";
 
 export class ResponseBuilder {
     private logicHandler?: (req: NextApiRequest, res: NextApiResponse, apiUtils: ApiUtils) => Promise<void>;
-    private adminRoute: boolean
+    private authenticatedRoute: boolean
     private readonly apiUtils: ApiUtils;
     constructor(private readonly req: NextApiRequest, private readonly res: NextApiResponse) {
-        this.adminRoute = false;
+        this.authenticatedRoute = false;
         this.apiUtils = new ApiUtils(req, res);
     }
 
-    public setAdminRoute() {
-        this.adminRoute = true;
+    public setAuthenticatedRoute() {
+        this.authenticatedRoute = true;
         return this;
     }
 
@@ -26,8 +29,9 @@ export class ResponseBuilder {
         if (!this.logicHandler)
             throw new Error('The logic error for this Response is undefined!');
         try {
-            if (this.adminRoute && !this.apiUtils.verifyJWT())
-                return this.apiUtils.prepareUnauthorizedResponse({ reason: 'Invalid JWT' });
+            console.log("is auth", await this.apiUtils.isAuthenticated())
+            if (this.authenticatedRoute && !(await this.apiUtils.isAuthenticated()))
+                return this.apiUtils.prepareUnauthorizedResponse({ reason: 'You are not authenticated.' });
             return await this.logicHandler(this.req, this.res, this.apiUtils);
         } catch (ex) {
             if (ex instanceof AxiosError)
@@ -41,29 +45,44 @@ export class ResponseBuilder {
 export default class ApiUtils {
     constructor(private readonly req: NextApiRequest, private readonly res: NextApiResponse) {}
 
-    public verifyJWT() {
-        const jwt = this.extractJWT();
-        console.log()
-        if (typeof jwt === 'undefined')
-            return false;
+    public async isAuthenticated(): Promise<boolean> {
+        const webClient = WebClient.getInstance();
         try {
-            return !!verify(jwt, process.env.API_SECRET_KEY!);
+            const data = (await webClient.get("/api/@me")).data;
+            return !!data;
         } catch (e) {
-            if (e instanceof JsonWebTokenError)
+            if (e instanceof AxiosError && (e.response?.status === 403 || e.response?.status === 404))
                 return false;
             console.error(e);
+            return false;
         }
-    }
-
-    public extractJWT() {
-        const auth = this.req.headers.authorization;
-        if (!auth || !auth.includes("Bearer "))
-            return undefined;
-        return auth.split("Bearer ")[1];
     }
 
     public prepareResponse(status: StatusCodes, message?: string, data?: any) {
         return this.res.status(status).json({data: data, status: status, message: message || 'There was no message provided.'});
+    }
+
+    public prepareUnauthorizedResponse(data?: any) {
+        return this.prepareResponse(StatusCodes.FORBIDDEN, ReasonPhrases.FORBIDDEN, data);
+    }
+
+    public static invalidMethod(res: NextApiResponse) {
+        return res.json({ data: {}, status: StatusCodes.BAD_REQUEST, message: 'Invalid HTTP method!' });
+    }
+}
+
+export class AppApiUtils {
+    constructor(private readonly req: NextRequest) {}
+
+    public redirect(url: string | URL | NextURL, init?: ResponseInit) {
+        return NextResponse.redirect(new URL(url, this.req.url), init)
+    }
+
+    public prepareResponse(status: StatusCodes, message?: string, data?: any) {
+        return NextResponse.json({data: data, status: status, message: message || 'There was no message provided.'}, {
+            status: status,
+            statusText: message || 'There was no text provided'
+        });
     }
 
     public prepareUnauthorizedResponse(data?: any) {

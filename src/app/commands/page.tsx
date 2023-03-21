@@ -1,5 +1,5 @@
 import HeadingSection from "@/components/heading-section";
-import {ExternalWebClient} from "@/utils/api/web-client";
+import WebClient, {ExternalWebClient} from "@/utils/api/web-client";
 import CommandTable from "@/app/commands/command-table";
 
 export type CommandData = {
@@ -12,7 +12,8 @@ export type CommandData = {
 const getCommandData = async ()  => {
     const externWebClient = await ExternalWebClient.getInstance();
     if (!externWebClient) return undefined
-    return (await externWebClient.get('/commands')).data;
+    const webClient = WebClient.getInstance();
+    return (await webClient.get('/api/commands')).data;
 }
 
 export default async function CommandsPage() {

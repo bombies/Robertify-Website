@@ -4,7 +4,7 @@ class WebClient {
     protected readonly instance: AxiosInstance;
     protected static INSTANCE?: WebClient;
 
-    constructor(masterPassword?: string, private options?: CreateAxiosDefaults<any>) {
+    constructor(private options?: CreateAxiosDefaults<any>) {
         this.instance = axios.create({
             headers: {
                 Accept: 'application/json',
@@ -14,75 +14,22 @@ class WebClient {
             ...options,
             baseURL: process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME
         });
-
-        this.instance.interceptors.response.use(
-            response => response,
-            async (error) => {
-                const originalRequest = error.config;
-
-                if (error.response.status === 403) {
-                    const token = await this.getAccessToken(masterPassword);
-                    await WebClient.setAccessToken(this, token, masterPassword);
-                    originalRequest.headers['Authorization'] = `Bearer ${token}`;
-                    return axios(originalRequest);
-                }
-
-                return Promise.reject(error);
-            }
-        )
     }
 
-    private async getAccessToken(masterPassword?: string): Promise<string | undefined> {
-        try {
-            const data = (await this.instance.post('/api/auth/login', {
-                password: masterPassword ?? process.env.API_MASTER_PASSWORD
-            })).data
-            return data?.data.access_token;
-        } catch (ex) {
-            console.error("Couldn't get the access token for WebClient.", ex);
-        }
-
-    }
-
-    private startTokenRefresh(masterPassword?: string) {
-        setInterval(async () => {
-            await WebClient.setAccessToken(this, undefined, masterPassword);
-        }, 5 * 60 * 1000)
-    }
-
-    private static async setAccessToken(client: WebClient, token?: string, masterPassword?: string) {
-        if (!token)
-            token = await client.getAccessToken(masterPassword);
-        return client.instance.interceptors.request.use(config => {
-            config.headers['Authorization'] = "Bearer " + token;
-            return config;
-        }, e => {
-            Promise.reject(e)
-        });
-    }
-
-    public static async getInstance(masterPassword?: string, options?: CreateAxiosDefaults<any>) {
+    public static getInstance(options?: CreateAxiosDefaults<any>) {
         if (!options) {
             if (this.INSTANCE)
                 return this.INSTANCE.instance;
 
-            const client = new WebClient(masterPassword);
+            const client = new WebClient();
             this.INSTANCE = client;
-
-            await WebClient.setAccessToken(client, undefined, masterPassword);
-            client.startTokenRefresh(masterPassword);
-
             return client.instance;
         }
 
         // Options provided
-        const client = new WebClient(masterPassword, {
+        const client = new WebClient({
             ...options
         });
-
-        await WebClient.setAccessToken(client, undefined, masterPassword);
-        client.startTokenRefresh(masterPassword);
-
         return client.instance;
     }
 }
@@ -107,10 +54,11 @@ export class ExternalWebClient {
             async (error) => {
                 const originalRequest = error.config;
 
-                if (error.response.status === 403) {
+                if (error.response.status === 403 && !originalRequest._retry) {
                     const token = await this.getAccessToken();
                     await ExternalWebClient.setAccessToken(this, token);
                     originalRequest.headers['Authorization'] = `Bearer ${token}`;
+                    originalRequest._retry = true;
                     return axios(originalRequest);
                 }
 

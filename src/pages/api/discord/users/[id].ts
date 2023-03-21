@@ -12,7 +12,7 @@ class RouteHandler extends MethodHandler {
 
     async GET(): Promise<void> {
         return await this.getResponseBuilder()
-            .setAdminRoute()
+            .setAuthenticatedRoute()
             .setLogic(async (req) => {
                 const { id } = req.query;
                 if (typeof id !== 'string')

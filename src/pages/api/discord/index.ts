@@ -10,7 +10,6 @@ class RouteHandler extends MethodHandler {
 
     async GET(): Promise<void> {
         return await this.getResponseBuilder()
-            .setAdminRoute()
             .setLogic(async (req) => {
                 const { id } = req.body;
                 const data = await new DiscordAccessRedisManager().findOne(id);
@@ -21,7 +20,6 @@ class RouteHandler extends MethodHandler {
 
     async POST(): Promise<void> {
         return await this.getResponseBuilder()
-            .setAdminRoute()
             .setLogic(async (req) => {
                 const { id, data } = req.body;
                 await new DiscordAccessRedisManager().putOne(id, data);

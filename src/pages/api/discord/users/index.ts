@@ -1,6 +1,5 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {HTTPMethod, MethodHandler} from "@/utils/api/method-handler";
-import {ResponseBuilder} from "@/utils/api/api-utils";
 import {DiscordUsersRedisManager} from "@/utils/api/redis/managers/discord-users.redis-manager";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 
@@ -12,7 +11,6 @@ class RouteHandler extends MethodHandler {
 
     async POST(): Promise<void> {
         return await this.getResponseBuilder()
-            .setAdminRoute()
             .setLogic(async (req) => {
                 const { id, data } = req.body;
                 await new DiscordUsersRedisManager().putOne(id, data);
