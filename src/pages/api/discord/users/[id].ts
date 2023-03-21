@@ -3,7 +3,7 @@ import {HTTPMethod, MethodHandler} from "@/utils/api/method-handler";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import DiscordAccessRedisManager from "@/utils/api/redis/managers/discord-access.redis-manager";
 import {DiscordUsersRedisManager} from "@/utils/api/redis/managers/discord-users.redis-manager";
-import WebClient, {DiscordWebClient} from "@/utils/api/web-client";
+import {DiscordWebClient} from "@/utils/api/web-client";
 
 class RouteHandler extends MethodHandler {
     constructor(req: NextApiRequest, res: NextApiResponse) {

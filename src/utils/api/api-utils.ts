@@ -1,6 +1,7 @@
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {NextApiRequest, NextApiResponse} from "next";
 import {JsonWebTokenError, verify} from "jsonwebtoken";
+import {AxiosError} from "axios";
 
 export class ResponseBuilder {
     private logicHandler?: (req: NextApiRequest, res: NextApiResponse, apiUtils: ApiUtils) => Promise<void>;
@@ -26,9 +27,11 @@ export class ResponseBuilder {
             throw new Error('The logic error for this Response is undefined!');
         try {
             if (this.adminRoute && !this.apiUtils.verifyJWT())
-                return this.apiUtils.prepareUnauthorizedResponse();
+                return this.apiUtils.prepareUnauthorizedResponse({ reason: 'Invalid JWT' });
             return await this.logicHandler(this.req, this.res, this.apiUtils);
         } catch (ex) {
+            if (ex instanceof AxiosError)
+                return this.apiUtils.prepareResponse(ex.status ?? StatusCodes.BAD_REQUEST, ex.message ?? 'Something went wrong!', ex.response?.data)
             console.error(ex);
             return this.apiUtils.prepareResponse(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR);
         }
@@ -43,7 +46,7 @@ export default class ApiUtils {
         if (typeof jwt === 'undefined')
             return false;
         try {
-            return !!verify(jwt, process.env.API_SECRET_KEY);
+            return !!verify(jwt, process.env.API_SECRET_KEY!);
         } catch (e) {
             if (e instanceof JsonWebTokenError)
                 return false;
@@ -62,8 +65,8 @@ export default class ApiUtils {
         return this.res.status(status).json({data: data, status: status, message: message || 'There was no message provided.'});
     }
 
-    public prepareUnauthorizedResponse() {
-        return this.prepareResponse(StatusCodes.FORBIDDEN, ReasonPhrases.FORBIDDEN);
+    public prepareUnauthorizedResponse(data?: any) {
+        return this.prepareResponse(StatusCodes.FORBIDDEN, ReasonPhrases.FORBIDDEN, data);
     }
 
     public static invalidMethod(res: NextApiResponse) {
