@@ -49,10 +49,8 @@ export default class ApiUtils {
         try {
             return !!verify(jwt, process.env.API_SECRET_KEY!);
         } catch (e) {
-            if (e instanceof JsonWebTokenError) {
-                console.error(e);
+            if (e instanceof JsonWebTokenError)
                 return false;
-            }
             console.error(e);
         }
     }

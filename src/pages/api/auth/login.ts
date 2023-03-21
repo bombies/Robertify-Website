@@ -1,7 +1,7 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {HTTPMethod, MethodHandler} from "@/utils/api/method-handler";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
-import {sign, verify} from "jsonwebtoken";
+import {JsonWebTokenError, sign, verify} from "jsonwebtoken";
 import {nanoid} from "nanoid";
 
 class RouteHandler extends MethodHandler {
@@ -30,7 +30,13 @@ class RouteHandler extends MethodHandler {
     private verifyPassword(password: string) {
         if (!password)
             return false;
-        return !!verify(password, process.env.API_SECRET_KEY!);
+        try {
+            return !!verify(password, process.env.API_SECRET_KEY!);
+        } catch (e) {
+            if (e instanceof JsonWebTokenError)
+                return false;
+            console.error(e);
+        }
     }
 
 }
