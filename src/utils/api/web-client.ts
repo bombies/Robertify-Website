@@ -97,8 +97,7 @@ export class ExternalWebClient {
         this.instance = axios.create({
             headers: {
                 Accept: 'application/json',
-                "User-Agent": 'Robertify Website (https://github.com/bombies/Robertify-Website)',
-                'Authorization': process.env.EXTERN_API_MASTER_PASSWORD
+                "User-Agent": 'Robertify Website (https://github.com/bombies/Robertify-Website)'
             },
             timeout: 5 * 1000,
             ...options,

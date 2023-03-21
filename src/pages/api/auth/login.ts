@@ -21,7 +21,7 @@ class RouteHandler extends MethodHandler {
                 if (password !== process.env.API_MASTER_PASSWORD)
                     return utils.prepareUnauthorizedResponse();
 
-                const token = sign({id: nanoid(6)}, process.env.API_SECRET_KEY, {expiresIn: '5m', subject: 'admin'});
+                const token = sign({id: nanoid(6)}, process.env.API_SECRET_KEY!, {expiresIn: '5m', subject: 'admin'});
                 return this.prepareResponse(StatusCodes.OK, ReasonPhrases.OK, {access_token: token});
             })
             .execute();
