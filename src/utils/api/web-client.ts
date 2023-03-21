@@ -102,6 +102,22 @@ export class ExternalWebClient {
             ...options,
             baseURL: process.env.EXTERN_API_HOSTNAME,
         });
+
+        this.instance.interceptors.response.use(
+            response => response,
+            async (error) => {
+                const originalRequest = error.config;
+
+                if (error.response.status === 403) {
+                    const token = await this.getAccessToken();
+                    await ExternalWebClient.setAccessToken(this, token);
+                    originalRequest.headers['Authorization'] = `Bearer ${token}`;
+                    return axios(originalRequest);
+                }
+
+                return Promise.reject(error);
+            }
+        )
     }
 
     private async getAccessToken() {
@@ -118,10 +134,11 @@ export class ExternalWebClient {
         }, 12 * 60 * 60 * 1000)
     }
 
-    private static async setAccessToken(client: ExternalWebClient) {
-        const accessToken = await client.getAccessToken();
+    private static async setAccessToken(client: ExternalWebClient, token?: string) {
+        if (!token)
+            token = await client.getAccessToken();
         client.instance.interceptors.request.use(config => {
-            config.headers['Authorization'] = "Bearer " + accessToken;
+            config.headers['Authorization'] = "Bearer " + token;
             return config;
         });
     }
