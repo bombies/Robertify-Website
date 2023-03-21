@@ -53,13 +53,20 @@ export default class ApiUtils {
 
     public async isAuthenticated(): Promise<boolean> {
         const session = this.getSession();
-        return !!session;
+        return session ? !this.sessionIsExpired(session) : false;
     }
 
     public getSession(): Session | undefined {
         if (!this.req.headers.session)
             return undefined;
         return JSON.parse(this.req.headers.session as string)
+    }
+
+    public sessionIsExpired(session: Session): boolean {
+        if (!session?.user)
+            return true;
+        const { exp } = session.user;
+        return Number(exp) - new Date().getSeconds() <= 0;
     }
 
     public prepareResponse(status: StatusCodes, message?: string, data?: any) {
@@ -77,6 +84,17 @@ export default class ApiUtils {
 
 export class AppApiUtils {
     constructor(private readonly req: NextRequest) {}
+
+    public async isAuthenticated(): Promise<boolean> {
+        const session = this.getSession();
+        return !!session;
+    }
+
+    public getSession(): Session | undefined {
+        if (!this.req.headers.get("session"))
+            return undefined;
+        return JSON.parse(this.req.headers.get("session") as string)
+    }
 
     public redirect(url: string | URL | NextURL, init?: ResponseInit) {
         return NextResponse.redirect(new URL(url, this.req.url), init)
