@@ -36,7 +36,7 @@ type Props = {
 const POSTChanges = async (apiMasterPassword: string | undefined, guildId: string, guildInfo: RobertifyGuild) => {
     if (!apiMasterPassword)
         throw new Error("The API master password is undefined!");
-    return (await (await WebClient.getInstance(undefined, {
+    return (await (await WebClient.getInstance(apiMasterPassword, {
         headers: {
             Accept: 'application/json',
             'Authorization': apiMasterPassword
