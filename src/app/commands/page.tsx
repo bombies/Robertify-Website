@@ -1,6 +1,8 @@
 import HeadingSection from "@/components/heading-section";
-import {ExternalWebClient} from "@/utils/api/web-client";
+import WebClient, {ExternalWebClient} from "@/utils/api/web-client";
 import CommandTable from "@/app/commands/command-table";
+import {getServerSession} from "next-auth";
+import {authOptions} from "@/pages/api/auth/[...nextauth]";
 
 export type CommandData = {
     id: number | string,
@@ -10,13 +12,16 @@ export type CommandData = {
 }
 
 const getCommandData = async ()  => {
+    const session = await getServerSession(authOptions);
     const externWebClient = await ExternalWebClient.getInstance();
     if (!externWebClient) return undefined
-    return (await externWebClient.get('/commands')).data;
+    const webClient = WebClient.getInstance(session);
+    return (await webClient.get('/api/commands')).data.data;
 }
 
 export default async function CommandsPage() {
     const data = await getCommandData();
+
     const columns = [
         { name: 'COMMAND', uid: 'command'},
         { name: 'DESCRIPTION', uid: 'description'},

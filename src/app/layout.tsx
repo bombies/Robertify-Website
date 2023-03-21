@@ -1,23 +1,25 @@
 import './globals.scss'
 import React from "react";
-import NavbarContainer from "@/app/_components/nav/navbar-container";
 import Footer from "@/app/_components/footer/footer";
 import Providers from "@/app/_components/providers";
 import ProgressBar from "@/app/_components/progress-bar";
 import Image from "next/image";
 import glow from "/public/rob-web-glow.png";
+import NavBar from "@/app/_components/nav/navbar";
 
 export const metadata = {
     title: 'Robertify',
     description: 'A next-gen music bot',
 }
 
-type Props = React.PropsWithChildren;
+interface Props extends React.PropsWithChildren {
+    session: any
+}
 
 export default function RootLayout(props: Props) {
     return (
         <html suppressHydrationWarning  lang="en">
-        <Providers>
+        <Providers session={props.session}>
             <ProgressBar />
             <div className='dark:visible opacity-50 blur-xl invisible fixed w-full h-full z-[0]'>
                 <Image
@@ -30,8 +32,7 @@ export default function RootLayout(props: Props) {
                 />
             </div>
             <div className='!z-[1] relative'>
-                {/* @ts-expect-error Async Server Component */}
-                <NavbarContainer/>
+                <NavBar />
                 {props.children}
                 <Footer/>
             </div>

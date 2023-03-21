@@ -10,7 +10,6 @@ class RouteHandler extends MethodHandler {
 
     protected async GET(): Promise<void> {
         return this.getResponseBuilder()
-            .setAdminRoute()
             .setLogic(async () => {
                 const externWebClient = await ExternalWebClient.getInstance();
                 if (!externWebClient)
@@ -24,7 +23,7 @@ class RouteHandler extends MethodHandler {
     }
 }
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const routeHandler = new RouteHandler(req, res);
     return routeHandler.handle([HTTPMethod.GET]);
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import React, {PropsWithChildren} from "react";
+import React from "react";
 import {DiscordDataProvider} from "@/app/_components/discord-data-context";
 import {DarkModeProvider} from "@/app/_components/dark-mode-context";
 import ReduxProvider from "@/app/_components/redux-provider";
@@ -10,10 +10,13 @@ import {SSRProvider} from "@react-aria/ssr";
 import darkTheme from "@/utils/ui/themes/default-dark";
 import lightTheme from "@/utils/ui/themes/default-light";
 import {ThemeProvider} from "next-themes";
+import {SessionProvider} from "next-auth/react";
 
-type Props = PropsWithChildren;
+interface Props extends React.PropsWithChildren {
+    session: any
+}
 
-export default function Providers({children}: Props) {
+export default function Providers({children, session}: Props) {
     useServerInsertedHTML(() => {
         return <>{CssBaseline.flush()}</>;
     })
@@ -33,9 +36,11 @@ export default function Providers({children}: Props) {
                 >
                     <NextUIProvider>
                         <DarkModeProvider>
-                            <DiscordDataProvider>
-                                {children}
-                            </DiscordDataProvider>
+                            <SessionProvider session={session}>
+                                <DiscordDataProvider>
+                                    {children}
+                                </DiscordDataProvider>
+                            </SessionProvider>
                         </DarkModeProvider>
                     </NextUIProvider>
                 </ThemeProvider>
