@@ -146,7 +146,7 @@ export class DiscordWebClient {
             },
             timeout: 5 * 1000,
             ...options,
-            baseURL: 'https://discord.com/api/v10/',
+            baseURL: 'https://discord.com/api/v10',
         });
     }
 
