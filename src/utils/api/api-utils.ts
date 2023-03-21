@@ -43,13 +43,16 @@ export default class ApiUtils {
 
     public verifyJWT() {
         const jwt = this.extractJWT();
+        console.log()
         if (typeof jwt === 'undefined')
             return false;
         try {
             return !!verify(jwt, process.env.API_SECRET_KEY!);
         } catch (e) {
-            if (e instanceof JsonWebTokenError)
+            if (e instanceof JsonWebTokenError) {
+                console.error(e);
                 return false;
+            }
             console.error(e);
         }
     }

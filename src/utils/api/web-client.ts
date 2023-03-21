@@ -4,7 +4,7 @@ class WebClient {
     protected readonly instance: AxiosInstance;
     protected static INSTANCE?: WebClient;
 
-    constructor(private options?: CreateAxiosDefaults<any>) {
+    constructor(masterPassword?: string, private options?: CreateAxiosDefaults<any>) {
         this.instance = axios.create({
             headers: {
                 Accept: 'application/json',
@@ -14,9 +14,25 @@ class WebClient {
             ...options,
             baseURL: process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME
         });
+
+        this.instance.interceptors.response.use(
+            response => response,
+            async (error) => {
+                const originalRequest = error.config;
+
+                if (error.response.status === 403) {
+                    const token = await this.getAccessToken(masterPassword);
+                    await WebClient.setAccessToken(this, token, masterPassword);
+                    originalRequest.headers['Authorization'] = `Bearer ${token}`;
+                    return axios(originalRequest);
+                }
+
+                return Promise.reject(error);
+            }
+        )
     }
 
-    private async getAccessToken(masterPassword?: string) {
+    private async getAccessToken(masterPassword?: string): Promise<string | undefined> {
         try {
             const data = (await this.instance.post('/api/auth/login', {
                 password: masterPassword ?? process.env.API_MASTER_PASSWORD
@@ -30,15 +46,18 @@ class WebClient {
 
     private startTokenRefresh(masterPassword?: string) {
         setInterval(async () => {
-            await WebClient.setAccessToken(this, masterPassword);
+            await WebClient.setAccessToken(this, undefined, masterPassword);
         }, 5 * 60 * 1000)
     }
 
-    private static async setAccessToken(client: WebClient, masterPassword?: string) {
-        const accessToken = await client.getAccessToken(masterPassword);
-        client.instance.interceptors.request.use(config => {
-            config.headers['Authorization'] = "Bearer " + accessToken;
+    private static async setAccessToken(client: WebClient, token?: string, masterPassword?: string) {
+        if (!token)
+            token = await client.getAccessToken(masterPassword);
+        return client.instance.interceptors.request.use(config => {
+            config.headers['Authorization'] = "Bearer " + token;
             return config;
+        }, e => {
+            Promise.reject(e)
         });
     }
 
@@ -47,21 +66,21 @@ class WebClient {
             if (this.INSTANCE)
                 return this.INSTANCE.instance;
 
-            const client = new WebClient();
+            const client = new WebClient(masterPassword);
             this.INSTANCE = client;
 
-            await WebClient.setAccessToken(client, masterPassword);
+            await WebClient.setAccessToken(client, undefined, masterPassword);
             client.startTokenRefresh(masterPassword);
 
             return client.instance;
         }
 
         // Options provided
-        const client = new WebClient({
+        const client = new WebClient(masterPassword, {
             ...options
         });
 
-        await WebClient.setAccessToken(client, masterPassword);
+        await WebClient.setAccessToken(client, undefined, masterPassword);
         client.startTokenRefresh(masterPassword);
 
         return client.instance;

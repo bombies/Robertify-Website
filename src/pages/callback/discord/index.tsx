@@ -56,6 +56,9 @@ export default function Callback(props: Props) {
             'redirect_uri': process.env.NEXT_PUBLIC_DISCORD_LOGIN_REDIRECT_URI!
         }
 
+        if (!data)
+            return;
+
         WebClient.getInstance(props.apiMasterPassword)
             .then(axiosInstance => {
                 axios.post('https://discord.com/api/v10/oauth2/token?=', new URLSearchParams(data).toString(), config)
@@ -66,11 +69,15 @@ export default function Callback(props: Props) {
                     })
                     .then(data => {
                         axiosInstance.post('/api/discord', data)
-                            .then(res => res.data)
+                            .then(res => {
+                                return res.data;
+                            })
                             .then(() => {
                                 router.push('/');
                             })
-                            .catch(err => console.error(err))
+                            .catch(err => {
+                                console.error(err);
+                            })
                     })
                     .catch(err => {
                         console.error(err);
