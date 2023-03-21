@@ -133,4 +133,34 @@ export class ExternalWebClient {
     }
 }
 
+export class DiscordWebClient {
+    protected readonly instance: AxiosInstance;
+    protected static BOT_INSTANCE?: DiscordWebClient;
+
+    constructor(accessToken?: string, private options?: CreateAxiosDefaults<any>) {
+        this.instance = axios.create({
+            headers: {
+                Accept: 'application/json',
+                "User-Agent": 'Robertify Website (https://github.com/bombies/Robertify-Website)',
+                'Authorization':  accessToken ? 'Bearer ' + accessToken : 'Bot ' + process.env.DISCORD_BOT_TOKEN,
+            },
+            timeout: 5 * 1000,
+            ...options,
+            baseURL: 'https://discord.com/api/v10/',
+        });
+    }
+
+    public static getInstance(accessToken?: string, options?: CreateAxiosDefaults<any>) {
+        if (!accessToken) {
+            if (this.BOT_INSTANCE)
+                return this.BOT_INSTANCE.instance;
+            const client = new DiscordWebClient();
+            this.BOT_INSTANCE = client;
+            return client.instance;
+        } else if (!options) {
+            return new DiscordWebClient(accessToken).instance;
+        } else return new DiscordWebClient(accessToken, options).instance;
+    }
+}
+
 export default WebClient;
