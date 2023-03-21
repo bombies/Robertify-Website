@@ -5,23 +5,23 @@ import {cookies} from "next/headers";
 import {DiscordUserGuild, isServerAdmin} from "@/utils/discord-types";
 
 const getDiscordGuildInfo = async (id: string) => {
-    return (await WebClient.getInstance()
+    return (await (await WebClient.getInstance())
         .get(`/api/discord/guilds/${id}`))?.data
 }
 
 const getDiscordGuildChannels = async (id: string) => {
-    return (await WebClient.getInstance()
+    return (await (await WebClient.getInstance())
         .get(`/api/discord/guilds/${id}/channels`))?.data
 }
 
 const getBotGuildInfo = async (id: string) => {
-    return (await WebClient.getInstance()
+    return (await (await WebClient.getInstance())
         .get(`/api/bot/guilds/${id}`))?.data
 }
 
 const getUserGuilds = async (token?: string) => {
     try {
-        return (await WebClient.getInstance()
+        return (await (await WebClient.getInstance())
             .get(`/api/discord/users/${token}/guilds`))?.data;
     } catch (e: any) {
         if (e instanceof AxiosError && e.response?.data.retry_after) {

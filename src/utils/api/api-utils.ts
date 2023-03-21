@@ -28,7 +28,7 @@ export class ResponseBuilder {
             throw new Error('The logic error for this Response is undefined!');
         try {
             if (this.adminRoute && !this.apiUtils.verifyJWT())
-                return this.apiUtils.prepareUnauthorizedResponse();
+                return this.apiUtils.prepareUnauthorizedResponse({reason: 'Invalid JWT'});
             return await this.logicHandler(this.req, this.res, this.apiUtils);
         } catch (ex) {
             if (ex instanceof AxiosError) {
@@ -36,7 +36,7 @@ export class ResponseBuilder {
                     setTimeout(async () => {
                         return await this.execute();
                     }, ex.response?.data.retry_after * 1000)
-                } else return this.apiUtils.prepareResponse(ex.status || 500, ex.message, ex.response?.data)
+                } else return this.apiUtils.prepareResponse(ex.response?.status ?? StatusCodes.BAD_REQUEST, ex.message ?? 'Something went wrong!', ex.response?.data)
             } else {
                 console.error(ex);
                 return this.apiUtils.prepareResponse(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR);
@@ -51,13 +51,16 @@ export default class ApiUtils {
 
     public verifyJWT() {
         const jwt = this.extractJWT();
-        if (!jwt)
+        console.log()
+        if (typeof jwt === 'undefined')
             return false;
         try {
-            return !!verify(jwt, process.env.API_SECRET_KEY);
+            return !!verify(jwt, process.env.API_SECRET_KEY!);
         } catch (e) {
-            if (e instanceof JsonWebTokenError)
+            if (e instanceof JsonWebTokenError) {
+                console.error(e);
                 return false;
+            }
             console.error(e);
         }
     }
@@ -70,11 +73,15 @@ export default class ApiUtils {
     }
 
     public prepareResponse(status: StatusCodes, message?: string, data?: any) {
-        return this.res.json({data: data, status: status, message: message || 'There was no message provided.'});
+        return this.res.status(status).json({
+            data: data,
+            status: status,
+            message: message || 'There was no message provided.'
+        });
     }
 
-    public prepareUnauthorizedResponse() {
-        return this.prepareResponse(StatusCodes.FORBIDDEN, ReasonPhrases.FORBIDDEN);
+    public prepareUnauthorizedResponse(data?: any) {
+        return this.prepareResponse(StatusCodes.FORBIDDEN, ReasonPhrases.FORBIDDEN, data);
     }
 
     public static invalidMethod(res: NextApiResponse) {

@@ -6,7 +6,7 @@ class WebClient {
     protected readonly instance: AxiosInstance;
     protected static INSTANCE?: WebClient;
 
-    constructor(private options?: CreateAxiosDefaults<any>) {
+    constructor(masterPassword?: string, private options?: CreateAxiosDefaults<any>) {
         this.instance = axios.create({
             headers: {
                 Accept: 'application/json',
@@ -16,50 +16,74 @@ class WebClient {
             ...options,
             baseURL: process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME
         });
+
+        this.instance.interceptors.response.use(
+            response => response,
+            async (error) => {
+                const originalRequest = error.config;
+
+                if (error.response.status === 403) {
+                    const token = await this.getAccessToken(masterPassword);
+                    await WebClient.setAccessToken(this, token, masterPassword);
+                    originalRequest.headers['Authorization'] = `Bearer ${token}`;
+                    return axios(originalRequest);
+                }
+
+                return Promise.reject(error);
+            }
+        )
     }
 
-    private async getAccessToken() {
-        const data = (await this.instance.post('/api/auth/login', {
-            password: process.env.API_MASTER_PASSWORD
-        })).data
-        return data?.access_token;
+    private async getAccessToken(masterPassword?: string): Promise<string | undefined> {
+        try {
+            const data = (await this.instance.post('/api/auth/login', {
+                password: masterPassword ?? process.env.API_MASTER_PASSWORD
+            })).data
+            return data?.data.access_token;
+        } catch (ex) {
+            console.error("Couldn't get the access token for WebClient.", ex);
+        }
+
     }
 
-    private startTokenRefresh() {
+    private startTokenRefresh(masterPassword?: string) {
         setInterval(async () => {
-            await WebClient.setAccessToken(this);
+            await WebClient.setAccessToken(this, undefined, masterPassword);
         }, 5 * 60 * 1000)
     }
 
-    private static async setAccessToken(client: WebClient) {
-        const accessToken = await client.getAccessToken();
-        client.instance.interceptors.request.use(config => {
-            config.headers['Authorization'] = "Bearer " + accessToken;
+    private static async setAccessToken(client: WebClient, token?: string, masterPassword?: string) {
+        if (!token)
+            token = await client.getAccessToken(masterPassword);
+        return client.instance.interceptors.request.use(config => {
+            config.headers['Authorization'] = "Bearer " + token;
             return config;
+        }, e => {
+            Promise.reject(e)
         });
     }
 
-    public static async getInstance(options?: CreateAxiosDefaults<any>) {
+    public static async getInstance(masterPassword?: string, options?: CreateAxiosDefaults<any>) {
         if (!options) {
             if (this.INSTANCE)
                 return this.INSTANCE.instance;
 
-            const client = new WebClient();
+            const client = new WebClient(masterPassword);
             this.INSTANCE = client;
 
-            await WebClient.setAccessToken(client);
-            client.startTokenRefresh();
+            await WebClient.setAccessToken(client, undefined, masterPassword);
+            client.startTokenRefresh(masterPassword);
 
             return client.instance;
         }
 
         // Options provided
-        const client = new WebClient({
+        const client = new WebClient(masterPassword, {
             ...options
         });
 
-        await WebClient.setAccessToken(client);
-        client.startTokenRefresh();
+        await WebClient.setAccessToken(client, undefined, masterPassword);
+        client.startTokenRefresh(masterPassword);
 
         return client.instance;
     }
@@ -80,6 +104,22 @@ export class ExternalWebClient {
             ...options,
             baseURL: process.env.EXTERN_API_HOSTNAME,
         });
+
+        this.instance.interceptors.response.use(
+            response => response,
+            async (error) => {
+                const originalRequest = error.config;
+
+                if (error.response.status === 403) {
+                    const token = await this.getAccessToken();
+                    await ExternalWebClient.setAccessToken(this, token);
+                    originalRequest.headers['Authorization'] = `Bearer ${token}`;
+                    return axios(originalRequest);
+                }
+
+                return Promise.reject(error);
+            }
+        )
     }
 
     private async getAccessToken() {
@@ -96,10 +136,11 @@ export class ExternalWebClient {
         }, 12 * 60 * 60 * 1000)
     }
 
-    private static async setAccessToken(client: ExternalWebClient) {
-        const accessToken = await client.getAccessToken();
+    private static async setAccessToken(client: ExternalWebClient, token?: string) {
+        if (!token)
+            token = await client.getAccessToken();
         client.instance.interceptors.request.use(config => {
-            config.headers['Authorization'] = "Bearer " + accessToken;
+            config.headers['Authorization'] = "Bearer " + token;
             return config;
         });
     }
@@ -208,7 +249,7 @@ export class DiscordWebClient {
             },
             timeout: 5 * 1000,
             ...options,
-            baseURL: 'https://discord.com/api/v10/',
+            baseURL: 'https://discord.com/api/v10',
         });
     }
 

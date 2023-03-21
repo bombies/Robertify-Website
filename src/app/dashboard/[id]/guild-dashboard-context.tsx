@@ -36,14 +36,14 @@ type Props = {
 const POSTChanges = async (apiMasterPassword: string | undefined, guildId: string, guildInfo: RobertifyGuild) => {
     if (!apiMasterPassword)
         throw new Error("The API master password is undefined!");
-    return (await WebClient.getInstance({
+    return (await (await WebClient.getInstance(undefined, {
         headers: {
             Accept: 'application/json',
             'Authorization': apiMasterPassword
         },
         timeout: 5 * 1000,
         baseURL: process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME,
-    }).post(`/api/bot/guilds/${guildId}`, guildInfo))
+    })).post(`/api/bot/guilds/${guildId}`, guildInfo))
         ?.data;
 }
 

@@ -6,7 +6,7 @@ import Card from "@/components/card";
 
 const getUserGuilds = async (token?: string) => {
     try {
-        return (await WebClient.getInstance()
+        return (await (await WebClient.getInstance())
             .get(`/api/discord/users/${token}/guilds`))?.data;
     } catch (e: any) {
         if (e instanceof AxiosError && e.response?.data.retry_after) {
