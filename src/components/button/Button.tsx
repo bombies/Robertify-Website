@@ -87,7 +87,11 @@ export default function Button(props: Props) {
                     <button className={className}
                             style={styleObj}
                             disabled={props.disabled}
-                            onClick={props.onClick}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                if (props.onClick)
+                                    props.onClick(e);
+                            }}
                             type={props.submit === true ? 'submit' : 'button'}
                     >
                         <div className={'flex justify-center p-2 gap-4 mx-auto' + ((props.type === ButtonType.INVERTED || props.type === ButtonType.SECONDARY) ? ' text-primary' : '')}>

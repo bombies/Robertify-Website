@@ -1,23 +1,28 @@
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
 import {NextApiRequest, NextApiResponse} from "next";
-import {JsonWebTokenError, verify} from "jsonwebtoken";
 import {AxiosError} from "axios";
 import {NextRequest, NextResponse} from "next/server";
-import WebClient from "@/utils/api/web-client";
 import {NextURL} from "next/dist/server/web/next-url";
+import {Session} from "next-auth";
 
 export class ResponseBuilder {
     private logicHandler?: (req: NextApiRequest, res: NextApiResponse, apiUtils: ApiUtils) => Promise<void>;
     private authenticatedRoute: boolean
+    private predicate: {predicateFunc: () => boolean, failOptions?: { message: string, status: number }};
     private readonly apiUtils: ApiUtils;
     constructor(private readonly req: NextApiRequest, private readonly res: NextApiResponse) {
         this.authenticatedRoute = false;
+        this.predicate = {predicateFunc: () => true}
         this.apiUtils = new ApiUtils(req, res);
     }
 
     public setAuthenticatedRoute() {
         this.authenticatedRoute = true;
         return this;
+    }
+
+    public setPredicate(predicate: () => boolean, failOptions?: { message: string, status: number }) {
+        this.predicate = { predicateFunc: predicate, failOptions };
     }
 
     public setLogic(logicCallback: (req: NextApiRequest, res: NextApiResponse, apiUtils: ApiUtils) => Promise<void>) {
@@ -29,9 +34,10 @@ export class ResponseBuilder {
         if (!this.logicHandler)
             throw new Error('The logic error for this Response is undefined!');
         try {
-            console.log("is auth", await this.apiUtils.isAuthenticated())
             if (this.authenticatedRoute && !(await this.apiUtils.isAuthenticated()))
                 return this.apiUtils.prepareUnauthorizedResponse({ reason: 'You are not authenticated.' });
+            if (!this.predicate.predicateFunc())
+                return this.apiUtils.prepareResponse(this.predicate.failOptions?.status || StatusCodes.BAD_REQUEST, this.predicate.failOptions?.message || 'Predicate check failed!');
             return await this.logicHandler(this.req, this.res, this.apiUtils);
         } catch (ex) {
             if (ex instanceof AxiosError)
@@ -46,16 +52,14 @@ export default class ApiUtils {
     constructor(private readonly req: NextApiRequest, private readonly res: NextApiResponse) {}
 
     public async isAuthenticated(): Promise<boolean> {
-        const webClient = WebClient.getInstance();
-        try {
-            const data = (await webClient.get("/api/@me")).data;
-            return !!data;
-        } catch (e) {
-            if (e instanceof AxiosError && (e.response?.status === 403 || e.response?.status === 404))
-                return false;
-            console.error(e);
-            return false;
-        }
+        const session = this.getSession();
+        return !!session;
+    }
+
+    public getSession(): Session | undefined {
+        if (!this.req.headers.session)
+            return undefined;
+        return JSON.parse(this.req.headers.session as string)
     }
 
     public prepareResponse(status: StatusCodes, message?: string, data?: any) {
