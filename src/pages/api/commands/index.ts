@@ -10,7 +10,6 @@ class RouteHandler extends MethodHandler {
 
     async GET(): Promise<void> {
         return this.getResponseBuilder()
-            .setAuthenticatedRoute()
             .setLogic(async () => {
                 const externWebClient = await ExternalWebClient.getInstance();
                 if (!externWebClient)
