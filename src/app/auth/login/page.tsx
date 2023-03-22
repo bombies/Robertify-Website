@@ -21,4 +21,3 @@ export default function LoginPage() {
         <main>{searchParams?.get("error")}</main>
     )
 }
-

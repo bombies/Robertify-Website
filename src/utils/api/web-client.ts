@@ -1,9 +1,7 @@
 import axios, {AxiosInstance, CreateAxiosDefaults} from "axios";
-import {Session, User} from "next-auth";
+import {User} from "next-auth";
 import {signOut} from "next-auth/react";
 import {sign} from "jsonwebtoken";
-
-
 
 class WebClient {
     protected readonly instance: AxiosInstance;

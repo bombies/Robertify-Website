@@ -14,7 +14,7 @@ export default function BasicContent(props: Props) {
                     props.title &&
                     <h1 className='text-4xl max-w-xl laptop:max-w-lg font-bold text-primary dark:drop-shadow-glow-primary-lg'>{props.title}</h1>
                 }
-                <p className='max-w-lg laptop:max-w-md dark:text-white'>{props.description}</p>
+                <p className='max-w-lg laptop:max-w-md dark:text-white tracking-wide'>{props.description}</p>
             </div>
             {props.children}
         </div>

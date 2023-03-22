@@ -6,7 +6,7 @@ import ProgressBar from "@/app/_components/progress-bar";
 import Image from "next/image";
 import glow from "/public/rob-web-glow.png";
 import NavBar from "@/app/_components/nav/navbar";
-import { Inter } from 'next/font/google';
+import {Inter} from 'next/font/google';
 
 export const metadata = {
     title: 'Robertify',
@@ -17,13 +17,14 @@ interface Props extends React.PropsWithChildren {
     session: any
 }
 
-const inter = Inter({ subsets: ['latin'] });
+
+const inter = Inter({subsets: ['latin']});
 
 export default function RootLayout(props: Props) {
     return (
-        <html suppressHydrationWarning  lang="en">
+        <html suppressHydrationWarning lang="en">
         <Providers session={props.session}>
-            <ProgressBar />
+            <ProgressBar/>
             <div className='dark:visible opacity-50 blur-xl invisible fixed w-full h-full z-[0]'>
                 <Image
                     draggable={false}
@@ -35,7 +36,7 @@ export default function RootLayout(props: Props) {
                 />
             </div>
             <div className={'!z-[1] relative ' + inter.className}>
-                <NavBar />
+                <NavBar/>
                 {props.children}
                 <Footer/>
             </div>
