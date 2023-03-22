@@ -8,7 +8,6 @@ import GuildCard from "@/app/dashboard/guild-card";
 import Card from "@/components/card";
 import {DiscordUserGuild, isServerAdmin} from "@/utils/discord-types";
 import {signIn, useSession} from "next-auth/react";
-import {redirect} from "next/navigation";
 
 type Props = {
     guilds?: DiscordUserGuild[],

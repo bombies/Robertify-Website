@@ -31,7 +31,6 @@ type Props = {
     discordGuildChannels: DiscordGuildChannel[]
     robertifyGuildInfo: RobertifyGuild,
     userHasPermission: boolean,
-    apiMasterPassword?: string
 }
 
 const POSTChanges = async (session: Session | null, guildId: string, guildInfo: RobertifyGuild) => {

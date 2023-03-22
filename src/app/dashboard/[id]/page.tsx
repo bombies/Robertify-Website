@@ -50,8 +50,6 @@ export default async function GuildDashboard({ params }: { params: { id: string 
     if (botGuildInfo.data?.statusCode === 404)
         botGuildInfo = undefined
 
-    const apiMasterPassword = process.env.API_MASTER_PASSWORD;
-
     return (
         <main className='w-full min-h-screen desktop:p-36 p-24 tablet:px-6 phone:px-3'>
             <GuildDashboardContext
@@ -59,7 +57,6 @@ export default async function GuildDashboard({ params }: { params: { id: string 
                 discordGuildInfo={discordGuildInfo?.data}
                 discordGuildChannels={discordGuildChannelInfo?.data}
                 robertifyGuildInfo={botGuildInfo?.data}
-                apiMasterPassword={apiMasterPassword}
                 userHasPermission={userGuilds ? isServerAdmin(userGuilds.filter((guild: DiscordUserGuild) => guild.id === id)[0])  : false}
             />
         </main>
