@@ -6,6 +6,7 @@ import Providers from "@/app/_components/providers";
 import ProgressBar from "@/app/_components/progress-bar";
 import Image from "next/image";
 import glow from "/public/rob-web-glow.png";
+import { Inter } from 'next/font/google'
 
 export const metadata = {
     title: 'Robertify',
@@ -13,6 +14,8 @@ export const metadata = {
 }
 
 type Props = React.PropsWithChildren;
+
+const inter = Inter({ subsets: ['latin'] })
 
 export default function RootLayout(props: Props) {
     return (
@@ -29,7 +32,7 @@ export default function RootLayout(props: Props) {
                     sizes='100vw, 100vh'
                 />
             </div>
-            <div className='!z-[1] relative'>
+            <div className={'!z-[1] relative ' + inter.className}>
                 {/* @ts-expect-error Async Server Component */}
                 <NavbarContainer/>
                 {props.children}
