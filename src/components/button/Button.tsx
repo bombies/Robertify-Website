@@ -22,7 +22,7 @@ const getButtonStyle = (darkMode: boolean, type?: ButtonType): string => {
             return "bg-danger shadow-lg dark:shadow-danger/40 shadow-transparent";
         }
         case ButtonType.INVERTED: {
-            return "bg-white dark:bg-dark text-primary shadow-lg dark:shadow-neutral-800/40 shadow-transparent";
+            return "bg-white dark:bg-dark !text-primary shadow-lg dark:shadow-neutral-800/40 shadow-transparent";
         }
         default: {
             return "bg-primary shadow-lg dark:shadow-primary/40 shadow-transparent"
@@ -67,7 +67,7 @@ export default function Button(props: Props) {
                     />
                 </div>
             }
-            <p className='text-center text-white self-center '>{props.label}</p>
+            <p className={'text-center text-white self-center ' + (props.type === ButtonType.INVERTED || props.type === ButtonType.SECONDARY ? '!text-primary' : '')}>{props.label}</p>
         </div>
     )
 
