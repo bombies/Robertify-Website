@@ -10,7 +10,7 @@ export const authOptions: NextAuthOptions = {
     },
     providers: [
         DiscordProvider({
-            clientId: process.env.DISCORD_CLIENT_ID!,
+            clientId: process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID!,
             clientSecret: process.env.DISCORD_CLIENT_SECRET!,
             authorization: { params: {scope: scopes }},
             profile(profile: DiscordProfile) {
@@ -26,13 +26,16 @@ export const authOptions: NextAuthOptions = {
         }),
     ],
     callbacks: {
-        async jwt({ token, user }) {
+        async jwt({ token, user, account }) {
             if (user) {
                 token = {
                     ...user,
-                    ...token
+                    ...token,
                 };
             }
+
+            if (account?.access_token)
+                token.access_token = account.access_token;
             return token;
         },
         session({ session, token }) {
@@ -42,6 +45,8 @@ export const authOptions: NextAuthOptions = {
                     ...session.user,
                 }
             }
+
+            session.access_token = token.access_token as string;
             return session;
         }
     },
@@ -57,5 +62,6 @@ declare module 'next-auth' {
 
     interface Session extends DefaultSession {
         user?: User;
+        access_token: string;
     }
 }

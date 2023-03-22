@@ -1,12 +1,14 @@
 import axios, {AxiosInstance, CreateAxiosDefaults} from "axios";
-import {Session} from "next-auth";
+import {User} from "next-auth";
+import {signOut} from "next-auth/react";
+import {sign} from "jsonwebtoken";
 
 class WebClient {
     protected readonly instance: AxiosInstance;
     protected static INSTANCE?: WebClient;
     private static SESSION_INSTANCES: Map<string, WebClient> = new Map<string, WebClient>();
 
-    constructor(private readonly session: Session | null, private options?: CreateAxiosDefaults<any>) {
+    constructor(private readonly session: User | undefined, private options?: CreateAxiosDefaults<any>) {
         this.instance = axios.create({
             headers: {
                 Accept: 'application/json',
@@ -16,22 +18,41 @@ class WebClient {
             ...options,
             baseURL: process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME
         });
+
+        this.instance.interceptors.response.use((config) => config, err => {
+            if (err.response?.status === 403 && typeof window !== 'undefined')
+                signOut({
+                    callbackUrl: '/'
+                });
+            else return Promise.reject(err);
+        });
     }
 
-    public static getInstance(session: Session | null, options?: CreateAxiosDefaults<any>) {
+    public static getInstance(session: User | undefined, options?: CreateAxiosDefaults<any>) {
+
         if (!options) {
-            if (!session || !session?.user) {
+            if (!session) {
                 if (this.INSTANCE)
                     return this.INSTANCE.instance;
                 this.INSTANCE = new WebClient(session);
                 return this.INSTANCE.instance;
             } else {
-                if (this.SESSION_INSTANCES.has(session.user.id) && !this.SESSION_INSTANCES.get(session.user.id)?.sessionIsExpired())
-                    return this.SESSION_INSTANCES.get(session.user.id)!.instance;
+                if (this.SESSION_INSTANCES.has(session.id) && !WebClient.SESSION_INSTANCES.get(session.id)?.sessionIsExpired())
+                    return this.SESSION_INSTANCES.get(session.id)!.instance;
+
+                // Browser client
+                if (typeof window !== 'undefined') {
+                    const client = new WebClient(session);
+                    return client.instance;
+                }
+
                 const client = new WebClient(session);
-                this.SESSION_INSTANCES.set(session.user.id, client);
+                this.SESSION_INSTANCES.set(session.id, client);
+
+
+                const encryptedSession = sign(JSON.stringify(session), process.env.NEXTAUTH_SECRET!);
                 client.instance.interceptors.request.use(config => {
-                    config.headers.session = JSON.stringify(session);
+                    config.headers.session = encryptedSession;
                     return config;
                 })
                 return client.instance;
