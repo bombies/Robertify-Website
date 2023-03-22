@@ -3,7 +3,9 @@ import {NextApiRequest, NextApiResponse} from "next";
 import {AxiosError} from "axios";
 import {NextRequest, NextResponse} from "next/server";
 import {NextURL} from "next/dist/server/web/next-url";
-import {Session} from "next-auth";
+import {Session, User} from "next-auth";
+import {JsonWebTokenError, JwtPayload, verify} from "jsonwebtoken";
+import {getToken} from "next-auth/jwt";
 
 export class ResponseBuilder {
     private logicHandler?: (req: NextApiRequest, res: NextApiResponse, apiUtils: ApiUtils) => Promise<void>;
@@ -60,23 +62,45 @@ export default class ApiUtils {
     }
 
     public async isAuthenticated(): Promise<boolean> {
-        const session = this.getSession();
+        const session = await this.getSession();
         return session ? !this.sessionIsExpired(session) : false;
     }
 
-    public getSession(): Session | undefined {
-        if (!this.req.headers.session)
+    public async getSession(): Promise<User | undefined> {
+        if (!this.req.headers.session) {
+            // Check if request is from browser
+            const token = await getToken({ req: this.req });
+            if (token) {
+                const session: User = JSON.parse(JSON.stringify(token));
+                if (this.sessionIsExpired(session))
+                    return undefined;
+                return session;
+            } else return undefined;
+        }
+
+        let decodedPayload: string | JwtPayload;
+
+        try {
+            decodedPayload = verify(this.req.headers.session as string, process.env.NEXTAUTH_SECRET!);
+        } catch (e) {
+            if (e instanceof JsonWebTokenError)
+                return undefined;
+            console.error(e);
             return undefined;
-        const session: Session = JSON.parse(this.req.headers.session as string);
+        }
+
+        if (!decodedPayload)
+            return undefined;
+        const session: User = JSON.parse(JSON.stringify(decodedPayload));
         if (this.sessionIsExpired(session))
             return undefined;
         return session;
     }
 
-    public sessionIsExpired(session: Session): boolean {
-        if (!session?.user)
+    public sessionIsExpired(session?: User): boolean {
+        if (!session)
             return true;
-        const { exp } = session.user;
+        const { exp } = session;
         return Number(exp) - new Date().getSeconds() <= 0;
     }
 

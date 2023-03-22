@@ -13,10 +13,8 @@ class RouteHandler extends MethodHandler {
             .setAuthenticatedRoute()
             .setLogic(async (req, _, apiUtils) => {
                 const session = apiUtils.getSession();
-                if (!session)
-                    return apiUtils.prepareUnauthorizedResponse({ reason: "Invalid session" });
                 const fetchedData = (
-                    await DiscordWebClient.getInstance(session.access_token)
+                    await DiscordWebClient.getInstance(session!.access_token)
                         .get('/users/@me/guilds')
                 )?.data;
                 return this.prepareResponse(StatusCodes.OK, ReasonPhrases.OK, fetchedData);

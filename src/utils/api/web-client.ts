@@ -1,6 +1,7 @@
 import axios, {AxiosInstance, CreateAxiosDefaults} from "axios";
 import {Session} from "next-auth";
 import {signOut} from "next-auth/react";
+import {sign} from "jsonwebtoken";
 
 
 
@@ -21,10 +22,11 @@ class WebClient {
         });
 
         this.instance.interceptors.response.use((config) => config, err => {
-            if (err.response.status === 403)
+            if (err.response?.status === 403 && typeof window !== 'undefined')
                 signOut({
                     callbackUrl: '/'
                 });
+            else return Promise.reject(err);
         });
     }
 
@@ -40,13 +42,22 @@ class WebClient {
                 this.INSTANCE = new WebClient(session);
                 return this.INSTANCE.instance;
             } else {
-                if (this.SESSION_INSTANCES.has(session.user.id) && !this.SESSION_INSTANCES.get(session.user.id)?.sessionIsExpired())
+                if (this.SESSION_INSTANCES.has(session.user.id) && !WebClient.SESSION_INSTANCES.get(session.user.id)?.sessionIsExpired())
                     return this.SESSION_INSTANCES.get(session.user.id)!.instance;
+
+                // Browser client
+                if (typeof window !== 'undefined') {
+                    const client = new WebClient(session);
+                    return client.instance;
+                }
 
                 const client = new WebClient(session);
                 this.SESSION_INSTANCES.set(session.user.id, client);
+
+
+                const encryptedSession = sign(JSON.stringify(session.user), process.env.NEXTAUTH_SECRET!);
                 client.instance.interceptors.request.use(config => {
-                    config.headers.session = JSON.stringify(session);
+                    config.headers.session = encryptedSession;
                     return config;
                 })
                 return client.instance;

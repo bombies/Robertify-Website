@@ -5,7 +5,7 @@ import {
     DiscordGuildChannel, LocaleString,
     RobertifyGuild, ThemeString
 } from "@/utils/discord-types";
-import {redirect, useRouter} from "next/navigation";
+import {useRouter} from "next/navigation";
 import Image from "next/image";
 import backIcon from '/public/go-back.svg';
 import Link from "next/link";
@@ -34,7 +34,7 @@ type Props = {
 }
 
 const POSTChanges = async (session: Session | null, guildId: string, guildInfo: RobertifyGuild) => {
-    return (await (await WebClient.getInstance(session)).post(`/api/bot/guilds/${guildId}`, guildInfo))
+    return (await WebClient.getInstance(session).post(`/api/bot/guilds/${guildId}`, guildInfo))
         ?.data;
 }
 
