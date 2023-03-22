@@ -24,6 +24,7 @@ import Toggle from "@/components/toggle";
 import Card from "@/components/card";
 import {signIn, useSession} from "next-auth/react";
 import {Session} from "next-auth";
+import useSWRMutation from 'swr/mutation';
 
 type Props = {
     id: string,
@@ -33,9 +34,12 @@ type Props = {
     userHasPermission: boolean,
 }
 
-const POSTChanges = async (session: Session | null, guildId: string, guildInfo: RobertifyGuild) => {
-    return (await WebClient.getInstance(session?.user).post(`/api/bot/guilds/${guildId}`, guildInfo))
-        ?.data;
+const POSTChanges = (session: Session | null, guildId: string, guildInfo: RobertifyGuild) => {
+    const mutator = async (url: string) => {
+        await WebClient.getInstance(session?.user).post(url, guildInfo);
+    }
+
+    return useSWRMutation(`/api/bot/guilds/${guildId}`, mutator)
 }
 
 export default function GuildDashboardContext(props: Props) {
@@ -43,7 +47,9 @@ export default function GuildDashboardContext(props: Props) {
     const router = useRouter();
     const [currentData, setCurrentData] = useState(props.robertifyGuildInfo)
     const [changesMade, setChangesMade] = useState(false);
-    const [isTransitioning, startTransition] = useTransition();
+    const [, startTransition] = useTransition();
+    // @ts-ignore
+    const { error: saveError, isMutating: isSaving, trigger: triggerSave } = POSTChanges(session, props.id, currentData);
     const handler = new GuildDashboardHandler(
         currentData,
         props.discordGuildInfo,
@@ -78,17 +84,16 @@ export default function GuildDashboardContext(props: Props) {
         if (!changesMade)
             return;
         startTransition(() => {
-            // @ts-ignore
-            POSTChanges(session, props.id, currentData)
+            triggerSave()
                 .then(() => {
                     currentData.autoplay ??= false;
                     currentData.twenty_four_seven_mode ??=  false;
                     props.robertifyGuildInfo = currentData;
                     setChangesMade(false);
-                })
-                .then(() => router.refresh())
-                .catch(err => {
-                    console.error(err)
+                    router.refresh()
+                }, (e) => {
+                    console.error(e);
+                    setChangesMade(true);
                 });
         });
     }
@@ -110,7 +115,7 @@ export default function GuildDashboardContext(props: Props) {
                 </p>
                 <div className='flex gap-4'>
                     <Button
-                        isWorking={isTransitioning}
+                        isWorking={isSaving}
                         label='Save'
                         icon={saveIcon}
                         className='self-center w-[8rem] h-[3rem] phone:w-[6rem]'
