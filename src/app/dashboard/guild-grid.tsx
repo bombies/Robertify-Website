@@ -7,7 +7,8 @@ import InputContext from "@/components/input-context";
 import GuildCard from "@/app/dashboard/guild-card";
 import Card from "@/components/card";
 import {DiscordUserGuild, isServerAdmin} from "@/utils/discord-types";
-import {useDiscordDataRequired} from "@/app/_components/discord-data-context";
+import {signIn, useSession} from "next-auth/react";
+import {redirect} from "next/navigation";
 
 type Props = {
     guilds?: DiscordUserGuild[],
@@ -46,6 +47,15 @@ const sortGuilds = (guilds: DiscordUserGuild[]) => {
 }
 
 export default function GuildGrid(props: Props) {
+    const { data: discordInfo, status } = useSession();
+
+    useEffect(() => {
+        if (status !== 'loading'  && (status === 'unauthenticated' || !discordInfo))
+            signIn('discord', {
+                callbackUrl: '/'
+            })
+    }, [discordInfo, status])
+
     const guildCards = useMemo(() => {
         return props.guilds ? sortGuilds(props.guilds)?.map(guild => <GuildCard
             key={guild.id}
@@ -62,9 +72,6 @@ export default function GuildGrid(props: Props) {
     useEffect(() => {
         setVisibleGuilds(filterGuilds(guildCards, searchValue));
     }, [searchValue, guildCards])
-
-    if (!useDiscordDataRequired())
-        return (<div></div>)
 
     return (
         <div>

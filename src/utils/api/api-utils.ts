@@ -67,7 +67,10 @@ export default class ApiUtils {
     public getSession(): Session | undefined {
         if (!this.req.headers.session)
             return undefined;
-        return JSON.parse(this.req.headers.session as string)
+        const session: Session = JSON.parse(this.req.headers.session as string);
+        if (this.sessionIsExpired(session))
+            return undefined;
+        return session;
     }
 
     public sessionIsExpired(session: Session): boolean {

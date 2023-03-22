@@ -1,5 +1,6 @@
 import axios, {AxiosInstance, CreateAxiosDefaults} from "axios";
 import {Session} from "next-auth";
+import {signOut} from "next-auth/react";
 
 
 
@@ -18,9 +19,20 @@ class WebClient {
             ...options,
             baseURL: process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME
         });
+
+        this.instance.interceptors.response.use((config) => config, err => {
+            if (err.response.status === 403)
+                signOut({
+                    callbackUrl: '/'
+                });
+        });
     }
 
     public static getInstance(session: Session | null, options?: CreateAxiosDefaults<any>) {
+        if (session && Object.keys(session).includes("data"))
+            // @ts-ignore
+            session = session.data;
+
         if (!options) {
             if (!session || !session?.user) {
                 if (this.INSTANCE)
@@ -30,6 +42,7 @@ class WebClient {
             } else {
                 if (this.SESSION_INSTANCES.has(session.user.id) && !this.SESSION_INSTANCES.get(session.user.id)?.sessionIsExpired())
                     return this.SESSION_INSTANCES.get(session.user.id)!.instance;
+
                 const client = new WebClient(session);
                 this.SESSION_INSTANCES.set(session.user.id, client);
                 client.instance.interceptors.request.use(config => {

@@ -10,7 +10,7 @@ class RouteHandler extends MethodHandler {
 
     protected async GET(): Promise<void> {
         return this.getResponseBuilder()
-            .setAdminRoute()
+            .setAuthenticatedRoute()
             .setLogic(async (req) => {
                 const {id} = req.query;
                 const externWebClient = await ExternalWebClient.getInstance();
@@ -29,7 +29,7 @@ class RouteHandler extends MethodHandler {
 
     protected async POST(): Promise<void> {
         return this.getResponseBuilder()
-            .setAdminRoute()
+            .setAuthenticatedRoute()
             .setLogic(async (req) => {
                 const {id} = req.query;
                 const {body} = req;

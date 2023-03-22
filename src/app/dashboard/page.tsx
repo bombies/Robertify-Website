@@ -2,16 +2,21 @@ import GuildGrid from "@/app/dashboard/guild-grid";
 import WebClient from "@/utils/api/web-client";
 import {cookies} from "next/headers";
 import {AxiosError} from "axios";
+import {getServerSession} from "next-auth";
+import {authOptions} from "@/pages/api/auth/[...nextauth]";
 
-const getUserGuilds = async (token?: string) => {
+const getUserGuilds = async () => {
     try {
-        return (await (await WebClient.getInstance())
-            .get(`/api/discord/users/${token}/guilds`))?.data;
+        const session = await getServerSession(authOptions);
+        if (!session?.user)
+            return []
+        return (await (await WebClient.getInstance(session))
+            .get(`/api/discord/users/${session.user.id}/guilds`))?.data;
     } catch (e: any) {
         if (e instanceof AxiosError) {
             if (e.response?.data.retry_after) {
                 setTimeout(() => {
-                    getUserGuilds(token);
+                    getUserGuilds();
                 }, e.response.data.retry_after)
             } else if (e.response?.status === 404)
                 return Promise.resolve(undefined);
@@ -20,8 +25,7 @@ const getUserGuilds = async (token?: string) => {
 }
 
 export default async function Dashboard() {
-    const token = cookies().get('login-token')?.value;
-    const guilds = (await getUserGuilds(token))?.data;
+    const guilds = (await getUserGuilds())?.data;
 
     return (
         <main className='p-12 phone:px-6 min-h-screen'>

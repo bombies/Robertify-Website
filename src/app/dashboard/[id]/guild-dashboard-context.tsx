@@ -5,14 +5,13 @@ import {
     DiscordGuildChannel, LocaleString,
     RobertifyGuild, ThemeString
 } from "@/utils/discord-types";
-import {useRouter} from "next/navigation";
+import {redirect, useRouter} from "next/navigation";
 import Image from "next/image";
 import backIcon from '/public/go-back.svg';
 import Link from "next/link";
 import DashboardSection from "@/app/dashboard/[id]/dashboard-section";
 import DashboardSectionContent from "@/app/dashboard/[id]/dashboard-section-content";
 import SelectMenu from "@/components/select-menu/SelectMenu";
-import {useDiscordDataRequired} from "@/app/_components/discord-data-context";
 import {useEffect, useState, useTransition} from "react";
 import {compare} from "@/utils/general-utils";
 import Button from "@/components/button/Button";
@@ -23,6 +22,8 @@ import saveIcon from '/public/save.svg';
 import discardIcon from '/public/discard.svg';
 import Toggle from "@/components/toggle";
 import Card from "@/components/card";
+import {signIn, useSession} from "next-auth/react";
+import {Session} from "next-auth";
 
 type Props = {
     id: string,
@@ -33,14 +34,13 @@ type Props = {
     apiMasterPassword?: string
 }
 
-const POSTChanges = async (apiMasterPassword: string | undefined, guildId: string, guildInfo: RobertifyGuild) => {
-    if (!apiMasterPassword)
-        throw new Error("The API master password is undefined!");
-    return (await (await WebClient.getInstance(apiMasterPassword)).post(`/api/bot/guilds/${guildId}`, guildInfo))
+const POSTChanges = async (session: Session | null, guildId: string, guildInfo: RobertifyGuild) => {
+    return (await (await WebClient.getInstance(session)).post(`/api/bot/guilds/${guildId}`, guildInfo))
         ?.data;
 }
 
 export default function GuildDashboardContext(props: Props) {
+    const session = useSession();
     const router = useRouter();
     const [currentData, setCurrentData] = useState(props.robertifyGuildInfo)
     const [changesMade, setChangesMade] = useState(false);
@@ -53,6 +53,14 @@ export default function GuildDashboardContext(props: Props) {
     );
 
     useEffect(() => {
+        if (session.status !== 'loading'  && (session.status === 'unauthenticated' || !session.data))
+            signIn('discord', {
+                callbackUrl: '/'
+            });
+    }, [session])
+
+
+    useEffect(() => {
         if (!props.discordGuildInfo || !props.robertifyGuildInfo || !props.discordGuildChannels)
             return router.push(`https://discord.com/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&permissions=269479308656&scope=bot%20applications.commands&redirect_uri=${encodeURI(`${process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot%20applications.commands&guild_id=${props.id}&disable_guild_select=true`);
     }, [!props.discordGuildInfo, !props.robertifyGuildInfo, !props.discordGuildChannels])
@@ -61,9 +69,6 @@ export default function GuildDashboardContext(props: Props) {
         const b = compareData(currentData, props.robertifyGuildInfo);
         setChangesMade(b)
     }, [currentData, props.robertifyGuildInfo]);
-
-    if (!useDiscordDataRequired())
-        return (<div></div>);
 
     if (!props.discordGuildInfo || !props.robertifyGuildInfo || !props.discordGuildChannels)
         return (<div></div>);
@@ -74,7 +79,8 @@ export default function GuildDashboardContext(props: Props) {
         if (!changesMade)
             return;
         startTransition(() => {
-            POSTChanges(props.apiMasterPassword, props.id, currentData)
+            // @ts-ignore
+            POSTChanges(session, props.id, currentData)
                 .then(() => {
                     currentData.autoplay ??= false;
                     currentData.twenty_four_seven_mode ??=  false;

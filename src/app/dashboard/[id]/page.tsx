@@ -1,32 +1,35 @@
 import WebClient from "@/utils/api/web-client";
 import GuildDashboardContext from "@/app/dashboard/[id]/guild-dashboard-context";
 import {AxiosError} from "axios";
-import {cookies} from "next/headers";
 import {DiscordUserGuild, isServerAdmin} from "@/utils/discord-types";
+import {getServerSession, Session} from "next-auth";
+import {authOptions} from "@/pages/api/auth/[...nextauth]";
 
-const getDiscordGuildInfo = async (id: string) => {
-    return (await (await WebClient.getInstance())
+const getDiscordGuildInfo = async (id: string, session: Session | null) => {
+    return (await (await WebClient.getInstance(session))
         .get(`/api/discord/guilds/${id}`))?.data
 }
 
-const getDiscordGuildChannels = async (id: string) => {
-    return (await (await WebClient.getInstance())
+const getDiscordGuildChannels = async (id: string, session: Session | null) => {
+    return (await (await WebClient.getInstance(session))
         .get(`/api/discord/guilds/${id}/channels`))?.data
 }
 
-const getBotGuildInfo = async (id: string) => {
-    return (await (await WebClient.getInstance())
+const getBotGuildInfo = async (id: string, session: Session | null) => {
+    return (await (await WebClient.getInstance(session))
         .get(`/api/bot/guilds/${id}`))?.data
 }
 
-const getUserGuilds = async (token?: string) => {
+const getUserGuilds = async (session: Session | null) => {
     try {
-        return (await (await WebClient.getInstance())
-            .get(`/api/discord/users/${token}/guilds`))?.data;
+        if (!session?.user)
+            return [];
+        return (await (await WebClient.getInstance(session))
+            .get(`/api/discord/users/${session.user}/guilds`))?.data;
     } catch (e: any) {
         if (e instanceof AxiosError && e.response?.data.retry_after) {
             setTimeout(() => {
-                getUserGuilds(token);
+                getUserGuilds(session);
             }, e.response.data.retry_after)
         } else throw e;
     }
@@ -34,11 +37,11 @@ const getUserGuilds = async (token?: string) => {
 
 export default async function GuildDashboard({ params }: { params: { id: string }}) {
     const { id } = params;
-    let discordGuildInfo = await getDiscordGuildInfo(id);
-    let discordGuildChannelInfo = await getDiscordGuildChannels(id);
-    let botGuildInfo = await getBotGuildInfo(id);
-    const token = cookies().get('login-token')?.value;
-    const userGuilds = (await getUserGuilds(token))?.data;
+    const serverSession = await getServerSession(authOptions);
+    let discordGuildInfo = await getDiscordGuildInfo(id, serverSession);
+    let discordGuildChannelInfo = await getDiscordGuildChannels(id, serverSession);
+    let botGuildInfo = await getBotGuildInfo(id, serverSession);
+    const userGuilds = (await getUserGuilds(serverSession))?.data;
 
     if (discordGuildInfo.data?.code === 10004)
         discordGuildInfo = undefined;
