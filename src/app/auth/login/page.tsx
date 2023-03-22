@@ -1,12 +1,16 @@
 'use client';
 
 import {signIn, useSession} from "next-auth/react";
-import {redirect} from "next/navigation";
+import {redirect, useSearchParams} from "next/navigation";
+import {NextPageContext} from "next";
 
-export default async function LoginPage() {
+export default function LoginPage() {
     const session = useSession();
+    const searchParams =  useSearchParams();
 
-    if (session.status === 'authenticated')
+    console.log('params', searchParams?.get("error"))
+
+    if (session.status === 'authenticated' || searchParams?.get("error") === 'Callback')
         redirect('/');
 
     signIn('discord', {
@@ -14,7 +18,6 @@ export default async function LoginPage() {
     });
 
     return (
-        <main></main>
+        <main>{searchParams?.get("error")}</main>
     )
 }
-
