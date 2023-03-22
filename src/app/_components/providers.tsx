@@ -1,7 +1,6 @@
 'use client';
 
 import React from "react";
-import {DiscordDataProvider} from "@/app/_components/discord-data-context";
 import {DarkModeProvider} from "@/app/_components/dark-mode-context";
 import ReduxProvider from "@/app/_components/redux-provider";
 import {useServerInsertedHTML} from "next/navigation";
@@ -37,9 +36,7 @@ export default function Providers({children, session}: Props) {
                     <NextUIProvider>
                         <DarkModeProvider>
                             <SessionProvider session={session}>
-                                <DiscordDataProvider initialDiscordData={undefined}>
-                                    {children}
-                                </DiscordDataProvider>
+                                {children}
                             </SessionProvider>
                         </DarkModeProvider>
                     </NextUIProvider>
