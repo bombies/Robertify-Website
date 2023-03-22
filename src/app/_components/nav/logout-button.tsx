@@ -13,7 +13,9 @@ export default function LogoutButton() {
                 width={6}
                 height={2.5}
                 className='text-center pointer-events-auto'
-                onClick={() => signOut()}
+                onClick={() => signOut({
+                    callbackUrl: '/'
+                })}
                 label='Logout'
                 icon={logoutIcon}
                 type={ButtonType.DANGER}
