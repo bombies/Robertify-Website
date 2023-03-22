@@ -23,12 +23,8 @@ class RouteHandler extends MethodHandler {
             })
             .execute();
     }
-
-    protected async PATCH(): Promise<void> {
-        return super.PATCH();
-    }
 }
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-    return new RouteHandler(req, res).handle([HTTPMethod.GET, HTTPMethod.PATCH])
+    return new RouteHandler(req, res).handle([HTTPMethod.GET])
 }
