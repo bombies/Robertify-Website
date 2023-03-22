@@ -12,7 +12,7 @@ class RouteHandler extends MethodHandler {
         return this.getResponseBuilder()
             .setAuthenticatedRoute()
             .setLogic(async (req, _, apiUtils) => {
-                const session = apiUtils.getSession();
+                const session = await apiUtils.getSession();
                 const fetchedData = (
                     await DiscordWebClient.getInstance(session!.access_token)
                         .get('/users/@me/guilds')
