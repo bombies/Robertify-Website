@@ -16,6 +16,11 @@ export default function Error({
     return (
         <div>
             Something went terribly wrong....
+            <code>
+                {error.name}
+                {error.message}
+                {error.stack}
+            </code>
         </div>
     )
 }
