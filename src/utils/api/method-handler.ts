@@ -1,7 +1,6 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import ApiUtils, {AppApiUtils, ResponseBuilder} from "@/utils/api/api-utils";
+import ApiUtils, {ResponseBuilder} from "@/utils/api/api-utils";
 import {StatusCodes} from "http-status-codes";
-import {NextRequest, NextResponse} from "next/server";
 
 export enum HTTPMethod {
     GET = "GET",
