@@ -6,6 +6,7 @@ import ProgressBar from "@/app/_components/progress-bar";
 import Image from "next/image";
 import glow from "/public/rob-web-glow.png";
 import NavBar from "@/app/_components/nav/navbar";
+import { Inter } from 'next/font/google';
 
 export const metadata = {
     title: 'Robertify',
@@ -15,6 +16,8 @@ export const metadata = {
 interface Props extends React.PropsWithChildren {
     session: any
 }
+
+const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout(props: Props) {
     return (
@@ -31,7 +34,7 @@ export default function RootLayout(props: Props) {
                     sizes='100vw, 100vh'
                 />
             </div>
-            <div className='!z-[1] relative'>
+            <div className={'!z-[1] relative ' + inter.className}>
                 <NavBar />
                 {props.children}
                 <Footer/>
