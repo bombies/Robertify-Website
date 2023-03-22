@@ -3,16 +3,19 @@ import {NextApiRequest, NextApiResponse} from "next";
 import {AxiosError} from "axios";
 import {NextRequest, NextResponse} from "next/server";
 import {NextURL} from "next/dist/server/web/next-url";
-import {Session} from "next-auth";
+import {Session, User} from "next-auth";
+import {JsonWebTokenError, JwtPayload, verify} from "jsonwebtoken";
+import {getToken} from "next-auth/jwt";
 
 export class ResponseBuilder {
     private logicHandler?: (req: NextApiRequest, res: NextApiResponse, apiUtils: ApiUtils) => Promise<void>;
     private authenticatedRoute: boolean
-    private predicate: {predicateFunc: () => boolean, failOptions?: { message: string, status: number }};
+    private predicate: {predicateFunc: (req: NextApiRequest, apiUtils: ApiUtils) => Promise<boolean>, failOptions?: { message: string, status: number }};
     private readonly apiUtils: ApiUtils;
+
     constructor(private readonly req: NextApiRequest, private readonly res: NextApiResponse) {
         this.authenticatedRoute = false;
-        this.predicate = {predicateFunc: () => true}
+        this.predicate = {predicateFunc: () => Promise.resolve(true)}
         this.apiUtils = new ApiUtils(req, res);
     }
 
@@ -21,8 +24,9 @@ export class ResponseBuilder {
         return this;
     }
 
-    public setPredicate(predicate: () => boolean, failOptions?: { message: string, status: number }) {
+    public setPredicate(predicate: (req: NextApiRequest, apiUtils: ApiUtils) => Promise<boolean>, failOptions?: { message: string, status: number }) {
         this.predicate = { predicateFunc: predicate, failOptions };
+        return this;
     }
 
     public setLogic(logicCallback: (req: NextApiRequest, res: NextApiResponse, apiUtils: ApiUtils) => Promise<void>) {
@@ -30,47 +34,83 @@ export class ResponseBuilder {
         return this;
     }
 
-    public async execute() {
+    public async execute(): Promise<void> {
         if (!this.logicHandler)
             throw new Error('The logic error for this Response is undefined!');
         try {
             if (this.authenticatedRoute && !(await this.apiUtils.isAuthenticated()))
                 return this.apiUtils.prepareUnauthorizedResponse({ reason: 'You are not authenticated.' });
-            if (!this.predicate.predicateFunc())
+            if (!await this.predicate.predicateFunc(this.req, this.apiUtils))
                 return this.apiUtils.prepareResponse(this.predicate.failOptions?.status || StatusCodes.BAD_REQUEST, this.predicate.failOptions?.message || 'Predicate check failed!');
             return await this.logicHandler(this.req, this.res, this.apiUtils);
         } catch (ex) {
-            if (ex instanceof AxiosError)
-                return this.apiUtils.prepareResponse(ex.status ?? StatusCodes.BAD_REQUEST, ex.message ?? 'Something went wrong!', ex.response?.data)
-            console.error(ex);
-            return this.apiUtils.prepareResponse(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR);
+            if (ex instanceof AxiosError) {
+                if (ex.response?.data.retry_after) {
+                    setTimeout(async () => {
+                        return await this.execute();
+                    }, ex.response?.data.retry_after * 1000)
+                } else return this.apiUtils.prepareResponse(ex.response?.status ?? StatusCodes.BAD_REQUEST, ex.message ?? 'Something went wrong!', ex.response?.data)
+            } else {
+                console.error(ex);
+                return this.apiUtils.prepareResponse(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 }
 
 export default class ApiUtils {
-    constructor(private readonly req: NextApiRequest, private readonly res: NextApiResponse) {}
+    constructor(private readonly req: NextApiRequest, private readonly res: NextApiResponse) {
+    }
 
     public async isAuthenticated(): Promise<boolean> {
-        const session = this.getSession();
+        const session = await this.getSession();
         return session ? !this.sessionIsExpired(session) : false;
     }
 
-    public getSession(): Session | undefined {
-        if (!this.req.headers.session)
+    public async getSession(): Promise<User | undefined> {
+        if (!this.req.headers.session) {
+            // Check if request is from browser
+            const token = await getToken({ req: this.req });
+            if (token) {
+                const session: User = JSON.parse(JSON.stringify(token));
+                if (this.sessionIsExpired(session))
+                    return undefined;
+                return session;
+            } else return undefined;
+        }
+
+        let decodedPayload: string | JwtPayload;
+
+        try {
+            decodedPayload = verify(this.req.headers.session as string, process.env.NEXTAUTH_SECRET!);
+        } catch (e) {
+            if (e instanceof JsonWebTokenError)
+                return undefined;
+            console.error(e);
             return undefined;
-        return JSON.parse(this.req.headers.session as string)
+        }
+
+        if (!decodedPayload)
+            return undefined;
+        const session: User = JSON.parse(JSON.stringify(decodedPayload));
+        if (this.sessionIsExpired(session))
+            return undefined;
+        return session;
     }
 
-    public sessionIsExpired(session: Session): boolean {
-        if (!session?.user)
+    public sessionIsExpired(session?: User): boolean {
+        if (!session)
             return true;
-        const { exp } = session.user;
+        const { exp } = session;
         return Number(exp) - new Date().getSeconds() <= 0;
     }
 
     public prepareResponse(status: StatusCodes, message?: string, data?: any) {
-        return this.res.status(status).json({data: data, status: status, message: message || 'There was no message provided.'});
+        return this.res.status(status).json({
+            data: data,
+            status: status,
+            message: message || 'There was no message provided.'
+        });
     }
 
     public prepareUnauthorizedResponse(data?: any) {
@@ -78,7 +118,7 @@ export default class ApiUtils {
     }
 
     public static invalidMethod(res: NextApiResponse) {
-        return res.json({ data: {}, status: StatusCodes.BAD_REQUEST, message: 'Invalid HTTP method!' });
+        return res.json({data: {}, status: StatusCodes.BAD_REQUEST, message: 'Invalid HTTP method!'});
     }
 }
 
@@ -114,17 +154,4 @@ export class AppApiUtils {
     public static invalidMethod(res: NextApiResponse) {
         return res.json({ data: {}, status: StatusCodes.BAD_REQUEST, message: 'Invalid HTTP method!' });
     }
-}
-
-type ParamSearchObject = {
-    searchParams: URLSearchParams,
-    paramName: string,
-    limit?: number,
-    defaultResult?: string
-}
-
-export const getParamFromSearch = (options: ParamSearchObject): string => {
-    const { searchParams, paramName, limit, defaultResult } = options;
-    const result = searchParams.get(paramName);
-    return result?.slice(0, limit ?? result?.length) ?? (defaultResult ?? '');
 }
