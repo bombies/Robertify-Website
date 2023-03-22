@@ -6,17 +6,17 @@ import {getServerSession, Session} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 
 const getDiscordGuildInfo = async (id: string, session: Session | null) => {
-    return (await WebClient.getInstance(session)
+    return (await WebClient.getInstance(session?.user)
         .get(`/api/discord/guilds/${id}`))?.data
 }
 
 const getDiscordGuildChannels = async (id: string, session: Session | null) => {
-    return (await WebClient.getInstance(session)
+    return (await WebClient.getInstance(session?.user)
         .get(`/api/discord/guilds/${id}/channels`))?.data
 }
 
 const getBotGuildInfo = async (id: string, session: Session | null) => {
-    return (await WebClient.getInstance(session)
+    return (await WebClient.getInstance(session?.user)
         .get(`/api/bot/guilds/${id}`))?.data
 }
 
@@ -24,7 +24,7 @@ const getUserGuilds = async (session: Session | null) => {
     try {
         if (!session?.user)
             return [];
-        return (await WebClient.getInstance(session)
+        return (await WebClient.getInstance(session?.user)
             .get(`/api/discord/user/guilds`)).data;
     } catch (e: any) {
         if (e instanceof AxiosError && e.response?.data.retry_after) {

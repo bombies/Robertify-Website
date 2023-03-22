@@ -10,12 +10,12 @@ import {getToken} from "next-auth/jwt";
 export class ResponseBuilder {
     private logicHandler?: (req: NextApiRequest, res: NextApiResponse, apiUtils: ApiUtils) => Promise<void>;
     private authenticatedRoute: boolean
-    private predicate: {predicateFunc: () => boolean, failOptions?: { message: string, status: number }};
+    private predicate: {predicateFunc: (req: NextApiRequest, apiUtils: ApiUtils) => Promise<boolean>, failOptions?: { message: string, status: number }};
     private readonly apiUtils: ApiUtils;
 
     constructor(private readonly req: NextApiRequest, private readonly res: NextApiResponse) {
         this.authenticatedRoute = false;
-        this.predicate = {predicateFunc: () => true}
+        this.predicate = {predicateFunc: () => Promise.resolve(true)}
         this.apiUtils = new ApiUtils(req, res);
     }
 
@@ -24,8 +24,9 @@ export class ResponseBuilder {
         return this;
     }
 
-    public setPredicate(predicate: () => boolean, failOptions?: { message: string, status: number }) {
+    public setPredicate(predicate: (req: NextApiRequest, apiUtils: ApiUtils) => Promise<boolean>, failOptions?: { message: string, status: number }) {
         this.predicate = { predicateFunc: predicate, failOptions };
+        return this;
     }
 
     public setLogic(logicCallback: (req: NextApiRequest, res: NextApiResponse, apiUtils: ApiUtils) => Promise<void>) {
@@ -39,7 +40,7 @@ export class ResponseBuilder {
         try {
             if (this.authenticatedRoute && !(await this.apiUtils.isAuthenticated()))
                 return this.apiUtils.prepareUnauthorizedResponse({ reason: 'You are not authenticated.' });
-            if (!this.predicate.predicateFunc())
+            if (!await this.predicate.predicateFunc(this.req, this.apiUtils))
                 return this.apiUtils.prepareResponse(this.predicate.failOptions?.status || StatusCodes.BAD_REQUEST, this.predicate.failOptions?.message || 'Predicate check failed!');
             return await this.logicHandler(this.req, this.res, this.apiUtils);
         } catch (ex) {

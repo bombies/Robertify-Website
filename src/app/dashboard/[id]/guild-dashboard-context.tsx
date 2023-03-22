@@ -34,7 +34,7 @@ type Props = {
 }
 
 const POSTChanges = async (session: Session | null, guildId: string, guildInfo: RobertifyGuild) => {
-    return (await WebClient.getInstance(session).post(`/api/bot/guilds/${guildId}`, guildInfo))
+    return (await WebClient.getInstance(session?.user).post(`/api/bot/guilds/${guildId}`, guildInfo))
         ?.data;
 }
 

@@ -1,7 +1,10 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {HTTPMethod, MethodHandler} from "@/utils/api/method-handler";
-import {ExternalWebClient} from "@/utils/api/web-client";
+import WebClient, {ExternalWebClient} from "@/utils/api/web-client";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
+import {Session, User} from "next-auth";
+import {AxiosError} from "axios";
+import {DiscordUserGuild, isServerAdmin} from "@/utils/discord-types";
 
 class RouteHandler extends MethodHandler {
     constructor(req: NextApiRequest, res: NextApiResponse) {
@@ -30,6 +33,32 @@ class RouteHandler extends MethodHandler {
     protected async POST(): Promise<void> {
         return this.getResponseBuilder()
             .setAuthenticatedRoute()
+            .setPredicate(async (req, utils) => {
+                const getUserGuilds = async (session: User | null) => {
+                    try {
+                        if (!session)
+                            return [];
+                        return (await WebClient.getInstance(session)
+                            .get(`/api/discord/user/guilds`)).data;
+                    } catch (e: any) {
+                        if (e instanceof AxiosError && e.response?.data.retry_after) {
+                            setTimeout(() => {
+                                getUserGuilds(session);
+                            }, e.response.data.retry_after)
+                        } else throw e;
+                    }
+                }
+
+                const { body } = req;
+                if (!body.server_id)
+                    return false;
+
+                const session = await utils.getSession()
+                if (!session)
+                    return false;
+                const userGuilds = (await getUserGuilds(session))?.data;
+                return userGuilds ? isServerAdmin(userGuilds.filter((guild: DiscordUserGuild) => guild.id === body.server_id)[0])  : false;
+            }, { status: StatusCodes.FORBIDDEN, message: 'You do not have permission to do this!'})
             .setLogic(async (req) => {
                 const {id} = req.query;
                 const {body} = req;

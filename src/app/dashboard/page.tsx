@@ -10,7 +10,7 @@ const getUserGuilds = async () => {
         const session = await getServerSession(authOptions);
         if (!session?.user)
             return []
-        return (await WebClient.getInstance(session)
+        return (await WebClient.getInstance(session?.user)
             .get(`/api/discord/user/guilds`)).data
     } catch (e: any) {
         if (e instanceof AxiosError) {
