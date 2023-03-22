@@ -1,5 +1,5 @@
-import {getParamFromSearch} from "@/utils/api/api-utils";
 import {ImageResponse} from "@vercel/og";
+import {getParamFromSearch} from "@/app/api/images/music/nowplaying/route";
 
 export const config = {
     runtime: 'edge',
