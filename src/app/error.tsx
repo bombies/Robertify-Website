@@ -15,11 +15,11 @@ export default function Error({
 
     return (
         <div>
-            Something went terribly wrong....
+            <p>
+                Something went terribly wrong....
+            </p>
             <code>
-                {error.name}
                 {error.message}
-                {error.stack}
             </code>
         </div>
     )
