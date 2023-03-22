@@ -34,7 +34,7 @@ export default function RootLayout(props: Props) {
                     sizes='100vw, 100vh'
                 />
             </div>
-            <div className={'!z-[1] relative ' + inter.className}>
+            <div className={'!z-[1] relative tracking-wider ' + inter.className}>
                 <NavBar/>
                 {props.children}
                 <Footer/>
