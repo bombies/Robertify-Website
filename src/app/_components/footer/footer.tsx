@@ -1,22 +1,16 @@
 import FooterGroup from "@/app/_components/footer/footer-group";
-import Link from "next/link";
 import HyperLink from "@/components/hyperlink";
-import Image from "next/image";
+import GenericImage from "@/app/_components/GenericImage";
 
 export default function Footer() {
     return (
         <div className='bg-neutral-200 dark:bg-dark/50 p-24 tablet:p-16 phone:p-3 flex phone:flex-col justify-between gap-4'>
             <div>
-                <div className='relative w-16 h-16 mb-6 phone:mb-2'>
-                    <Image
-                        draggable={false}
-                        src='https://i.imgur.com/fwG8qA5.png'
-                        alt=''
-                        fill={true}
-                        className='dark:drop-shadow-glow-primary-lg'
-                        sizes='4rem'
-                    />
-                </div>
+                <GenericImage
+                    className='mb-6 phone:mb-2'
+                    src='https://i.imgur.com/fwG8qA5.png'
+                    width={4}
+                />
                 <p className='text-neutral-400 dark:text-neutral-500 max-w-xs phone:max-w-3/4 font-light text-sm phone:text-[.75rem]'>A discord music bot that with a multitude of features that will fit your liking.</p>
             </div>
             <div className='flex gap-16 phone:gap-4 phone:justify-center'>

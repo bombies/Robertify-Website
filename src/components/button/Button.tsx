@@ -6,6 +6,7 @@ import Spinner from "@/components/Spinner";
 import {useDarkMode} from "@/app/_components/dark-mode-context";
 import {ButtonType} from "@/components/button/ButtonType";
 import Image, {StaticImageData} from "next/image";
+import GenericImage from "@/app/_components/GenericImage";
 
 const getButtonStyle = (darkMode: boolean, type?: ButtonType): string => {
     switch (type) {
@@ -46,15 +47,11 @@ export default function Button(props: Props) {
     const children = (
         <div className={'flex gap-[.25rem] justify-center'}>
             {props.icon &&
-                <div className='relative w-5 h-5 self-center'>
-                    <Image
-                        draggable={false}
-                        src={props.icon}
-                        alt=''
-                        fill={true}
-                        sizes='1.25rem'
-                    />
-                </div>
+                <GenericImage
+                    className='self-center'
+                    src={props.icon}
+                    width={1.25}
+                />
             }
             <p className='text-center'>{props.label}</p>
         </div>

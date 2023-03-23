@@ -2,10 +2,11 @@
 
 import Image, {StaticImageData} from "next/image";
 import {useVisible} from "@/utils/client-utils";
-import {useRef} from "react";
+import {CSSProperties, useRef} from "react";
 
 type Props = {
     className?: string
+    imageClassName?: string
     src: string | StaticImageData,
     alt?: string,
     width?: number,
@@ -13,6 +14,7 @@ type Props = {
     priority?: boolean,
     fade?: boolean,
     draggable?: boolean,
+    style?: CSSProperties,
 }
 
 export default function GenericImage(props: Props) {
@@ -29,11 +31,13 @@ export default function GenericImage(props: Props) {
             }}
         >
             <Image
+                className={props.imageClassName}
                 priority={props.priority !== undefined}
                 draggable={props.draggable !== undefined}
                 src={props.src}
                 alt={props.alt ?? ''}
                 fill={true}
+                style={props.style}
             />
         </div>
     )

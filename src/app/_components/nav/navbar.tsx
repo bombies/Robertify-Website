@@ -8,6 +8,7 @@ import DarkModeSwitcher from "@/app/_components/nav/dark-mode-switcher";
 import HyperLink from "@/components/hyperlink";
 import {useSession} from "next-auth/react";
 import LoginButton from "@/app/_components/nav/login-button";
+import GenericImage from "@/app/_components/GenericImage";
 
 export default function NavBar() {
     const [isOpen, setOpen] = useState(false);
@@ -49,15 +50,12 @@ export default function NavBar() {
                     ref={mobileNavRef}
                     className={`flex tablet:flex-col dark:bg-dark/50 backdrop-blur-lg w-full h-20 tablet:h-fit tablet:absolute bg-neutral-100 p-6 transition-fast ${isOpen ? 'tablet:visible' : 'tablet:invisible tablet:opacity-0'}`}>
                     <Link href='/' className={'flex gap-4 justify-center cursor-pointer hover:scale-105 transition-fast'}>
-                        <div className='relative w-16 h-16 self-center'>
-                            <Image
-                                draggable={false}
-                                src='https://i.imgur.com/fwG8qA5.png'
-                                alt='Robertify Logo'
-                                fill={true}
-                                sizes='4rem'
-                            />
-                        </div>
+                        <GenericImage
+                            className='self-center'
+                            src='https://i.imgur.com/fwG8qA5.png'
+                            alt='Robertify Logo'
+                            width={4}
+                        />
                         <h1 className='uppercase font-black text-3xl self-center tracking-widest text-primary my-auto'>Robertify</h1>
                     </Link>
                     <div
