@@ -17,8 +17,10 @@ interface Props extends React.PropsWithChildren {
     session: any
 }
 
-
-const inter = Inter({subsets: ['latin']});
+const inter = Inter({
+    weight:['300','400','500','600','700','900'],
+    subsets: ['latin']
+})
 
 export default function RootLayout(props: Props) {
     return (
