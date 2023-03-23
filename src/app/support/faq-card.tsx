@@ -24,7 +24,7 @@ export default function FAQCard(props: Props) {
         <div>
             <Card
                 onClick={() => setExpanded(true)}
-                className='!w-full pointer-cursor'
+                className='!w-full pointer-cursor h-full'
                 hoverable
                 title={props.title}
                 size='xs'
