@@ -1,12 +1,7 @@
 'use client';
 
-import {
-    DiscordGuild,
-    DiscordGuildChannel, LocaleString,
-    RobertifyGuild, ThemeString
-} from "@/utils/discord-types";
+import {DiscordGuild, DiscordGuildChannel, LocaleString, RobertifyGuild, ThemeString} from "@/utils/discord-types";
 import {useRouter} from "next/navigation";
-import Image from "next/image";
 import backIcon from '/public/go-back.svg';
 import Link from "next/link";
 import DashboardSection from "@/app/dashboard/[id]/dashboard-section";
@@ -16,7 +11,7 @@ import {useEffect, useState, useTransition} from "react";
 import {compare} from "@/utils/general-utils";
 import Button from "@/components/button/Button";
 import {ButtonType} from "@/components/button/ButtonType";
-import WebClient from "@/utils/api/web-client";
+import WebClient, {ExternalWebClient} from "@/utils/api/web-client";
 import GuildDashboardHandler from "@/app/dashboard/[id]/guild-dashboard-handler";
 import saveIcon from '/public/save.svg';
 import discardIcon from '/public/discard.svg';
@@ -43,6 +38,18 @@ const POSTChanges = (session: Session | null, guildId: string, guildInfo: Robert
     return useSWRMutation(`/api/bot/guilds/${guildId}`, mutator)
 }
 
+const CreateReqChannel = (session: Session | null, id: string) => {
+    const mutator = async (url: string) => {
+        return await WebClient.getInstance(session?.user).post(url);
+    }
+
+    return useSWRMutation(`/api/bot/guilds/${id}/reqchannel`, mutator);
+}
+
+const hasReqChannel = (currentData: RobertifyGuild) => {
+    return currentData.dedicated_channel.channel_id !== '-1' && currentData.dedicated_channel.channel_id;
+}
+
 export default function GuildDashboardContext(props: Props) {
     const session = useSession();
     const router = useRouter();
@@ -50,7 +57,13 @@ export default function GuildDashboardContext(props: Props) {
     const [changesMade, setChangesMade] = useState(false);
     const [, startTransition] = useTransition();
     // @ts-ignore
-    const { error: saveError, isMutating: isSaving, trigger: triggerSave } = POSTChanges(session, props.id, currentData);
+    const {error: saveError, isMutating: isSaving, trigger: triggerSave} = POSTChanges(session, props.id, currentData);
+    const {
+        error: reqChannelCreationError,
+        isMutating: isCreatingReqChannel,
+        trigger: triggerReqChannelCreation
+        // @ts-ignore
+    } = CreateReqChannel(session, props.robertifyGuildInfo.server_id);
     const handler = new GuildDashboardHandler(
         currentData,
         props.discordGuildInfo,
@@ -59,7 +72,7 @@ export default function GuildDashboardContext(props: Props) {
     );
 
     useEffect(() => {
-        if (session.status !== 'loading'  && (session.status === 'unauthenticated' || !session.data))
+        if (session.status !== 'loading' && (session.status === 'unauthenticated' || !session.data))
             signIn('discord', {
                 callbackUrl: '/'
             });
@@ -73,22 +86,59 @@ export default function GuildDashboardContext(props: Props) {
 
     useEffect(() => {
         const b = compareData(currentData, props.robertifyGuildInfo);
-        setChangesMade(b)
+        setChangesMade(b);
     }, [currentData, props.robertifyGuildInfo]);
 
     if (!props.discordGuildInfo || !props.robertifyGuildInfo || !props.discordGuildChannels)
         return (<div></div>);
+
+    const createReqChannel = () => {
+        if (!props.userHasPermission)
+            return;
+        if (hasReqChannel(currentData))
+            return;
+        if (isCreatingReqChannel)
+            return;
+        startTransition(() => {
+            triggerReqChannelCreation()
+                .then((data) => {
+                    if (data) {
+                        const dataParsed = data.data.data;
+                        const configParsed = JSON.parse(dataParsed.config);
+
+                        setCurrentData(prevState => {
+                            const ret = ({
+                                ...prevState,
+                                dedicated_channel: {
+                                    ...prevState.dedicated_channel,
+                                    ...dataParsed,
+                                    config: configParsed
+                                },
+                            });
+
+                            props.robertifyGuildInfo = ret;
+                            return ret;
+                        });
+                        router.refresh();
+                    }
+                }, e => {
+                    console.error(reqChannelCreationError);
+                });
+        })
+    }
 
     const saveChanges = () => {
         if (!props.userHasPermission)
             return;
         if (!changesMade)
             return;
+        if (isSaving)
+            return;
         startTransition(() => {
             triggerSave()
                 .then(() => {
                     currentData.autoplay ??= false;
-                    currentData.twenty_four_seven_mode ??=  false;
+                    currentData.twenty_four_seven_mode ??= false;
                     props.robertifyGuildInfo = currentData;
                     setChangesMade(false);
                     router.refresh()
@@ -121,7 +171,7 @@ export default function GuildDashboardContext(props: Props) {
                         icon={saveIcon}
                         className='self-center w-[8rem] h-[3rem] phone:w-[6rem]'
                         onClick={saveChanges}
-                        disabled={!props.userHasPermission}
+                        disabled={!props.userHasPermission || isSaving}
                     />
                     <Button
                         label='Discard'
@@ -129,7 +179,7 @@ export default function GuildDashboardContext(props: Props) {
                         icon={discardIcon}
                         className='self-center w-[8rem] h-[3rem] phone:w-[6rem]'
                         onClick={discardChanges}
-                        disabled={!props.userHasPermission}
+                        disabled={!props.userHasPermission || isSaving}
                     />
                 </div>
             </div>
@@ -137,7 +187,7 @@ export default function GuildDashboardContext(props: Props) {
                 className='mx-auto mb-12 tablet:p-6 p-12 bg-primary/10 shadow-md dark:bg-neutral-900 w-full h-42 rounded-2xl border-2 border-primary/90'>
                 <Link href='/dashboard'>
                     <div className='flex gap-4 hover:scale-[100.25%] transition-fast mb-12'>
-                        <GenericImage src={backIcon} width={2} />
+                        <GenericImage src={backIcon} width={2}/>
                         <p className='relative self-center text-primary font-semibold text-xl phone:text-sm'>Return to
                             your servers</p>
                     </div>
@@ -151,8 +201,10 @@ export default function GuildDashboardContext(props: Props) {
                     <h1 className='text-5xl phone:text-xl font-bold text-primary self-center'>{props.discordGuildInfo.name}</h1>
                 </div>
             </div>
-            <div className='relative mx-auto space-y-6 mb-12 p-12 tablet:p-6 bg-primary/10 shadow-md dark:bg-neutral-900 w-full min-h-42 rounded-2xl border-2 border-primary/90'>
-                { !props.userHasPermission && <div className='absolute w-full h-full bg-dark/80 z-10 top-0 left-0 rounded-2xl p-12 tablet:p-6 phone:p-3'>
+            <div
+                className='relative mx-auto space-y-6 mb-12 p-12 tablet:p-6 bg-primary/10 shadow-md dark:bg-neutral-900 w-full min-h-42 rounded-2xl border-2 border-primary/90'>
+                {!props.userHasPermission && <div
+                    className='absolute w-full h-full bg-dark/80 z-10 top-0 left-0 rounded-2xl p-12 tablet:p-6 phone:p-3'>
                     <Card
                         centered
                         hoverable
@@ -160,7 +212,28 @@ export default function GuildDashboardContext(props: Props) {
                         title="No Permission"
                         description="It looks like you don't have enough permission to interact with the dashboard. You need to have administrative permissions in this server to edit bot settings here."
                     />
-                </div> }
+                </div>}
+                <DashboardSection title='Request Channel'>
+                    {
+                        !hasReqChannel(currentData) ?
+                            <Card
+                                title='No Request Channel'
+                                description="You currently don't have a request channel setup.\nClick the button below to experience the best Robertify has to offer."
+                                size='md'
+                            >
+                                <Button
+                                    isWorking={isCreatingReqChannel}
+                                    disabled={!props.userHasPermission || isCreatingReqChannel}
+                                    label='Create Request Channel'
+                                    type={ButtonType.CTA}
+                                    height={3}
+                                    width={12}
+                                    onClick={createReqChannel}
+                                />
+                            </Card> :
+                            <div>mmm yes yes request channel yes</div>
+                    }
+                </DashboardSection>
                 <DashboardSection
                     title='Management'
                     className='grid grid-cols-3 laptop:grid-cols-2 phone:grid-cols-1 gap-6'

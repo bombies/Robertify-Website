@@ -16,7 +16,7 @@ class RouteHandler extends MethodHandler {
             .setAuthenticatedRoute()
             .setLogic(async (req) => {
                 const {id} = req.query;
-                const externWebClient = await ExternalWebClient.getInstance();
+                const externWebClient = ExternalWebClient.getInstance();
                 if (!externWebClient)
                     return this.prepareResponse(StatusCodes.INTERNAL_SERVER_ERROR, "The external Web Client is null!");
 
@@ -33,36 +33,11 @@ class RouteHandler extends MethodHandler {
     protected async POST(): Promise<void> {
         return this.getResponseBuilder()
             .setAuthenticatedRoute()
-            .setPredicate(async (req, utils) => {
-                const getUserGuilds = async (session: User | null) => {
-                    try {
-                        if (!session)
-                            return [];
-                        return (await WebClient.getInstance(session)
-                            .get(`/api/discord/user/guilds`)).data;
-                    } catch (e: any) {
-                        if (e instanceof AxiosError && e.response?.data.retry_after) {
-                            setTimeout(() => {
-                                getUserGuilds(session);
-                            }, e.response.data.retry_after)
-                        } else throw e;
-                    }
-                }
-
-                const { body } = req;
-                if (!body.server_id)
-                    return false;
-
-                const session = await utils.getSession()
-                if (!session)
-                    return false;
-                const userGuilds = (await getUserGuilds(session))?.data;
-                return userGuilds ? isServerAdmin(userGuilds.filter((guild: DiscordUserGuild) => guild.id === body.server_id)[0])  : false;
-            }, { status: StatusCodes.FORBIDDEN, message: 'You do not have permission to do this!'})
+            .setServerAdminOnlyRoute()
             .setLogic(async (req) => {
                 const {id} = req.query;
                 const {body} = req;
-                const externWebClient = await ExternalWebClient.getInstance();
+                const externWebClient = ExternalWebClient.getInstance();
                 if (!externWebClient)
                     return this.prepareResponse(StatusCodes.INTERNAL_SERVER_ERROR, "The external Web Client is null!");
 

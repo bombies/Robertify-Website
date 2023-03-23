@@ -13,7 +13,7 @@ export type CommandData = {
 
 const getCommandData = async ()  => {
     const session = await getServerSession(authOptions);
-    const externWebClient = await ExternalWebClient.getInstance();
+    const externWebClient = ExternalWebClient.getInstance();
     if (!externWebClient) return undefined
     const webClient = WebClient.getInstance(session?.user);
     return (await webClient.get('/api/commands')).data.data;

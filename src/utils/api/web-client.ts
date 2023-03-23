@@ -20,11 +20,11 @@ class WebClient {
         });
 
         this.instance.interceptors.response.use((config) => config, err => {
-            if (err.response?.status === 403 && typeof window !== 'undefined')
-                signOut({
-                    callbackUrl: '/'
-                });
-            else return Promise.reject(err);
+            // if (err.response?.status === 403 && typeof window !== 'undefined')
+            //     signOut({
+            //         callbackUrl: '/'
+            //     });
+            // else return Promise.reject(err);
         });
     }
 
@@ -93,9 +93,8 @@ export class ExternalWebClient {
             async (error) => {
                 const originalRequest = error.config;
 
-                if (error.response.status === 403 && !originalRequest._retry) {
+                if ((error.response?.status === 403 || error.response?.status === 401) && !originalRequest._retry) {
                     const token = await this.getAccessToken();
-                    await ExternalWebClient.setAccessToken(this, token);
                     originalRequest.headers['Authorization'] = `Bearer ${token}`;
                     originalRequest._retry = true;
                     return axios(originalRequest);
@@ -114,32 +113,13 @@ export class ExternalWebClient {
         return data?.access_token;
     }
 
-    private startTokenRefresh() {
-        setInterval(async () => {
-            await ExternalWebClient.setAccessToken(this);
-        }, 12 * 60 * 60 * 1000)
-    }
-
-    private static async setAccessToken(client: ExternalWebClient, token?: string) {
-        if (!token)
-            token = await client.getAccessToken();
-        client.instance.interceptors.request.use(config => {
-            config.headers['Authorization'] = "Bearer " + token;
-            return config;
-        });
-    }
-
-    public static async getInstance(options?: CreateAxiosDefaults<any>) {
+    public static getInstance(options?: CreateAxiosDefaults<any>) {
         if (!options) {
             if (this.INSTANCE)
                 return this.INSTANCE.instance;
 
             const client = new ExternalWebClient();
             this.INSTANCE = client;
-
-            await ExternalWebClient.setAccessToken(client);
-            client.startTokenRefresh();
-
             return client.instance;
         }
 
@@ -147,10 +127,6 @@ export class ExternalWebClient {
         const client = new ExternalWebClient({
             ...options
         });
-
-        await ExternalWebClient.setAccessToken(client);
-        client.startTokenRefresh();
-
         return client.instance;
     }
 }
