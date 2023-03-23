@@ -1,4 +1,4 @@
-import React, {CSSProperties, MouseEventHandler} from "react";
+import React, {CSSProperties, MouseEventHandler, MutableRefObject} from "react";
 import Link from "next/link";
 
 export type ComponentSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -14,6 +14,7 @@ interface Props extends React.PropsWithChildren {
     centered?: boolean;
     href?: string;
     style?: CSSProperties;
+    ref?: MutableRefObject<any>;
 }
 
 export const parseCardSize = (size?: ComponentSize) => {
@@ -30,6 +31,7 @@ export const parseCardSize = (size?: ComponentSize) => {
 export default function Card(props: Props) {
     const card = (
         <div
+            ref={props.ref}
             onClick={props.onClick}
             className={'bg-neutral-200/50 dark:bg-neutral-900 rounded-xl shadow-lg p-6 phone:p-3 ' + (parseCardSize(props.size)) + ' ' + (props.className || '') + (typeof props.hoverable !== 'undefined' ? ' transition-fast hover:scale-105' : '') + (typeof props.centered !== 'undefined' ? ' mx-auto' : '')}
         >
@@ -48,6 +50,7 @@ export default function Card(props: Props) {
     if (props.href)
         return (
             <Link
+                ref={props.ref}
                 href={props.href}
                 className={'bg-neutral-200/50 dark:bg-neutral-900/50 backdrop-blur-lg rounded-xl shadow-lg p-6 phone:p-3 ' + (parseCardSize(props.size)) + ' ' + (props.className || '') + (typeof props.hoverable !== 'undefined' ? ' transition-fast hover:scale-105' : '') + (typeof props.centered !== 'undefined' ? ' mx-auto' : '')}
                 style={props.style}

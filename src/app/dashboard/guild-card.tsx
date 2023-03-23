@@ -1,10 +1,13 @@
+'use client';
+
 import Card from "@/components/card";
 import Image from "next/image";
 import crownIcon from '/public/crown.svg';
 import shieldIcon from '/public/shield.svg';
 import {Tooltip} from "@nextui-org/react";
-import {useState} from "react";
+import {useRef, useState} from "react";
 import GenericImage from "@/app/_components/GenericImage";
+import {useVisible} from "@/utils/client-utils";
 
 type Props = {
     id: string,
@@ -15,13 +18,12 @@ type Props = {
 }
 
 export default function GuildCard(props: Props) {
-
     return (
         <Card
             centered
             size='xs'
             hoverable
-            className='pointer-cursor h-32 !p-0 flex flex-col phone:w-full'
+            className={`relative pointer-cursor h-32 !p-0 flex flex-col phone:w-full`}
             href={`/dashboard/${props.id}`}
         >
             {
