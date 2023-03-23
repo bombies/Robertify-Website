@@ -38,6 +38,7 @@ export default function GenericImage(props: Props) {
                 alt={props.alt ?? ''}
                 fill={true}
                 style={props.style}
+                sizes={props.width ? `${props.width}rem` : undefined}
             />
         </div>
     )
