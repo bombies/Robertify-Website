@@ -5,7 +5,7 @@ import Providers from "@/app/_components/providers";
 import ProgressBar from "@/app/_components/progress-bar";
 import glow from "/public/rob-web-glow.png";
 import NavBar from "@/app/_components/nav/navbar";
-import {Inter} from 'next/font/google';
+import {Inter} from '@next/font/google';
 import GenericImage from "@/app/_components/GenericImage";
 
 export const metadata = {
@@ -18,13 +18,12 @@ interface Props extends React.PropsWithChildren {
 }
 
 const inter = Inter({
-    weight:['300','400','500','600','700','900'],
-    subsets: ['latin']
+    subsets: ['latin'],
 })
 
 export default function RootLayout(props: Props) {
     return (
-        <html suppressHydrationWarning lang="en">
+        <html suppressHydrationWarning lang="en" className={inter.className}>
         <Providers session={props.session}>
             <ProgressBar/>
             <GenericImage
@@ -33,7 +32,7 @@ export default function RootLayout(props: Props) {
                 imageClassName='blur-xl z-[0]'
                 src={glow}
             />
-            <div className={'!z-[1] relative tracking-wide ' + inter.className}>
+            <div className={'!z-[1] relative tracking-wide '}>
                 <NavBar/>
                 {props.children}
                 <Footer/>
