@@ -32,7 +32,7 @@ export default function RootLayout(props: Props) {
                 imageClassName='blur-xl z-[0]'
                 src={glow}
             />
-            <div className={'!z-[1] relative tracking-wide '}>
+            <div className={'!z-[1] relative'}>
                 <NavBar/>
                 {props.children}
                 <Footer/>
