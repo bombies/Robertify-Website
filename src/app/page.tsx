@@ -5,6 +5,7 @@ import reqChannel from '/public/reqchannel.png';
 import features from '/public/features.png';
 import BasicContent from "@/components/baisc-content";
 import HeadingSection from "@/components/heading-section";
+import GenericImage from "@/app/_components/GenericImage";
 
 export default async function Home() {
     return (
@@ -21,28 +22,22 @@ export default async function Home() {
                     description='Interact with your music in a unique and fashionable way! The request channel comes with player control buttons which allow for the easy control of Robertify&apos;s player. These buttons can even be toggled on or off, catering to your needs.'
 
                 >
-                    <div className='relative w-[30rem] laptop:h-[20rem] h-[30rem] laptop:w-[20rem] self-center'>
-                        <Image
-                            draggable={false}
-                            src={reqChannel}
-                            alt=''
-                            fill={true}
-                        />
-                    </div>
+                    <GenericImage
+                        fade
+                        className='relative w-[30rem] laptop:h-[20rem] h-[30rem] laptop:w-[20rem] self-center'
+                        src={reqChannel}
+                    />
                 </BasicContent>
                 <BasicContent
                     title='So many more features...'
                     description='There are over 60 commands Robertify offers. With fun features like 8ball ranging to robust audio commands like searching and setting favourite tracks, it&apos;s all up to you to take advantage of them!'
                     childrenAlign='left'
                 >
-                    <div className='relative w-[36rem] laptop:w-[26rem] h-[36rem] laptop:h-[26rem] phone:w-[20rem] phone:h-[20rem] self-center'>
-                        <Image
-                            draggable={false}
-                            src={features}
-                            alt=''
-                            fill={true}
-                        />
-                    </div>
+                    <GenericImage
+                        fade
+                        src={features}
+                        className='relative w-[36rem] laptop:w-[26rem] h-[30rem] laptop:h-[20rem] phone:w-[20rem] phone:h-[14rem] self-center'
+                    />
                 </BasicContent>
             </div>
         </main>
