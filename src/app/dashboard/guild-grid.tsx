@@ -8,6 +8,7 @@ import GuildCard from "@/app/dashboard/guild-card";
 import Card from "@/components/card";
 import {DiscordUserGuild, isServerAdmin} from "@/utils/discord-types";
 import {signIn, useSession} from "next-auth/react";
+import GenericImage from "@/app/_components/GenericImage";
 
 type Props = {
     guilds?: DiscordUserGuild[],
@@ -82,7 +83,7 @@ export default function GuildGrid(props: Props) {
                     value={searchValue}
                     size='xl'
                     placeholder='Search...'
-                    contentRight={<div className='relative w-6 h-6'><Image src={searchIcon} alt='' fill={true}/></div>}
+                    contentRight={<GenericImage src={searchIcon} width={1.5} />}
                     aria-label='search-input'
                 />
             </div>

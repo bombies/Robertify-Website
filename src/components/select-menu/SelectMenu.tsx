@@ -4,6 +4,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {ComponentSize} from "@/components/card";
 import Image, {StaticImageData} from "next/image";
 import dropDownIcon from '/public/drop-down.svg';
+import GenericImage from "@/app/_components/GenericImage";
 
 export type SelectMenuContent = {
     label: string,
@@ -81,10 +82,7 @@ const generateCategoryElement = (
             }}
         >
             {
-                item.icon &&
-                <div className='relative w-4 h-4 self-center'>
-                    <Image draggable={false} src={item.icon} alt='' fill={true}/>
-                </div>
+                item.icon && <GenericImage src={item.icon} width={1} className='self-center' />
             }
             <p className={'dark:text-neutral-400 text-neutral-700 hover:!text-primary transition-fast select-none whitespace-nowrap overflow-hidden text-ellipsis' + (isItemSelected(item) ? ' !text-primary' : '')}>{item.label}</p>
         </div>
@@ -180,10 +178,11 @@ export default function SelectMenu(props: Props) {
                 >
                     {selected ? ( selected.length > 0 ? selected.map(item => item.label).toLocaleString() : (props.placeholder || '') ) : (props.placeholder || '')}
                 </p>
-                <div
-                    className={'self-center relative w-6 h-6 transition-fast select-none ' + (expanded ? 'rotate-180' : '')}>
-                    <Image draggable={false} src={dropDownIcon} alt='' fill={true}/>
-                </div>
+                <GenericImage
+                    className={'self-center relative transition-fast select-none ' + (expanded ? 'rotate-180' : '')}
+                    src={dropDownIcon}
+                    width={1.5}
+                />
             </div>
             {
                 expanded &&
