@@ -26,6 +26,7 @@ export default function RootLayout(props: Props) {
             <ProgressBar/>
             <div className='dark:visible opacity-50 blur-xl invisible fixed w-full h-full z-[0]'>
                 <Image
+                    priority={true}
                     draggable={false}
                     className='blur-xl z-[0]'
                     src={glow}
