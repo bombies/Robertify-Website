@@ -9,24 +9,13 @@ import Image, {StaticImageData} from "next/image";
 
 const getButtonStyle = (darkMode: boolean, type?: ButtonType): string => {
     switch (type) {
-        case ButtonType.PRIMARY: {
-            return "bg-primary shadow-lg dark:shadow-primary/40 shadow-transparent";
-        }
-        case ButtonType.SECONDARY: {
-            return "bg-transparent border-[1px] border-primary text-primary shadow-lg dark:shadow-primary/40 shadow-transparent";
-        }
-        case ButtonType.WARNING: {
-            return "bg-warning shadow-lg dark:shadow-warning/40 shadow-transparent";
-        }
-        case ButtonType.DANGER: {
-            return "bg-danger shadow-lg dark:shadow-danger/40 shadow-transparent";
-        }
-        case ButtonType.INVERTED: {
-            return "bg-white dark:bg-dark text-primary shadow-lg dark:shadow-neutral-800/40 shadow-transparent";
-        }
-        default: {
-            return "bg-primary shadow-lg dark:shadow-primary/40 shadow-transparent"
-        }
+        case ButtonType.PRIMARY: return "bg-primary shadow-lg dark:shadow-primary/40 shadow-transparent";
+        case ButtonType.SECONDARY: return "bg-transparent border-[1px] border-primary text-primary shadow-lg dark:shadow-primary/40 shadow-transparent";
+        case ButtonType.WARNING: return "bg-warning shadow-lg dark:shadow-warning/40 shadow-transparent";
+        case ButtonType.DANGER: return "bg-danger shadow-lg dark:shadow-danger/40 shadow-transparent";
+        case ButtonType.INVERTED: return "bg-white dark:bg-dark text-primary shadow-lg dark:shadow-neutral-800/40 shadow-transparent";
+        case ButtonType.CTA: return "bg-gradient-to-br bg-[length:200%_200%] animate-gradient-normal from-green-400 via-lime-500 to-amber-500 text-white shadow-lg dark:shadow-green-500/60 shadow-transparent"
+        default: return "bg-primary shadow-lg dark:shadow-primary/40 shadow-transparent"
     }
 }
 
