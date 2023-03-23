@@ -15,7 +15,7 @@ export default async function Home() {
                     <Button label='LEARN MORE' className='phone:mx-auto' type={ButtonType.INVERTED} width={10} height={3} href='#content' />
                 </div>
             </HeadingSection>
-            <div className='p-32 laptop:p-16 tablet:p-4 phone:p-2' id='content'>
+            <div className='p-32 laptop:p-16 tablet:p-4' id='content'>
                 <BasicContent
                     title='Customizable Request Channel'
                     description='Interact with your music in a unique and fashionable way! The request channel comes with player control buttons which allow for the easy control of Robertify&apos;s player. These buttons can even be toggled on or off, catering to your needs.'
@@ -27,10 +27,6 @@ export default async function Home() {
                             src={reqChannel}
                             alt=''
                             fill={true}
-                            sizes='
-                                (max-width: 1280px) 20rem,
-                                30rem
-                            '
                         />
                     </div>
                 </BasicContent>
@@ -39,16 +35,12 @@ export default async function Home() {
                     description='There are over 60 commands Robertify offers. With fun features like 8ball ranging to robust audio commands like searching and setting favourite tracks, it&apos;s all up to you to take advantage of them!'
                     childrenAlign='left'
                 >
-                    <div className='relative w-[36rem] laptop:w-[26rem] h-[30rem] laptop:h-[20rem] self-center'>
+                    <div className='relative w-[36rem] laptop:w-[26rem] h-[36rem] laptop:h-[26rem] phone:w-[20rem] phone:h-[20rem] self-center'>
                         <Image
                             draggable={false}
                             src={features}
                             alt=''
                             fill={true}
-                            sizes='
-                                (max-width: 1280px) 26rem,
-                                36rem
-                            '
                         />
                     </div>
                 </BasicContent>

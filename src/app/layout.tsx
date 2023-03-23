@@ -24,7 +24,7 @@ export default function RootLayout(props: Props) {
         <html suppressHydrationWarning lang="en">
         <Providers session={props.session}>
             <ProgressBar/>
-            <div className='dark:visible opacity-50 blur-xl invisible fixed w-full h-full z-[0]'>
+            <div className='dark:visible opacity-50 blur-xl invisible fixed w-screen h-screen z-[0]'>
                 <Image
                     priority={true}
                     draggable={false}
@@ -32,7 +32,6 @@ export default function RootLayout(props: Props) {
                     src={glow}
                     alt=''
                     fill={true}
-                    sizes='100vw, 100vh'
                 />
             </div>
             <div className={'!z-[1] relative tracking-wide ' + inter.className}>
