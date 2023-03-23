@@ -2,26 +2,39 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import NavUserProfile from "@/app/_components/nav/nav-user-profile";
 import DarkModeSwitcher from "@/app/_components/nav/dark-mode-switcher";
-import Button from "@/components/button/Button";
-import login from '/public/login.svg';
 import HyperLink from "@/components/hyperlink";
-import {signIn, useSession} from "next-auth/react";
+import {useSession} from "next-auth/react";
 import LoginButton from "@/app/_components/nav/login-button";
 
 export default function NavBar() {
     const [isOpen, setOpen] = useState(false);
     const discordInfo = useSession().data?.user;
+    const mobileNavRef = useRef<any>(null);
+    const hamburgerRef = useRef<any>(null);
 
     const toggleOpen = () => {
         setOpen(lastVal => !lastVal);
     }
 
+    useEffect(() => {
+        const handle = (event: MouseEvent) => {
+            if (mobileNavRef.current && (!mobileNavRef.current.contains(event.target) && !hamburgerRef.current.contains(event.target)))
+                setOpen(false);
+        }
+
+        document.addEventListener('mousedown', handle);
+        return () => {
+            document.removeEventListener('mousedown', handle);
+        }
+    }, [mobileNavRef, hamburgerRef]);
+
     return (
         <nav className='relative z-50'>
             <div
+                ref={hamburgerRef}
                 className='z-[51] invisible tablet:visible transition-fast absolute top-5 left-5 flex flex-col gap-[.15rem] w-8 h-12 cursor-pointer'
                 onClick={toggleOpen}>
                 <div
@@ -33,6 +46,7 @@ export default function NavBar() {
             </div>
             {
                 <div
+                    ref={mobileNavRef}
                     className={`flex tablet:flex-col dark:bg-dark/50 backdrop-blur-lg w-full h-20 tablet:h-fit tablet:absolute bg-neutral-100 p-6 transition-fast ${isOpen ? 'tablet:visible' : 'tablet:invisible tablet:opacity-0'}`}>
                     <Link href='/' className={'flex gap-4 justify-center cursor-pointer hover:scale-105 transition-fast'}>
                         <div className='relative w-16 h-16 self-center'>
