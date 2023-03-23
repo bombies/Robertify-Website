@@ -13,14 +13,14 @@ export default function TermsOfService() {
                     title='Accepting these terms'
                     description='These Terms of Service (&quot;Terms&quot;, &quot;ToS&quot;) are an agreement between Robertify (&quot;us&quot;, &quot;we&quot;, &quot;our&quot;) and you (&quot;you&quot;, &quot;your&quot;). Upon the invitation, use, or distribution of Robertify (&quot;the Service&quot;), any source code associated with us and our website, you agree if you are over the age of majority in your jurisdiction or over, that you have read, understood, and accept to be bound by these Terms of Service. If you are below the age of majority in your jurisdiction, ensure that your legal guardian has reviewed and agreed to these Terms of Service.\n\n
                     At any time do we reserve the right to update these Terms of Service with reasons including (but not limited to) adhering to new Discord Terms of Service, or improving the user experience Robertify provides. If the aforementioned changes affect your usage of Robertify, we will be sure to notify all at least 5-7 days before the proposed changes. If you object to any of the changes proposed, your course of action shall be to cease usage of Robertify.'
-                    size='lg'
+                    size='md'
                     spacers
                 />
                 <Card
                     className='mx-auto'
                     title='The terms'
                     description='Ajani Green (bombies) has developed the Service in connection with the Discord™ API (&quot;the Platform&quot;).\nBy using the Service you agree to be bounded by these Terms of Service to all of its extent.'
-                    size='lg'
+                    size='md'
                     spacers
                 >
                     <div className='p-6 flex flex-col gap-y-6'>
@@ -28,13 +28,13 @@ export default function TermsOfService() {
                             hoverable
                             title='Support'
                             description='Support for the Service is only provided in our support server.\nSupport via another method is NOT in any way official.'
-                            size='md'
+                            size='sm'
                         />
                         <Card
                             hoverable
                             title='General Statement'
                             description='Robertify is a Discord music bot and its service is provided for free with no guarantees.'
-                            size='md'
+                            size='sm'
                         />
                         <Card
                             hoverable
@@ -42,7 +42,7 @@ export default function TermsOfService() {
                             description='You are responsible for the streaming of any form of copyrighted material.<br />
                             The music streaming services provided by the Service are always subject to change without prior notice. <br />
                             The quality of the Service will be tried to be kept at its highest, however, this may be subject to the usage of the Service and the quantity of concurrent users.'
-                            size='md'
+                            size='sm'
                         />
                         <Card
                             hoverable
@@ -50,7 +50,7 @@ export default function TermsOfService() {
                             description='We have no obligation or motive to monitor any means of communication using the Service, but it may do so in connections with providing the Service. We may also ban you from the Service at any time, without notice, without reason.<br /><br />
                             You acknowledge the fact that any user-based content (including but not limited to chats and images) through the Service is neither endorsed nor controlled by us. We will not, under any circumstances, be liable for any activity on the Service. We are not responsible for what you choose to share through the Service, or the actions of other users.<br /><br />
                             We reserve the right to deem what we consider a violation of these Terms of Service or improper usage. On such judgement we reserve the right to take action which includes the termination of your account from the Service.'
-                            size='md'
+                            size='sm'
                         />
                         <Card
                             hoverable
@@ -59,7 +59,7 @@ export default function TermsOfService() {
                             You take full responsibility for the money transferred to us.<br />
                             You agree that the money that you sent is yours to be sent, and that you have full rights over it.<br />
                             You agree that you are of the legal age to donate in your country and/or the permission to legally dispose of the funds.'
-                            size='md'
+                            size='sm'
                         />
                     </div>
                 </Card>
