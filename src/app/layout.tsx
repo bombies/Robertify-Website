@@ -3,10 +3,10 @@ import React from "react";
 import Footer from "@/app/_components/footer/footer";
 import Providers from "@/app/_components/providers";
 import ProgressBar from "@/app/_components/progress-bar";
-import Image from "next/image";
 import glow from "/public/rob-web-glow.png";
 import NavBar from "@/app/_components/nav/navbar";
 import {Inter} from 'next/font/google';
+import GenericImage from "@/app/_components/GenericImage";
 
 export const metadata = {
     title: 'Robertify',
@@ -25,16 +25,12 @@ export default function RootLayout(props: Props) {
         <html suppressHydrationWarning lang="en">
         <Providers session={props.session}>
             <ProgressBar/>
-            <div className='dark:visible opacity-50 blur-xl invisible fixed w-full h-full z-[0]'>
-                <Image
-                    draggable={false}
-                    className='blur-xl z-[0]'
-                    src={glow}
-                    alt=''
-                    fill={true}
-                    sizes='100vw, 100vh'
-                />
-            </div>
+            <GenericImage
+                priority
+                className='dark:visible opacity-50 blur-xl invisible !fixed w-screen h-screen z-[0]'
+                imageClassName='blur-xl z-[0]'
+                src={glow}
+            />
             <div className={'!z-[1] relative tracking-wide ' + inter.className}>
                 <NavBar/>
                 {props.children}

@@ -3,9 +3,9 @@
 import Card from "@/components/card";
 import {useState} from "react";
 import {Modal} from "@nextui-org/react";
-import Image from "next/image";
 import Parser from "html-react-parser";
 import {useDarkMode} from "@/app/_components/dark-mode-context";
+import GenericImage from "@/app/_components/GenericImage";
 
 type Props = {
     title: string;
@@ -24,7 +24,7 @@ export default function FAQCard(props: Props) {
         <div>
             <Card
                 onClick={() => setExpanded(true)}
-                className='!w-full pointer-cursor'
+                className='!w-full pointer-cursor h-full'
                 hoverable
                 title={props.title}
                 size='xs'
@@ -48,17 +48,13 @@ export default function FAQCard(props: Props) {
                 <Modal.Body>
                     <p className='text-lg'>{Parser(props.content.replaceAll('\\n', '<br/>'))}</p>
                     {props.contentImg &&
-                        <div className='relative w-80 h-80'>
-                            <Image
-                                src={props.contentImg}
-                                alt=''
-                                fill={true}
-                                style={{
-                                    objectFit: 'scale-down'
-                                }}
-                                sizes='20rem'
-                            />
-                        </div>
+                        <GenericImage
+                            width={20}
+                            src={props.contentImg}
+                            style={{
+                                objectFit: 'scale-down'
+                            }}
+                        />
                     }
                 </Modal.Body>
             </Modal>

@@ -26,9 +26,15 @@ module.exports = {
         "secondary-text": "rgb(115,115,115)",
       },
       animation: {
-        'wave-normal': 'wave 2s linear infinite'
+        'wave-normal': 'wave 2s linear infinite',
+        'gradient-normal': 'gradient 5s ease infinite'
       },
       keyframes: {
+        gradient: {
+          '0%': { 'background-position': '0% 50%' },
+          '50%': { 'background-position': '100% 50%' },
+          '100%': { 'background-position': '0% 50%' }
+        },
         wave: {
           '0%': { transform: 'rotate(-10deg)' },
           '25%': { transform: 'rotate(0deg)' },
@@ -49,6 +55,9 @@ module.exports = {
       dropShadow: {
         'glow-primary-md': '0 4px 3px rgb(0 214 21 / 0.25)',
         'glow-primary-lg': '0 4px 10px rgb(0 214 21 / 0.25)'
+      },
+      backgroundSize: {
+        '400%': '400% 400%'
       }
     },
   },

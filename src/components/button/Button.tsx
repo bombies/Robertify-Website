@@ -5,28 +5,18 @@ import Link from "next/link";
 import Spinner from "@/components/Spinner";
 import {useDarkMode} from "@/app/_components/dark-mode-context";
 import {ButtonType} from "@/components/button/ButtonType";
-import Image, {StaticImageData} from "next/image";
+import {StaticImageData} from "next/image";
+import GenericImage from "@/app/_components/GenericImage";
 
 const getButtonStyle = (darkMode: boolean, type?: ButtonType): string => {
     switch (type) {
-        case ButtonType.PRIMARY: {
-            return "bg-primary shadow-lg dark:shadow-primary/40 shadow-transparent";
-        }
-        case ButtonType.SECONDARY: {
-            return "bg-transparent border-[1px] border-primary text-primary shadow-lg dark:shadow-primary/40 shadow-transparent";
-        }
-        case ButtonType.WARNING: {
-            return "bg-warning shadow-lg dark:shadow-warning/40 shadow-transparent";
-        }
-        case ButtonType.DANGER: {
-            return "bg-danger shadow-lg dark:shadow-danger/40 shadow-transparent";
-        }
-        case ButtonType.INVERTED: {
-            return "bg-white dark:bg-dark !text-primary shadow-lg dark:shadow-neutral-800/40 shadow-transparent";
-        }
-        default: {
-            return "bg-primary shadow-lg dark:shadow-primary/40 shadow-transparent"
-        }
+        case ButtonType.PRIMARY: return "bg-primary shadow-lg dark:shadow-primary/40 shadow-transparent";
+        case ButtonType.SECONDARY: return "bg-transparent border-[1px] border-primary text-primary shadow-lg dark:shadow-primary/40 shadow-transparent";
+        case ButtonType.WARNING: return "bg-warning shadow-lg dark:shadow-warning/40 shadow-transparent";
+        case ButtonType.DANGER: return "bg-danger shadow-lg dark:shadow-danger/40 shadow-transparent";
+        case ButtonType.INVERTED: return "bg-white dark:bg-dark text-primary shadow-lg dark:shadow-neutral-800/40 shadow-transparent";
+        case ButtonType.CTA: return "bg-gradient-to-br bg-[length:200%_200%] animate-gradient-normal from-green-400 via-lime-500 to-amber-500 text-white shadow-lg dark:shadow-green-500/60 shadow-transparent"
+        default: return "bg-primary shadow-lg dark:shadow-primary/40 shadow-transparent"
     }
 }
 
@@ -57,15 +47,11 @@ export default function Button(props: Props) {
     const children = (
         <div className={'flex gap-[.25rem] justify-center'}>
             {props.icon &&
-                <div className='relative w-5 h-5 self-center'>
-                    <Image
-                        draggable={false}
-                        src={props.icon}
-                        alt=''
-                        fill={true}
-                        sizes='1.25rem'
-                    />
-                </div>
+                <GenericImage
+                    className='self-center'
+                    src={props.icon}
+                    width={1.25}
+                />
             }
             <p className={'text-center text-white self-center ' + (props.type === ButtonType.INVERTED || props.type === ButtonType.SECONDARY ? '!text-primary' : '')}>{props.label}</p>
         </div>
