@@ -3,7 +3,6 @@
 import Card from "@/components/card";
 import {useState} from "react";
 import {Modal} from "@nextui-org/react";
-import Image from "next/image";
 import Parser from "html-react-parser";
 import {useDarkMode} from "@/app/_components/dark-mode-context";
 import GenericImage from "@/app/_components/GenericImage";

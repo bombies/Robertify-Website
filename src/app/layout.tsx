@@ -3,7 +3,6 @@ import React from "react";
 import Footer from "@/app/_components/footer/footer";
 import Providers from "@/app/_components/providers";
 import ProgressBar from "@/app/_components/progress-bar";
-import Image from "next/image";
 import glow from "/public/rob-web-glow.png";
 import NavBar from "@/app/_components/nav/navbar";
 import {Inter} from 'next/font/google';

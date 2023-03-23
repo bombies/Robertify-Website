@@ -5,7 +5,7 @@ import Link from "next/link";
 import Spinner from "@/components/Spinner";
 import {useDarkMode} from "@/app/_components/dark-mode-context";
 import {ButtonType} from "@/components/button/ButtonType";
-import Image, {StaticImageData} from "next/image";
+import {StaticImageData} from "next/image";
 import GenericImage from "@/app/_components/GenericImage";
 
 const getButtonStyle = (darkMode: boolean, type?: ButtonType): string => {

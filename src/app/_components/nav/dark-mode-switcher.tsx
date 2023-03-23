@@ -3,7 +3,6 @@
 import {useDarkMode} from "@/app/_components/dark-mode-context";
 import moon from '/public/moon.svg';
 import sun from '/public/sun.svg';
-import Image from "next/image";
 import GenericImage from "@/app/_components/GenericImage";
 
 export default function DarkModeSwitcher() {
