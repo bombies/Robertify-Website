@@ -64,9 +64,10 @@ const darkTheme = createTheme({
             errorShadow: '$red500'
         },
         fonts: {
-            sans: "'Inter', sans-serif",
-            mono: "'Fira Code Mono', Menlo"
-        },
+            sans: '',
+            mono: '',
+            serif: '',
+        }
     }
 })
 
