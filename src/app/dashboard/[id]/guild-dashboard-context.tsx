@@ -11,7 +11,7 @@ import {useEffect, useState, useTransition} from "react";
 import {compare} from "@/utils/general-utils";
 import Button from "@/components/button/Button";
 import {ButtonType} from "@/components/button/ButtonType";
-import WebClient, {ExternalWebClient} from "@/utils/api/web-client";
+import WebClient from "@/utils/api/web-client";
 import GuildDashboardHandler from "@/app/dashboard/[id]/guild-dashboard-handler";
 import saveIcon from '/public/save.svg';
 import discardIcon from '/public/discard.svg';
@@ -231,7 +231,13 @@ export default function GuildDashboardContext(props: Props) {
                                     onClick={createReqChannel}
                                 />
                             </Card> :
-                            <div>mmm yes yes request channel yes</div>
+                            <Card
+                                className='relative !w-5/6'
+                            >
+                                <div className='grid grid-cols-5 gap-4'>
+                                    {handler.generateReqChannelButtons(props.userHasPermission)}
+                                </div>
+                            </Card>
                     }
                 </DashboardSection>
                 <DashboardSection

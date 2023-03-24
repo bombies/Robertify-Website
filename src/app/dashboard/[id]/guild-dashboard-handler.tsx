@@ -1,12 +1,15 @@
 import {
+    DedicatedChannelConfig,
     DiscordGuild,
     DiscordGuildChannel,
     DiscordRole,
     GuildDJToggles,
     GuildLogToggles,
     GuildPermissions,
-    GuildToggles, LocaleString,
-    RobertifyGuild, ThemeString
+    GuildToggles,
+    LocaleString,
+    RobertifyGuild,
+    ThemeString
 } from "@/utils/discord-types";
 import {Dispatch, SetStateAction} from "react";
 import {SelectMenuContent} from "@/components/select-menu/SelectMenu";
@@ -22,14 +25,82 @@ import france from '/public/locale/france.svg';
 import russia from '/public/locale/russia.svg';
 import netherlands from '/public/locale/netherlands.svg';
 import germany from '/public/locale/germany.svg';
+import Button from "@/components/button/Button";
+import {ButtonType} from "@/components/button/ButtonType";
+
+type RequestChannelButton = keyof DedicatedChannelConfig
 
 export default class GuildDashboardHandler {
+
     constructor(
         private readonly robertifyGuild: RobertifyGuild,
         private readonly discordGuild: DiscordGuild,
         private readonly guildChannels: DiscordGuildChannel[],
         private readonly setCurrentData: Dispatch<SetStateAction<RobertifyGuild>>
     ) {
+    }
+
+    public generateReqChannelButtons(userHasPermission: boolean) {
+        const config = this.robertifyGuild.dedicated_channel.config || this.getDefaultButtonStates();
+        const getButtonLabel = (button: RequestChannelButton) => {
+            switch (button) {
+                case "disconnect": return "Disconnect";
+                case "favourite": return "Favourite";
+                case "filters": return "Filters";
+                case "previous": return "Previous";
+                case "rewind": return "Rewind";
+                case "shuffle": return "Shuffle";
+                case "loop": return "Loop";
+                case "play_pause": return "Play and Pause";
+                case "skip": return "Skip";
+                case "stop": return "Stop";
+            }
+        }
+
+        return Object.keys(config).map((key) => (
+            <Button
+                disabled={!userHasPermission}
+                label={getButtonLabel(key as RequestChannelButton)}
+                type={ButtonType.BLUE}
+                height={3}
+                width={8}
+                onClick={() => this.toggleReqChannelButton(key as RequestChannelButton)}
+            />
+        ));
+    }
+
+    private getDefaultButtonStates(): DedicatedChannelConfig {
+        return {
+            disconnect: true,
+            play_pause: true,
+            stop: true,
+            skip: true,
+            filters: false,
+            favourite: true,
+            shuffle: true,
+            rewind: true,
+            loop: true,
+            previous: true
+        }
+    }
+
+    public toggleReqChannelButton(button: RequestChannelButton) {
+        const defaultButtonStates: DedicatedChannelConfig = this.getDefaultButtonStates();
+
+        return this.setCurrentData(prev => {
+            const configToUse = this.robertifyGuild.dedicated_channel.config || defaultButtonStates;
+
+            return ({
+                ...prev,
+                dedicated_channel: {
+                    ...prev.dedicated_channel,
+                    config: {
+                        ...configToUse,
+                        [button]: !configToUse[button]
+                    }
+                }
+            })
+        })
     }
 
     public generateDJToggleElements(userHasPermission: boolean) {

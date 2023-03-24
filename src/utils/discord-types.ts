@@ -98,20 +98,22 @@ export type DiscordGuildChannel = {
 export type DedicatedChannel = {
     message_id?: string,
     channel_id?: string,
-    config?: {
-        disconnect: boolean,
-        play_pause: boolean,
-        previous: boolean,
-        rewind: boolean,
-        stop: boolean,
-        loop: boolean,
-        skip: boolean,
-        filters: boolean,
-        favourite: boolean,
-        shuffle: boolean
-    },
+    config?: DedicatedChannelConfig,
     og_announcement_toggle?: boolean,
 };
+
+export type DedicatedChannelConfig = {
+    disconnect: boolean,
+    play_pause: boolean,
+    previous: boolean,
+    rewind: boolean,
+    stop: boolean,
+    loop: boolean,
+    skip: boolean,
+    filters: boolean,
+    favourite: boolean,
+    shuffle: boolean
+}
 
 export type RestrictedChannels = {
     voice_channels?: string[],
@@ -207,8 +209,25 @@ type GuildBannedUser = {
     banned_at: String
 };
 
-export type LocaleString = "english"|"spanish"|"portuguese"|"russian"|"dutch"|"german"|"french";
-export type ThemeString = "green"|"gold"|"red"|"yellow"|"orange"|"dark"|"light"|"blue"|"light_blue"|"lightblue"|"pink"|"purple"|"mint"|"pastel_yellow"|"pastel_purple"|"pastel_red"|"baby_blue"
+export type LocaleString = "english" | "spanish" | "portuguese" | "russian" | "dutch" | "german" | "french";
+export type ThemeString =
+    "green"
+    | "gold"
+    | "red"
+    | "yellow"
+    | "orange"
+    | "dark"
+    | "light"
+    | "blue"
+    | "light_blue"
+    | "lightblue"
+    | "pink"
+    | "purple"
+    | "mint"
+    | "pastel_yellow"
+    | "pastel_purple"
+    | "pastel_red"
+    | "baby_blue"
 
 export type RobertifyGuild = {
     dedicated_channel: DedicatedChannel;
