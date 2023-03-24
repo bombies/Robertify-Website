@@ -7,6 +7,7 @@ import {useDarkMode} from "@/app/_components/dark-mode-context";
 import {ButtonType} from "@/components/button/ButtonType";
 import {StaticImageData} from "next/image";
 import GenericImage from "@/app/_components/GenericImage";
+import {Property} from "csstype";
 
 const getButtonStyle = (darkMode: boolean, type?: ButtonType): string => {
     switch (type) {
@@ -33,6 +34,7 @@ interface Props {
     href?: string;
     isWorking?: boolean;
     centered?: boolean;
+    colour?: Property.BackgroundColor
 }
 
 export default function Button(props: Props) {
@@ -62,7 +64,10 @@ export default function Button(props: Props) {
             {
                 props.href ?
                     <Link className={className + ' flex justify-center '}
-                          style={styleObj}
+                          style={{
+                              ...styleObj,
+                              backgroundColor: props.colour
+                          }}
                           href={props.href}
                     >
                         <div className={'flex justify-center self-center gap-4' + ((props.type === ButtonType.INVERTED || props.type === ButtonType.SECONDARY) ? ' text-primary' : '')  + ( props.className ? ` ${props.className}` : '')}>
@@ -71,7 +76,9 @@ export default function Button(props: Props) {
                     </Link>
                     :
                     <button className={className}
-                            style={styleObj}
+                            style={{
+                                ...styleObj
+                            }}
                             disabled={props.disabled}
                             onClick={(e) => {
                                 e.preventDefault();
