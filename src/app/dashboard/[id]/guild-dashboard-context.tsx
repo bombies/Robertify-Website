@@ -57,7 +57,7 @@ const GetCurrentBotInfo = (session: Session | null, id: string) => {
 }
 
 const hasReqChannel = (currentData: RobertifyGuild) => {
-    return currentData.dedicated_channel.channel_id && currentData.dedicated_channel.channel_id !== '-1';
+    return currentData.dedicated_channel.channel_id && currentData.dedicated_channel?.channel_id !== '-1';
 }
 
 export default function GuildDashboardContext(props: Props) {
