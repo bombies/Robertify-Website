@@ -1,5 +1,9 @@
+'use client';
+
 import 'client-only';
 import {MutableRefObject, useEffect, useState} from "react";
+import toast from "react-hot-toast";
+import ToastComponent, {ToastDataProps} from "@/components/ToastComponent";
 
 export function getWindowSize(): [number, number] {
     return [window.innerWidth, window.innerHeight];
@@ -16,8 +20,14 @@ export function useVisible(ref: MutableRefObject<any>): boolean {
         });
 
         if (curRef) observer.observe(curRef);
-        return () => { if (curRef) observer.unobserve(curRef); }
+        return () => {
+            if (curRef) observer.unobserve(curRef);
+        }
     }, [ref]);
 
     return isVisible;
+}
+
+export function sendToast(props: ToastDataProps) {
+    toast.custom(t => (<ToastComponent toastObj={t} data={props} />));
 }

@@ -7,6 +7,8 @@ import {useDarkMode} from "@/app/_components/dark-mode-context";
 import {ButtonType} from "@/components/button/ButtonType";
 import {StaticImageData} from "next/image";
 import GenericImage from "@/app/_components/GenericImage";
+import {ToastDataProps} from "@/components/ToastComponent";
+import {sendToast} from "@/utils/client-utils";
 
 const getButtonStyle = (darkMode: boolean, type?: ButtonType): string => {
     switch (type) {
@@ -32,7 +34,7 @@ const getButtonStyle = (darkMode: boolean, type?: ButtonType): string => {
 }
 
 interface Props {
-    label: string,
+    label?: string,
     icon?: string | StaticImageData,
     type?: ButtonType;
     width?: number;
@@ -44,6 +46,7 @@ interface Props {
     href?: string;
     isWorking?: boolean;
     centered?: boolean;
+    toast?: ToastDataProps;
 }
 
 export default function Button(props: Props) {
@@ -59,12 +62,14 @@ export default function Button(props: Props) {
         <div className={'flex gap-[.25rem] justify-center'}>
             {props.icon &&
                 <GenericImage
-                    className='self-center'
+                    className='self-center align-middle'
                     src={props.icon}
                     width={1.25}
                 />
             }
-            <p className={'text-center text-white self-center ' + (props.type === ButtonType.INVERTED || props.type === ButtonType.SECONDARY ? '!text-primary' : '')}>{props.label}</p>
+            {props.label &&
+                <p className={'text-center text-white self-center ' + (props.type === ButtonType.INVERTED || props.type === ButtonType.SECONDARY ? '!text-primary' : '')}>{props.label}</p>
+            }
         </div>
     )
 
@@ -94,6 +99,8 @@ export default function Button(props: Props) {
                                 e.preventDefault();
                                 if (props.onClick)
                                     props.onClick(e);
+                                if (props.toast)
+                                    sendToast(props.toast)
                             }}
                             type={props.submit === true ? 'submit' : 'button'}
                     >

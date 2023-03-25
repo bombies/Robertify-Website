@@ -1,11 +1,12 @@
 import Button from "@/components/button/Button";
 import {ButtonType} from "@/components/button/ButtonType";
-import Image from "next/image";
 import reqChannel from '/public/reqchannel.png';
 import features from '/public/features.png';
 import BasicContent from "@/components/baisc-content";
 import HeadingSection from "@/components/heading-section";
 import GenericImage from "@/app/_components/GenericImage";
+import {sendToast} from "@/utils/client-utils";
+import search from '/public/search.svg';
 
 export default async function Home() {
     return (
@@ -20,7 +21,6 @@ export default async function Home() {
                 <BasicContent
                     title='Customizable Request Channel'
                     description='Interact with your music in a unique and fashionable way! The request channel comes with player control buttons which allow for the easy control of Robertify&apos;s player. These buttons can even be toggled on or off, catering to your needs.'
-
                 >
                     <GenericImage
                         fade
