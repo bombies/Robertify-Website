@@ -5,6 +5,7 @@ import {StaticImageData} from "next/image";
 import GenericImage from "@/app/_components/GenericImage";
 import close from '/public/reqchannel/disconnect.svg';
 import Button from "@/components/button/Button";
+import {ButtonType} from "@/components/button/ButtonType";
 
 type Props = {
     toastObj: Toast
@@ -15,6 +16,7 @@ export type ToastDataProps = {
     title?: string,
     description: string,
     icon?: string | StaticImageData
+    type?: ButtonType
 }
 
 export default function ToastComponent(props: Props) {
@@ -36,6 +38,7 @@ export default function ToastComponent(props: Props) {
                 onClick={() => {
                     toast.dismiss(props.toastObj.id)
                 }}
+                type={props.data.type}
             />
         </div>
     )

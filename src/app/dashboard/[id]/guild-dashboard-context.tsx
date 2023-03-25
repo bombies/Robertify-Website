@@ -21,6 +21,7 @@ import {signIn, useSession} from "next-auth/react";
 import {Session} from "next-auth";
 import useSWRMutation from 'swr/mutation';
 import GenericImage from "@/app/_components/GenericImage";
+import {sendToast} from "@/utils/client-utils";
 
 type Props = {
     id: string,
@@ -122,9 +123,16 @@ export default function GuildDashboardContext(props: Props) {
                             return ret;
                         });
                         router.refresh();
+                        sendToast({
+                            description: 'Request channel has been created!'
+                        })
                     }
                 }, e => {
                     console.error(reqChannelCreationError);
+                    sendToast({
+                        description: 'Could not create your request channel.',
+                        type: ButtonType.DANGER
+                    })
                 });
         })
     }
@@ -144,9 +152,16 @@ export default function GuildDashboardContext(props: Props) {
                     props.robertifyGuildInfo = currentData;
                     setChangesMade(false);
                     router.refresh()
+                    sendToast({
+                        description: 'All changes made successfully.'
+                    })
                 }, (e) => {
                     console.error(e);
                     setChangesMade(true);
+                    sendToast({
+                        description: 'Could not save your changes!',
+                        type: ButtonType.DANGER
+                    })
                 });
         });
     }
@@ -157,6 +172,10 @@ export default function GuildDashboardContext(props: Props) {
         if (!changesMade)
             return;
         setCurrentData(props.robertifyGuildInfo);
+        sendToast({
+            description: 'Discarded all changes!',
+            type: ButtonType.WARNING
+        })
     }
 
     return (
@@ -177,7 +196,7 @@ export default function GuildDashboardContext(props: Props) {
                     />
                     <Button
                         label='Discard'
-                        type={ButtonType.DANGER}
+                        type={ButtonType.WARNING}
                         icon={discardIcon}
                         className='self-center w-[8rem] h-[3rem] phone:w-[6rem]'
                         onClick={discardChanges}
