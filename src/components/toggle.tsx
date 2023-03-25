@@ -17,7 +17,7 @@ export default function Toggle(props: Props) {
                     props.onClick(e);
             }}
         >
-            <div className={'absolute transition-fast h-6 w-6 rounded-full bg-primary shadow-md dark:shadow-primary/30 ' + (props.status ? 'right-0 !bg-white' : 'left-0')}></div>
+            <div className={'transition-fast h-6 w-6 rounded-full bg-primary shadow-md dark:shadow-primary/30 !ease-out ' + (props.status ? 'translate-x-full !bg-white' : '')}></div>
         </div>
     )
 }
