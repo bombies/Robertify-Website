@@ -43,11 +43,11 @@ export default async function GuildDashboard({ params }: { params: { id: string 
     let botGuildInfo = await getBotGuildInfo(id, serverSession);
     const userGuilds = (await getUserGuilds(serverSession))?.data;
 
-    if (discordGuildInfo.data?.code === 10004)
+    if (discordGuildInfo?.data?.code === 10004)
         discordGuildInfo = undefined;
-    if (discordGuildChannelInfo.data?.code === 50001)
+    if (discordGuildChannelInfo?.data?.code === 50001)
         discordGuildChannelInfo = undefined;
-    if (botGuildInfo.data?.statusCode === 404)
+    if (botGuildInfo?.data?.statusCode === 404)
         botGuildInfo = undefined
 
     return (

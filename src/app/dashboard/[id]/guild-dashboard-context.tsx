@@ -64,7 +64,7 @@ export default function GuildDashboardContext(props: Props) {
         isMutating: isCreatingReqChannel,
         trigger: triggerReqChannelCreation
         // @ts-ignore
-    } = CreateReqChannel(session, props.robertifyGuildInfo.server_id);
+    } = CreateReqChannel(session, props.robertifyGuildInfo?.server_id);
     const handler = new GuildDashboardHandler(
         currentData,
         props.discordGuildInfo,
@@ -84,7 +84,7 @@ export default function GuildDashboardContext(props: Props) {
     useEffect(() => {
         if (!props.discordGuildInfo || !props.robertifyGuildInfo || !props.discordGuildChannels)
             return router.push(inviteLink);
-    }, [!props.discordGuildInfo, !props.robertifyGuildInfo, !props.discordGuildChannels])
+    }, [props.discordGuildInfo, props.robertifyGuildInfo, props.discordGuildChannels, inviteLink, router])
 
     useEffect(() => {
         const b = compareData(currentData, props.robertifyGuildInfo);
@@ -476,6 +476,7 @@ export default function GuildDashboardContext(props: Props) {
 }
 
 const compareData = (cur: RobertifyGuild, original: RobertifyGuild) => {
+    if (!cur && !original) return false;
     if ("_id" in cur)
         // @ts-ignore
         delete cur._id;

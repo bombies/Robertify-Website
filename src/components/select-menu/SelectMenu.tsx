@@ -109,7 +109,7 @@ export default function SelectMenu(props: Props) {
 
     useEffect(() => {
         setVisibleItems(searchValue === '' ? parseCategories(props.content) : parseCategories(props.content?.filter(item => item.label.toLowerCase().includes(searchValue.trim()))))
-    }, [searchValue])
+    }, [searchValue, props.content, setVisibleItems])
 
     const toggleExpanded = () => {
         if (props.disabled)
