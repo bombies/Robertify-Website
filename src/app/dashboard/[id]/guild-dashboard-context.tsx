@@ -191,6 +191,7 @@ export default function GuildDashboardContext(props: Props) {
                     fetchedData.autoplay ??= false;
                     fetchedData.twenty_four_seven_mode ??= false;
                     props.robertifyGuildInfo = fetchedData;
+                    setCurrentData(props.robertifyGuildInfo);
                     setChangesMade(false);
                     router.refresh()
                     sendToast({
