@@ -120,6 +120,8 @@ export default function SelectMenu(props: Props) {
     const handleSelect = (value: SelectMenuContent) => {
         if (props.disabled)
             return;
+        if (!expanded)
+            return;
 
         setSelected(prev => {
             if (!prev || prev.length === 0) {
@@ -185,27 +187,25 @@ export default function SelectMenu(props: Props) {
                     width={1.5}
                 />
             </div>
-            {
-                expanded &&
-                <div
-                    className='absolute z-50 left-0 mt-4'
-                    ref={optionsViewRef}
-                >
-                    <input type='text'
-                           className='p-3 w-full rounded-xl mb-2 bg-neutral-200 dark:bg-dark dark:placeholder-neutral-700 dark:text-white'
-                           placeholder='Search...'
-                           value={searchValue}
-                            onChange={e => {
-                                setSearchValue(e.target.value);
-                            }}
-                    />
-                    <div className={' max-h-48 overflow-auto p-4 bg-neutral-200 dark:bg-dark rounded-xl shadow-md transition-faster ' + parseMenuSize(props.size)}>
-                        {categories.length !== 0 ? categories :
-                            <p className='text-neutral-700 select-none'>There are no items...</p>}
-                    </div>
+            <div
+                className={'absolute z-50 left-0 mt-4 transition-fast ' + (expanded ? 'opacity-100' : 'opacity-0 pointer-events-none') }
+                ref={optionsViewRef}
+            >
+                <input type='text'
+                       className='p-3 w-full rounded-xl mb-2 bg-neutral-200 dark:bg-dark dark:placeholder-neutral-700 dark:text-white'
+                       placeholder='Search...'
+                       value={searchValue}
+                       onChange={e => {
+                           if (!expanded)
+                               return;
+                           setSearchValue(e.target.value);
+                       }}
+                />
+                <div className={' max-h-48 overflow-auto p-4 bg-neutral-200 dark:bg-dark rounded-xl shadow-md transition-faster ' + parseMenuSize(props.size)}>
+                    {categories.length !== 0 ? categories :
+                        <p className='text-neutral-700 select-none'>There are no items...</p>}
                 </div>
-
-            }
+            </div>
         </div>
     )
 }
