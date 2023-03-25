@@ -30,6 +30,13 @@ import {ButtonType} from "@/components/button/ButtonType";
 
 type RequestChannelButton = keyof DedicatedChannelConfig
 
+type RequestChannelButtonMetaData = {
+    id: number,
+    label: string,
+    key: string,
+    icon: string | StaticImageData,
+    type: ButtonType.BLUE | ButtonType.GREY | ButtonType.DANGER
+}
 export default class GuildDashboardHandler {
 
     constructor(
@@ -40,48 +47,117 @@ export default class GuildDashboardHandler {
     ) {
     }
 
+    private getButtonMetaData(button: RequestChannelButton): RequestChannelButtonMetaData {
+        switch (button) {
+            case "disconnect": return {
+                id: 10,
+                label: "Disconnect",
+                key: button,
+                icon: '',
+                type: ButtonType.DANGER
+            };
+            case "favourite": return {
+                id: 6,
+                label: "Favourite",
+                key: button,
+                icon: '',
+                type: ButtonType.GREY
+            };
+            case "filters": return {
+                id: 9,
+                label: "Filters",
+                key: button,
+                icon: '',
+                type: ButtonType.GREY
+            };
+            case "previous": return {
+                id: 1,
+                label: "Previous",
+                key: button,
+                icon: '',
+                type: ButtonType.BLUE
+            };
+            case "rewind": return {
+                id: 2,
+                label: "Rewind",
+                key: button,
+                icon: '',
+                type: ButtonType.BLUE
+            };
+            case "shuffle": return {
+                id: 8,
+                label: "Shuffle",
+                key: button,
+                icon: '',
+                type: ButtonType.GREY
+            };
+            case "loop": return {
+                id: 7,
+                label: "Loop",
+                key: button,
+                icon: '',
+                type: ButtonType.GREY
+            };
+            case "play_pause": return {
+                id: 3,
+                label: "Play and Pause",
+                key: button,
+                icon: '',
+                type: ButtonType.BLUE
+            };
+            case "skip": return {
+                id: 5,
+                label: "Skip",
+                key: button,
+                icon: '',
+                type: ButtonType.BLUE
+            };
+            case "stop": return {
+                id: 4,
+                label: "Stop",
+                key: button,
+                icon: '',
+                type: ButtonType.BLUE
+            };
+        }
+    }
+
     public generateReqChannelButtons(userHasPermission: boolean) {
         const config = this.robertifyGuild.dedicated_channel.config || this.getDefaultButtonStates();
-        const getButtonLabel = (button: RequestChannelButton) => {
-            switch (button) {
-                case "disconnect": return "Disconnect";
-                case "favourite": return "Favourite";
-                case "filters": return "Filters";
-                case "previous": return "Previous";
-                case "rewind": return "Rewind";
-                case "shuffle": return "Shuffle";
-                case "loop": return "Loop";
-                case "play_pause": return "Play and Pause";
-                case "skip": return "Skip";
-                case "stop": return "Stop";
-            }
-        }
 
-        return Object.keys(config).map((key) => (
-            <Button
-                key={key}
-                disabled={!userHasPermission}
-                label={getButtonLabel(key as RequestChannelButton)}
-                type={ButtonType.BLUE}
-                height={3}
-                width={8}
-                onClick={() => this.toggleReqChannelButton(key as RequestChannelButton)}
-            />
-        ));
+        return Object.keys(config).map((key) => {
+            const metaData = this.getButtonMetaData(key as RequestChannelButton);
+
+            return ({
+                id: metaData.id,
+                element: <Button
+                    key={key}
+                    disabled={!userHasPermission}
+                    label={metaData.label}
+                    icon={metaData.icon}
+                    type={metaData.type}
+                    height={3}
+                    className={(!config[key as RequestChannelButton] ? 'dark:brightness-[60%] brightness-[75%]' : '') + ' !w-full'}
+                    onClick={() => this.toggleReqChannelButton(key as RequestChannelButton)}
+                />
+            })
+        })
+            .sort((a, b) => a.id - b.id)
+            .map(e => e.element);
     }
 
     private getDefaultButtonStates(): DedicatedChannelConfig {
         return {
-            disconnect: true,
+            previous: true,
+            rewind: true,
             play_pause: true,
             stop: true,
             skip: true,
-            filters: false,
             favourite: true,
-            shuffle: true,
-            rewind: true,
             loop: true,
-            previous: true
+            shuffle: true,
+            filters: false,
+            disconnect: true,
         }
     }
 

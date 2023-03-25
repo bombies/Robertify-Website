@@ -234,9 +234,10 @@ export default function GuildDashboardContext(props: Props) {
                                 />
                             </Card> :
                             <Card
-                                className='relative !w-5/6'
+                                className='relative !w-5/6 laptop:!w-full'
                             >
-                                <div className='grid grid-cols-5 gap-4'>
+                                <p className='text-xl phone:text-sm tablet:text-center tracking-widest font-semibold mb-6 text-secondary dark:text-white'>Select which buttons you want to be displayed in your request channel</p>
+                                <div className='grid grid-cols-5 laptop:grid-cols-3 tablet:grid-cols-2 tablet:place-items-center phone:grid-cols-1 gap-4'>
                                     {handler.generateReqChannelButtons(props.userHasPermission)}
                                 </div>
                             </Card>
