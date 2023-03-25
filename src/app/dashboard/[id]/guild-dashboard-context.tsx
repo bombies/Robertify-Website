@@ -219,6 +219,8 @@ export default function GuildDashboardContext(props: Props) {
         })
     }
 
+    const guildIcon = props.discordGuildInfo.icon ? `https://cdn.discordapp.com/icons/${props.discordGuildInfo.id}/${props.discordGuildInfo.icon}.webp?size=512` : 'https://i.imgur.com/k14Qfh5.png';
+
     return (
         <div className='relative'>
             <div
@@ -245,22 +247,25 @@ export default function GuildDashboardContext(props: Props) {
                     />
                 </div>
             </div>
-            <div
-                className='mx-auto mb-12 tablet:p-6 p-12 bg-primary/10 shadow-md dark:bg-neutral-900 w-full h-42 rounded-2xl border-2 border-primary/90'>
+            <div className='tablet:px-6 px+-12'>
                 <Link href='/dashboard'>
-                    <div className='flex gap-4 hover:scale-[100.25%] transition-fast mb-12'>
+                    <div className='flex gap-4 hover:scale-[100.25%] transition-fast mb-6'>
                         <GenericImage src={backIcon} width={2}/>
                         <p className='relative self-center text-primary font-semibold text-xl phone:text-sm'>Return to
                             your servers</p>
                     </div>
                 </Link>
+            </div>
+            <div
+                className='relative overflow-hidden mx-auto mb-12 tablet:p-6 p-8 bg-primary/10 shadow-md dark:bg-neutral-900 w-full h-42 rounded-2xl border-2 border-primary/90'
+            >
                 <div className='flex gap-12'>
                     <GenericImage
-                        className='relative w-32 h-32 phone:w-16 phone:h-16 rounded-full border-2 border-primary'
+                        className='relative w-20 h-20 phone:w-16 phone:h-16 rounded-full'
                         imageClassName='rounded-full'
-                        src={props.discordGuildInfo.icon ? `https://cdn.discordapp.com/icons/${props.discordGuildInfo.id}/${props.discordGuildInfo.icon}.webp?size=512` : 'https://i.imgur.com/k14Qfh5.png'}
+                        src={guildIcon}
                     />
-                    <h1 className='text-5xl phone:text-xl font-bold text-primary self-center'>{props.discordGuildInfo.name}</h1>
+                    <h1 className='text-4xl phone:text-xl font-black tracking-wider text-primary self-center z-10'>{props.discordGuildInfo.name}</h1>
                 </div>
             </div>
             <div
