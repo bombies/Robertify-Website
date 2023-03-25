@@ -27,7 +27,7 @@ export default function GenericImage(props: Props) {
             className={`relative ${props.fade !== undefined ? `fade-in-section ${isVisible ? 'is-visible' : ''}` : ''} ${props.className || ''}`}
             style={{
                 width: props.width && `${props.width}rem`,
-                height: props.width && `${props.height || props.width}rem`,
+                height: props.width && `${props.height ?? props.width}rem`,
             }}
         >
             <Image

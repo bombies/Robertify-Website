@@ -25,6 +25,16 @@ import france from '/public/locale/france.svg';
 import russia from '/public/locale/russia.svg';
 import netherlands from '/public/locale/netherlands.svg';
 import germany from '/public/locale/germany.svg';
+import disconnect from '/public/reqchannel/disconnect.svg';
+import favourite from '/public/reqchannel/favourite.svg';
+import filters from '/public/reqchannel/filters.svg';
+import loop from '/public/reqchannel/loop.svg';
+import play_and_pause from '/public/reqchannel/pnp.svg';
+import previous from '/public/reqchannel/previous.svg';
+import rewind from '/public/reqchannel/rewind.svg';
+import shuffle from '/public/reqchannel/shuffle.svg';
+import skip from '/public/reqchannel/skip.svg';
+import stop from '/public/reqchannel/stop.svg';
 import Button from "@/components/button/Button";
 import {ButtonType} from "@/components/button/ButtonType";
 
@@ -53,70 +63,70 @@ export default class GuildDashboardHandler {
                 id: 10,
                 label: "Disconnect",
                 key: button,
-                icon: '',
+                icon: disconnect,
                 type: ButtonType.DANGER
             };
             case "favourite": return {
                 id: 6,
                 label: "Favourite",
                 key: button,
-                icon: '',
+                icon: favourite,
                 type: ButtonType.GREY
             };
             case "filters": return {
                 id: 9,
                 label: "Filters",
                 key: button,
-                icon: '',
+                icon: filters,
                 type: ButtonType.GREY
             };
             case "previous": return {
                 id: 1,
                 label: "Previous",
                 key: button,
-                icon: '',
+                icon: previous,
                 type: ButtonType.BLUE
             };
             case "rewind": return {
                 id: 2,
                 label: "Rewind",
                 key: button,
-                icon: '',
+                icon: rewind,
                 type: ButtonType.BLUE
             };
             case "shuffle": return {
                 id: 8,
                 label: "Shuffle",
                 key: button,
-                icon: '',
+                icon: shuffle,
                 type: ButtonType.GREY
             };
             case "loop": return {
                 id: 7,
                 label: "Loop",
                 key: button,
-                icon: '',
+                icon: loop,
                 type: ButtonType.GREY
             };
             case "play_pause": return {
                 id: 3,
                 label: "Play and Pause",
                 key: button,
-                icon: '',
+                icon: play_and_pause,
                 type: ButtonType.BLUE
             };
             case "skip": return {
                 id: 5,
                 label: "Skip",
                 key: button,
-                icon: '',
+                icon: skip,
                 type: ButtonType.BLUE
             };
             case "stop": return {
                 id: 4,
                 label: "Stop",
                 key: button,
-                icon: '',
+                icon: stop,
                 type: ButtonType.BLUE
             };
         }

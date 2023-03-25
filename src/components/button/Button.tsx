@@ -59,7 +59,7 @@ export default function Button(props: Props) {
         <div className={'flex gap-[.25rem] justify-center'}>
             {props.icon &&
                 <GenericImage
-                    className='self-center shadow-primary/40'
+                    className='self-center'
                     src={props.icon}
                     width={1.25}
                 />
