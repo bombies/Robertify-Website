@@ -2,7 +2,7 @@
 
 import React, {useEffect, useRef, useState} from "react";
 import {ComponentSize} from "@/components/card";
-import Image, {StaticImageData} from "next/image";
+import {StaticImageData} from "next/image";
 import dropDownIcon from '/public/drop-down.svg';
 import GenericImage from "@/app/_components/GenericImage";
 
@@ -101,6 +101,7 @@ export default function SelectMenu(props: Props) {
     const [selected, setSelected] = useState<SelectMenuContent[] | undefined>(props.content?.filter(item => item.selected === true));
     const [ searchValue, setSearchValue ] = useState('');
     const [ visibleItems, setVisibleItems ] = useState(parseCategories(props.content));
+
 
     useEffect(() => {
         setSelected(props.content?.filter(item => item.selected === true))

@@ -59,6 +59,7 @@ export default class GuildDashboardHandler {
 
         return Object.keys(config).map((key) => (
             <Button
+                key={key}
                 disabled={!userHasPermission}
                 label={getButtonLabel(key as RequestChannelButton)}
                 type={ButtonType.BLUE}

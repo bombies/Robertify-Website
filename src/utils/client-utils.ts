@@ -9,12 +9,14 @@ export function useVisible(ref: MutableRefObject<any>): boolean {
     const [isVisible, setVisible] = useState(true);
 
     useEffect(() => {
+        const curRef = ref.current;
+
         const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => setVisible(entry.isIntersecting))
         });
 
-        if (ref.current) observer.observe(ref.current);
-        return () => { if (ref.current) observer.unobserve(ref.current); }
+        if (curRef) observer.observe(curRef);
+        return () => { if (curRef) observer.unobserve(curRef); }
     }, [ref]);
 
     return isVisible;
