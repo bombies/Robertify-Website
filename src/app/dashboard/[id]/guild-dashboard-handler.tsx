@@ -53,7 +53,12 @@ export default class GuildDashboardHandler {
         private readonly robertifyGuild: RobertifyGuild,
         private readonly discordGuild: DiscordGuild,
         private readonly guildChannels: DiscordGuildChannel[],
-        private readonly setCurrentData: Dispatch<SetStateAction<RobertifyGuild>>
+        private readonly setCurrentData: Dispatch<SetStateAction<RobertifyGuild>>,
+        private readonly hasPerms: boolean,
+        private readonly saving: boolean,
+        private readonly refreshing: boolean,
+        private readonly creatingReqChannel: boolean,
+
     ) {
     }
 
@@ -132,7 +137,7 @@ export default class GuildDashboardHandler {
         }
     }
 
-    public generateReqChannelButtons(userHasPermission: boolean) {
+    public generateReqChannelButtons() {
         const config = this.robertifyGuild.dedicated_channel.config || this.getDefaultButtonStates();
 
         return Object.keys(config).map((key) => {
@@ -142,7 +147,7 @@ export default class GuildDashboardHandler {
                 id: metaData.id,
                 element: <Button
                     key={key}
-                    disabled={!userHasPermission}
+                    disabled={!this.hasPerms || this.saving || this.creatingReqChannel || this.refreshing}
                     label={metaData.label}
                     icon={metaData.icon}
                     type={metaData.type}
@@ -172,6 +177,9 @@ export default class GuildDashboardHandler {
     }
 
     public toggleReqChannelButton(button: RequestChannelButton) {
+        if (!this.hasPerms || this.saving || this.creatingReqChannel || this.refreshing)
+            return;
+
         const defaultButtonStates: DedicatedChannelConfig = this.getDefaultButtonStates();
 
         return this.setCurrentData(prev => {
@@ -190,7 +198,7 @@ export default class GuildDashboardHandler {
         })
     }
 
-    public generateDJToggleElements(userHasPermission: boolean) {
+    public generateDJToggleElements() {
         const obj = this.robertifyGuild.toggles.dj_toggles;
         return (Object.keys(obj) as (keyof GuildDJToggles)[])
             .sort((a, b) => a.localeCompare(b))
@@ -202,7 +210,7 @@ export default class GuildDashboardHandler {
                     <Toggle
                         status={this.getToggle('dj_toggles', key)}
                         onClick={() => this.switchToggle('dj_toggles', key)}
-                        disabled={!userHasPermission}
+                        disabled={!this.hasPerms || this.saving || this.creatingReqChannel || this.refreshing}
                     />
                 </DashboardSectionContent>
             ));
@@ -232,7 +240,7 @@ export default class GuildDashboardHandler {
         }
     }
 
-    public generateLogToggleElements(userHasPermission: boolean) {
+    public generateLogToggleElements() {
         let obj = this.robertifyGuild.toggles.log_toggles ?? this.genDefaultLogTogglesObject();
         return (Object.keys(obj) as (keyof GuildLogToggles)[])
             .sort((a, b) => a.localeCompare(b))
@@ -244,7 +252,7 @@ export default class GuildDashboardHandler {
                     <Toggle
                         status={this.getToggle('log_toggles', key)}
                         onClick={() => this.switchToggle('log_toggles', key)}
-                        disabled={!userHasPermission}
+                        disabled={!this.hasPerms || this.saving || this.creatingReqChannel || this.refreshing}
                     />
                 </DashboardSectionContent>
             ));
@@ -279,6 +287,9 @@ export default class GuildDashboardHandler {
     }
 
     public switchToggle(toggle: keyof GuildToggles | 'autoplay' | 'twenty_four_seven_mode', innerToggle?: keyof GuildDJToggles | keyof GuildLogToggles) {
+        if (!this.hasPerms || this.saving || this.creatingReqChannel || this.refreshing)
+            return;
+
         switch (toggle) {
             case "dj_toggles": {
                 if (!innerToggle) return;
@@ -355,6 +366,9 @@ export default class GuildDashboardHandler {
     }
 
     public addDJRole(id: string) {
+        if (!this.hasPerms || this.saving || this.creatingReqChannel || this.refreshing)
+            return;
+
         this.setCurrentData(prev => ({
             ...prev,
             permissions: {
@@ -365,6 +379,9 @@ export default class GuildDashboardHandler {
     }
 
     public removeDJRole(id: string) {
+        if (!this.hasPerms || this.saving || this.creatingReqChannel || this.refreshing)
+            return;
+
         this.setCurrentData(prev => ({
             ...prev,
             permissions: {
@@ -391,6 +408,9 @@ export default class GuildDashboardHandler {
     }
 
     public addLogChannel(id: string) {
+        if (!this.hasPerms || this.saving || this.creatingReqChannel || this.refreshing)
+            return;
+
         this.setCurrentData(prev => ({
             ...prev,
             log_channel: id
@@ -398,6 +418,9 @@ export default class GuildDashboardHandler {
     }
 
     public setLocale(locale: LocaleString) {
+        if (!this.hasPerms || this.saving || this.creatingReqChannel || this.refreshing)
+            return;
+
         this.setCurrentData(prev => ({
             ...prev,
             locale: locale
@@ -405,6 +428,9 @@ export default class GuildDashboardHandler {
     }
 
     public setTheme(theme: ThemeString) {
+        if (!this.hasPerms || this.saving || this.creatingReqChannel || this.refreshing)
+            return;
+
         this.setCurrentData(prev => ({
             ...prev,
             theme: theme
@@ -416,6 +442,9 @@ export default class GuildDashboardHandler {
     }
 
     private addRestrictedChannel(id: string, channelType: 'text' | 'voice') {
+        if (!this.hasPerms || this.saving || this.creatingReqChannel || this.refreshing)
+            return;
+
         switch (channelType) {
             case "text": {
                 this.setCurrentData(prev => ({
@@ -441,6 +470,9 @@ export default class GuildDashboardHandler {
     }
 
     private removeRestrictedChannel(id: string, channelType: 'text' | 'voice') {
+        if (!this.hasPerms || this.saving || this.creatingReqChannel || this.refreshing)
+            return;
+
         switch (channelType) {
             case "text": {
                 this.setCurrentData(prev => ({
