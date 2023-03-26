@@ -20,11 +20,11 @@ class WebClient {
         });
 
         this.instance.interceptors.response.use((config) => config, err => {
-            // if (err.response?.status === 403 && typeof window !== 'undefined')
-            //     signOut({
-            //         callbackUrl: '/'
-            //     });
-            // else return Promise.reject(err);
+            if (err.response?.status === 403 && typeof window !== 'undefined')
+                signOut({
+                    callbackUrl: '/'
+                });
+            else return Promise.reject(err);
         });
     }
 
