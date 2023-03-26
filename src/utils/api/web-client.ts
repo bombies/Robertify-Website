@@ -1,6 +1,6 @@
 import axios, {AxiosInstance, CreateAxiosDefaults} from "axios";
 import {User} from "next-auth";
-import {signOut} from "next-auth/react";
+import {signIn} from "next-auth/react";
 import {sign} from "jsonwebtoken";
 
 class WebClient {
@@ -21,7 +21,7 @@ class WebClient {
 
         this.instance.interceptors.response.use((config) => config, err => {
             if (err.response?.status === 403 && typeof window !== 'undefined')
-                signOut({
+                signIn('discord', {
                     callbackUrl: '/'
                 });
             else return Promise.reject(err);

@@ -23,6 +23,7 @@ import useSWRMutation from 'swr/mutation';
 import GenericImage from "@/app/_components/GenericImage";
 import {sendToast} from "@/utils/client-utils";
 import refreshIcon from '/public/refresh.svg';
+import {AxiosError} from "axios";
 
 type Props = {
     id: string,
@@ -56,6 +57,14 @@ const GetCurrentBotInfo = (session: Session | null, id: string) => {
     return useSWRMutation(`/api/bot/guilds/${id}`, mutator)
 }
 
+const DeleteReqChannel = (session: Session | null, id: string) => {
+    const mutator = async (url: string) => {
+        return await WebClient.getInstance(session?.user).delete(url);
+    }
+
+    return useSWRMutation(`/api/bot/guilds/${id}/reqchannel`, mutator);
+}
+
 const hasReqChannel = (currentData: RobertifyGuild) => {
     return currentData.dedicated_channel?.channel_id && currentData.dedicated_channel?.channel_id !== '-1';
 }
@@ -75,18 +84,21 @@ export default function GuildDashboardContext(props: Props) {
         trigger: triggerReqChannelCreation
         // @ts-ignore
     } = CreateReqChannel(session, props.robertifyGuildInfo?.server_id);
+    const {
+        error: reqChannelDeletionError,
+        isMutating: isDeletingReqChannel,
+        trigger: triggerReqChannelDeletion
+        // @ts-ignore
+    } = DeleteReqChannel(session, props.robertifyGuildInfo?.server_id);
     // @ts-ignore
     const { error: refreshError, isMutating: isRefreshing, trigger: triggerRefresh } = GetCurrentBotInfo(session, props.id);
-
+    const canInteract = props.userHasPermission && !isSaving && !isRefreshing && !isCreatingReqChannel && !isDeletingReqChannel;
     const handler = new GuildDashboardHandler(
         currentData,
         props.discordGuildInfo,
         props.discordGuildChannels,
         setCurrentData,
-        props.userHasPermission,
-        isSaving,
-        isRefreshing,
-        isCreatingReqChannel
+        canInteract
     );
     const inviteLink = `https://discord.com/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&permissions=269479308656&scope=bot%20applications.commands&redirect_uri=${encodeURI(`${process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot%20applications.commands&guild_id=${props.id}&disable_guild_select=true`;
 
@@ -112,7 +124,7 @@ export default function GuildDashboardContext(props: Props) {
         return (<div></div>);
 
     const createReqChannel = () => {
-        if (!props.userHasPermission || isSaving || isRefreshing || isCreatingReqChannel)
+        if (!canInteract)
             return;
         startTransition(() => {
             triggerReqChannelCreation()
@@ -140,7 +152,21 @@ export default function GuildDashboardContext(props: Props) {
                         })
                     }
                 }, e => {
-                    console.error(reqChannelCreationError);
+                    if (e instanceof AxiosError) {
+                        const errMsg: string = e.response?.data.data.message;
+                        if (errMsg) {
+                            if (errMsg.toLowerCase().includes("already has a request channel")) {
+                                sendToast({
+                                    description: 'This server already has a request channel setup!',
+                                    type: ButtonType.DANGER
+                                })
+                                refresh();
+                                return;
+                            }
+                        }
+                    }
+
+                    console.error(e);
                     sendToast({
                         description: 'Could not create your request channel.',
                         type: ButtonType.DANGER
@@ -149,8 +175,55 @@ export default function GuildDashboardContext(props: Props) {
         })
     }
 
+    const deleteReqChannel = () => {
+        if (!canInteract)
+            return;
+        startTransition(() => {
+            triggerReqChannelDeletion()
+                .then(() => {
+                    setCurrentData(prevState => {
+                        const ret: RobertifyGuild = ({
+                            ...prevState,
+                            dedicated_channel: {
+                                ...prevState.dedicated_channel,
+                                channel_id: '-1',
+                                message_id: '-1',
+                            },
+                        });
+
+                        props.robertifyGuildInfo = ret;
+                        return ret;
+                    });
+                    router.refresh();
+                    sendToast({
+                        description: 'Request channel has been deleted!'
+                    });
+                }, (e: any) => {
+                    if (e instanceof AxiosError) {
+                        const errMsg: string = e.response?.data.data.message;
+                        if (errMsg) {
+                            if (errMsg.toLowerCase().includes("doesn't have a channel set")) {
+                                sendToast({
+                                    description: 'This server does not have a request channel!',
+                                    type: ButtonType.DANGER
+                                })
+                                refresh();
+                                return;
+                            }
+                        }
+                    }
+
+                    console.error(e);
+                    sendToast({
+                        description: 'Could not delete your request channel.',
+                        type: ButtonType.DANGER
+                    })
+                });
+        })
+    }
+
     const saveChanges = () => {
-        if (!props.userHasPermission || isSaving || isRefreshing || isCreatingReqChannel)
+        if (!canInteract || !changesMade)
             return;
         startTransition(() => {
             triggerSave()
@@ -175,7 +248,7 @@ export default function GuildDashboardContext(props: Props) {
     }
 
     const refresh = () => {
-        if (!props.userHasPermission || isSaving || isRefreshing || isCreatingReqChannel)
+        if (!canInteract)
             return;
         startTransition(() => {
             triggerRefresh()
@@ -209,9 +282,7 @@ export default function GuildDashboardContext(props: Props) {
     }
 
     const discardChanges = () => {
-        if (!props.userHasPermission)
-            return;
-        if (!changesMade)
+        if (!canInteract || !changesMade)
             return;
         setCurrentData(props.robertifyGuildInfo);
         sendToast({
@@ -236,7 +307,7 @@ export default function GuildDashboardContext(props: Props) {
                         icon={saveIcon}
                         className='self-center w-[8rem] h-[3rem] phone:w-[6rem]'
                         onClick={saveChanges}
-                        disabled={!props.userHasPermission || isSaving || isRefreshing || isCreatingReqChannel}
+                        disabled={!canInteract}
                     />
                     <Button
                         label='Discard'
@@ -244,7 +315,7 @@ export default function GuildDashboardContext(props: Props) {
                         icon={discardIcon}
                         className='self-center w-[8rem] h-[3rem] phone:w-[6rem]'
                         onClick={discardChanges}
-                        disabled={!props.userHasPermission || isSaving || isRefreshing || isCreatingReqChannel}
+                        disabled={!canInteract}
                     />
                 </div>
             </div>
@@ -291,7 +362,7 @@ export default function GuildDashboardContext(props: Props) {
                             >
                                 <Button
                                     isWorking={isCreatingReqChannel}
-                                    disabled={!props.userHasPermission || isSaving || isRefreshing || isCreatingReqChannel}
+                                    disabled={!canInteract}
                                     label='Create Request Channel'
                                     type={ButtonType.CTA}
                                     height={3}
@@ -306,6 +377,17 @@ export default function GuildDashboardContext(props: Props) {
                                 <div className='grid grid-cols-5 laptop:grid-cols-3 tablet:grid-cols-2 tablet:place-items-center phone:grid-cols-1 gap-4'>
                                     {handler.generateReqChannelButtons()}
                                 </div>
+                                <Button
+                                    className='mt-12'
+                                    label='Delete Request Channel'
+                                    isWorking={isDeletingReqChannel}
+                                    disabled={!canInteract}
+                                    icon={discardIcon}
+                                    width={12}
+                                    height={3}
+                                    onClick={deleteReqChannel}
+                                    type={ButtonType.DANGER}
+                                />
                             </Card>
                     }
                 </DashboardSection>
@@ -327,7 +409,7 @@ export default function GuildDashboardContext(props: Props) {
                             handleItemSelect={(item) => {
                                 handler.setTheme(item.value as ThemeString)
                             }}
-                            disabled={!props.userHasPermission || isSaving || isRefreshing || isCreatingReqChannel}
+                            disabled={!canInteract}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -344,7 +426,7 @@ export default function GuildDashboardContext(props: Props) {
                             handleItemSelect={(item) => {
                                 handler.setLocale(item.value as LocaleString)
                             }}
-                            disabled={!props.userHasPermission || isSaving || isRefreshing || isCreatingReqChannel}
+                            disabled={!canInteract}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -360,7 +442,7 @@ export default function GuildDashboardContext(props: Props) {
                             displayCategories={false}
                             handleItemSelect={(item) => handler.addDJRole(item.value)}
                             handleItemDeselect={(item) => handler.removeDJRole(item.value)}
-                            disabled={!props.userHasPermission || isSaving || isRefreshing || isCreatingReqChannel}
+                            disabled={!canInteract}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -375,7 +457,7 @@ export default function GuildDashboardContext(props: Props) {
                             content={handler.generateVoiceChannelContent('restricted_channels')}
                             handleItemSelect={item => handler.addRestrictedVoiceChannel(item.value)}
                             handleItemDeselect={item => handler.removeRestrictedVoiceChannel(item.value)}
-                            disabled={!props.userHasPermission || isSaving || isRefreshing || isCreatingReqChannel}
+                            disabled={!canInteract}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -390,7 +472,7 @@ export default function GuildDashboardContext(props: Props) {
                             content={handler.generateTextChannelContent('restricted_channels')}
                             handleItemSelect={item => handler.addRestrictedTextChannel(item.value)}
                             handleItemDeselect={item => handler.removeRestrictedTextChannel(item.value)}
-                            disabled={!props.userHasPermission || isSaving || isRefreshing || isCreatingReqChannel}
+                            disabled={!canInteract}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -404,7 +486,7 @@ export default function GuildDashboardContext(props: Props) {
                             content={handler.generateTextChannelContent('log_channel')}
                             handleItemSelect={item => handler.addLogChannel(item.value)}
                             handleItemDeselect={() => handler.removeLogChannel()}
-                            disabled={!props.userHasPermission || isSaving || isRefreshing || isCreatingReqChannel}
+                            disabled={!canInteract}
                         />
                     </DashboardSectionContent>
                 </DashboardSection>
@@ -419,7 +501,7 @@ export default function GuildDashboardContext(props: Props) {
                         <Toggle
                             status={handler.getToggle('restricted_text_channels')}
                             onClick={() => handler.switchToggle('restricted_text_channels')}
-                            disabled={!props.userHasPermission || isSaving || isRefreshing || isCreatingReqChannel}
+                            disabled={!canInteract}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -429,7 +511,7 @@ export default function GuildDashboardContext(props: Props) {
                         <Toggle
                             status={handler.getToggle('restricted_voice_channels')}
                             onClick={() => handler.switchToggle('restricted_voice_channels')}
-                            disabled={!props.userHasPermission || isSaving || isRefreshing || isCreatingReqChannel}
+                            disabled={!canInteract}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -439,7 +521,7 @@ export default function GuildDashboardContext(props: Props) {
                         <Toggle
                             status={handler.getToggle('announce_messages')}
                             onClick={() => handler.switchToggle('announce_messages')}
-                            disabled={!props.userHasPermission || isSaving || isRefreshing || isCreatingReqChannel}
+                            disabled={!canInteract}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -449,7 +531,7 @@ export default function GuildDashboardContext(props: Props) {
                         <Toggle
                             status={handler.getToggle('show_requester')}
                             onClick={() => handler.switchToggle('show_requester')}
-                            disabled={!props.userHasPermission || isSaving || isRefreshing || isCreatingReqChannel}
+                            disabled={!canInteract}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -459,7 +541,7 @@ export default function GuildDashboardContext(props: Props) {
                         <Toggle
                             status={handler.getToggle('8ball')}
                             onClick={() => handler.switchToggle('8ball')}
-                            disabled={!props.userHasPermission || isSaving || isRefreshing || isCreatingReqChannel}
+                            disabled={!canInteract}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -469,7 +551,7 @@ export default function GuildDashboardContext(props: Props) {
                         <Toggle
                             status={handler.getToggle('polls')}
                             onClick={() => handler.switchToggle('polls')}
-                            disabled={!props.userHasPermission || isSaving || isRefreshing || isCreatingReqChannel}
+                            disabled={!canInteract}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -479,7 +561,7 @@ export default function GuildDashboardContext(props: Props) {
                         <Toggle
                             status={handler.getToggle('reminders')}
                             onClick={() => handler.switchToggle('reminders')}
-                            disabled={!props.userHasPermission || isSaving || isRefreshing || isCreatingReqChannel}
+                            disabled={!canInteract}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -489,7 +571,7 @@ export default function GuildDashboardContext(props: Props) {
                         <Toggle
                             status={handler.getToggle('tips')}
                             onClick={() => handler.switchToggle('tips')}
-                            disabled={!props.userHasPermission || isSaving || isRefreshing || isCreatingReqChannel}
+                            disabled={!canInteract}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -499,7 +581,7 @@ export default function GuildDashboardContext(props: Props) {
                         <Toggle
                             status={handler.getToggle('vote_skips')}
                             onClick={() => handler.switchToggle('vote_skips')}
-                            disabled={!props.userHasPermission || isSaving || isRefreshing || isCreatingReqChannel}
+                            disabled={!canInteract}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -509,7 +591,7 @@ export default function GuildDashboardContext(props: Props) {
                         <Toggle
                             status={handler.getToggle('autoplay')}
                             onClick={() => handler.switchToggle('autoplay')}
-                            disabled={!props.userHasPermission || isSaving || isRefreshing || isCreatingReqChannel}
+                            disabled={!canInteract}
                         />
                     </DashboardSectionContent>
                     <DashboardSectionContent
@@ -519,7 +601,7 @@ export default function GuildDashboardContext(props: Props) {
                         <Toggle
                             status={handler.getToggle('twenty_four_seven_mode')}
                             onClick={() => handler.switchToggle('twenty_four_seven_mode')}
-                            disabled={!props.userHasPermission || isSaving || isRefreshing || isCreatingReqChannel}
+                            disabled={!canInteract}
                         />
                     </DashboardSectionContent>
                 </DashboardSection>
@@ -539,7 +621,7 @@ export default function GuildDashboardContext(props: Props) {
                 </DashboardSection>
                 <Button
                     label='Refresh'
-                    disabled={!props.userHasPermission || isSaving || isRefreshing || isCreatingReqChannel}
+                    disabled={!canInteract}
                     isWorking={isRefreshing}
                     icon={refreshIcon}
                     height={3}

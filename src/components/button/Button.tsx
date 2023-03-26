@@ -105,7 +105,7 @@ export default function Button(props: Props) {
                             type={props.submit === true ? 'submit' : 'button'}
                     >
                         <div
-                            className={'flex justify-center p-2 gap-4 mx-auto' + ((props.type === ButtonType.INVERTED || props.type === ButtonType.SECONDARY) ? ' text-primary' : '') + (props.className ? ` ${props.className}` : '')}>
+                            className={'flex justify-center p-2 gap-4 mx-auto' + ((props.type === ButtonType.INVERTED || props.type === ButtonType.SECONDARY) ? ' text-primary' : '')}>
                             {props.isWorking ? <Spinner size={.75}/> : children}
                         </div>
                     </button>

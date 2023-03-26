@@ -9,7 +9,7 @@ type Props = {
 export default function Toggle(props: Props) {
     return (
         <div
-            className={'relative w-12 h-6 transition-fast rounded-full dark:bg-dark bg-neutral-100 shadow-md cursor-pointer ' + (props.status ? '!bg-primary' : '') + (props.disabled ? ' brightness-50' : '')}
+            className={'relative w-16 h-8 p-2 transition-fast rounded-full dark:bg-dark bg-neutral-100 shadow-md cursor-pointer ' + (props.status ? '!bg-primary' : '') + (props.disabled ? ' brightness-50' : '')}
             onClick={(e) => {
                 if (props.disabled)
                     return;
@@ -17,7 +17,7 @@ export default function Toggle(props: Props) {
                     props.onClick(e);
             }}
         >
-            <div className={'transition-fast h-6 w-6 rounded-full bg-primary shadow-md dark:shadow-primary/30 !ease-out ' + (props.status ? 'translate-x-full !bg-white' : '')}></div>
+            <div className={'transition-fast h-4 w-4 rounded-full bg-primary shadow-md dark:shadow-primary/30 !ease-out ' + (props.status ? 'translate-x-[200%] !bg-white' : '')}></div>
         </div>
     )
 }
