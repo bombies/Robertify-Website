@@ -24,6 +24,7 @@ import GenericImage from "@/app/_components/GenericImage";
 import {sendToast} from "@/utils/client-utils";
 import refreshIcon from '/public/refresh.svg';
 import {AxiosError} from "axios";
+import MiniContent from "@/components/MiniContent";
 
 type Props = {
     id: string,
@@ -359,6 +360,7 @@ export default function GuildDashboardContext(props: Props) {
                         src={guildIcon}
                     />
                     <h1 className='text-4xl phone:text-xl font-black tracking-wider text-primary self-center z-10'>{props.discordGuildInfo.name}</h1>
+                    <MiniContent content='BETA' />
                 </div>
             </div>
             <div

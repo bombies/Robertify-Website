@@ -3,6 +3,7 @@ import WebClient from "@/utils/api/web-client";
 import {AxiosError} from "axios";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
+import MiniContent from "@/components/MiniContent";
 
 export const metadata = {
     title: 'Robertify - Guild List'
@@ -32,9 +33,11 @@ export default async function Dashboard() {
 
     return (
         <main className='p-12 phone:px-6 min-h-screen'>
+            <MiniContent content='BETA' className='mx-auto' />
             <h1 className='text-primary text-5xl phone:text-3xl dark:drop-shadow-glow-primary-lg text-center mb-6'>
                 Welcome to your dashboard
             </h1>
+
             <GuildGrid guilds={guilds}/>
         </main>
     )

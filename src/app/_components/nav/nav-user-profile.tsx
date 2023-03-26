@@ -7,6 +7,7 @@ import {ButtonType} from "@/components/button/ButtonType";
 import serverIcon from '/public/server.svg';
 import {useSession} from "next-auth/react";
 import GenericImage from "@/app/_components/GenericImage";
+import MiniContent from "@/components/MiniContent";
 
 export default function NavUserProfile() {
     const [expanded, setExpanded] = useState(false);
@@ -67,16 +68,18 @@ export default function NavUserProfile() {
                         </div>
                     }
                     <div className='space-y-3'>
-                        <Button
-                            centered
-                            width={6}
-                            height={2.5}
-                            icon={serverIcon}
-                            label='Servers'
-                            href='/dashboard'
-                            newTab={false}
-                            type={ButtonType.PRIMARY}
-                        />
+                        <div className='flex gap-1'>
+                            <Button
+                                centered
+                                width={10}
+                                height={2.5}
+                                icon={serverIcon}
+                                label='Servers (BETA)'
+                                href='/dashboard'
+                                newTab={false}
+                                type={ButtonType.PRIMARY}
+                            />
+                        </div>
                         <LogoutButton/>
                     </div>
                 </div>

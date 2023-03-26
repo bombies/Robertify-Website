@@ -10,7 +10,7 @@ import GenericImage from "@/app/_components/GenericImage";
 import {ToastDataProps} from "@/components/ToastComponent";
 import {sendToast} from "@/utils/client-utils";
 
-const getButtonStyle = (darkMode: boolean, type?: ButtonType): string => {
+export const getButtonStyle = (type?: ButtonType): string => {
     switch (type) {
         case ButtonType.PRIMARY:
             return "bg-primary shadow-lg dark:shadow-primary/40 shadow-transparent";
@@ -53,7 +53,7 @@ interface Props {
 export default function Button(props: Props) {
     const [darkMode] = useDarkMode();
 
-    const className = '!cursor-pointer transition-fast hover:!scale-105 rounded-lg !text-white ' + getButtonStyle(darkMode, props.type) + ' ' + (props.className || '') + (typeof props.centered !== 'undefined' ? ' flex mx-auto' : '');
+    const className = '!cursor-pointer transition-fast hover:!scale-105 rounded-lg !text-white ' + getButtonStyle(props.type) + ' ' + (props.className || '') + (typeof props.centered !== 'undefined' ? ' flex mx-auto' : '');
     const styleObj = {
         width: props.width ? props.width + 'rem' : "inherit",
         height: props.height ? props.height + 'rem' : "inherit",

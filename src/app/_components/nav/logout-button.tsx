@@ -9,7 +9,7 @@ export default function LogoutButton() {
     return (
         <div className='flex justify-center'>
             <Button
-                width={6}
+                width={10}
                 height={2.5}
                 className='text-center pointer-events-auto'
                 onClick={() => signOut({
