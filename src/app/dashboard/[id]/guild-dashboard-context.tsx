@@ -317,8 +317,8 @@ export default function GuildDashboardContext(props: Props) {
     return (
         <div className='relative'>
             <div
-                className={'fixed rounded-xl w-full bottom-0 right-0 mx-auto bg-primary/90 dark:bg-neutral-900/80 backdrop-blur-sm h-20 z-[51] p-6 flex phone:gap-2 justify-between transition-fast' + (!changesMade ? ' bottom-[-200px]' : '')}>
-                <p className='text-white dark:text-primary dark:drop-shadow-glow-primary-lg font-semibold text-2xl phone:text-sm self-center'>You
+                className={'fixed rounded-xl w-full bottom-0 right-0 mx-auto bg-primary/20 dark:bg-neutral-900/80 backdrop-blur-sm h-20 z-[51] p-6 flex phone:gap-2 justify-between transition-faster' + (!changesMade ? ' bottom-[-100px]' : '')}>
+                <p className='text-black dark:text-primary dark:drop-shadow-glow-primary-lg font-semibold text-2xl phone:text-sm self-center'>You
                     have unsaved changes!
                 </p>
                 <div className='flex gap-4'>
@@ -326,7 +326,7 @@ export default function GuildDashboardContext(props: Props) {
                         isWorking={isSaving}
                         label='Save'
                         icon={saveIcon}
-                        className='self-center w-[8rem] h-[3rem] phone:w-[6rem]'
+                        className='self-center !w-[8rem] !h-[3rem] phone:!w-[6rem]'
                         onClick={saveChanges}
                         disabled={!canInteract}
                     />
@@ -334,7 +334,7 @@ export default function GuildDashboardContext(props: Props) {
                         label='Discard'
                         type={ButtonType.WARNING}
                         icon={discardIcon}
-                        className='self-center w-[8rem] h-[3rem] phone:w-[6rem]'
+                        className='self-center !w-[8rem] !h-[3rem] phone:!w-[6rem]'
                         onClick={discardChanges}
                         disabled={!canInteract}
                     />
