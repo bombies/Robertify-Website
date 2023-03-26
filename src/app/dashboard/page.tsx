@@ -1,9 +1,12 @@
 import GuildGrid from "@/app/dashboard/guild-grid";
 import WebClient from "@/utils/api/web-client";
-import {cookies} from "next/headers";
 import {AxiosError} from "axios";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
+
+export const metadata = {
+    title: 'Robertify - Guild List'
+}
 
 const getUserGuilds = async () => {
     try {

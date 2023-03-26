@@ -5,6 +5,10 @@ import {DiscordUserGuild, isServerAdmin} from "@/utils/discord-types";
 import {getServerSession, Session} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 
+export const metadata = {
+    title: `Robertify - Guild Dashboard`
+}
+
 const getDiscordGuildInfo = async (id: string, session: Session | null) => {
     try {
         return (await WebClient.getInstance(session?.user)
