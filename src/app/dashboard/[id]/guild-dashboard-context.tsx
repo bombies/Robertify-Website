@@ -75,6 +75,7 @@ export default function GuildDashboardContext(props: Props) {
     const [currentData, setCurrentData] = useState(props.robertifyGuildInfo)
     const [changesMade, setChangesMade] = useState(false);
     const [, startTransition] = useTransition();
+    const { data: discordInfo, status } = useSession();
 
     // @ts-ignore
     const {error: saveError, isMutating: isSaving, trigger: triggerSave} = POSTChanges(session, props.id, currentData);
@@ -108,17 +109,16 @@ export default function GuildDashboardContext(props: Props) {
     const inviteLink = `https://discord.com/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&permissions=269479308656&scope=bot%20applications.commands&redirect_uri=${encodeURI(`${process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot%20applications.commands&guild_id=${props.id}&disable_guild_select=true`;
 
     useEffect(() => {
-        if (session.status !== 'loading' && (session.status === 'unauthenticated' || !session.data))
+        if (status === 'loading')
+            return;
+
+        if (status === 'unauthenticated' || !discordInfo)
             signIn('discord', {
-                callbackUrl: '/'
-            });
-    }, [session])
-
-
-    useEffect(() => {
-        if (!props.discordGuildInfo || !props.robertifyGuildInfo || !props.discordGuildChannels)
+                callbackUrl: `/dashboard/${props.id}`
+            })
+        else if (!props.discordGuildInfo || !props.robertifyGuildInfo || !props.discordGuildChannels)
             return router.push(inviteLink);
-    }, [props.discordGuildInfo, props.robertifyGuildInfo, props.discordGuildChannels, inviteLink, router])
+    }, [props.discordGuildInfo, props.robertifyGuildInfo, props.discordGuildChannels, inviteLink, router, discordInfo, status])
 
     useEffect(() => {
         const b = compareData(currentData, props.robertifyGuildInfo);

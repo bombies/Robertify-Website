@@ -52,7 +52,7 @@ export default function GuildGrid(props: Props) {
     useEffect(() => {
         if (status !== 'loading'  && (status === 'unauthenticated' || !discordInfo))
             signIn('discord', {
-                callbackUrl: '/'
+                callbackUrl: '/dashboard'
             })
     }, [discordInfo, status])
 
