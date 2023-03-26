@@ -383,7 +383,7 @@ export default function GuildDashboardContext(props: Props) {
                                     isWorking={isDeletingReqChannel}
                                     disabled={!canInteract}
                                     icon={discardIcon}
-                                    width={12}
+                                    width={14}
                                     height={3}
                                     onClick={deleteReqChannel}
                                     type={ButtonType.DANGER}
