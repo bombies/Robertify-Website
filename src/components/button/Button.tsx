@@ -85,6 +85,7 @@ export default function Button(props: Props) {
                         className={className + ' flex justify-center '}
                         href={props.href}
                         target={props.newTab === false ?  undefined : "_blank"}
+                        rel={props.newTab !== false ? 'noopener noreferrer' : undefined}
                     >
                         <div
                             className={'flex justify-center self-center gap-4' + ((props.type === ButtonType.INVERTED || props.type === ButtonType.SECONDARY) ? ' text-primary' : '') + (props.className ? ` ${props.className}` : '')}>
