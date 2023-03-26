@@ -2,7 +2,7 @@
 
 import 'client-only';
 import {MutableRefObject, useEffect, useState} from "react";
-import toast from "react-hot-toast";
+import toast, {ToastOptions} from "react-hot-toast";
 import ToastComponent, {ToastDataProps} from "@/components/ToastComponent";
 
 export function getWindowSize(): [number, number] {
@@ -28,6 +28,6 @@ export function useVisible(ref: MutableRefObject<any>): boolean {
     return isVisible;
 }
 
-export function sendToast(props: ToastDataProps) {
-    toast.custom(t => (<ToastComponent toastObj={t} data={props} />));
+export function sendToast(props: ToastDataProps, options?: ToastOptions) {
+    toast.custom(t => (<ToastComponent toastObj={t} data={props} />), options);
 }

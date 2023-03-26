@@ -6,18 +6,40 @@ import {getServerSession, Session} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 
 const getDiscordGuildInfo = async (id: string, session: Session | null) => {
-    return (await WebClient.getInstance(session?.user)
-        .get(`/api/discord/guilds/${id}`))?.data
+    try {
+        return (await WebClient.getInstance(session?.user)
+            .get(`/api/discord/guilds/${id}`))?.data
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            if (e.response?.status === 404)
+                return undefined;
+        }
+    }
+
 }
 
 const getDiscordGuildChannels = async (id: string, session: Session | null) => {
-    return (await WebClient.getInstance(session?.user)
-        .get(`/api/discord/guilds/${id}/channels`))?.data
+    try {
+        return (await WebClient.getInstance(session?.user)
+            .get(`/api/discord/guilds/${id}/channels`))?.data
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            if (e.response?.status === 404)
+                return undefined;
+        }
+    }
 }
 
 const getBotGuildInfo = async (id: string, session: Session | null) => {
-    return (await WebClient.getInstance(session?.user)
-        .get(`/api/bot/guilds/${id}`))?.data
+    try {
+        return (await WebClient.getInstance(session?.user)
+            .get(`/api/bot/guilds/${id}`))?.data
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            if (e.response?.status === 404)
+                return undefined;
+        }
+    }
 }
 
 const getUserGuilds = async (session: Session | null) => {

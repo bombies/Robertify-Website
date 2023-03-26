@@ -91,7 +91,12 @@ export default function GuildDashboardContext(props: Props) {
         // @ts-ignore
     } = DeleteReqChannel(session, props.robertifyGuildInfo?.server_id);
     // @ts-ignore
-    const { error: refreshError, isMutating: isRefreshing, trigger: triggerRefresh } = GetCurrentBotInfo(session, props.id);
+    const {
+        error: refreshError,
+        isMutating: isRefreshing,
+        trigger: triggerRefresh
+        // @ts-ignore
+    } = GetCurrentBotInfo(session, props.id);
     const canInteract = props.userHasPermission && !isSaving && !isRefreshing && !isCreatingReqChannel && !isDeletingReqChannel;
     const handler = new GuildDashboardHandler(
         currentData,
@@ -162,6 +167,14 @@ export default function GuildDashboardContext(props: Props) {
                                 })
                                 refresh();
                                 return;
+                            } else if (errMsg.includes("don't have the required permissions")) {
+                                sendToast({
+                                    description: "The bot doesn't have enough permission in this server to create the request channel! Make sure the bot has the Manage Channels permission before attempting to delete the channel again!",
+                                    type: ButtonType.DANGER
+                                }, {
+                                    duration: 10000,
+                                })
+                                return;
                             }
                         }
                     }
@@ -200,14 +213,22 @@ export default function GuildDashboardContext(props: Props) {
                     });
                 }, (e: any) => {
                     if (e instanceof AxiosError) {
-                        const errMsg: string = e.response?.data.data.message;
+                        const errMsg: string = e.response?.data.data.message.toLowerCase();
                         if (errMsg) {
-                            if (errMsg.toLowerCase().includes("doesn't have a channel set")) {
+                            if (errMsg.includes("doesn't have a channel set")) {
                                 sendToast({
                                     description: 'This server does not have a request channel!',
                                     type: ButtonType.DANGER
                                 })
                                 refresh();
+                                return;
+                            } else if (errMsg.includes("don't have the required permissions")) {
+                                sendToast({
+                                    description: "The bot doesn't have enough permission in this server to delete the request channel! Make sure the bot has the Manage Channels permission before attempting to delete the channel again!",
+                                    type: ButtonType.DANGER
+                                }, {
+                                    duration: 10000
+                                })
                                 return;
                             }
                         }
@@ -373,8 +394,10 @@ export default function GuildDashboardContext(props: Props) {
                             <Card
                                 className='relative !w-5/6 laptop:!w-full'
                             >
-                                <p className='text-xl phone:text-sm tablet:text-center tracking-widest font-semibold mb-6 text-secondary dark:text-white'>Select which buttons you want to be displayed in your request channel</p>
-                                <div className='grid grid-cols-5 laptop:grid-cols-3 tablet:grid-cols-2 tablet:place-items-center phone:grid-cols-1 gap-4'>
+                                <p className='text-xl phone:text-sm tablet:text-center tracking-widest font-semibold mb-6 text-secondary dark:text-white'>Select
+                                    which buttons you want to be displayed in your request channel</p>
+                                <div
+                                    className='grid grid-cols-5 laptop:grid-cols-3 tablet:grid-cols-2 tablet:place-items-center phone:grid-cols-1 gap-4'>
                                     {handler.generateReqChannelButtons()}
                                 </div>
                                 <Button

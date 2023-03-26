@@ -22,7 +22,7 @@ export type ToastDataProps = {
 export default function ToastComponent(props: Props) {
     const { title, description, icon } = props.data;
     return (
-        <div className={`${props.toastObj.visible ? 'animate-enter' : 'animate-leave'} dark:bg-dark/90 rounded-xl bg-neutral-200/75 backdrop-blur-sm p-6 w-96 flex justify-between`}>
+        <div className={`${props.toastObj.visible ? 'animate-enter' : 'animate-leave'} dark:bg-dark/90 rounded-xl bg-neutral-200/75 backdrop-blur-sm p-6 min-w-96 max-w-[32rem] flex gap-4 justify-between`}>
             { icon && <GenericImage className='self-center' src={icon} width={1.5} /> }
             <div className='self-center'>
                 {
@@ -31,7 +31,7 @@ export default function ToastComponent(props: Props) {
                 <p className='dark:text-white text-black'>{description}</p>
             </div>
             <Button
-                className='self-center'
+                className='self-start'
                 icon={close}
                 width={2}
                 height={2}
