@@ -188,7 +188,7 @@ export default function SelectMenu(props: Props) {
                 />
             </div>
             <div
-                className={'absolute z-50 left-0 mt-4 transition-fast ' + (expanded ? 'opacity-100' : 'opacity-0 pointer-events-none') }
+                className={'absolute z-50 left-0 mt-4 transition-faster ' + (expanded ? 'opacity-100' : 'opacity-0 pointer-events-none') }
                 ref={optionsViewRef}
             >
                 <input type='text'
