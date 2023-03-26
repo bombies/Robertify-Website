@@ -1,15 +1,16 @@
 import SkeletonProvider from "@/components/skeletons/SkeletonProvider";
-import {CardSize, parseCardSize} from "@/components/card";
+import {ComponentSize, parseCardSize} from "@/components/card";
 import SkeletonContentProvider from "@/components/skeletons/SkeletonContentProvider";
 
 type Props = {
-    size?: CardSize,
+    size?: ComponentSize,
     centered?: boolean,
+    className?: string,
 }
 
 export default function SkeletonCard(props: Props) {
     return (
-        <SkeletonProvider centered={props.centered} className={parseCardSize(props.size)}>
+        <SkeletonProvider centered={props.centered} className={parseCardSize(props.size) + ' ' + props.className}>
             <div className='space-y-6'>
                 <SkeletonContentProvider className='h-4 w-4/5' />
                 <div className='space-y-3'>

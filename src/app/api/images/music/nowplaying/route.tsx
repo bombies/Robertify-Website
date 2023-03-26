@@ -1,6 +1,5 @@
 import {ImageResponse} from "@vercel/og";
 
-
 type ParamSearchObject = {
     searchParams: URLSearchParams,
     paramName: string,

@@ -10,6 +10,7 @@ import darkTheme from "@/utils/ui/themes/default-dark";
 import lightTheme from "@/utils/ui/themes/default-light";
 import {ThemeProvider} from "next-themes";
 import {SessionProvider} from "next-auth/react";
+import {Toaster} from "react-hot-toast";
 
 interface Props extends React.PropsWithChildren {
     session: any
@@ -19,7 +20,6 @@ export default function Providers({children, session}: Props) {
     useServerInsertedHTML(() => {
         return <>{CssBaseline.flush()}</>;
     })
-
 
     return (
         <body>
@@ -36,6 +36,10 @@ export default function Providers({children, session}: Props) {
                     <NextUIProvider>
                         <DarkModeProvider>
                             <SessionProvider session={session}>
+                                <Toaster
+                                    position="top-right"
+                                    reverseOrder={false}
+                                />
                                 {children}
                             </SessionProvider>
                         </DarkModeProvider>

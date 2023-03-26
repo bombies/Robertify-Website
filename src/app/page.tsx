@@ -1,8 +1,8 @@
 import Button from "@/components/button/Button";
 import {ButtonType} from "@/components/button/ButtonType";
-import Image from "next/image";
 import reqChannel from '/public/reqchannel.png';
 import features from '/public/features.png';
+import dashboardImg from '/public/dashboard.png';
 import BasicContent from "@/components/baisc-content";
 import HeadingSection from "@/components/heading-section";
 import GenericImage from "@/app/_components/GenericImage";
@@ -18,9 +18,19 @@ export default async function Home() {
             </HeadingSection>
             <div className='p-32 laptop:p-16 tablet:p-4' id='content'>
                 <BasicContent
+                    title='Interactive Dashboard'
+                    description="Easily manage the bot without ever running a command. You don't have to worry about digging through help menus and commands to customize the bot exactly how you want it to be for you and your server members."
+                    childrenAlign='left'
+                >
+                    <GenericImage
+                        fade
+                        className='relative w-[40rem] h-[25rem] self-center'
+                        src={dashboardImg}
+                    />
+                </BasicContent>
+                <BasicContent
                     title='Customizable Request Channel'
                     description='Interact with your music in a unique and fashionable way! The request channel comes with player control buttons which allow for the easy control of Robertify&apos;s player. These buttons can even be toggled on or off, catering to your needs.'
-
                 >
                     <GenericImage
                         fade

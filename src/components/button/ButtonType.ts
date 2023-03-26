@@ -5,4 +5,6 @@ export enum ButtonType {
     DANGER,
     INVERTED,
     CTA,
+    BLUE,
+    GREY,
 }

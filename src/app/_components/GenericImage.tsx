@@ -2,7 +2,7 @@
 
 import Image, {StaticImageData} from "next/image";
 import {useVisible} from "@/utils/client-utils";
-import {CSSProperties, useRef} from "react";
+import {CSSProperties, MouseEventHandler, useRef} from "react";
 
 type Props = {
     className?: string
@@ -15,6 +15,7 @@ type Props = {
     fade?: boolean,
     draggable?: boolean,
     style?: CSSProperties,
+    onClick?: MouseEventHandler<HTMLDivElement>
 }
 
 export default function GenericImage(props: Props) {
@@ -24,13 +25,15 @@ export default function GenericImage(props: Props) {
     return (
         <div
             ref={ref}
-            className={`relative ${props.fade !== undefined ? `fade-in-section ${isVisible ? 'is-visible' : ''}` : ''} ${props.className || ''}`}
+            className={`relative ${props.fade !== undefined ? `fade-in-section ${isVisible ? 'is-visible' : ''}` : ''} ${props.className || ''} ${props.onClick ? 'cursor-pointer' : ''}`}
+            onClick={props.onClick}
             style={{
                 width: props.width && `${props.width}rem`,
-                height: props.width && `${props.height || props.width}rem`,
+                height: props.width && `${props.height ?? props.width}rem`,
             }}
         >
             <Image
+                onClick={props.onClick}
                 className={props.imageClassName}
                 priority={props.priority !== undefined}
                 draggable={props.draggable !== undefined}
@@ -38,6 +41,7 @@ export default function GenericImage(props: Props) {
                 alt={props.alt ?? ''}
                 fill={true}
                 style={props.style}
+                sizes={props.width ? `${props.width}rem` : undefined}
             />
         </div>
     )

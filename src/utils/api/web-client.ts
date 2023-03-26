@@ -1,6 +1,6 @@
 import axios, {AxiosInstance, CreateAxiosDefaults} from "axios";
 import {User} from "next-auth";
-import {signOut} from "next-auth/react";
+import {signIn} from "next-auth/react";
 import {sign} from "jsonwebtoken";
 
 class WebClient {
@@ -21,7 +21,7 @@ class WebClient {
 
         this.instance.interceptors.response.use((config) => config, err => {
             if (err.response?.status === 403 && typeof window !== 'undefined')
-                signOut({
+                signIn('discord', {
                     callbackUrl: '/'
                 });
             else return Promise.reject(err);
@@ -93,9 +93,8 @@ export class ExternalWebClient {
             async (error) => {
                 const originalRequest = error.config;
 
-                if (error.response.status === 403 && !originalRequest._retry) {
+                if ((error.response?.status === 403 || error.response?.status === 401) && !originalRequest._retry) {
                     const token = await this.getAccessToken();
-                    await ExternalWebClient.setAccessToken(this, token);
                     originalRequest.headers['Authorization'] = `Bearer ${token}`;
                     originalRequest._retry = true;
                     return axios(originalRequest);
@@ -114,17 +113,59 @@ export class ExternalWebClient {
         return data?.access_token;
     }
 
-    private startTokenRefresh() {
-        setInterval(async () => {
-            await ExternalWebClient.setAccessToken(this);
-        }, 12 * 60 * 60 * 1000)
+    public static getInstance(options?: CreateAxiosDefaults<any>) {
+        if (!options) {
+            if (this.INSTANCE)
+                return this.INSTANCE.instance;
+
+            const client = new ExternalWebClient();
+            this.INSTANCE = client;
+            return client.instance;
+        }
+
+        // Options provided
+        const client = new ExternalWebClient({
+            ...options
+        });
+        return client.instance;
+    }
+}
+
+export class BotWebClient {
+    protected readonly instance: AxiosInstance;
+    protected static INSTANCE?: BotWebClient;
+
+    constructor(private options?: CreateAxiosDefaults<any>) {
+        this.instance = axios.create({
+            headers: {
+                Accept: 'application/json',
+                "User-Agent": 'Robertify Website (https://github.com/bombies/Robertify-Website)',
+                'Authorization': process.env.BOT_API_MASTER_PASSWORD
+            },
+            timeout: 5 * 1000,
+            ...options,
+            baseURL: process.env.BOT_API_HOSTNAME,
+        });
     }
 
-    private static async setAccessToken(client: ExternalWebClient, token?: string) {
-        if (!token)
-            token = await client.getAccessToken();
+    private async getAccessToken() {
+        const data = (await this.instance.post('/auth/login', {
+            username: 'bombies',
+            password: process.env.BOT_API_MASTER_PASSWORD
+        })).data
+        return data?.access_token;
+    }
+
+    private startTokenRefresh() {
+        setInterval(async () => {
+            await BotWebClient.setAccessToken(this);
+        }, 60 * 60 * 1000)
+    }
+
+    private static async setAccessToken(client: BotWebClient) {
+        const accessToken = await client.getAccessToken();
         client.instance.interceptors.request.use(config => {
-            config.headers['Authorization'] = "Bearer " + token;
+            config.headers['Authorization'] = "Bearer " + accessToken;
             return config;
         });
     }
@@ -134,21 +175,21 @@ export class ExternalWebClient {
             if (this.INSTANCE)
                 return this.INSTANCE.instance;
 
-            const client = new ExternalWebClient();
+            const client = new BotWebClient();
             this.INSTANCE = client;
 
-            await ExternalWebClient.setAccessToken(client);
+            await BotWebClient.setAccessToken(client);
             client.startTokenRefresh();
 
             return client.instance;
         }
 
         // Options provided
-        const client = new ExternalWebClient({
+        const client = new BotWebClient({
             ...options
         });
 
-        await ExternalWebClient.setAccessToken(client);
+        await BotWebClient.setAccessToken(client);
         client.startTokenRefresh();
 
         return client.instance;
