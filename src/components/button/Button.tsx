@@ -64,6 +64,7 @@ export default function Button(props: Props) {
                     <Link className={className + ' flex justify-center '}
                           style={styleObj}
                           href={props.href}
+                          target="_blank"
                     >
                         <div className={'flex justify-center self-center gap-4' + ((props.type === ButtonType.INVERTED || props.type === ButtonType.SECONDARY) ? ' text-primary' : '')}>
                             {children}
