@@ -44,6 +44,7 @@ interface Props {
     disabled?: boolean;
     onClick?: MouseEventHandler<HTMLButtonElement>
     href?: string;
+    newTab?: boolean;
     isWorking?: boolean;
     centered?: boolean;
     toast?: ToastDataProps;
@@ -83,7 +84,7 @@ export default function Button(props: Props) {
                         }}
                         className={className + ' flex justify-center '}
                         href={props.href}
-                        target="_blank"
+                        target={props.newTab === false ?  undefined : "_blank"}
                     >
                         <div
                             className={'flex justify-center self-center gap-4' + ((props.type === ButtonType.INVERTED || props.type === ButtonType.SECONDARY) ? ' text-primary' : '') + (props.className ? ` ${props.className}` : '')}>

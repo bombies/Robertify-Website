@@ -1,6 +1,5 @@
 'use client';
 
-import Image from "next/image";
 import {useEffect, useRef, useState} from "react";
 import LogoutButton from "@/app/_components/nav/logout-button";
 import Button from "@/components/button/Button";
@@ -75,6 +74,7 @@ export default function NavUserProfile() {
                             icon={serverIcon}
                             label='Servers'
                             href='/dashboard'
+                            newTab={false}
                             type={ButtonType.PRIMARY}
                         />
                         <LogoutButton/>
