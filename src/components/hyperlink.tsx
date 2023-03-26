@@ -15,6 +15,7 @@ export default function HyperLink(props: Props) {
             className={'dark:text-white dark:hover:!text-primary hover:!text-primary transition-fast text-black ' + props.className}
             href={props.href}
             target={props.newTab === false ?  undefined : "_blank"}
+            rel={props.newTab !== false ? 'noopener noreferrer' : undefined}
         >
             {props.children}
         </Link>
