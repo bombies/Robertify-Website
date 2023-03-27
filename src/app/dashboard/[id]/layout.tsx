@@ -79,7 +79,6 @@ export async function generateMetadata({params}: { params: { id: string } }) {
 }
 
 export default async function GuildDashboardLayout({ children, params }: Props) {
-
     const serverSession = await getServerSession(authOptions);
     let discordGuildInfo = await getDiscordGuildInfo(params.id, serverSession);
     let discordGuildChannelInfo = await getDiscordGuildChannels(params.id, serverSession);
@@ -120,6 +119,7 @@ export default async function GuildDashboardLayout({ children, params }: Props) 
                 </div>
             </div>
             <GuildDashboardInfoProvider initialDashboardInfo={{
+                id: params.id,
                 discordGuild: discordGuildInfo?.data,
                 discordGuildChannels: discordGuildChannelInfo?.data,
                 robertifyGuild: botGuildInfo?.data,

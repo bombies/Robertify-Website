@@ -4,6 +4,7 @@ import {DiscordGuild, DiscordGuildChannel, RobertifyGuild} from "@/utils/discord
 import React, {useState} from "react";
 
 export type GuildDashboardInfo = {
+    id: string,
     discordGuild?: DiscordGuild,
     discordGuildChannels?: DiscordGuildChannel[],
     robertifyGuild?: RobertifyGuild,

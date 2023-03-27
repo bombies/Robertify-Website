@@ -378,6 +378,7 @@ export default class DashboardGeneralHandler {
             case "twenty_four_seven_mode": {
                 return this.opts.setCurrentData(prev => {
                     if (!prev) return;
+
                     return ({
                         ...prev,
                         twenty_four_seven_mode: !prev.twenty_four_seven_mode,
