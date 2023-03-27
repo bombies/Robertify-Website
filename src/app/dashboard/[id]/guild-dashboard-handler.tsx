@@ -12,7 +12,7 @@ import {
     ThemeString
 } from "@/utils/discord-types";
 import {Dispatch, SetStateAction} from "react";
-import {SelectMenuContent} from "@/components/select-menu/SelectMenu";
+import {SelectMenuContent} from "@/components/SelectMenu";
 import discordVoiceChannelIcon from "../../../../public/discord-voice-channel.svg";
 import discordTextChannelIcon from "../../../../public/discord-text-channel.svg";
 import Toggle from "@/components/toggle";

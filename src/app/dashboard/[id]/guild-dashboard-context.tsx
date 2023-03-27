@@ -6,7 +6,7 @@ import backIcon from '/public/go-back.svg';
 import Link from "next/link";
 import DashboardSection from "@/app/dashboard/[id]/dashboard-section";
 import DashboardSectionContent from "@/app/dashboard/[id]/dashboard-section-content";
-import SelectMenu from "@/components/select-menu/SelectMenu";
+import SelectMenu from "@/components/SelectMenu";
 import {useEffect, useState, useTransition} from "react";
 import {compare} from "@/utils/general-utils";
 import Button from "@/components/button/Button";

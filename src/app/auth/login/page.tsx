@@ -8,8 +8,6 @@ export default function LoginPage() {
     const session = useSession();
     const searchParams =  useSearchParams();
 
-    console.log('params', searchParams?.get("error"))
-
     if (session.status === 'authenticated' || searchParams?.get("error") === 'Callback')
         redirect('/');
 
