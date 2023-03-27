@@ -28,6 +28,6 @@ export function GuildDashboardInfoProvider({ children, initialDashboardInfo }: P
 export function useGuildDashboard() {
     const context = React.useContext(GuildInfoContext);
     if (!context)
-        throw new Error('useDarkMode must be used within a GuildDashboardInfoProvider');
+        throw new Error('useGuildDashboard must be used within a GuildDashboardInfoProvider');
     return context;
 }
