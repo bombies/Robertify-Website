@@ -3,9 +3,8 @@
 import Card from "@/components/card";
 import {useState} from "react";
 import {Modal} from "@nextui-org/react";
-import Parser from "html-react-parser";
-import {useDarkMode} from "@/app/_components/dark-mode-context";
 import GenericImage from "@/app/_components/GenericImage";
+import Parser from 'html-react-parser';
 
 type Props = {
     title: string;
@@ -15,7 +14,6 @@ type Props = {
 
 export default function FAQCard(props: Props) {
     const [expanded, setExpanded] = useState(false);
-    const [darkMode] = useDarkMode();
     const closeCard = () => {
         setExpanded(false);
     }
@@ -34,6 +32,7 @@ export default function FAQCard(props: Props) {
                 color='primary'
                 closeButton
                 aria-labelledby="modal-title"
+                className='overflow-visible'
                 open={expanded}
                 onClose={closeCard}
                 css={{
@@ -45,10 +44,11 @@ export default function FAQCard(props: Props) {
                         {props.title}
                     </p>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className='overflow-visible'>
                     <p className='text-lg'>{Parser(props.content.replaceAll('\\n', '<br/>'))}</p>
                     {props.contentImg &&
                         <GenericImage
+                            className='hover:scale-[200%] transition-fast'
                             width={20}
                             src={props.contentImg}
                             style={{

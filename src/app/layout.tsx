@@ -30,6 +30,9 @@ export default function RootLayout(props: Props) {
             <GenericImage
                 priority
                 className='dark:visible opacity-50 blur-xl invisible !fixed w-screen h-screen z-[0]'
+                style={{
+                    objectFit: 'cover'
+                }}
                 imageClassName='blur-xl z-[0]'
                 src={glow}
             />
