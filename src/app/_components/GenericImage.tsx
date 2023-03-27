@@ -40,7 +40,10 @@ export default function GenericImage(props: Props) {
                 src={props.src}
                 alt={props.alt ?? ''}
                 fill={true}
-                style={props.style}
+                style={{
+                    objectFit: 'contain',
+                    ...props.style
+                }}
                 sizes={props.width ? `${props.width}rem` : undefined}
             />
         </div>
