@@ -10,7 +10,7 @@ import {compare} from "@/utils/general-utils";
 import Button from "@/components/button/Button";
 import {ButtonType} from "@/components/button/ButtonType";
 import WebClient from "@/utils/api/web-client";
-import GuildDashboardHandler from "@/app/dashboard/[id]/(categories)/general/guild-dashboard-handler";
+import GuildDashboardGeneralHandler from "@/app/dashboard/[id]/(categories)/general/guild-dashboard-general-handler";
 import saveIcon from '/public/save.svg';
 import discardIcon from '/public/discard.svg';
 import Toggle from "@/components/toggle";
@@ -24,12 +24,13 @@ import {AxiosError} from "axios";
 import {useGuildDashboard} from "@/app/dashboard/[id]/guild-info-context";
 import DashboardContainer from "@/app/dashboard/[id]/(categories)/dashboard-container";
 import DashboardUnsavedChangesPopup from "@/app/dashboard/[id]/(categories)/dashboard-unsaved-changes-popup";
+import DashboardRefreshButton from "@/app/dashboard/[id]/(categories)/dashboard-refresh-button";
 
 type Props = {
     id: string
 }
 
-const POSTChanges = (session: Session | null, guildId: string, guildInfo: RobertifyGuild) => {
+export const POSTChanges = (session: Session | null, guildId: string, guildInfo: RobertifyGuild) => {
     const mutator = async (url: string) => {
         await WebClient.getInstance(session?.user).post(url, guildInfo);
     }
@@ -45,7 +46,7 @@ const CreateReqChannel = (session: Session | null, id: string) => {
     return useSWRMutation(`/api/bot/guilds/${id}/reqchannel`, mutator);
 }
 
-const GetCurrentBotInfo = (session: Session | null, id: string) => {
+export const GetCurrentBotInfo = (session: Session | null, id: string) => {
     const mutator = async (url: string) => {
         return await WebClient.getInstance(session?.user).get(url);
     }
@@ -66,7 +67,7 @@ const hasReqChannel = (currentData?: RobertifyGuild): boolean => {
     return !!(currentData.dedicated_channel?.channel_id && currentData.dedicated_channel?.channel_id !== '-1');
 }
 
-export default function GuildDashboardContext(props: Props) {
+export default function GuildDashboardGeneralContext(props: Props) {
     const [dashboardInfo, ] = useGuildDashboard();
     const session = useSession();
     const router = useRouter();
@@ -92,9 +93,9 @@ export default function GuildDashboardContext(props: Props) {
         isMutating: isRefreshing,
         trigger: triggerRefresh
         // @ts-ignore
-    } = GetCurrentBotInfo(session, dashboardInfo.id);
+    } = GetCurrentBotInfo(session, dashboardInfo.robertifyGuild?.server_id);
     const canInteract = dashboardInfo.userHasPermission && !isSaving && !isRefreshing && !isCreatingReqChannel && !isDeletingReqChannel;
-    const handler = new GuildDashboardHandler({
+    const handler = new GuildDashboardGeneralHandler({
         robertifyGuild: currentData,
         discordGuild: dashboardInfo.discordGuild,
         guildChannels: dashboardInfo.discordGuildChannels,
@@ -591,14 +592,10 @@ export default function GuildDashboardContext(props: Props) {
                 >
                     {handler.generateLogToggleElements()}
                 </DashboardSection>
-                <Button
-                    label='Refresh'
-                    disabled={!canInteract}
-                    isWorking={isRefreshing}
-                    icon={refreshIcon}
-                    height={3}
-                    width={8}
-                    onClick={refresh}
+                <DashboardRefreshButton
+                    refresh={refresh}
+                    isRefreshing={isRefreshing}
+                    canInteract={canInteract}
                 />
             </DashboardContainer>
         </div>

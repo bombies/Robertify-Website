@@ -1,9 +1,9 @@
-import GuildDashboardContext from "@/app/dashboard/[id]/(categories)/general/guild-dashboard-context";
+import GuildDashboardGeneralContext from "@/app/dashboard/[id]/(categories)/general/guild-dashboard-general-context";
 
 export default async function GuildDashboard({params}: { params: { id: string } }) {
     const {id} = params;
 
     return (
-        <GuildDashboardContext id={id}/>
+        <GuildDashboardGeneralContext id={id}/>
     )
 }
