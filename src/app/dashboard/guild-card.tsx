@@ -1,13 +1,10 @@
 'use client';
 
 import Card from "@/components/card";
-import Image from "next/image";
 import crownIcon from '/public/crown.svg';
 import shieldIcon from '/public/shield.svg';
 import {Tooltip} from "@nextui-org/react";
-import {useRef, useState} from "react";
 import GenericImage from "@/app/_components/GenericImage";
-import {useVisible} from "@/utils/client-utils";
 
 type Props = {
     id: string,
@@ -24,7 +21,7 @@ export default function GuildCard(props: Props) {
             size='xs'
             hoverable
             className={`relative pointer-cursor h-32 !p-0 flex flex-col phone:w-full bg-primary dark:!bg-dark`}
-            href={`/dashboard/${props.id}`}
+            href={`/dashboard/${props.id}/general`}
         >
             {
                 (props.isOwner || props.isAdmin) &&

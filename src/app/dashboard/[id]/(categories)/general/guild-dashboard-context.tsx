@@ -1,18 +1,16 @@
 'use client';
 
-import {DiscordGuild, DiscordGuildChannel, LocaleString, RobertifyGuild, ThemeString} from "@/utils/discord-types";
+import {LocaleString, RobertifyGuild, ThemeString} from "@/utils/discord-types";
 import {useRouter} from "next/navigation";
-import backIcon from '/public/go-back.svg';
-import Link from "next/link";
-import DashboardSection from "@/app/dashboard/[id]/dashboard-section";
-import DashboardSectionContent from "@/app/dashboard/[id]/dashboard-section-content";
+import DashboardSection from "@/app/dashboard/[id]/(categories)/dashboard-section";
+import DashboardSectionContent from "@/app/dashboard/[id]/(categories)/dashboard-section-content";
 import SelectMenu from "@/components/SelectMenu";
 import {useEffect, useState, useTransition} from "react";
 import {compare} from "@/utils/general-utils";
 import Button from "@/components/button/Button";
 import {ButtonType} from "@/components/button/ButtonType";
 import WebClient from "@/utils/api/web-client";
-import GuildDashboardHandler from "@/app/dashboard/[id]/guild-dashboard-handler";
+import GuildDashboardHandler from "@/app/dashboard/[id]/(categories)/general/guild-dashboard-handler";
 import saveIcon from '/public/save.svg';
 import discardIcon from '/public/discard.svg';
 import Toggle from "@/components/toggle";
@@ -20,18 +18,15 @@ import Card from "@/components/card";
 import {signIn, useSession} from "next-auth/react";
 import {Session} from "next-auth";
 import useSWRMutation from 'swr/mutation';
-import GenericImage from "@/app/_components/GenericImage";
 import {sendToast} from "@/utils/client-utils";
 import refreshIcon from '/public/refresh.svg';
 import {AxiosError} from "axios";
-import MiniContent from "@/components/MiniContent";
+import {useGuildDashboard} from "@/app/dashboard/[id]/guild-info-context";
+import DashboardContainer from "@/app/dashboard/[id]/(categories)/dashboard-container";
+import DashboardUnsavedChangesPopup from "@/app/dashboard/[id]/dashboard-unsaved-changes-popup";
 
 type Props = {
-    id: string,
-    discordGuildInfo: DiscordGuild,
-    discordGuildChannels: DiscordGuildChannel[]
-    robertifyGuildInfo: RobertifyGuild,
-    userHasPermission: boolean,
+    id: string
 }
 
 const POSTChanges = (session: Session | null, guildId: string, guildInfo: RobertifyGuild) => {
@@ -66,47 +61,46 @@ const DeleteReqChannel = (session: Session | null, id: string) => {
     return useSWRMutation(`/api/bot/guilds/${id}/reqchannel`, mutator);
 }
 
-const hasReqChannel = (currentData: RobertifyGuild) => {
-    return currentData.dedicated_channel?.channel_id && currentData.dedicated_channel?.channel_id !== '-1';
+const hasReqChannel = (currentData?: RobertifyGuild): boolean => {
+    if (!currentData) return false;
+    return !!(currentData.dedicated_channel?.channel_id && currentData.dedicated_channel?.channel_id !== '-1');
 }
 
 export default function GuildDashboardContext(props: Props) {
+    const [dashboardInfo, ] = useGuildDashboard();
     const session = useSession();
     const router = useRouter();
-    const [currentData, setCurrentData] = useState(props.robertifyGuildInfo)
+    const [currentData, setCurrentData] = useState(dashboardInfo.robertifyGuild)
     const [changesMade, setChangesMade] = useState(false);
     const [, startTransition] = useTransition();
-    const { data: discordInfo, status } = useSession();
+    const {data: discordInfo, status} = useSession();
 
     // @ts-ignore
-    const {error: saveError, isMutating: isSaving, trigger: triggerSave} = POSTChanges(session, props.id, currentData);
+    const {isMutating: isSaving, trigger: triggerSave} = POSTChanges(session, dashboardInfo.robertifyGuild?.server_id, currentData);
     const {
-        error: reqChannelCreationError,
         isMutating: isCreatingReqChannel,
         trigger: triggerReqChannelCreation
         // @ts-ignore
-    } = CreateReqChannel(session, props.robertifyGuildInfo?.server_id);
+    } = CreateReqChannel(session, dashboardInfo.robertifyGuild?.server_id);
     const {
-        error: reqChannelDeletionError,
         isMutating: isDeletingReqChannel,
         trigger: triggerReqChannelDeletion
         // @ts-ignore
-    } = DeleteReqChannel(session, props.robertifyGuildInfo?.server_id);
+    } = DeleteReqChannel(session, dashboardInfo.robertifyGuild?.server_id);
     // @ts-ignore
     const {
-        error: refreshError,
         isMutating: isRefreshing,
         trigger: triggerRefresh
         // @ts-ignore
-    } = GetCurrentBotInfo(session, props.id);
-    const canInteract = props.userHasPermission && !isSaving && !isRefreshing && !isCreatingReqChannel && !isDeletingReqChannel;
-    const handler = new GuildDashboardHandler(
-        currentData,
-        props.discordGuildInfo,
-        props.discordGuildChannels,
-        setCurrentData,
+    } = GetCurrentBotInfo(session, dashboardInfo.id);
+    const canInteract = dashboardInfo.userHasPermission && !isSaving && !isRefreshing && !isCreatingReqChannel && !isDeletingReqChannel;
+    const handler = new GuildDashboardHandler({
+        robertifyGuild: currentData,
+        discordGuild: dashboardInfo.discordGuild,
+        guildChannels: dashboardInfo.discordGuildChannels,
+        setCurrentData: setCurrentData,
         canInteract
-    );
+    });
     const inviteLink = `https://discord.com/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&permissions=269479308656&scope=bot%20applications.commands&redirect_uri=${encodeURI(`${process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot%20applications.commands&guild_id=${props.id}&disable_guild_select=true`;
 
     useEffect(() => {
@@ -115,18 +109,18 @@ export default function GuildDashboardContext(props: Props) {
 
         if (status === 'unauthenticated' || !discordInfo)
             signIn('discord', {
-                callbackUrl: `/dashboard/${props.id}`
+                callbackUrl: `/dashboard/${props.id}/general`
             })
-        else if (!props.discordGuildInfo || !props.robertifyGuildInfo || !props.discordGuildChannels)
+        else if (!dashboardInfo.discordGuild || !dashboardInfo.robertifyGuild || !dashboardInfo.discordGuildChannels)
             return router.push(inviteLink);
-    }, [props.discordGuildInfo, props.robertifyGuildInfo, props.discordGuildChannels, inviteLink, router, discordInfo, status])
+    }, [dashboardInfo.discordGuild, dashboardInfo.robertifyGuild, dashboardInfo.discordGuildChannels, inviteLink, router, discordInfo, status])
 
     useEffect(() => {
-        const b = compareData(currentData, props.robertifyGuildInfo);
+        const b = compareData(currentData, dashboardInfo.robertifyGuild);
         setChangesMade(b);
-    }, [currentData, props.robertifyGuildInfo]);
+    }, [currentData, dashboardInfo.robertifyGuild]);
 
-    if (!props.discordGuildInfo || !props.robertifyGuildInfo || !props.discordGuildChannels)
+    if (!dashboardInfo.discordGuild || !dashboardInfo.robertifyGuild || !dashboardInfo.discordGuildChannels)
         return (<div></div>);
 
     const createReqChannel = () => {
@@ -140,6 +134,8 @@ export default function GuildDashboardContext(props: Props) {
                         const configParsed = JSON.parse(dataParsed.config);
 
                         setCurrentData(prevState => {
+                            if (!prevState) return;
+
                             const ret = ({
                                 ...prevState,
                                 dedicated_channel: {
@@ -149,7 +145,7 @@ export default function GuildDashboardContext(props: Props) {
                                 },
                             });
 
-                            props.robertifyGuildInfo = ret;
+                            dashboardInfo.robertifyGuild = ret;
                             return ret;
                         });
                         router.refresh();
@@ -196,6 +192,8 @@ export default function GuildDashboardContext(props: Props) {
             triggerReqChannelDeletion()
                 .then(() => {
                     setCurrentData(prevState => {
+                        if (!prevState) return;
+
                         const ret: RobertifyGuild = ({
                             ...prevState,
                             dedicated_channel: {
@@ -205,7 +203,7 @@ export default function GuildDashboardContext(props: Props) {
                             },
                         });
 
-                        props.robertifyGuildInfo = ret;
+                        dashboardInfo.robertifyGuild = ret;
                         return ret;
                     });
                     router.refresh();
@@ -250,9 +248,11 @@ export default function GuildDashboardContext(props: Props) {
         startTransition(() => {
             triggerSave()
                 .then(() => {
+                    if (!currentData) return;
+
                     currentData.autoplay ??= false;
                     currentData.twenty_four_seven_mode ??= false;
-                    props.robertifyGuildInfo = currentData;
+                    dashboardInfo.robertifyGuild = currentData;
                     setChangesMade(false);
                     router.refresh()
                     sendToast({
@@ -285,8 +285,8 @@ export default function GuildDashboardContext(props: Props) {
                     const fetchedData = data.data.data;
                     fetchedData.autoplay ??= false;
                     fetchedData.twenty_four_seven_mode ??= false;
-                    props.robertifyGuildInfo = fetchedData;
-                    setCurrentData(props.robertifyGuildInfo);
+                    dashboardInfo.robertifyGuild = fetchedData;
+                    setCurrentData(dashboardInfo.robertifyGuild);
                     setChangesMade(false);
                     router.refresh()
                     sendToast({
@@ -306,75 +306,22 @@ export default function GuildDashboardContext(props: Props) {
     const discardChanges = () => {
         if (!canInteract || !changesMade)
             return;
-        setCurrentData(props.robertifyGuildInfo);
+        setCurrentData(dashboardInfo.robertifyGuild);
         sendToast({
             description: 'Discarded all changes!',
             type: ButtonType.WARNING
         })
     }
-
-    const guildIcon = props.discordGuildInfo.icon ? `https://cdn.discordapp.com/icons/${props.discordGuildInfo.id}/${props.discordGuildInfo.icon}.webp?size=512` : 'https://i.imgur.com/k14Qfh5.png';
-
     return (
         <div className='relative'>
-            <div
-                className={'fixed rounded-xl w-full bottom-0 right-0 mx-auto bg-primary/20 dark:bg-neutral-900/80 backdrop-blur-sm h-20 z-[51] p-6 flex phone:gap-2 justify-between transition-faster' + (!changesMade ? ' bottom-[-100px]' : '')}>
-                <p className='text-black dark:text-primary dark:drop-shadow-glow-primary-lg font-semibold text-2xl phone:text-sm self-center'>You
-                    have unsaved changes!
-                </p>
-                <div className='flex gap-4'>
-                    <Button
-                        isWorking={isSaving}
-                        label='Save'
-                        icon={saveIcon}
-                        className='self-center !w-[8rem] !h-[3rem] phone:!w-[6rem]'
-                        onClick={saveChanges}
-                        disabled={!canInteract}
-                    />
-                    <Button
-                        label='Discard'
-                        type={ButtonType.WARNING}
-                        icon={discardIcon}
-                        className='self-center !w-[8rem] !h-[3rem] phone:!w-[6rem]'
-                        onClick={discardChanges}
-                        disabled={!canInteract}
-                    />
-                </div>
-            </div>
-            <div className='tablet:px-6 px+-12'>
-                <Link href='/dashboard'>
-                    <div className='flex gap-4 hover:scale-[100.25%] transition-fast mb-6'>
-                        <GenericImage src={backIcon} width={2}/>
-                        <p className='relative self-center text-primary font-semibold text-xl phone:text-sm'>Return to
-                            your servers</p>
-                    </div>
-                </Link>
-            </div>
-            <div
-                className='relative overflow-hidden mx-auto mb-12 tablet:p-6 p-8 bg-primary/10 shadow-md dark:bg-neutral-900 w-full h-42 rounded-2xl border-2 border-primary/90'
-            >
-                <div className='flex gap-12'>
-                    <GenericImage
-                        className='relative w-20 h-20 phone:w-16 phone:h-16 rounded-full'
-                        imageClassName='rounded-full'
-                        src={guildIcon}
-                    />
-                    <h1 className='text-4xl phone:text-xl font-black tracking-wider text-primary self-center z-10'>{props.discordGuildInfo.name}</h1>
-                    <MiniContent content='BETA' />
-                </div>
-            </div>
-            <div
-                className='relative mx-auto space-y-6 mb-12 p-12 tablet:p-6 bg-primary/10 shadow-md dark:bg-neutral-900 w-full min-h-42 rounded-2xl border-2 border-primary/90'>
-                {!props.userHasPermission && <div
-                    className='absolute w-full h-full bg-dark/80 z-10 top-0 left-0 rounded-2xl p-12 tablet:p-6 phone:p-3'>
-                    <Card
-                        centered
-                        hoverable
-                        size='lg'
-                        title="No Permission"
-                        description="It looks like you don't have enough permission to interact with the dashboard. You need to have administrative permissions in this server to edit bot settings here."
-                    />
-                </div>}
+            <DashboardUnsavedChangesPopup
+                isSaving={isSaving}
+                changesMade={changesMade}
+                saveChanges={saveChanges}
+                discardChanges={discardChanges}
+                canInteract={canInteract}
+            />
+            <DashboardContainer>
                 <DashboardSection title='Request Channel'>
                     {
                         !hasReqChannel(currentData) ?
@@ -653,17 +600,17 @@ export default function GuildDashboardContext(props: Props) {
                     width={8}
                     onClick={refresh}
                 />
-            </div>
+            </DashboardContainer>
         </div>
     )
 }
 
-const compareData = (cur: RobertifyGuild, original: RobertifyGuild) => {
+const compareData = (cur?: RobertifyGuild, original?: RobertifyGuild) => {
     if (!cur && !original) return false;
-    if ("_id" in cur)
+    if (cur&& "_id" in cur)
         // @ts-ignore
         delete cur._id;
-    if ("_id" in original)
+    if (original && "_id" in original)
         // @ts-ignore
         delete original._id;
     return !compare(cur, original);
