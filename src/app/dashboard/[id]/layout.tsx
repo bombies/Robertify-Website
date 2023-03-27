@@ -68,17 +68,17 @@ const getUserGuilds = async (session: Session | null) => {
 }
 
 export async function generateMetadata({params}: { params: { id: string } }) {
-    const { id } = params;
+    const {id} = params;
     let guildInfo = await getDiscordGuildInfo(id, await getServerSession(authOptions));
     if (guildInfo?.data?.code === 10004)
         guildInfo = undefined;
 
     return {
-        title: `Robertify - ${!guildInfo ? 'No Server' : guildInfo?.data.name }`
+        title: `Robertify - ${!guildInfo ? 'No Server' : guildInfo?.data.name}`
     }
 }
 
-export default async function GuildDashboardLayout({ children, params }: Props) {
+export default async function GuildDashboardLayout({children, params}: Props) {
     const serverSession = await getServerSession(authOptions);
     let discordGuildInfo = await getDiscordGuildInfo(params.id, serverSession);
     let discordGuildChannelInfo = await getDiscordGuildChannels(params.id, serverSession);
@@ -108,14 +108,17 @@ export default async function GuildDashboardLayout({ children, params }: Props) 
             <div
                 className='relative overflow-hidden mx-auto mb-12 tablet:p-6 p-8 bg-primary/10 shadow-md dark:bg-neutral-900 w-full h-42 rounded-2xl border-2 border-primary/90'
             >
-                <div className='flex gap-12'>
+                <div className='flex gap-12 phone:gap-6'>
                     <GenericImage
                         className='relative w-20 h-20 phone:w-16 phone:h-16 rounded-full'
                         imageClassName='rounded-full'
                         src={guildIcon}
+                        style={{
+                            objectFit: 'cover'
+                        }}
                     />
                     <h1 className='text-4xl phone:text-xl font-black tracking-wider text-primary self-center z-10'>{discordGuildInfo?.data.name}</h1>
-                    <MiniContent content='BETA' />
+                    <MiniContent content='BETA'/>
                 </div>
             </div>
             <GuildDashboardInfoProvider initialDashboardInfo={{
@@ -125,7 +128,6 @@ export default async function GuildDashboardLayout({ children, params }: Props) 
                 robertifyGuild: botGuildInfo?.data,
                 userHasPermission: userGuilds ? isServerAdmin(userGuilds.filter((guild: DiscordUserGuild) => guild.id === params.id)[0]) : false
             }}>
-                <DashboardCategorySelector />
                 {children}
             </GuildDashboardInfoProvider>
         </div>

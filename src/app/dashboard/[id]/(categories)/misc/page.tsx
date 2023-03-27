@@ -1,9 +1,7 @@
 import DashboardMiscContext from "@/app/dashboard/[id]/(categories)/misc/dashboard-misc-context";
 
-export default async function GuildDashboard({params}: { params: { id: string } }) {
-    const {id} = params;
-
+export default async function GuildDashboard() {
     return (
-        <DashboardMiscContext id={id}/>
+        <DashboardMiscContext />
     )
 }

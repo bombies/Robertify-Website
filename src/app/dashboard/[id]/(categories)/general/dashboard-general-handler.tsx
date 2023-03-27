@@ -37,6 +37,7 @@ import skip from '/public/reqchannel/skip.svg';
 import stop from '/public/reqchannel/stop.svg';
 import Button from "@/components/button/Button";
 import {ButtonType} from "@/components/button/ButtonType";
+import AbstractDashboardHandler, {AbstractDashboardFields} from "@/app/dashboard/[id]/(categories)/abstract-dashboard-handler";
 
 type RequestChannelButton = keyof DedicatedChannelConfig
 
@@ -47,17 +48,10 @@ type RequestChannelButtonMetaData = {
     icon: string | StaticImageData,
     type: ButtonType.BLUE | ButtonType.GREY | ButtonType.DANGER
 }
+export default class DashboardGeneralHandler extends AbstractDashboardHandler{
 
-type ConstructorType = {
-    robertifyGuild?: RobertifyGuild,
-    discordGuild?: DiscordGuild,
-    guildChannels?: DiscordGuildChannel[],
-    setCurrentData?: Dispatch<SetStateAction<RobertifyGuild | undefined>>,
-    canInteract: boolean,
-}
-export default class DashboardGeneralHandler {
-
-    constructor(private readonly opts: ConstructorType) {
+    constructor(opts: AbstractDashboardFields) {
+        super(opts);
     }
 
     private getButtonMetaData(button: RequestChannelButton): RequestChannelButtonMetaData {
@@ -304,8 +298,7 @@ export default class DashboardGeneralHandler {
     }
 
     public switchToggle(toggle: keyof GuildToggles | 'autoplay' | 'twenty_four_seven_mode', innerToggle?: keyof GuildDJToggles | keyof GuildLogToggles) {
-        if (!this.opts.setCurrentData) return;
-        if (!this.opts.canInteract) return;
+        if (!this.isUsable()) return;
 
         switch (toggle) {
             case "dj_toggles": {
@@ -315,7 +308,7 @@ export default class DashboardGeneralHandler {
                 if (!obj) return;
 
                 if (!(innerToggle in obj.dj_toggles)) return;
-                return this.opts.setCurrentData(prev => {
+                return this.opts.setCurrentData!(prev => {
                     if (!prev) return;
                     return ({
                         ...prev,
@@ -336,7 +329,7 @@ export default class DashboardGeneralHandler {
                 if (!obj) return;
 
                 if (!(innerToggle in (obj.log_toggles ?? this.genDefaultLogTogglesObject()))) return;
-                return this.opts.setCurrentData(prev => {
+                return this.opts.setCurrentData!(prev => {
                         if (!prev) return;
                         if (prev.toggles.log_toggles)
                             return ({
@@ -367,7 +360,7 @@ export default class DashboardGeneralHandler {
                 );
             }
             case "autoplay": {
-                return this.opts.setCurrentData(prev => {
+                return this.opts.setCurrentData!(prev => {
                     if (!prev) return;
                     return ({
                         ...prev,
@@ -376,7 +369,7 @@ export default class DashboardGeneralHandler {
                 });
             }
             case "twenty_four_seven_mode": {
-                return this.opts.setCurrentData(prev => {
+                return this.opts.setCurrentData!(prev => {
                     if (!prev) return;
 
                     return ({
@@ -386,7 +379,7 @@ export default class DashboardGeneralHandler {
                 });
             }
             default: {
-                return this.opts.setCurrentData(prev => {
+                return this.opts.setCurrentData!(prev => {
                     if (!prev) return;
                     return ({
                         ...prev,

@@ -30,14 +30,6 @@ const CreateReqChannel = (session: Session | null, id: string) => {
     return useSWRMutation(`/api/bot/guilds/${id}/reqchannel`, mutator);
 }
 
-export const GetCurrentBotInfo = (session: Session | null, id: string) => {
-    const mutator = async (url: string) => {
-        return await WebClient.getInstance(session?.user).get(url);
-    }
-
-    return useSWRMutation(`/api/bot/guilds/${id}`, mutator)
-}
-
 const DeleteReqChannel = (session: Session | null, id: string) => {
     const mutator = async (url: string) => {
         return await WebClient.getInstance(session?.user).delete(url);
@@ -56,12 +48,10 @@ export default function DashboardGeneralContext() {
         dashboardInfo,
         session,
         useCurrentData,
-        useChangesMade,
         canInteract: stateCanInteract
     } = useDashboardState();
     const router = useRouter();
     const [currentData, setCurrentData] = useCurrentData
-    const [, setChangesMade] = useChangesMade;
     const [, startTransition] = useTransition();
 
     const {
@@ -74,13 +64,8 @@ export default function DashboardGeneralContext() {
         trigger: triggerReqChannelDeletion
         // @ts-ignore
     } = DeleteReqChannel(session, dashboardInfo.robertifyGuild?.server_id);
-    // @ts-ignore
-    const {
-        isMutating: isRefreshing,
-        trigger: triggerRefresh
-        // @ts-ignore
-    } = GetCurrentBotInfo(session, dashboardInfo.robertifyGuild?.server_id);
-    const canInteract = stateCanInteract && !isRefreshing && !isCreatingReqChannel && !isDeletingReqChannel;
+
+    const canInteract = stateCanInteract && !isCreatingReqChannel && !isDeletingReqChannel;
     const handler = new DashboardGeneralHandler({
         robertifyGuild: currentData,
         discordGuild: dashboardInfo.discordGuild,
@@ -128,7 +113,7 @@ export default function DashboardGeneralContext() {
                                     description: 'This server already has a request channel setup!',
                                     type: ButtonType.DANGER
                                 })
-                                refresh();
+                                router.refresh();
                                 return;
                             } else if (errMsg.includes("don't have the required permissions")) {
                                 sendToast({
@@ -185,7 +170,7 @@ export default function DashboardGeneralContext() {
                                     description: 'This server does not have a request channel!',
                                     type: ButtonType.DANGER
                                 })
-                                refresh();
+                                router.refresh();
                                 return;
                             } else if (errMsg.includes("don't have the required permissions")) {
                                 sendToast({
@@ -208,39 +193,6 @@ export default function DashboardGeneralContext() {
         })
     }
 
-    const refresh = () => {
-        if (!canInteract)
-            return;
-        startTransition(() => {
-            triggerRefresh()
-                .then(data => {
-                    if (!data) {
-                        sendToast({
-                            description: 'There was no data fetched on refresh!',
-                            type: ButtonType.DANGER
-                        })
-                        return;
-                    }
-                    const fetchedData = data.data.data;
-                    fetchedData.autoplay ??= false;
-                    fetchedData.twenty_four_seven_mode ??= false;
-                    dashboardInfo.robertifyGuild = fetchedData;
-                    setCurrentData(dashboardInfo.robertifyGuild);
-                    setChangesMade(false);
-                    router.refresh()
-                    sendToast({
-                        description: "Successfully refreshed this server's data!"
-                    })
-                })
-                .catch(e => {
-                    sendToast({
-                        description: "There was an error trying to refresh this server's data!",
-                        type: ButtonType.DANGER
-                    });
-                    console.error(e);
-                })
-        })
-    }
     return (
         <DashboardContainer>
             <DashboardSection title='Request Channel'>
@@ -512,11 +464,6 @@ export default function DashboardGeneralContext() {
             >
                 {handler.generateLogToggleElements()}
             </DashboardSection>
-            <DashboardRefreshButton
-                refresh={refresh}
-                isRefreshing={isRefreshing}
-                canInteract={canInteract}
-            />
         </DashboardContainer>
     )
 }

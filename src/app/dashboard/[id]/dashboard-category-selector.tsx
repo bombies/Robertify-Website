@@ -5,10 +5,17 @@ import Button from "@/components/button/Button";
 import {usePathname, useRouter} from "next/navigation";
 import {useGuildDashboard} from "@/app/dashboard/[id]/dashboard-info-context";
 import {ButtonType} from "@/components/button/ButtonType";
+import DashboardRefreshButton from "@/app/dashboard/[id]/(categories)/dashboard-refresh-button";
 
 type Category = 'general' | 'misc';
 
-export default function DashboardCategorySelector() {
+type Props = {
+    refresh: () => void,
+    isRefreshing: boolean,
+    canInteract: boolean
+}
+
+export default function DashboardCategorySelector(props: Props) {
     const [ selected, setSelected ] = useState<Category>('general');
     const [ dashboardInfo, ] = useGuildDashboard();
     const pathName = usePathname();
@@ -25,7 +32,12 @@ export default function DashboardCategorySelector() {
     const id = dashboardInfo.robertifyGuild?.server_id;
 
     return (
-        <div className='flex gap-4 m-6 tablet:justify-center'>
+        <div className='flex gap-4 m-6 phone:mx-2 tablet:justify-center'>
+            <DashboardRefreshButton
+                refresh={props.refresh}
+                isRefreshing={props.isRefreshing}
+                canInteract={props.canInteract}
+            />
             <Selector
                 id={id}
                 category={'general'}

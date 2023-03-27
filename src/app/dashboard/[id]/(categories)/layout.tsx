@@ -13,6 +13,7 @@ import {ButtonType} from "@/components/button/ButtonType";
 import {Session} from "next-auth";
 import WebClient from "@/utils/api/web-client";
 import useSWRMutation from "swr/mutation";
+import DashboardCategorySelector from "@/app/dashboard/[id]/dashboard-category-selector";
 
 type Props = React.PropsWithChildren;
 
@@ -24,6 +25,14 @@ const POSTChanges = (session: Session | null, guildId: string, guildInfo: Robert
     return useSWRMutation(`/api/bot/guilds/${guildId}`, mutator)
 }
 
+const GetCurrentBotInfo = (session: Session | null, id: string) => {
+    const mutator = async (url: string) => {
+        return await WebClient.getInstance(session?.user).get(url);
+    }
+
+    return useSWRMutation(`/api/bot/guilds/${id}`, mutator)
+}
+
 export default function DashboardCategoryLayout({ children }: Props) {
     const [dashboardInfo, ] = useGuildDashboard();
     const session = useSession();
@@ -33,7 +42,13 @@ export default function DashboardCategoryLayout({ children }: Props) {
     const [, startTransition] = useTransition();
     // @ts-ignore
     const {isMutating: isSaving, trigger: triggerSave} = POSTChanges(session, dashboardInfo.robertifyGuild?.server_id, useCurrentData[0]);
-    const canInteract = dashboardInfo.userHasPermission && !isSaving;
+    // @ts-ignore
+    const {
+        isMutating: isRefreshing,
+        trigger: triggerRefresh
+        // @ts-ignore
+    } = GetCurrentBotInfo(session, dashboardInfo.robertifyGuild?.server_id);
+    const canInteract = dashboardInfo.userHasPermission && !isSaving && !isRefreshing;
     const dashboardState: DashboardState = {dashboardInfo, session, useCurrentData, useChangesMade, canInteract}
     const inviteLink = `https://discord.com/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&permissions=269479308656&scope=bot%20applications.commands&redirect_uri=${encodeURI(`${process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot%20applications.commands&guild_id=${dashboardInfo.id}&disable_guild_select=true`;
 
@@ -94,8 +109,43 @@ export default function DashboardCategoryLayout({ children }: Props) {
         })
     }
 
+    const refresh = () => {
+        if (!canInteract)
+            return;
+        startTransition(() => {
+            triggerRefresh()
+                .then(data => {
+                    if (!data) {
+                        sendToast({
+                            description: 'There was no data fetched on refresh!',
+                            type: ButtonType.DANGER
+                        })
+                        return;
+                    }
+                    const fetchedData = data.data.data;
+                    fetchedData.autoplay ??= false;
+                    fetchedData.twenty_four_seven_mode ??= false;
+                    dashboardInfo.robertifyGuild = fetchedData;
+                    useCurrentData[1](dashboardInfo.robertifyGuild);
+                    useChangesMade[1](false);
+                    router.refresh()
+                    sendToast({
+                        description: "Successfully refreshed this server's data!"
+                    })
+                })
+                .catch(e => {
+                    sendToast({
+                        description: "There was an error trying to refresh this server's data!",
+                        type: ButtonType.DANGER
+                    });
+                    console.error(e);
+                })
+        })
+    }
+
     return (
         <DashboardStateProvider initialData={dashboardState}>
+            <DashboardCategorySelector  canInteract={canInteract} isRefreshing={isRefreshing} refresh={refresh}/>
             <div className='relative'>
                 <DashboardUnsavedChangesPopup
                     isSaving={isSaving}
