@@ -6,7 +6,7 @@ const scopes = ['identify','email','guilds'].join(' ');
 export const authOptions: NextAuthOptions = {
     session: {
         strategy: 'jwt',
-        maxAge: 3600,
+        maxAge: 86400,
     },
     providers: [
         DiscordProvider({
