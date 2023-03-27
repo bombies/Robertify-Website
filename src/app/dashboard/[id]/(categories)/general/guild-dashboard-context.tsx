@@ -23,7 +23,7 @@ import refreshIcon from '/public/refresh.svg';
 import {AxiosError} from "axios";
 import {useGuildDashboard} from "@/app/dashboard/[id]/guild-info-context";
 import DashboardContainer from "@/app/dashboard/[id]/(categories)/dashboard-container";
-import DashboardUnsavedChangesPopup from "@/app/dashboard/[id]/dashboard-unsaved-changes-popup";
+import DashboardUnsavedChangesPopup from "@/app/dashboard/[id]/(categories)/dashboard-unsaved-changes-popup";
 
 type Props = {
     id: string

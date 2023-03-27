@@ -1,7 +1,7 @@
 import Button from "@/components/button/Button";
-import saveIcon from "../../../../public/save.svg";
+import saveIcon from "../../../../../public/save.svg";
 import {ButtonType} from "@/components/button/ButtonType";
-import discardIcon from "../../../../public/discard.svg";
+import discardIcon from "../../../../../public/discard.svg";
 
 type Props = {
     isSaving: boolean,
