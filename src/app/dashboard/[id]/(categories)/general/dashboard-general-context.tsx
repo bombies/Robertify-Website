@@ -10,7 +10,7 @@ import {compare} from "@/utils/general-utils";
 import Button from "@/components/button/Button";
 import {ButtonType} from "@/components/button/ButtonType";
 import WebClient from "@/utils/api/web-client";
-import GuildDashboardGeneralHandler from "@/app/dashboard/[id]/(categories)/general/guild-dashboard-general-handler";
+import DashboardGeneralHandler from "@/app/dashboard/[id]/(categories)/general/dashboard-general-handler";
 import saveIcon from '/public/save.svg';
 import discardIcon from '/public/discard.svg';
 import Toggle from "@/components/toggle";
@@ -19,9 +19,8 @@ import {signIn, useSession} from "next-auth/react";
 import {Session} from "next-auth";
 import useSWRMutation from 'swr/mutation';
 import {sendToast} from "@/utils/client-utils";
-import refreshIcon from '/public/refresh.svg';
 import {AxiosError} from "axios";
-import {useGuildDashboard} from "@/app/dashboard/[id]/guild-info-context";
+import {useGuildDashboard} from "@/app/dashboard/[id]/dashboard-info-context";
 import DashboardContainer from "@/app/dashboard/[id]/(categories)/dashboard-container";
 import DashboardUnsavedChangesPopup from "@/app/dashboard/[id]/(categories)/dashboard-unsaved-changes-popup";
 import DashboardRefreshButton from "@/app/dashboard/[id]/(categories)/dashboard-refresh-button";
@@ -67,7 +66,7 @@ const hasReqChannel = (currentData?: RobertifyGuild): boolean => {
     return !!(currentData.dedicated_channel?.channel_id && currentData.dedicated_channel?.channel_id !== '-1');
 }
 
-export default function GuildDashboardGeneralContext(props: Props) {
+export default function DashboardGeneralContext(props: Props) {
     const [dashboardInfo, ] = useGuildDashboard();
     const session = useSession();
     const router = useRouter();
@@ -95,7 +94,7 @@ export default function GuildDashboardGeneralContext(props: Props) {
         // @ts-ignore
     } = GetCurrentBotInfo(session, dashboardInfo.robertifyGuild?.server_id);
     const canInteract = dashboardInfo.userHasPermission && !isSaving && !isRefreshing && !isCreatingReqChannel && !isDeletingReqChannel;
-    const handler = new GuildDashboardGeneralHandler({
+    const handler = new DashboardGeneralHandler({
         robertifyGuild: currentData,
         discordGuild: dashboardInfo.discordGuild,
         guildChannels: dashboardInfo.discordGuildChannels,

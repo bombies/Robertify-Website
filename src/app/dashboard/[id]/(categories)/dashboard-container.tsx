@@ -1,5 +1,5 @@
 import React from "react";
-import {useGuildDashboard} from "@/app/dashboard/[id]/guild-info-context";
+import {useGuildDashboard} from "@/app/dashboard/[id]/dashboard-info-context";
 import Card from "@/components/card";
 
 interface Props extends React.PropsWithChildren {

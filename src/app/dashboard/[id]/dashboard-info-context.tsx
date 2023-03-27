@@ -10,7 +10,7 @@ export type GuildDashboardInfo = {
     userHasPermission: boolean,
 }
 
-const GuildInfoContext = React.createContext<[GuildDashboardInfo, React.Dispatch<React.SetStateAction<GuildDashboardInfo>>] | undefined>(undefined);
+const DashboardInfoContext = React.createContext<[GuildDashboardInfo, React.Dispatch<React.SetStateAction<GuildDashboardInfo>>] | undefined>(undefined);
 
 interface Props extends React.PropsWithChildren {
     initialDashboardInfo: GuildDashboardInfo
@@ -19,14 +19,14 @@ export function GuildDashboardInfoProvider({ children, initialDashboardInfo }: P
     const [ dashboardInfo, setDashboardInfo ] = useState(initialDashboardInfo);
 
     return (
-        <GuildInfoContext.Provider value={[dashboardInfo, setDashboardInfo]}>
+        <DashboardInfoContext.Provider value={[dashboardInfo, setDashboardInfo]}>
             {children}
-        </GuildInfoContext.Provider>
+        </DashboardInfoContext.Provider>
     )
 }
 
 export function useGuildDashboard() {
-    const context = React.useContext(GuildInfoContext);
+    const context = React.useContext(DashboardInfoContext);
     if (!context)
         throw new Error('useGuildDashboard must be used within a GuildDashboardInfoProvider');
     return context;

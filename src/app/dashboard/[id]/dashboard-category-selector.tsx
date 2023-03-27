@@ -3,7 +3,7 @@
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import Button from "@/components/button/Button";
 import {usePathname, useRouter} from "next/navigation";
-import {useGuildDashboard} from "@/app/dashboard/[id]/guild-info-context";
+import {useGuildDashboard} from "@/app/dashboard/[id]/dashboard-info-context";
 import {ButtonType} from "@/components/button/ButtonType";
 
 type Category = 'general' | 'misc';

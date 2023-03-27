@@ -55,7 +55,7 @@ type ConstructorType = {
     setCurrentData?: Dispatch<SetStateAction<RobertifyGuild | undefined>>,
     canInteract: boolean,
 }
-export default class GuildDashboardGeneralHandler {
+export default class DashboardGeneralHandler {
 
     constructor(private readonly opts: ConstructorType) {
     }

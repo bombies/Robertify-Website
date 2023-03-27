@@ -7,7 +7,7 @@ import GenericImage from "@/app/_components/GenericImage";
 import backIcon from "../../../../public/go-back.svg";
 import MiniContent from "@/components/MiniContent";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
-import {GuildDashboardInfoProvider} from "@/app/dashboard/[id]/guild-info-context";
+import {GuildDashboardInfoProvider} from "@/app/dashboard/[id]/dashboard-info-context";
 import {DiscordUserGuild, isServerAdmin} from "@/utils/discord-types";
 import DashboardCategorySelector from "@/app/dashboard/[id]/dashboard-category-selector";
 
