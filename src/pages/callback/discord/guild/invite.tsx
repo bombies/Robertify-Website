@@ -30,7 +30,7 @@ export default function Callback() {
             router.push('/dashboard');
             return;
         } else {
-            router.push(`/dashboard/${guildId}`)
+            router.push(`/dashboard/${guildId}/general`)
         }
     }, [code, error, guildId, router])
 
