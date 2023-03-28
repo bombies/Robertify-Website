@@ -19,6 +19,7 @@ export default function BadgeWrapper(props: Props) {
                 color={props.color}
                 content={props.content}
                 size={props.size}
+                className={props.classname}
                 css={{
                     'color': 'white',
                 }}
