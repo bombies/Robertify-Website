@@ -1,9 +1,6 @@
 'use client';
 
 import Card from "@/components/card";
-import crownIcon from '/public/crown.svg';
-import shieldIcon from '/public/shield.svg';
-import {Tooltip} from "@nextui-org/react";
 import GenericImage from "@/app/_components/GenericImage";
 import BadgeWrapper from "@/components/BadgeWrapper";
 
