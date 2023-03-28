@@ -5,7 +5,7 @@ import {Modal, Spacer, Table, Text, Textarea, Tooltip} from "@nextui-org/react";
 import {TableColumn} from "@/app/commands/command-table";
 import React, {useMemo, useState} from "react";
 import IconButton from "@/components/button/IconButton";
-import binIcon from '/public/discard.svg';
+import binIcon from '/public/red-bin.svg';
 import Card from "@/components/card";
 import Button from "@/components/button/Button";
 import {ButtonType} from "@/components/button/ButtonType";
