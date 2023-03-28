@@ -20,11 +20,14 @@ export default async function Dashboard() {
 
     return (
         <main className='p-12 phone:px-6 min-h-screen'>
-            <div className='flex self-center justify-center gap-4'>
-                <h1 className='text-primary text-5xl phone:text-3xl dark:drop-shadow-glow-primary-lg text-center mb-6'>
+            <div className='flex self-center justify-center gap-4 mb-6'>
+                <h1 className='text-primary text-5xl phone:text-3xl dark:drop-shadow-glow-primary-lg text-center self-center'>
                     Welcome to your dashboard
                 </h1>
-                <BadgeWrapper color='primary' size='sm'>BETA</BadgeWrapper>
+                <BadgeWrapper
+                    color='primary'
+                    size='sm'
+                >BETA</BadgeWrapper>
             </div>
             <GuildGrid guilds={guilds}/>
         </main>

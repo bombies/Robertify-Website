@@ -7,11 +7,12 @@ interface Props extends React.PropsWithChildren {
     color?: 'primary' | 'warning' | 'error' | 'success' | 'secondary',
     size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
     content?: string,
+    classname?: string
 }
 
 export default function BadgeWrapper(props: Props) {
     return (
-        <div className='self-center'>
+        <div className={'self-center ' + (props.classname ?? '')}>
             <Badge
                 disableOutline
                 enableShadow
