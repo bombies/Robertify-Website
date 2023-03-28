@@ -7,11 +7,10 @@ import backIcon from "../../../../public/go-back.svg";
 import MiniContent from "@/components/MiniContent";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 import {GuildDashboardInfoProvider} from "@/app/dashboard/[id]/dashboard-info-context";
-import {DiscordUserGuild, isServerAdmin} from "@/utils/discord-types";
+import {isGuildAdmin} from "@/utils/discord-types";
 import {
     fetchDiscordGuildChannels,
-    fetchDiscordGuildInfo,
-    fetchDiscordUserGuilds,
+    fetchDiscordGuildInfo, fetchDiscordGuildMember,
     fetchRobertifyGuildInfo
 } from "@/utils/api/api-methods";
 
@@ -53,10 +52,10 @@ const getBotGuildInfo = async (id: string, session: Session | null) => {
     }
 }
 
-const getUserGuilds = async (session: Session | null) => {
+const getGuildMember = async (server_id: string, session: Session | null) => {
     if (!session?.user)
-        return [];
-    return await fetchDiscordUserGuilds(session?.user);
+        return {}
+    return await fetchDiscordGuildMember(server_id, session?.user);
 }
 
 export async function generateMetadata({params}: { params: { id: string } }) {
@@ -75,7 +74,7 @@ export default async function GuildDashboardLayout({children, params}: Props) {
     let discordGuildInfo = await getDiscordGuildInfo(params.id, serverSession);
     let discordGuildChannelInfo = await getDiscordGuildChannels(params.id, serverSession);
     let botGuildInfo = await getBotGuildInfo(params.id, serverSession);
-    const userGuilds = await getUserGuilds(serverSession);
+    const guildMemberInfo = await getGuildMember(params.id, serverSession);
 
     if (discordGuildInfo?.code === 10004)
         discordGuildInfo = undefined;
@@ -118,7 +117,7 @@ export default async function GuildDashboardLayout({children, params}: Props) {
                 discordGuild: discordGuildInfo,
                 discordGuildChannels: discordGuildChannelInfo,
                 robertifyGuild: botGuildInfo,
-                userHasPermission: userGuilds ? isServerAdmin(userGuilds.filter((guild: DiscordUserGuild) => guild.id === params.id)[0]) : false
+                userHasPermission: guildMemberInfo ? isGuildAdmin(guildMemberInfo, discordGuildInfo) : false
             }}>
                 {children}
             </GuildDashboardInfoProvider>

@@ -39,6 +39,14 @@ export const fetchDiscordUserGuilds = async (session?: User | null) => {
     return data.data;
 }
 
+export const fetchDiscordGuildMember = async (guildId: string, session?: User | null) => {
+    if (!session)
+        throw new Error('You are not authenticated!');
+    const data = await DiscordWebClient.getInstance()
+        .get(`/guilds/${guildId}/members/${session.id}`)
+    return data.data;
+}
+
 export const fetchDiscordGuildChannels = async (id: string, session?: User | null) => {
     if (!session)
         throw new Error('You are not authenticated!');

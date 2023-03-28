@@ -244,7 +244,7 @@ export type RobertifyGuild = {
     log_channel: string;
     twenty_four_seven_mode: boolean;
     locale: LocaleString;
-}
+};
 
 export type DiscordUserGuild = {
     id: string,
@@ -253,9 +253,68 @@ export type DiscordUserGuild = {
     owner: boolean,
     permissions: string,
     features: string[]
+};
+
+export type DiscordUser = {
+    id: string,
+    username: string,
+    discriminator: string,
+    avatar?: string,
+    bot?: boolean,
+    system?: boolean,
+    mfa_enabled?: boolean,
+    banner?: string,
+    accent_color?: number,
+    locale?: string,
+    verified?: boolean,
+    email?: string,
+    flags?: number,
+    premium_type?: number,
+    public_flags?: number,
+};
+
+export type DiscordGuildMember = {
+    user?: DiscordUser,
+    nick?: string,
+    avatar?: string,
+    roles?: string[],
+    joined_at: string,
+    premium_since?: string,
+    deaf: boolean,
+    mute: boolean,
+    flags: number,
+    pending?: boolean,
+    permissions?: string,
+    communication_disabled_until?: string,
+};
+
+export function isServerAdmin(guild: DiscordUserGuild): boolean {
+    if (!guild) return false;
+    return permContainsAdmin(guild.permissions);
 }
 
-export const isServerAdmin = (guild: DiscordUserGuild) => {
-    if (!guild) return false;
-    return (Number(guild.permissions) & (1 << 5)) === (1 << 5) || (Number(guild.permissions) & (1 << 3)) === (1 << 3);
+export function isGuildAdmin(member: DiscordGuildMember, guildInfo: DiscordGuild): boolean {
+    if (!member) return false;
+
+    if (member.user && (member.user.id === guildInfo.owner_id))
+        return true;
+
+    const userCheck = permContainsAdmin(member.permissions);
+    if (userCheck)
+        return true;
+
+    const memberRoles = member.roles
+    if (!memberRoles || memberRoles.length == 0)
+        return false;
+
+    const roleDetails = guildInfo.roles.filter(role => memberRoles.some(r => r === role.id));
+    for (let i = 0; i < roleDetails.length; i++)
+        if (permContainsAdmin(roleDetails[i].permissions))
+            return true;
+    return false;
+}
+
+function permContainsAdmin(perm?: string) {
+    if (!perm) return false;
+    return (Number(perm) & (1 << 5)) === (1 << 5) || (Number(perm) & (1 << 3)) === (1 << 3)
 }
