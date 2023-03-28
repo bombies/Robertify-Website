@@ -16,6 +16,7 @@ type Props = {
 export default function IconButton(props: Props) {
     return (
         <GenericImage
+            className='transition-faster hover:scale-105'
             src={props.icon}
             width={props.size ?? 1.25}
             onClick={(e) => {

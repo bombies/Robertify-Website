@@ -1,5 +1,5 @@
 import AbstractDashboardHandler, {AbstractDashboardFields} from "@/app/dashboard/[id]/(categories)/abstract-dashboard-handler";
-import {Table} from "@nextui-org/react";
+import {Table, Tooltip} from "@nextui-org/react";
 import {TableColumn} from "@/app/commands/command-table";
 import React from "react";
 import IconButton from "@/components/button/IconButton";
@@ -29,20 +29,29 @@ export default class DashboardMiscHandler extends AbstractDashboardHandler {
 
         const renderCell = (response: {response: string, index: number}, key: React.Key) => {
             switch (key) {
-                case "response_col": return <p>{response.response}</p>
-                case "actions_col": return <div className='flex gap-2 justify-center'><IconButton icon={binIcon}/></div>
+                case "response_col": return <p className='dark:text-white text-black'>{response.response}</p>
+                case "actions_col": return <div className='flex gap-2'>
+                    <Tooltip content='Delete Response' color='error'>
+                        <IconButton
+                            icon={binIcon}
+                            onClick={() => this.removeEightBallResponse(response.response)}
+                        />
+                    </Tooltip>
+
+                </div>
             }
         }
 
         return (
             <Table
                 compact
+                sticked
                 bordered
                 aria-label="Command table"
                 color='primary'
                 css={{
                     height: 'auto',
-                    minWidth: "100%",
+                    minWidth: "50%",
                 }}
             >
                 <Table.Header columns={columns}>
@@ -54,7 +63,7 @@ export default class DashboardMiscHandler extends AbstractDashboardHandler {
                 </Table.Header>
                 <Table.Body items={responses}>
                     {(response) => (
-                        <Table.Row>
+                        <Table.Row key={response.index}>
                             {(columnKey) => (
                                 <Table.Cell>{renderCell(response, columnKey)}</Table.Cell>
                             )}
@@ -65,7 +74,7 @@ export default class DashboardMiscHandler extends AbstractDashboardHandler {
         )
     }
 
-    private addEightBallResponse(response: string) {
+    public addEightBallResponse(response: string) {
         if (!this.isUsable()) return;
 
         this.opts.setCurrentData!(prevState => {
@@ -78,7 +87,7 @@ export default class DashboardMiscHandler extends AbstractDashboardHandler {
         })
     }
 
-    private removeEightBallResponse(response: string) {
+    public removeEightBallResponse(response: string) {
         if (!this.isUsable()) return;
 
         this.opts.setCurrentData!(prevState => {
