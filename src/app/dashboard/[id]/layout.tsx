@@ -1,6 +1,5 @@
 import React from "react";
 import {getServerSession, Session} from "next-auth";
-import WebClient from "@/utils/api/web-client";
 import {AxiosError} from "axios";
 import Link from "next/link";
 import GenericImage from "@/app/_components/GenericImage";
@@ -9,7 +8,12 @@ import MiniContent from "@/components/MiniContent";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 import {GuildDashboardInfoProvider} from "@/app/dashboard/[id]/dashboard-info-context";
 import {DiscordUserGuild, isServerAdmin} from "@/utils/discord-types";
-import DashboardCategorySelector from "@/app/dashboard/[id]/dashboard-category-selector";
+import {
+    fetchDiscordGuildChannels,
+    fetchDiscordGuildInfo,
+    fetchDiscordUserGuilds,
+    fetchRobertifyGuildInfo
+} from "@/utils/api/api-methods";
 
 interface Props extends React.PropsWithChildren {
     params: { id: string }
@@ -17,8 +21,7 @@ interface Props extends React.PropsWithChildren {
 
 const getDiscordGuildInfo = async (id: string, session: Session | null) => {
     try {
-        return (await WebClient.getInstance(session?.user)
-            .get(`/api/discord/guilds/${id}`))?.data
+        return await fetchDiscordGuildInfo(id, session?.user);
     } catch (e) {
         if (e instanceof AxiosError) {
             if (e.response?.status === 404)
@@ -30,8 +33,7 @@ const getDiscordGuildInfo = async (id: string, session: Session | null) => {
 
 const getDiscordGuildChannels = async (id: string, session: Session | null) => {
     try {
-        return (await WebClient.getInstance(session?.user)
-            .get(`/api/discord/guilds/${id}/channels`))?.data
+        return await fetchDiscordGuildChannels(id, session?.user);
     } catch (e) {
         if (e instanceof AxiosError) {
             if (e.response?.status === 404)
@@ -42,8 +44,7 @@ const getDiscordGuildChannels = async (id: string, session: Session | null) => {
 
 const getBotGuildInfo = async (id: string, session: Session | null) => {
     try {
-        return (await WebClient.getInstance(session?.user)
-            .get(`/api/bot/guilds/${id}`))?.data
+        return await fetchRobertifyGuildInfo(id, session?.user);
     } catch (e) {
         if (e instanceof AxiosError) {
             if (e.response?.status === 404)
@@ -53,28 +54,19 @@ const getBotGuildInfo = async (id: string, session: Session | null) => {
 }
 
 const getUserGuilds = async (session: Session | null) => {
-    try {
-        if (!session?.user)
-            return [];
-        return (await WebClient.getInstance(session?.user)
-            .get(`/api/discord/user/guilds`))?.data;
-    } catch (e: any) {
-        if (e instanceof AxiosError && e.response?.data.retry_after) {
-            setTimeout(() => {
-                getUserGuilds(session);
-            }, e.response.data.retry_after)
-        } else throw e;
-    }
+    if (!session?.user)
+        return [];
+    return await fetchDiscordUserGuilds(session?.user);
 }
 
 export async function generateMetadata({params}: { params: { id: string } }) {
     const {id} = params;
     let guildInfo = await getDiscordGuildInfo(id, await getServerSession(authOptions));
-    if (guildInfo?.data?.code === 10004)
+    if (guildInfo?.code === 10004)
         guildInfo = undefined;
 
     return {
-        title: `Robertify - ${!guildInfo ? 'No Server' : guildInfo?.data.name}`
+        title: `Robertify - ${!guildInfo ? 'No Server' : guildInfo?.name}`
     }
 }
 
@@ -83,16 +75,16 @@ export default async function GuildDashboardLayout({children, params}: Props) {
     let discordGuildInfo = await getDiscordGuildInfo(params.id, serverSession);
     let discordGuildChannelInfo = await getDiscordGuildChannels(params.id, serverSession);
     let botGuildInfo = await getBotGuildInfo(params.id, serverSession);
-    const userGuilds = (await getUserGuilds(serverSession))?.data;
+    const userGuilds = await getUserGuilds(serverSession);
 
-    if (discordGuildInfo?.data?.code === 10004)
+    if (discordGuildInfo?.code === 10004)
         discordGuildInfo = undefined;
-    if (discordGuildChannelInfo?.data?.code === 50001)
+    if (discordGuildChannelInfo?.code === 50001)
         discordGuildChannelInfo = undefined;
-    if (botGuildInfo?.data?.statusCode === 404)
+    if (botGuildInfo?.statusCode === 404)
         botGuildInfo = undefined
 
-    const guildIcon = discordGuildInfo?.data.icon ? `https://cdn.discordapp.com/icons/${discordGuildInfo?.data.id}/${discordGuildInfo?.data.icon}.webp?size=512` : 'https://i.imgur.com/k14Qfh5.png';
+    const guildIcon = discordGuildInfo?.icon ? `https://cdn.discordapp.com/icons/${discordGuildInfo?.id}/${discordGuildInfo?.icon}.webp?size=512` : 'https://i.imgur.com/k14Qfh5.png';
 
     return (
         <div className='w-full min-h-screen desktop:p-36 p-24 tablet:px-6 phone:px-3'>
@@ -117,15 +109,15 @@ export default async function GuildDashboardLayout({children, params}: Props) {
                             objectFit: 'cover'
                         }}
                     />
-                    <h1 className='text-4xl phone:text-xl font-black tracking-wider text-primary self-center z-10'>{discordGuildInfo?.data.name}</h1>
+                    <h1 className='text-4xl phone:text-xl font-black tracking-wider text-primary self-center z-10'>{discordGuildInfo?.name}</h1>
                     <MiniContent content='BETA'/>
                 </div>
             </div>
             <GuildDashboardInfoProvider initialDashboardInfo={{
                 id: params.id,
-                discordGuild: discordGuildInfo?.data,
-                discordGuildChannels: discordGuildChannelInfo?.data,
-                robertifyGuild: botGuildInfo?.data,
+                discordGuild: discordGuildInfo,
+                discordGuildChannels: discordGuildChannelInfo,
+                robertifyGuild: botGuildInfo,
                 userHasPermission: userGuilds ? isServerAdmin(userGuilds.filter((guild: DiscordUserGuild) => guild.id === params.id)[0]) : false
             }}>
                 {children}

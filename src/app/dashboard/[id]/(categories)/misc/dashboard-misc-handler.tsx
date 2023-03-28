@@ -37,10 +37,11 @@ export default class DashboardMiscHandler extends AbstractDashboardHandler {
                             onClick={() => this.removeEightBallResponse(response.response)}
                         />
                     </Tooltip>
-
                 </div>
             }
         }
+
+        const disabledKeys = !this.opts.canInteract ? responses.map(r => r.index) : [];
 
         return (
             <Table
@@ -48,6 +49,7 @@ export default class DashboardMiscHandler extends AbstractDashboardHandler {
                 sticked
                 bordered
                 aria-label="Command table"
+                disabledKeys={disabledKeys}
                 color='primary'
                 css={{
                     height: 'auto',
@@ -63,7 +65,9 @@ export default class DashboardMiscHandler extends AbstractDashboardHandler {
                 </Table.Header>
                 <Table.Body items={responses}>
                     {(response) => (
-                        <Table.Row key={response.index}>
+                        <Table.Row
+                            key={response.index}
+                        >
                             {(columnKey) => (
                                 <Table.Cell>{renderCell(response, columnKey)}</Table.Cell>
                             )}

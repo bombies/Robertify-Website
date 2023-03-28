@@ -6,8 +6,8 @@ import {NextURL} from "next/dist/server/web/next-url";
 import {Session, User} from "next-auth";
 import {JsonWebTokenError, JwtPayload, verify} from "jsonwebtoken";
 import {getToken} from "next-auth/jwt";
-import WebClient from "@/utils/api/web-client";
 import {DiscordUserGuild, isServerAdmin} from "@/utils/discord-types";
+import {fetchDiscordUserGuilds} from "@/utils/api/api-methods";
 
 export class ResponseBuilder {
     private logicHandler?: (req: NextApiRequest, res: NextApiResponse, apiUtils: ApiUtils) => Promise<void>;
@@ -30,18 +30,9 @@ export class ResponseBuilder {
         this.predicate = {
             predicateFunc: async (req, utils) => {
                 const getUserGuilds = async (session: User | null) => {
-                    try {
-                        if (!session)
-                            return [];
-                        return (await WebClient.getInstance(session)
-                            .get(`/api/discord/user/guilds`)).data;
-                    } catch (e: any) {
-                        if (e instanceof AxiosError && e.response?.data.retry_after) {
-                            setTimeout(() => {
-                                getUserGuilds(session);
-                            }, e.response.data.retry_after)
-                        } else throw e;
-                    }
+                    if (!session)
+                        return [];
+                    return await fetchDiscordUserGuilds(session);
                 }
 
                 const {body} = req;
@@ -53,10 +44,10 @@ export class ResponseBuilder {
                 const session = await utils.getSession()
                 if (!session)
                     return false;
-                const userGuilds = (await getUserGuilds(session))?.data;
+                const userGuilds = await getUserGuilds(session)
                 return userGuilds ? isServerAdmin(userGuilds.filter((guild: DiscordUserGuild) => guild.id === serverId)[0]) : false;
             },
-            failOptions: {status: StatusCodes.FORBIDDEN, message: 'You do not have permission to do this!'}
+            failOptions: {status: StatusCodes.BAD_REQUEST, message: 'You do not have permission to do this!'}
         }
         return this;
     }
@@ -82,11 +73,7 @@ export class ResponseBuilder {
             return await this.logicHandler(this.req, this.res, this.apiUtils);
         } catch (ex) {
             if (ex instanceof AxiosError) {
-                if (ex.response?.data.retry_after) {
-                    setTimeout(async () => {
-                        return await this.execute();
-                    }, ex.response?.data.retry_after * 1000)
-                } else return this.apiUtils.prepareResponse(ex.response?.status ?? StatusCodes.BAD_REQUEST, ex.message ?? 'Something went wrong!', ex.response?.data)
+                return this.apiUtils.prepareResponse(ex.response?.status ?? StatusCodes.BAD_REQUEST, ex.message ?? 'Something went wrong!', ex.response?.data)
             } else {
                 console.error(ex);
                 return this.apiUtils.prepareResponse(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, ex);

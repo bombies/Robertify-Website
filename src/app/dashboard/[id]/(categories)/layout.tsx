@@ -11,25 +11,19 @@ import DashboardUnsavedChangesPopup from "@/app/dashboard/[id]/(categories)/dash
 import {sendToast} from "@/utils/client-utils";
 import {ButtonType} from "@/components/button/ButtonType";
 import {Session} from "next-auth";
-import WebClient from "@/utils/api/web-client";
 import useSWRMutation from "swr/mutation";
 import DashboardCategorySelector from "@/app/dashboard/[id]/dashboard-category-selector";
+import WebClient from "@/utils/api/web-client";
 
 type Props = React.PropsWithChildren;
 
 const POSTChanges = (session: Session | null, guildId: string, guildInfo: RobertifyGuild) => {
-    const mutator = async (url: string) => {
-        await WebClient.getInstance(session?.user).post(url, guildInfo);
-    }
-
+    const mutator = async (url: string) => await WebClient.getInstance(session?.user).post(url, guildInfo);
     return useSWRMutation(`/api/bot/guilds/${guildId}`, mutator)
 }
 
 const GetCurrentBotInfo = (session: Session | null, id: string) => {
-    const mutator = async (url: string) => {
-        return await WebClient.getInstance(session?.user).get(url);
-    }
-
+    const mutator = async (url: string) => await WebClient.getInstance(session?.user).get(url);
     return useSWRMutation(`/api/bot/guilds/${id}`, mutator)
 }
 
@@ -41,13 +35,13 @@ export default function DashboardCategoryLayout({ children }: Props) {
     const router = useRouter();
     const [, startTransition] = useTransition();
     // @ts-ignore
-    const {isMutating: isSaving, trigger: triggerSave} = POSTChanges(session, dashboardInfo.robertifyGuild?.server_id, useCurrentData[0]);
+    const {isMutating: isSaving, trigger: triggerSave} = POSTChanges(session.data, dashboardInfo.robertifyGuild?.server_id, useCurrentData[0]);
     // @ts-ignore
     const {
         isMutating: isRefreshing,
         trigger: triggerRefresh
         // @ts-ignore
-    } = GetCurrentBotInfo(session, dashboardInfo.robertifyGuild?.server_id);
+    } = GetCurrentBotInfo(session.data, dashboardInfo.robertifyGuild?.server_id);
     const canInteract = dashboardInfo.userHasPermission && !isSaving && !isRefreshing;
     const dashboardState: DashboardState = {dashboardInfo, session, useCurrentData, useChangesMade, canInteract}
     const inviteLink = `https://discord.com/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&permissions=269479308656&scope=bot%20applications.commands&redirect_uri=${encodeURI(`${process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot%20applications.commands&guild_id=${dashboardInfo.id}&disable_guild_select=true`;

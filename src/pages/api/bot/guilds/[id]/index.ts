@@ -1,10 +1,7 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {HTTPMethod, MethodHandler} from "@/utils/api/method-handler";
-import WebClient, {ExternalWebClient} from "@/utils/api/web-client";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
-import {Session, User} from "next-auth";
-import {AxiosError} from "axios";
-import {DiscordUserGuild, isServerAdmin} from "@/utils/discord-types";
+import {fetchRobertifyGuildInfo, updateRobertifyGuildInfo} from "@/utils/api/api-methods";
 
 class RouteHandler extends MethodHandler {
     constructor(req: NextApiRequest, res: NextApiResponse) {
@@ -14,17 +11,9 @@ class RouteHandler extends MethodHandler {
     protected async GET(): Promise<void> {
         return this.getResponseBuilder()
             .setAuthenticatedRoute()
-            .setLogic(async (req) => {
+            .setLogic(async (req, _, apiUtils) => {
                 const {id} = req.query;
-                const externWebClient = ExternalWebClient.getInstance();
-                if (!externWebClient)
-                    return this.prepareResponse(StatusCodes.INTERNAL_SERVER_ERROR, "The external Web Client is null!");
-
-                const guildInfo = (
-                    await externWebClient
-                        .get(`/guild/${id}`)
-                )?.data;
-
+                const guildInfo = await fetchRobertifyGuildInfo(id as string, await apiUtils.getSession())
                 return this.prepareResponse(StatusCodes.OK, ReasonPhrases.OK, guildInfo);
             })
             .execute();
@@ -34,16 +23,13 @@ class RouteHandler extends MethodHandler {
         return this.getResponseBuilder()
             .setAuthenticatedRoute()
             .setServerAdminOnlyRoute()
-            .setLogic(async (req) => {
+            .setLogic(async (req, _, apiUtils) => {
                 const {id} = req.query;
                 const {body} = req;
-                const externWebClient = ExternalWebClient.getInstance();
-                if (!externWebClient)
-                    return this.prepareResponse(StatusCodes.INTERNAL_SERVER_ERROR, "The external Web Client is null!");
 
                 if (!body)
                     return this.prepareResponse(StatusCodes.BAD_REQUEST, "A body must be provided!");
-                const res = (await externWebClient.patch(`/guild/${id}`, body))?.data;
+                const res = await updateRobertifyGuildInfo(id as string, body, await apiUtils.getSession());
                 return this.prepareResponse(StatusCodes.OK, ReasonPhrases.OK, res);
             })
             .execute();

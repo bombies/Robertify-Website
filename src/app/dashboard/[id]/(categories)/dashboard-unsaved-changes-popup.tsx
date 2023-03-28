@@ -4,18 +4,6 @@ import Button from "@/components/button/Button";
 import saveIcon from "../../../../../public/save.svg";
 import {ButtonType} from "@/components/button/ButtonType";
 import discardIcon from "../../../../../public/discard.svg";
-import {Session} from "next-auth";
-import {RobertifyGuild} from "@/utils/discord-types";
-import WebClient from "@/utils/api/web-client";
-import useSWRMutation from "swr/mutation";
-
-const POSTChanges = (session: Session | null, guildId: string, guildInfo: RobertifyGuild) => {
-    const mutator = async (url: string) => {
-        await WebClient.getInstance(session?.user).post(url, guildInfo);
-    }
-
-    return useSWRMutation(`/api/bot/guilds/${guildId}`, mutator)
-}
 
 type Props = {
     isSaving: boolean,

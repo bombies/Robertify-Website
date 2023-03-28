@@ -9,7 +9,6 @@ import {useTransition} from "react";
 import {compare} from "@/utils/general-utils";
 import Button from "@/components/button/Button";
 import {ButtonType} from "@/components/button/ButtonType";
-import WebClient from "@/utils/api/web-client";
 import DashboardGeneralHandler from "@/app/dashboard/[id]/(categories)/general/dashboard-general-handler";
 import discardIcon from '/public/discard.svg';
 import Toggle from "@/components/toggle";
@@ -19,22 +18,17 @@ import useSWRMutation from 'swr/mutation';
 import {sendToast} from "@/utils/client-utils";
 import {AxiosError} from "axios";
 import DashboardContainer from "@/app/dashboard/[id]/(categories)/dashboard-container";
-import DashboardRefreshButton from "@/app/dashboard/[id]/(categories)/dashboard-refresh-button";
 import {useDashboardState} from "@/app/dashboard/[id]/(categories)/dashboard-state-context";
+import {createReqChannel, deleteReqChannel} from "@/utils/api/api-methods";
+import WebClient from "@/utils/api/web-client";
 
 const CreateReqChannel = (session: Session | null, id: string) => {
-    const mutator = async (url: string) => {
-        return await WebClient.getInstance(session?.user).post(url);
-    }
-
+    const mutator = async (url: string) => await WebClient.getInstance(session?.user).post(url);
     return useSWRMutation(`/api/bot/guilds/${id}/reqchannel`, mutator);
 }
 
 const DeleteReqChannel = (session: Session | null, id: string) => {
-    const mutator = async (url: string) => {
-        return await WebClient.getInstance(session?.user).delete(url);
-    }
-
+    const mutator = async (url: string) => await WebClient.getInstance(session?.user).delete(url);
     return useSWRMutation(`/api/bot/guilds/${id}/reqchannel`, mutator);
 }
 
@@ -58,12 +52,12 @@ export default function DashboardGeneralContext() {
         isMutating: isCreatingReqChannel,
         trigger: triggerReqChannelCreation
         // @ts-ignore
-    } = CreateReqChannel(session, dashboardInfo.robertifyGuild?.server_id);
+    } = CreateReqChannel(session.data, dashboardInfo.robertifyGuild?.server_id);
     const {
         isMutating: isDeletingReqChannel,
         trigger: triggerReqChannelDeletion
         // @ts-ignore
-    } = DeleteReqChannel(session, dashboardInfo.robertifyGuild?.server_id);
+    } = DeleteReqChannel(session.data, dashboardInfo.robertifyGuild?.server_id);
 
     const canInteract = stateCanInteract && !isCreatingReqChannel && !isDeletingReqChannel;
     const handler = new DashboardGeneralHandler({
