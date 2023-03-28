@@ -1,6 +1,7 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {HTTPMethod, MethodHandler} from "@/utils/api/method-handler";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
+import {fetchDiscordUserGuilds} from "@/utils/api/api-methods";
 
 class RouteHandler extends MethodHandler {
     constructor(req: NextApiRequest, res: NextApiResponse) {
