@@ -7,7 +7,7 @@ import GenericImage from "@/app/_components/GenericImage";
 export default function Loading() {
     return (
         <main className='p-12 min-h-screen'>
-            <h1 className='text-primary dark:drop-shadow-glow-primary-lg text-center'>Welcome to your dashboard</h1>
+            <h1 className='text-primary drop-shadow-glow-primary-lg text-center'>Welcome to your dashboard</h1>
             <div>
                 <div className='flex justify-center'>
                     <InputContext
