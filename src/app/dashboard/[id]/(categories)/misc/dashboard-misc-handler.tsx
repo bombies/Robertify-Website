@@ -3,7 +3,7 @@ import AbstractDashboardHandler, {
 } from "@/app/dashboard/[id]/(categories)/abstract-dashboard-handler";
 import {Modal, Spacer, Table, Text, Textarea, Tooltip} from "@nextui-org/react";
 import {TableColumn} from "@/app/commands/command-table";
-import React, {useMemo, useState} from "react";
+import React, {Dispatch, SetStateAction} from "react";
 import IconButton from "@/components/button/IconButton";
 import binIcon from '/public/red-bin.svg';
 import Card from "@/components/card";
@@ -12,31 +12,22 @@ import {ButtonType} from "@/components/button/ButtonType";
 import {sendToast} from "@/utils/client-utils";
 import DashboardSection from "@/app/dashboard/[id]/(categories)/dashboard-section";
 
+type EightBallFields = {
+    toggleEightBallModal: () => void,
+    addEightBallResponse: boolean,
+    setAddEightBallResponse: Dispatch<SetStateAction<boolean>>
+    proposedResponse: string,
+    setProposedResponse: Dispatch<SetStateAction<string>>,
+    eightBallValidator: {text: string, color: "primary" | "error" | "success"}
+}
+
 export default class DashboardMiscHandler extends AbstractDashboardHandler {
-    constructor(opts: AbstractDashboardFields) {
+    constructor(private readonly eightBall: EightBallFields, opts: AbstractDashboardFields) {
         super(opts);
     }
 
 
     public generateEightBallSection() {
-        const [addEightBallResponse, setAddEightBallResponse] = useState(false);
-        const [proposedResponse, setProposedResponse] = useState('');
-        const toggleEightBallModal = () => {
-            setAddEightBallResponse(prev => !prev);
-        }
-
-        const inputValidatorHelper = useMemo((): { text: string, color: 'primary' | 'error' | 'success' } => {
-            if (!proposedResponse)
-                return {
-                    text: "",
-                    color: "primary"
-                };
-            const isValid = proposedResponse.length <= 3500;
-            return {
-                text: isValid ? 'Cool response!' : 'Your response must not be over 3500 characters.',
-                color: isValid ? 'success' : 'error',
-            };
-        }, [proposedResponse])
 
         return (
             <DashboardSection title='8 Ball'>
@@ -48,16 +39,16 @@ export default class DashboardMiscHandler extends AbstractDashboardHandler {
                     type={ButtonType.CTA}
                     width={8}
                     disabled={!this.opts.canInteract}
-                    onClick={toggleEightBallModal}
+                    onClick={this.eightBall.toggleEightBallModal}
                 />
                 <Modal
                     width="600px"
                     closeButton
                     aria-labelledby="modal-title"
-                    open={addEightBallResponse}
+                    open={this.eightBall.addEightBallResponse}
                     onClose={() => {
-                        setAddEightBallResponse(false)
-                        setProposedResponse('');
+                        this.eightBall.setAddEightBallResponse(false)
+                        this.eightBall.setProposedResponse('');
                     }}
                     css={{
                         backgroundColor: '$background'
@@ -68,38 +59,38 @@ export default class DashboardMiscHandler extends AbstractDashboardHandler {
                     </Modal.Header>
                     <Modal.Body>
                         <Textarea
-                            value={proposedResponse}
+                            value={this.eightBall.proposedResponse}
                             onChange={(e) => {
-                                setProposedResponse(e.target.value)
+                                this.eightBall.setProposedResponse(e.target.value)
                             }}
                             disabled={!this.opts.canInteract}
                             bordered
                             fullWidth
-                            color={proposedResponse.length === 0 ? 'error' : inputValidatorHelper.color}
+                            color={this.eightBall.proposedResponse.length === 0 ? 'error' : this.eightBall.eightBallValidator.color}
                             size="lg"
                             placeholder="Enter a response..."
                             aria-label='eightball-response-input'
-                            status={proposedResponse.length === 0 ? 'error' : inputValidatorHelper.color}
-                            helperColor={inputValidatorHelper.color}
-                            helperText={inputValidatorHelper.text}
+                            status={this.eightBall.proposedResponse.length === 0 ? 'error' : this.eightBall.eightBallValidator.color}
+                            helperColor={this.eightBall.eightBallValidator.color}
+                            helperText={this.eightBall.eightBallValidator.text}
                         />
                         <Spacer y={.5} />
                     </Modal.Body>
                     <Modal.Footer>
                         <Button
                             label='Add'
-                            type={proposedResponse && proposedResponse.length <= 3500 ? ButtonType.CTA : ButtonType.DANGER}
+                            type={this.eightBall.proposedResponse && this.eightBall.proposedResponse.length <= 3500 ? ButtonType.CTA : ButtonType.DANGER}
                             width={5}
                             height={3}
                             disabled={!this.opts.canInteract}
                             onClick={() => {
-                                if (!proposedResponse) {
+                                if (!this.eightBall.proposedResponse) {
                                     sendToast({
                                         description: "The response can't be empty!",
                                         type: ButtonType.DANGER
                                     });
                                     return;
-                                } else if (proposedResponse.length > 3500) {
+                                } else if (this.eightBall.proposedResponse.length > 3500) {
                                     sendToast({
                                         description: "The response can't be more than 3500 characters!",
                                         type: ButtonType.DANGER
@@ -107,9 +98,9 @@ export default class DashboardMiscHandler extends AbstractDashboardHandler {
                                     return;
                                 }
 
-                                this.addEightBallResponse(proposedResponse);
-                                setAddEightBallResponse(false);
-                                setProposedResponse('');
+                                this.addEightBallResponse(this.eightBall.proposedResponse);
+                                this.eightBall.setAddEightBallResponse(false);
+                                this.eightBall.setProposedResponse('');
                                 sendToast({
                                     description: "Added your response successfully!",
                                     type: ButtonType.PRIMARY
