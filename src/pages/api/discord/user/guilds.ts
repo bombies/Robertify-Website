@@ -1,7 +1,7 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {HTTPMethod, MethodHandler} from "@/utils/api/method-handler";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
-import {DiscordWebClient} from "@/utils/api/web-client";
+import {fetchDiscordUserGuilds} from "@/utils/api/api-methods";
 
 class RouteHandler extends MethodHandler {
     constructor(req: NextApiRequest, res: NextApiResponse) {
@@ -13,10 +13,7 @@ class RouteHandler extends MethodHandler {
             .setAuthenticatedRoute()
             .setLogic(async (req, _, apiUtils) => {
                 const session = await apiUtils.getSession();
-                const fetchedData = (
-                    await DiscordWebClient.getInstance(session!.access_token)
-                        .get('/users/@me/guilds')
-                )?.data;
+                const fetchedData = await fetchDiscordUserGuilds(session);
                 return this.prepareResponse(StatusCodes.OK, ReasonPhrases.OK, fetchedData);
             })
             .execute();

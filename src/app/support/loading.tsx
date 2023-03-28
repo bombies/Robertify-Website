@@ -1,7 +1,5 @@
 import HeadingSection from "@/components/heading-section";
-import Card from "@/components/card";
 import SkeletonCard from "@/components/skeletons/skeleton-card";
-import Button from "@/components/button/Button";
 
 export default function Loading() {
     return (

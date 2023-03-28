@@ -1,7 +1,7 @@
 import {HTTPMethod, MethodHandler} from "@/utils/api/method-handler";
 import {NextApiRequest, NextApiResponse} from "next";
-import {ExternalWebClient} from "@/utils/api/web-client";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
+import {createReqChannel, deleteReqChannel} from "@/utils/api/api-methods";
 
 class RouteHandler extends MethodHandler {
     constructor(req: NextApiRequest, res: NextApiResponse) {
@@ -12,12 +12,9 @@ class RouteHandler extends MethodHandler {
         return this.getResponseBuilder()
             .setAuthenticatedRoute()
             .setServerAdminOnlyRoute()
-            .setLogic(async (req) => {
+            .setLogic(async (req, _, apiUtils) => {
                 const {id} = req.query;
-                const externWebClient = ExternalWebClient.getInstance();
-                if (!externWebClient)
-                    return this.prepareResponse(StatusCodes.INTERNAL_SERVER_ERROR, "The external Web Client is null!");
-                const res = (await externWebClient.post(`/guild/${id}/reqchannel`))?.data;
+                const res = await createReqChannel(id as string, await apiUtils.getSession());
                 return this.prepareResponse(StatusCodes.CREATED, ReasonPhrases.CREATED, res);
             })
             .execute();
@@ -27,12 +24,9 @@ class RouteHandler extends MethodHandler {
         return this.getResponseBuilder()
             .setAuthenticatedRoute()
             .setServerAdminOnlyRoute()
-            .setLogic(async (req) => {
+            .setLogic(async (req, _, apiUtils) => {
                 const {id} = req.query;
-                const externWebClient = ExternalWebClient.getInstance();
-                if (!externWebClient)
-                    return this.prepareResponse(StatusCodes.INTERNAL_SERVER_ERROR, "The external Web Client is null!");
-                const res = (await externWebClient.delete(`/guild/${id}/reqchannel`))?.data;
+                const res = await deleteReqChannel(id as string, await apiUtils.getSession());
                 return this.prepareResponse(StatusCodes.OK, ReasonPhrases.OK, res);
             })
             .execute();

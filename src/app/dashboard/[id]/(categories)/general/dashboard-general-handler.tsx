@@ -13,10 +13,10 @@ import {
 } from "@/utils/discord-types";
 import {Dispatch, SetStateAction} from "react";
 import {SelectMenuContent} from "@/components/SelectMenu";
-import discordVoiceChannelIcon from "../../../../public/discord-voice-channel.svg";
-import discordTextChannelIcon from "../../../../public/discord-text-channel.svg";
+import discordVoiceChannelIcon from "../../../../../../public/discord-voice-channel.svg";
+import discordTextChannelIcon from "../../../../../../public/discord-text-channel.svg";
 import Toggle from "@/components/toggle";
-import DashboardSectionContent from "@/app/dashboard/[id]/dashboard-section-content";
+import DashboardSectionContent from "@/app/dashboard/[id]/(categories)/dashboard-section-content";
 import {StaticImageData} from "next/image";
 import britain from '/public/locale/britain.svg';
 import spain from '/public/locale/spain.svg';
@@ -37,6 +37,7 @@ import skip from '/public/reqchannel/skip.svg';
 import stop from '/public/reqchannel/stop.svg';
 import Button from "@/components/button/Button";
 import {ButtonType} from "@/components/button/ButtonType";
+import AbstractDashboardHandler, {AbstractDashboardFields} from "@/app/dashboard/[id]/(categories)/abstract-dashboard-handler";
 
 type RequestChannelButton = keyof DedicatedChannelConfig
 
@@ -47,95 +48,99 @@ type RequestChannelButtonMetaData = {
     icon: string | StaticImageData,
     type: ButtonType.BLUE | ButtonType.GREY | ButtonType.DANGER
 }
-export default class GuildDashboardHandler {
+export default class DashboardGeneralHandler extends AbstractDashboardHandler{
 
-    constructor(
-        private readonly robertifyGuild: RobertifyGuild,
-        private readonly discordGuild: DiscordGuild,
-        private readonly guildChannels: DiscordGuildChannel[],
-        private readonly setCurrentData: Dispatch<SetStateAction<RobertifyGuild>>,
-        private readonly canInteract: boolean,
-
-    ) {
+    constructor(opts: AbstractDashboardFields) {
+        super(opts);
     }
 
     private getButtonMetaData(button: RequestChannelButton): RequestChannelButtonMetaData {
         switch (button) {
-            case "disconnect": return {
-                id: 10,
-                label: "Disconnect",
-                key: button,
-                icon: disconnect,
-                type: ButtonType.DANGER
-            };
-            case "favourite": return {
-                id: 6,
-                label: "Favourite",
-                key: button,
-                icon: favourite,
-                type: ButtonType.GREY
-            };
-            case "filters": return {
-                id: 9,
-                label: "Filters",
-                key: button,
-                icon: filters,
-                type: ButtonType.GREY
-            };
-            case "previous": return {
-                id: 1,
-                label: "Previous",
-                key: button,
-                icon: previous,
-                type: ButtonType.BLUE
-            };
-            case "rewind": return {
-                id: 2,
-                label: "Rewind",
-                key: button,
-                icon: rewind,
-                type: ButtonType.BLUE
-            };
-            case "shuffle": return {
-                id: 8,
-                label: "Shuffle",
-                key: button,
-                icon: shuffle,
-                type: ButtonType.GREY
-            };
-            case "loop": return {
-                id: 7,
-                label: "Loop",
-                key: button,
-                icon: loop,
-                type: ButtonType.GREY
-            };
-            case "play_pause": return {
-                id: 3,
-                label: "Play and Pause",
-                key: button,
-                icon: play_and_pause,
-                type: ButtonType.BLUE
-            };
-            case "skip": return {
-                id: 5,
-                label: "Skip",
-                key: button,
-                icon: skip,
-                type: ButtonType.BLUE
-            };
-            case "stop": return {
-                id: 4,
-                label: "Stop",
-                key: button,
-                icon: stop,
-                type: ButtonType.BLUE
-            };
+            case "disconnect":
+                return {
+                    id: 10,
+                    label: "Disconnect",
+                    key: button,
+                    icon: disconnect,
+                    type: ButtonType.DANGER
+                };
+            case "favourite":
+                return {
+                    id: 6,
+                    label: "Favourite",
+                    key: button,
+                    icon: favourite,
+                    type: ButtonType.GREY
+                };
+            case "filters":
+                return {
+                    id: 9,
+                    label: "Filters",
+                    key: button,
+                    icon: filters,
+                    type: ButtonType.GREY
+                };
+            case "previous":
+                return {
+                    id: 1,
+                    label: "Previous",
+                    key: button,
+                    icon: previous,
+                    type: ButtonType.BLUE
+                };
+            case "rewind":
+                return {
+                    id: 2,
+                    label: "Rewind",
+                    key: button,
+                    icon: rewind,
+                    type: ButtonType.BLUE
+                };
+            case "shuffle":
+                return {
+                    id: 8,
+                    label: "Shuffle",
+                    key: button,
+                    icon: shuffle,
+                    type: ButtonType.GREY
+                };
+            case "loop":
+                return {
+                    id: 7,
+                    label: "Loop",
+                    key: button,
+                    icon: loop,
+                    type: ButtonType.GREY
+                };
+            case "play_pause":
+                return {
+                    id: 3,
+                    label: "Play and Pause",
+                    key: button,
+                    icon: play_and_pause,
+                    type: ButtonType.BLUE
+                };
+            case "skip":
+                return {
+                    id: 5,
+                    label: "Skip",
+                    key: button,
+                    icon: skip,
+                    type: ButtonType.BLUE
+                };
+            case "stop":
+                return {
+                    id: 4,
+                    label: "Stop",
+                    key: button,
+                    icon: stop,
+                    type: ButtonType.BLUE
+                };
         }
     }
 
     public generateReqChannelButtons() {
-        const config = this.robertifyGuild.dedicated_channel.config || this.getDefaultButtonStates();
+        const config = this.opts.robertifyGuild?.dedicated_channel.config || this.getDefaultButtonStates();
 
         return Object.keys(config).map((key) => {
             const metaData = this.getButtonMetaData(key as RequestChannelButton);
@@ -144,7 +149,7 @@ export default class GuildDashboardHandler {
                 id: metaData.id,
                 element: <Button
                     key={key}
-                    disabled={!this.canInteract}
+                    disabled={!this.opts.canInteract}
                     label={metaData.label}
                     icon={metaData.icon}
                     type={metaData.type}
@@ -174,13 +179,17 @@ export default class GuildDashboardHandler {
     }
 
     public toggleReqChannelButton(button: RequestChannelButton) {
-        if (!this.canInteract)
+        if (!this.opts.setCurrentData)
+            return;
+        if (!this.opts.canInteract)
             return;
 
         const defaultButtonStates: DedicatedChannelConfig = this.getDefaultButtonStates();
 
-        return this.setCurrentData(prev => {
-            const configToUse = this.robertifyGuild.dedicated_channel.config || defaultButtonStates;
+        return this.opts.setCurrentData(prev => {
+            if (!prev) return;
+
+            const configToUse = this.opts.robertifyGuild?.dedicated_channel.config || defaultButtonStates;
 
             return ({
                 ...prev,
@@ -196,7 +205,10 @@ export default class GuildDashboardHandler {
     }
 
     public generateDJToggleElements() {
-        const obj = this.robertifyGuild.toggles.dj_toggles;
+        const obj = this.opts.robertifyGuild?.toggles.dj_toggles;
+        if (!obj)
+            return [];
+
         return (Object.keys(obj) as (keyof GuildDJToggles)[])
             .sort((a, b) => a.localeCompare(b))
             .map(key => (
@@ -207,7 +219,7 @@ export default class GuildDashboardHandler {
                     <Toggle
                         status={this.getToggle('dj_toggles', key)}
                         onClick={() => this.switchToggle('dj_toggles', key)}
-                        disabled={!this.canInteract}
+                        disabled={!this.opts.canInteract}
                     />
                 </DashboardSectionContent>
             ));
@@ -238,7 +250,7 @@ export default class GuildDashboardHandler {
     }
 
     public generateLogToggleElements() {
-        let obj = this.robertifyGuild.toggles.log_toggles ?? this.genDefaultLogTogglesObject();
+        let obj = this.opts.robertifyGuild?.toggles.log_toggles ?? this.genDefaultLogTogglesObject();
         return (Object.keys(obj) as (keyof GuildLogToggles)[])
             .sort((a, b) => a.localeCompare(b))
             .map(key => (
@@ -249,14 +261,16 @@ export default class GuildDashboardHandler {
                     <Toggle
                         status={this.getToggle('log_toggles', key)}
                         onClick={() => this.switchToggle('log_toggles', key)}
-                        disabled={!this.canInteract}
+                        disabled={!this.opts.canInteract}
                     />
                 </DashboardSectionContent>
             ));
     }
 
     public getToggle(toggle: keyof GuildToggles | 'autoplay' | 'twenty_four_seven_mode', innerToggle?: keyof GuildDJToggles | keyof GuildLogToggles) {
-        const obj = this.robertifyGuild.toggles;
+        const obj = this.opts.robertifyGuild?.toggles;
+        if (!obj)
+            return false;
         switch (toggle) {
             case "dj_toggles": {
                 if (!innerToggle)
@@ -275,41 +289,48 @@ export default class GuildDashboardHandler {
                 return logToggles[innerToggle as keyof GuildLogToggles] || false;
             }
             case "autoplay":
-                return this.robertifyGuild.autoplay || false;
+                return this.opts.robertifyGuild?.autoplay || false;
             case "twenty_four_seven_mode":
-                return this.robertifyGuild.twenty_four_seven_mode || false;
+                return this.opts.robertifyGuild?.twenty_four_seven_mode || false;
             default:
                 return obj[toggle] || false;
         }
     }
 
     public switchToggle(toggle: keyof GuildToggles | 'autoplay' | 'twenty_four_seven_mode', innerToggle?: keyof GuildDJToggles | keyof GuildLogToggles) {
-        if (!this.canInteract)
-            return;
+        if (!this.isUsable()) return;
 
         switch (toggle) {
             case "dj_toggles": {
                 if (!innerToggle) return;
 
-                const obj = this.robertifyGuild.toggles;
+                const obj = this.opts.robertifyGuild?.toggles;
+                if (!obj) return;
+
                 if (!(innerToggle in obj.dj_toggles)) return;
-                return this.setCurrentData(prev => ({
-                    ...prev,
-                    toggles: {
-                        ...prev.toggles,
-                        dj_toggles: {
-                            ...prev.toggles.dj_toggles,
-                            [innerToggle as keyof GuildDJToggles]: !prev.toggles.dj_toggles[innerToggle as keyof GuildDJToggles]
+                return this.opts.setCurrentData!(prev => {
+                    if (!prev) return;
+                    return ({
+                        ...prev,
+                        toggles: {
+                            ...prev.toggles,
+                            dj_toggles: {
+                                ...prev.toggles.dj_toggles,
+                                [innerToggle as keyof GuildDJToggles]: !prev.toggles.dj_toggles[innerToggle as keyof GuildDJToggles]
+                            }
                         }
-                    }
-                }));
+                    })
+                });
             }
             case "log_toggles": {
                 if (!innerToggle) return;
 
-                const obj = this.robertifyGuild.toggles;
+                const obj = this.opts.robertifyGuild?.toggles;
+                if (!obj) return;
+
                 if (!(innerToggle in (obj.log_toggles ?? this.genDefaultLogTogglesObject()))) return;
-                return this.setCurrentData(prev => {
+                return this.opts.setCurrentData!(prev => {
+                        if (!prev) return;
                         if (prev.toggles.log_toggles)
                             return ({
                                 ...prev,
@@ -339,53 +360,69 @@ export default class GuildDashboardHandler {
                 );
             }
             case "autoplay": {
-                return this.setCurrentData(prev => ({
-                    ...prev,
-                    autoplay: !prev.autoplay,
-                }));
+                return this.opts.setCurrentData!(prev => {
+                    if (!prev) return;
+                    return ({
+                        ...prev,
+                        autoplay: !prev.autoplay,
+                    })
+                });
             }
             case "twenty_four_seven_mode": {
-                return this.setCurrentData(prev => ({
-                    ...prev,
-                    twenty_four_seven_mode: !prev.twenty_four_seven_mode,
-                }));
+                return this.opts.setCurrentData!(prev => {
+                    if (!prev) return;
+
+                    return ({
+                        ...prev,
+                        twenty_four_seven_mode: !prev.twenty_four_seven_mode,
+                    })
+                });
             }
             default: {
-                return this.setCurrentData(prev => ({
-                    ...prev,
-                    toggles: {
-                        ...prev.toggles,
-                        [toggle]: !prev.toggles[toggle]
-                    }
-                }));
+                return this.opts.setCurrentData!(prev => {
+                    if (!prev) return;
+                    return ({
+                        ...prev,
+                        toggles: {
+                            ...prev.toggles,
+                            [toggle]: !prev.toggles[toggle]
+                        }
+                    })
+                });
             }
         }
     }
 
     public addDJRole(id: string) {
-        if (!this.canInteract)
-            return;
+        if (!this.opts.setCurrentData) return;
+        if (!this.opts.canInteract) return;
 
-        this.setCurrentData(prev => ({
-            ...prev,
-            permissions: {
-                ...prev.permissions,
-                "1": prev.permissions["1"] ? [...prev.permissions["1"], id] : [id]
-            }
-        }))
+        this.opts.setCurrentData(prev => {
+            if (!prev) return;
+            return ({
+                ...prev,
+                permissions: {
+                    ...prev.permissions,
+                    "1": prev.permissions["1"] ? [...prev.permissions["1"], id] : [id]
+                }
+            })
+        })
     }
 
     public removeDJRole(id: string) {
-        if (!this.canInteract)
-            return;
+        if (!this.opts.setCurrentData) return;
+        if (!this.opts.canInteract) return;
 
-        this.setCurrentData(prev => ({
-            ...prev,
-            permissions: {
-                ...prev.permissions,
-                "1": prev.permissions["1"] ? prev.permissions["1"]?.filter(permission => permission !== id) : []
-            }
-        }))
+        this.opts.setCurrentData(prev => {
+            if (!prev) return;
+            return ({
+                ...prev,
+                permissions: {
+                    ...prev.permissions,
+                    "1": prev.permissions["1"] ? prev.permissions["1"]?.filter(permission => permission !== id) : []
+                }
+            })
+        })
     }
 
     public addRestrictedVoiceChannel(id: string) {
@@ -405,33 +442,42 @@ export default class GuildDashboardHandler {
     }
 
     public addLogChannel(id: string) {
-        if (!this.canInteract)
-            return;
+        if (!this.opts.setCurrentData) return;
+        if (!this.opts.canInteract) return;
 
-        this.setCurrentData(prev => ({
-            ...prev,
-            log_channel: id
-        }))
+        this.opts.setCurrentData(prev => {
+            if (!prev) return;
+            return ({
+                ...prev,
+                log_channel: id
+            })
+        })
     }
 
     public setLocale(locale: LocaleString) {
-        if (!this.canInteract)
-            return;
+        if (!this.opts.setCurrentData) return;
+        if (!this.opts.canInteract) return;
 
-        this.setCurrentData(prev => ({
-            ...prev,
-            locale: locale
-        }))
+        this.opts.setCurrentData(prev => {
+            if (!prev) return;
+            return ({
+                ...prev,
+                locale: locale
+            })
+        })
     }
 
     public setTheme(theme: ThemeString) {
-        if (!this.canInteract)
-            return;
+        if (!this.opts.setCurrentData) return;
+        if (!this.opts.canInteract) return;
 
-        this.setCurrentData(prev => ({
-            ...prev,
-            theme: theme
-        }))
+        this.opts.setCurrentData(prev => {
+            if (!prev) return;
+            return ({
+                ...prev,
+                theme: theme
+            })
+        })
     }
 
     public removeLogChannel() {
@@ -439,56 +485,68 @@ export default class GuildDashboardHandler {
     }
 
     private addRestrictedChannel(id: string, channelType: 'text' | 'voice') {
-        if (!this.canInteract)
-            return;
+        if (!this.opts.setCurrentData) return;
+        if (!this.opts.canInteract) return;
 
         switch (channelType) {
             case "text": {
-                this.setCurrentData(prev => ({
-                    ...prev,
-                    restricted_channels: {
-                        ...prev.restricted_channels,
-                        text_channels: prev.restricted_channels.text_channels ? [...prev.restricted_channels.text_channels, id] : [id]
-                    }
-                }));
+                this.opts.setCurrentData(prev => {
+                    if (!prev) return;
+                    return ({
+                        ...prev,
+                        restricted_channels: {
+                            ...prev.restricted_channels,
+                            text_channels: prev.restricted_channels.text_channels ? [...prev.restricted_channels.text_channels, id] : [id]
+                        }
+                    })
+                });
                 break;
             }
             case "voice": {
-                this.setCurrentData(prev => ({
-                    ...prev,
-                    restricted_channels: {
-                        ...prev.restricted_channels,
-                        voice_channels: prev.restricted_channels.voice_channels ? [...prev.restricted_channels.voice_channels, id] : [id]
-                    }
-                }));
+                this.opts.setCurrentData(prev => {
+                    if (!prev) return;
+                    return ({
+                        ...prev,
+                        restricted_channels: {
+                            ...prev.restricted_channels,
+                            voice_channels: prev.restricted_channels.voice_channels ? [...prev.restricted_channels.voice_channels, id] : [id]
+                        }
+                    })
+                });
                 break;
             }
         }
     }
 
     private removeRestrictedChannel(id: string, channelType: 'text' | 'voice') {
-        if (!this.canInteract)
-            return;
+        if (!this.opts.setCurrentData) return;
+        if (!this.opts.canInteract) return;
 
         switch (channelType) {
             case "text": {
-                this.setCurrentData(prev => ({
-                    ...prev,
-                    restricted_channels: {
-                        ...prev.restricted_channels,
-                        text_channels: prev.restricted_channels.text_channels ? prev.restricted_channels.text_channels.filter(channel => channel !== id) : []
-                    }
-                }));
+                this.opts.setCurrentData(prev => {
+                    if (!prev) return;
+                    return ({
+                        ...prev,
+                        restricted_channels: {
+                            ...prev.restricted_channels,
+                            text_channels: prev.restricted_channels.text_channels ? prev.restricted_channels.text_channels.filter(channel => channel !== id) : []
+                        }
+                    })
+                });
                 break;
             }
             case "voice": {
-                this.setCurrentData(prev => ({
-                    ...prev,
-                    restricted_channels: {
-                        ...prev.restricted_channels,
-                        voice_channels: prev.restricted_channels.voice_channels ? prev.restricted_channels.voice_channels.filter(channel => channel !== id) : []
-                    }
-                }));
+                this.opts.setCurrentData(prev => {
+                    if (!prev) return;
+                    return ({
+                        ...prev,
+                        restricted_channels: {
+                            ...prev.restricted_channels,
+                            voice_channels: prev.restricted_channels.voice_channels ? prev.restricted_channels.voice_channels.filter(channel => channel !== id) : []
+                        }
+                    })
+                });
                 break;
             }
         }
@@ -504,7 +562,7 @@ export default class GuildDashboardHandler {
 
     public generateThemesContent(): SelectMenuContent[] {
         const isThemeSelected = (theme: string): boolean => {
-            return this.robertifyGuild.theme === theme.toLowerCase().replaceAll(/\s/g, "_");
+            return this.opts.robertifyGuild?.theme === theme.toLowerCase().replaceAll(/\s/g, "_");
         }
 
         const themes = [
@@ -525,7 +583,7 @@ export default class GuildDashboardHandler {
         }
 
         const isSelected = (locale: Locale) => {
-            return this.robertifyGuild.locale === locale.locale;
+            return this.opts.robertifyGuild?.locale === locale.locale;
         }
 
         const locales: Locale[] = [
@@ -568,11 +626,11 @@ export default class GuildDashboardHandler {
     }
 
     public generateRolesContent(selectedKey?: keyof RobertifyGuild): SelectMenuContent[] {
-        if (!this.discordGuild.roles)
-            return [];
+        if (!this.opts.discordGuild?.roles) return [];
         const isRoleSelected = (role: DiscordRole): boolean => {
             if (!selectedKey) return false;
-            const obj = this.robertifyGuild[selectedKey];
+            if (!this.opts.robertifyGuild) return false;
+            const obj = this.opts.robertifyGuild[selectedKey];
             if (!obj) return false;
 
             switch (selectedKey) {
@@ -585,7 +643,7 @@ export default class GuildDashboardHandler {
             }
         }
 
-        return this.discordGuild.roles.map<SelectMenuContent>(role => ({
+        return this.opts.discordGuild?.roles.map<SelectMenuContent>(role => ({
             label: role.name,
             value: role.id,
             selected: isRoleSelected(role)
@@ -598,7 +656,7 @@ export default class GuildDashboardHandler {
 
             switch (selectedKey) {
                 case "restricted_channels": {
-                    const obj = this.robertifyGuild.restricted_channels[channelType === 'voice' ? 'voice_channels' : 'text_channels'];
+                    const obj = this.opts.robertifyGuild?.restricted_channels[channelType === 'voice' ? 'voice_channels' : 'text_channels'];
                     if (!obj || obj.length === 0)
                         return false;
                     return obj.includes(channel.id);
@@ -606,7 +664,7 @@ export default class GuildDashboardHandler {
                 case "log_channel": {
                     if (channelType !== 'text')
                         return false;
-                    const obj = this.robertifyGuild.log_channel;
+                    const obj = this.opts.robertifyGuild?.log_channel;
                     if (!obj)
                         return false;
                     return obj === channel.id;
@@ -614,7 +672,8 @@ export default class GuildDashboardHandler {
             }
         }
 
-        const convertToSelectMenuContent = (obj: { category: string | undefined, channels: DiscordGuildChannel[] }): SelectMenuContent[] => {
+        const convertToSelectMenuContent = (obj: { category: string | undefined, channels?: DiscordGuildChannel[] }): SelectMenuContent[] => {
+            if (!obj.channels) return []
             return obj.channels.map<SelectMenuContent>(channel => {
                 return {
                     category: obj.category,
@@ -628,19 +687,18 @@ export default class GuildDashboardHandler {
 
         const raw = this.extractChannelsWithCategories(channelType);
         const contents = raw.map(rawObj => convertToSelectMenuContent(rawObj));
-        return contents.reduce((previousValue, currentValue, index) => ([
+        return contents.reduce((previousValue, currentValue) => ([
             ...previousValue, ...currentValue
         ]), [])
     }
 
     private extractChannelsWithCategories(channelType: 'voice' | 'text') {
-        if (!this.guildChannels)
-            return [];
+        if (!this.opts.guildChannels) return [];
 
-        const noCategoryChannels = this.guildChannels.filter(channel => !channel.parent_id && (channel.type === (channelType === 'voice' ? 2 : 0)))
+        const noCategoryChannels = this.opts.guildChannels?.filter(channel => !channel.parent_id && (channel.type === (channelType === 'voice' ? 2 : 0)))
 
         return [
-            ...this.guildChannels.filter(channel => channel.type === 4)
+            ...this.opts.guildChannels?.filter(channel => channel.type === 4)
                 .map(category => {
                     return {
                         name: category.name,
@@ -650,10 +708,10 @@ export default class GuildDashboardHandler {
                 .map(category => {
                     return {
                         category: category.name,
-                        channels: this.guildChannels.filter(channel => (channel.type === (channelType === 'voice' ? 2 : 0)) && channel.parent_id === category.id)
+                        channels: this.opts.guildChannels?.filter(channel => (channel.type === (channelType === 'voice' ? 2 : 0)) && channel.parent_id === category.id)
                     }
                 })
-                .filter(categoryObj => categoryObj.channels.length !== 0),
+                .filter(categoryObj => categoryObj.channels?.length !== 0),
             {
                 category: undefined,
                 channels: [...noCategoryChannels]

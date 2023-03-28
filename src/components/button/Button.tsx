@@ -13,23 +13,23 @@ import {sendToast} from "@/utils/client-utils";
 export const getButtonStyle = (type?: ButtonType): string => {
     switch (type) {
         case ButtonType.PRIMARY:
-            return "bg-primary shadow-lg dark:shadow-primary/40 shadow-transparent";
+            return "bg-primary shadow-lg shadow-primary/40";
         case ButtonType.BLUE:
-            return "bg-[#6064f4] shadow-lg dark:shadow-[#6064f4]/40 shadow-transparent";
+            return "bg-[#6064f4] shadow-lg shadow-[#6064f4]/40";
         case ButtonType.GREY:
-            return "bg-[#50545c] shadow-lg dark:shadow-[#50545c]/40 shadow-transparent";
+            return "bg-[#50545c] shadow-lg shadow-[#50545c]/40";
         case ButtonType.SECONDARY:
-            return "bg-transparent border-[1px] border-primary text-primary shadow-lg dark:shadow-primary/40 shadow-transparent";
+            return "bg-transparent border-[1px] border-primary text-primary shadow-lg shadow-primary/40";
         case ButtonType.WARNING:
-            return "bg-warning shadow-lg dark:shadow-warning/40 shadow-transparent";
+            return "bg-warning shadow-lg shadow-warning/40";
         case ButtonType.DANGER:
-            return "bg-danger shadow-lg dark:shadow-danger/40 shadow-transparent";
+            return "bg-danger shadow-lg shadow-danger/40";
         case ButtonType.INVERTED:
-            return "bg-white dark:bg-dark text-primary shadow-lg dark:shadow-neutral-800/40 shadow-transparent";
+            return "bg-white dark:bg-dark text-primary shadow-lg shadow-neutral-800/40";
         case ButtonType.CTA:
-            return "bg-gradient-to-br bg-[length:200%_200%] animate-gradient-normal from-green-400 via-lime-500 to-amber-500 text-white shadow-lg dark:shadow-green-500/60 shadow-transparent"
+            return "bg-gradient-to-br bg-[length:200%_200%] animate-gradient-normal from-green-400 via-lime-500 to-amber-500 text-white shadow-lg shadow-green-500/60"
         default:
-            return `bg-primary shadow-lg dark:shadow-primary/40 shadow-transparent`
+            return `bg-primary shadow-lg shadow-primary/40`
     }
 }
 
@@ -43,6 +43,7 @@ interface Props {
     submit?: boolean;
     disabled?: boolean;
     onClick?: MouseEventHandler<HTMLButtonElement>
+    hrefClick?: MouseEventHandler<HTMLAnchorElement>
     href?: string;
     newTab?: boolean;
     isWorking?: boolean;
@@ -86,6 +87,7 @@ export default function Button(props: Props) {
                         href={props.href}
                         target={props.newTab === false ?  undefined : "_blank"}
                         rel={props.newTab !== false ? 'noopener noreferrer' : undefined}
+                        onClick={props.hrefClick}
                     >
                         <div
                             className={'flex justify-center self-center gap-4' + ((props.type === ButtonType.INVERTED || props.type === ButtonType.SECONDARY) ? ' text-primary' : '') + (props.className ? ` ${props.className}` : '')}>

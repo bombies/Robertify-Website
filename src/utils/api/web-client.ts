@@ -2,6 +2,7 @@ import axios, {AxiosInstance, CreateAxiosDefaults} from "axios";
 import {User} from "next-auth";
 import {signIn} from "next-auth/react";
 import {sign} from "jsonwebtoken";
+import axiosRetry from "axios-retry";
 
 class WebClient {
     protected readonly instance: AxiosInstance;
@@ -211,6 +212,15 @@ export class DiscordWebClient {
             ...options,
             baseURL: 'https://discord.com/api/v10',
         });
+
+        axiosRetry(this.instance, {
+            retries: 5,
+            retryDelay: () => {
+                return 1000;
+            },
+            // @ts-ignore
+            retryCondition: (err) => err.response?.data.retry_after !== undefined
+        })
     }
 
     public static getInstance(accessToken?: string, options?: CreateAxiosDefaults<any>) {

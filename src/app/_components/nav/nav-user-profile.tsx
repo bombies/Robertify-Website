@@ -7,7 +7,7 @@ import {ButtonType} from "@/components/button/ButtonType";
 import serverIcon from '/public/server.svg';
 import {useSession} from "next-auth/react";
 import GenericImage from "@/app/_components/GenericImage";
-import MiniContent from "@/components/MiniContent";
+import BadgeWrapper from "@/components/BadgeWrapper";
 
 export default function NavUserProfile() {
     const [expanded, setExpanded] = useState(false);
@@ -46,11 +46,11 @@ export default function NavUserProfile() {
                         width={2}
                         imageClassName='self-center rounded-full'
                     />
-                    <p className='self-center text-primary font-semibold dark:drop-shadow-glow-primary-lg'>{discordInfo?.username}#{discordInfo?.discriminator}</p>
+                    <p className='self-center text-primary font-semibold drop-shadow-glow-primary-lg'>{discordInfo?.username}#{discordInfo?.discriminator}</p>
                 </div>
                 <div
                     ref={miniViewRef}
-                    className='absolute dark:bg-dark/80 shadow-lg dark:shadow-primary/50 shadow-primary/0 mt-4 mr-2 left-[-3rem] z-50 w-56 p-6 h-fit bg-neutral-100/80 shadow-md backdrop-blur-xl rounded-xl transition-faster border-[1px] border-primary'
+                    className='absolute dark:bg-dark/80 shadow-lg shadow-primary/50 mt-4 mr-2 left-[-3rem] z-50 w-56 p-6 h-fit bg-neutral-100/80 shadow-md backdrop-blur-xl rounded-xl transition-faster border-[1px] border-primary'
                     style={{
                         display: expanded ? 'inherit' : 'none'
                     }}
@@ -64,21 +64,26 @@ export default function NavUserProfile() {
                                 src={avatar}
                                 width={6}
                             />
-                            <p className='self-center text-primary text-center text-xl dark:drop-shadow-glow-primary-lg font-semibold pointer-events-none mb-6'>{discordInfo?.username}#{discordInfo?.discriminator}</p>
+                            <p className='self-center text-primary text-center text-xl drop-shadow-glow-primary-lg font-semibold pointer-events-none mb-6'>{discordInfo?.username}#{discordInfo?.discriminator}</p>
                         </div>
                     }
                     <div className='space-y-3'>
                         <div className='flex gap-1'>
-                            <Button
-                                centered
-                                width={10}
-                                height={2.5}
-                                icon={serverIcon}
-                                label='Servers (BETA)'
-                                href='/dashboard'
-                                newTab={false}
-                                type={ButtonType.PRIMARY}
-                            />
+                            <BadgeWrapper
+                                color='warning'
+                                content='BETA'
+                            >
+                                <Button
+                                    centered
+                                    width={10}
+                                    height={2.5}
+                                    icon={serverIcon}
+                                    label='Servers'
+                                    href='/dashboard'
+                                    newTab={false}
+                                    type={ButtonType.PRIMARY}
+                                />
+                            </BadgeWrapper>
                         </div>
                         <LogoutButton/>
                     </div>
