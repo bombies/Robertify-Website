@@ -20,8 +20,8 @@ export default async function Dashboard() {
 
     return (
         <main className='p-12 phone:px-6 min-h-screen'>
-            <div className='flex self-center justify-center gap-4 mb-6'>
-                <h1 className='text-primary text-5xl phone:text-3xl drop-shadow-glow-primary-lg text-center self-center'>
+            <div className='flex justify-center gap-4 mb-6'>
+                <h1 className='text-primary text-5xl phone:text-3xl drop-shadow-glow-primary-lg self-center !m-0'>
                     Welcome to your dashboard
                 </h1>
                 <BadgeWrapper
