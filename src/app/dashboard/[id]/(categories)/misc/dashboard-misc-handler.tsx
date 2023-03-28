@@ -172,12 +172,13 @@ export default class DashboardMiscHandler extends AbstractDashboardHandler {
                     {(response) => (
                         <Table.Row
                             key={response.index}
-                            css={{
-                                zIndex: 2
-                            }}
                         >
                             {(columnKey) => (
-                                <Table.Cell>{renderCell(response, columnKey)}</Table.Cell>
+                                <Table.Cell
+                                    css={{
+                                        zIndex: 2
+                                    }}
+                                >{renderCell(response, columnKey)}</Table.Cell>
                             )}
                         </Table.Row>
                     )}
