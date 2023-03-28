@@ -4,7 +4,6 @@ import {AxiosError} from "axios";
 import Link from "next/link";
 import GenericImage from "@/app/_components/GenericImage";
 import backIcon from "../../../../public/go-back.svg";
-import MiniContent from "@/components/MiniContent";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 import {GuildDashboardInfoProvider} from "@/app/dashboard/[id]/dashboard-info-context";
 import {isGuildAdmin} from "@/utils/discord-types";
@@ -13,6 +12,7 @@ import {
     fetchDiscordGuildInfo, fetchDiscordGuildMember,
     fetchRobertifyGuildInfo
 } from "@/utils/api/api-methods";
+import BadgeWrapper from "@/components/BadgeWrapper";
 
 interface Props extends React.PropsWithChildren {
     params: { id: string }
@@ -109,7 +109,7 @@ export default async function GuildDashboardLayout({children, params}: Props) {
                         }}
                     />
                     <h1 className='text-4xl phone:text-xl font-black tracking-wider text-primary self-center z-10'>{discordGuildInfo?.name}</h1>
-                    <MiniContent content='BETA'/>
+                    <BadgeWrapper color='primary' size='sm'>BETA</BadgeWrapper>
                 </div>
             </div>
             <GuildDashboardInfoProvider initialDashboardInfo={{

@@ -2,10 +2,12 @@
 
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import Button from "@/components/button/Button";
-import {usePathname, useRouter} from "next/navigation";
+import {usePathname} from "next/navigation";
 import {useGuildDashboard} from "@/app/dashboard/[id]/dashboard-info-context";
 import {ButtonType} from "@/components/button/ButtonType";
 import DashboardRefreshButton from "@/app/dashboard/[id]/(categories)/dashboard-refresh-button";
+import {Badge} from "@nextui-org/react";
+import BadgeWrapper from "@/components/BadgeWrapper";
 
 type Category = 'general' | 'misc';
 
@@ -44,12 +46,17 @@ export default function DashboardCategorySelector(props: Props) {
                 selected={selected}
                 setSelected={setSelected}
             />
-            <Selector
-                id={id}
-                category={'misc'}
-                selected={selected}
-                setSelected={setSelected}
-            />
+            <BadgeWrapper
+                color='warning'
+                content="NEW!"
+            >
+                <Selector
+                    id={id}
+                    category={'misc'}
+                    selected={selected}
+                    setSelected={setSelected}
+                />
+            </BadgeWrapper>
         </div>
     )
 }
