@@ -1,0 +1,16 @@
+{
+  "stop": "Stopping Tracks",
+  "pause": "Pausing Tracks",
+  "resume": "Resuming Tracks",
+  "skip": "Skipping Tracks",
+  "move": "Moving Tracks",
+  "rewind": "Rewinding Tracks",
+  "remove": "Removing Tracks",
+  "seek": "Fast Forwarding Tracks",
+  "loop": "Loops",
+  "join": "Force Joins",
+  "volume": "Changing Global Volume",
+  "filters": "Filters",
+  "247": "24/7 Mode",
+  "autoplay": "Auto Play"
+}
