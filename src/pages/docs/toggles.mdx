@@ -1,0 +1,59 @@
+import {Callout} from "nextra-theme-docs";
+
+# Toggles
+
+There are quite a lot of features in Robertify, and instead of forcing you and all your users to use them you are given
+the means to disable certain features and limit access to certain commands.
+
+## The Main Toggles
+
+There are a few fundamental toggles. Details can be seen in the table below.
+
+| Toggle            | Description                                                                                                 |
+|-------------------|-------------------------------------------------------------------------------------------------------------|
+| `restrictedvoice` | Toggle whether you want commands to be restricted to certain channels or not.                               |
+| `restrictedtext`  | Toggle whether you want Robertify to join specific voice channels or not.                                   |
+| `announcements`   | Toggle whether you want song announcements to be made when they have begun playing.                         |
+| `requester`       | Toggle if you want the requester for songs to be displayed in songs announcements and your request channel. |
+| `8ball`           | Toggle whether the 8 ball feature should be enabled or not.                                                 |
+| `polls`           | Toggle whether the polls feature should be enabled or not.                                                  |
+| `reminders`       | Toggle whether the reminders feature should be enabled or not.                                              |
+| `tips`            | Toggle whether you want tips to be sent in your channels or not.                                            |
+| `voteskips`       | Toggle whether you want the vote skip feature to be enabled or not.                                         |
+
+You can toggle these on/off by running the `/toggle switch` command with the `toggle` as the argument.
+You can list the status of these toggles by running the `/toggles list` command.
+
+![Example](https://i.imgur.com/PPNthfm.gif)
+
+## DJ Toggles
+
+DJ toggles define which audio commands should be DJ-only or not. This means that once a command is set to DJ-only, only DJs
+will be able to execute that command. To toggle a DJ-only command, you must execute the command `/toggles dj switch` with the command
+name as the argument
+
+To view the status of your DJ toggles you must execute the `/toggles dj list` command.
+
+<Callout type='info'>
+    Found below is a list of all valid command names:
+
+    `play`, `disconnect`, `clear`, `join`, `jump`, `loop`, `move`, `nowplaying`, `pause`, `queue`, `remove`,
+    `rewind`, `seek`, `shuffleplay`, `shuffle`, `skip`, `volume`, `favouritetracks`, `247`, `autoplay`, `search`,
+    `resume`, `previous`, `lyrics`, `karaoke`, `nightcore`, `8d`, `tremolo`, `vibrato`, `stop`, `history`
+</Callout>
+
+## Log Toggles
+
+Log toggles define which log events should be sent to the [log channel](/docs/logs). To toggle a log event, you must execute
+the command `/toggles logs switch` with the log event as the argument.
+
+To view the status of your log toggles you must execute the `/toggles logs list` command.
+
+<Callout type='info'>
+    Found below is a list of all valid log events:
+
+    `QUEUE_ADD`, `QUEUE_REMOVE`, `QUEUE_CLEAR`, `QUEUE_SHUFFLE`, `QUEUE_LOOP`,
+    `PLAYER_STOP`, `PLAYER_PAUSE`, `PLAYER_RESUME`, `TRACK_SKIP`, `TRACK_VOTE_SKIP`,
+    `TRACK_REWIND`, `TRACK_JUMP`, `TRACK_SEEK`, `TRACK_PREVIOUS`, `TRACK_LOOP`,
+    `TRACK_MOVE`, `VOLUME_CHANGE`, `BOT_DISCONNECTED`, `FILTER_TOGGLED`
+</Callout>

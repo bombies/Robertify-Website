@@ -24,6 +24,21 @@ You can skip to a specific track by running the `/skip` command with the ID of t
 
 ![Example](https://i.imgur.com/zOObz9l.gif)
 
+### Vote Skips
+
+To enable vote skips the `skip` command must be set to a DJ-only command and the `voteskips` toggle **must** be enabled.
+When a non-dj user attempts to skip a song, a prompt will come up requesting that users in the voice channel vote to skip.
+The track will be skipped when more than 50% of the channel has voted to do so.
+
+<Callout type='info'>
+    - To learn more about setting DJs, click [here](/docs/perms#the-dj-command).
+    - To learn more about setting DJ toggles, click [here](/docs/toggles#dj-toggles).
+    - To learn more about enabling the `voteskips` toggle, click [here](/docs/toggles#the-main-toggles).
+</Callout>
+<Callout type='info'>
+    DJs will be able to skip the tracks without the need for a vote.
+</Callout>
+
 ## Stopping a Track
 
 You can stop a track by running the `/stop` command. This will not only stop the currently played track, but will also clear the queue.

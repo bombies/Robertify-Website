@@ -43,3 +43,6 @@ sentry.*.config.js
 
 # Sentry
 next.config.original.js
+
+# Turbo Repo
+.turbo

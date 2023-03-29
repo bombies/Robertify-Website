@@ -1,6 +1,6 @@
 {
   "index": "Introduction",
-  "disc-setup": "Discord Setup",
+  "discord-setup": "Discord Setup",
   "web-setup": "Web Setup",
   "-": {
     "type": "separator",
@@ -8,20 +8,21 @@
   },
   "music": "Playing Music",
   "player": "Controlling the Player",
-  "reqchannel": "The Request Channel",
+  "request-channel": "The Request Channel",
   "--": {
     "type": "separator",
     "title": "Bot Control"
   },
-  "perms": "Permissions",
+  "logs": "Logging",
   "toggles": "Toggles",
-  "rchannels": "Restricted Channels",
+  "restricted-channels": "Restricted Channels",
+  "locale": "Locale",
   "---": {
     "type": "separator",
     "title": "User Management"
   },
+  "perms": "Permissions",
   "user-bans": "Ban Users",
-  "user-perms": "User Permissions",
   "----": {
     "type": "separator",
     "title": "Miscellaneous Features"
@@ -32,10 +33,5 @@
   "-----": {
     "type": "separator",
     "title": "Other"
-  },
-  "invite_link": {
-    "title": "Invite Robertify",
-    "href": "https://robertify.me/invite",
-    "newWindow": true
   }
 }
