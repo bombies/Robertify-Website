@@ -7,7 +7,6 @@ import glow from "/public/rob-web-glow.png";
 import NavBar from "@/app/_components/nav/navbar";
 import {Inter} from "next/font/google";
 import GenericImage from "@/app/_components/GenericImage";
-import {GoogleAnalytics} from "nextjs-google-analytics";
 
 export const metadata = {
     title: 'Robertify',
@@ -42,7 +41,6 @@ export default function RootLayout(props: Props) {
                 <Footer/>
             </div>
         </Providers>
-        {/*<GoogleAnalytics />*/}
         </html>
 
     )

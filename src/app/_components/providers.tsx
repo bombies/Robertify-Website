@@ -11,6 +11,7 @@ import lightTheme from "@/utils/ui/themes/default-light";
 import {ThemeProvider} from "next-themes";
 import {SessionProvider} from "next-auth/react";
 import {Toaster} from "react-hot-toast";
+import {GoogleAnalytics} from "nextjs-google-analytics";
 
 interface Props extends React.PropsWithChildren {
     session: any
@@ -23,6 +24,7 @@ export default function Providers({children, session}: Props) {
 
     return (
         <body>
+        <GoogleAnalytics />
         <SSRProvider>
             <ReduxProvider>
                 <ThemeProvider
