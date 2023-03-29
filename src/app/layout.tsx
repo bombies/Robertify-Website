@@ -42,7 +42,7 @@ export default function RootLayout(props: Props) {
                 <Footer/>
             </div>
         </Providers>
-        <GoogleAnalytics />
+        {/*<GoogleAnalytics />*/}
         </html>
 
     )
