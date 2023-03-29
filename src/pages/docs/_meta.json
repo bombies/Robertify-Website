@@ -15,6 +15,7 @@
   },
   "perms": "Permissions",
   "toggles": "Toggles",
+  "rchannels": "Restricted Channels",
   "---": {
     "type": "separator",
     "title": "User Management"
