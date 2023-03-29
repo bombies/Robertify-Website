@@ -33,6 +33,7 @@
     "next-auth": "^4.20.1",
     "next-redux-wrapper": "^8.1.0",
     "next-themes": "^0.2.1",
+    "nextjs-google-analytics": "^2.3.3",
     "nextjs-progressbar": "^0.0.16",
     "nprogress": "^0.2.0",
     "react": "18.2.0",
