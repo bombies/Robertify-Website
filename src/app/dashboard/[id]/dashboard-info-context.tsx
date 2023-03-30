@@ -1,13 +1,13 @@
 'use client';
 
 import {DiscordGuild, DiscordGuildChannel, RobertifyGuild} from "@/utils/discord-types";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 export type GuildDashboardInfo = {
     id: string,
-    discordGuild?: DiscordGuild,
-    discordGuildChannels?: DiscordGuildChannel[],
-    robertifyGuild?: RobertifyGuild,
+    discordGuild: [DiscordGuild | undefined, boolean],
+    discordGuildChannels: [DiscordGuildChannel[] | undefined, boolean],
+    robertifyGuild: [RobertifyGuild | undefined, boolean],
     userHasPermission: boolean,
 }
 
@@ -18,6 +18,10 @@ interface Props extends React.PropsWithChildren {
 }
 export function GuildDashboardInfoProvider({ children, initialDashboardInfo }: Props) {
     const [ dashboardInfo, setDashboardInfo ] = useState(initialDashboardInfo);
+
+    useEffect(() => {
+        console.log('info changed')
+    }, [dashboardInfo])
 
     return (
         <DashboardInfoContext.Provider value={[dashboardInfo, setDashboardInfo]}>

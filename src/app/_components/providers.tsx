@@ -12,6 +12,7 @@ import {ThemeProvider} from "next-themes";
 import {SessionProvider} from "next-auth/react";
 import {Toaster} from "react-hot-toast";
 import {GoogleAnalytics} from "nextjs-google-analytics";
+import {SWRConfig} from "swr";
 
 interface Props extends React.PropsWithChildren {
     session: any
@@ -25,30 +26,36 @@ export default function Providers({children, session}: Props) {
     return (
         <body>
         <GoogleAnalytics trackPageViews />
-        <SSRProvider>
-            <ReduxProvider>
-                <ThemeProvider
-                    defaultTheme="dark"
-                    attribute='class'
-                    value={{
-                        light: lightTheme.className,
-                        dark: darkTheme.className,
-                    }}
-                >
-                    <NextUIProvider>
-                        <DarkModeProvider>
-                            <SessionProvider session={session}>
-                                <Toaster
-                                    position="top-right"
-                                    reverseOrder={false}
-                                />
-                                {children}
-                            </SessionProvider>
-                        </DarkModeProvider>
-                    </NextUIProvider>
-                </ThemeProvider>
-            </ReduxProvider>
-        </SSRProvider>
+        <SWRConfig
+            value={{
+                refreshInterval: 60 * 1000
+            }}
+        >
+            <SSRProvider>
+                <ReduxProvider>
+                    <ThemeProvider
+                        defaultTheme="dark"
+                        attribute='class'
+                        value={{
+                            light: lightTheme.className,
+                            dark: darkTheme.className,
+                        }}
+                    >
+                        <NextUIProvider>
+                            <DarkModeProvider>
+                                <SessionProvider session={session}>
+                                    <Toaster
+                                        position="top-right"
+                                        reverseOrder={false}
+                                    />
+                                    {children}
+                                </SessionProvider>
+                            </DarkModeProvider>
+                        </NextUIProvider>
+                    </ThemeProvider>
+                </ReduxProvider>
+            </SSRProvider>
+        </SWRConfig>
         </body>
     );
 }

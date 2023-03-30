@@ -1,5 +1,5 @@
 import {
-    DedicatedChannelConfig,
+    RequestChannelConfig,
     DiscordGuild,
     DiscordGuildChannel,
     DiscordRole,
@@ -39,7 +39,7 @@ import Button from "@/components/button/Button";
 import {ButtonType} from "@/components/button/ButtonType";
 import AbstractDashboardHandler, {AbstractDashboardFields} from "@/app/dashboard/[id]/(categories)/abstract-dashboard-handler";
 
-type RequestChannelButton = keyof DedicatedChannelConfig
+type RequestChannelButton = keyof RequestChannelConfig
 
 type RequestChannelButtonMetaData = {
     id: number,
@@ -163,7 +163,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
             .map(e => e.element);
     }
 
-    private getDefaultButtonStates(): DedicatedChannelConfig {
+    private getDefaultButtonStates(): RequestChannelConfig {
         return {
             previous: true,
             rewind: true,
@@ -184,7 +184,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
         if (!this.opts.canInteract)
             return;
 
-        const defaultButtonStates: DedicatedChannelConfig = this.getDefaultButtonStates();
+        const defaultButtonStates: RequestChannelConfig = this.getDefaultButtonStates();
 
         return this.opts.setCurrentData(prev => {
             if (!prev) return;

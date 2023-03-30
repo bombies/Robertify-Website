@@ -14,6 +14,7 @@ import {Session} from "next-auth";
 import useSWRMutation from "swr/mutation";
 import DashboardCategorySelector from "@/app/dashboard/[id]/dashboard-category-selector";
 import WebClient from "@/utils/api/web-client";
+import Spinner from "@/components/Spinner";
 
 type Props = React.PropsWithChildren;
 
@@ -27,21 +28,27 @@ const GetCurrentBotInfo = (session: Session | null, id: string) => {
     return useSWRMutation(`/api/bot/guilds/${id}`, mutator)
 }
 
-export default function DashboardCategoryLayout({ children }: Props) {
-    const [dashboardInfo, ] = useGuildDashboard();
+export default function DashboardCategoryLayout({children}: Props) {
+    const [dashboardInfo,] = useGuildDashboard();
+    const [discordGuild, discordGuildLoading] = dashboardInfo.discordGuild;
+    const [discordGuildChannels, discordGuildChannelsLoading] = dashboardInfo.discordGuildChannels;
+    let [robertifyGuild, robertifyGuildLoading] = dashboardInfo.robertifyGuild;
     const session = useSession();
-    const useCurrentData = useState(dashboardInfo.robertifyGuild)
+    const useCurrentData = useState(robertifyGuild)
     const useChangesMade = useState(false);
     const router = useRouter();
     const [, startTransition] = useTransition();
     // @ts-ignore
-    const {isMutating: isSaving, trigger: triggerSave} = POSTChanges(session.data, dashboardInfo.robertifyGuild?.server_id, useCurrentData[0]);
+    const {
+        isMutating: isSaving,
+        trigger: triggerSave
+    } = POSTChanges(session.data, robertifyGuild?.server_id, useCurrentData[0]);
     // @ts-ignore
     const {
         isMutating: isRefreshing,
         trigger: triggerRefresh
         // @ts-ignore
-    } = GetCurrentBotInfo(session.data, dashboardInfo.robertifyGuild?.server_id);
+    } = GetCurrentBotInfo(session.data, robertifyGuild?.server_id);
     const canInteract = dashboardInfo.userHasPermission && !isSaving && !isRefreshing;
     const dashboardState: DashboardState = {dashboardInfo, session, useCurrentData, useChangesMade, canInteract}
     const inviteLink = `https://discord.com/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&permissions=269479308656&scope=bot%20applications.commands&redirect_uri=${encodeURI(`${process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot%20applications.commands&guild_id=${dashboardInfo.id}&disable_guild_select=true`;
@@ -54,17 +61,25 @@ export default function DashboardCategoryLayout({ children }: Props) {
             signIn('discord', {
                 callbackUrl: `/dashboard/${dashboardInfo.id}/general`
             })
-        else if (!dashboardInfo.discordGuild || !dashboardInfo.robertifyGuild || !dashboardInfo.discordGuildChannels)
-            return router.push(inviteLink);
-    }, [dashboardInfo.discordGuild, dashboardInfo.robertifyGuild, dashboardInfo.discordGuildChannels, inviteLink, router, session.data, session.status])
+        else if ((!discordGuild && !discordGuildLoading)
+            || (!robertifyGuild && !robertifyGuildLoading)
+            || (!discordGuildChannels && !discordGuildChannelsLoading)
+        ) {
+            // return router.push(inviteLink);
+        }
+    }, [discordGuild, robertifyGuild, discordGuildChannels, inviteLink, router, session.data, session.status])
 
     useEffect(() => {
-        const b = compareData(useCurrentData[0], dashboardInfo.robertifyGuild);
+        const b = compareData(useCurrentData[0], robertifyGuild);
         useChangesMade[1](b);
-    }, [useCurrentData[0], dashboardInfo.robertifyGuild]);
+    }, [useCurrentData[0], robertifyGuild]);
 
-    if (!dashboardInfo.discordGuild || !dashboardInfo.robertifyGuild || !dashboardInfo.discordGuildChannels)
-        return (<div></div>);
+    console.log("cat layout", discordGuildLoading, robertifyGuildLoading, discordGuildChannelsLoading)
+    if (!discordGuild || !robertifyGuild || !discordGuildChannels)
+        if (discordGuildLoading || robertifyGuildLoading || discordGuildChannelsLoading)
+            return <Spinner size={4}/>
+        else
+            return (<div></div>);
 
     const saveChanges = () => {
         if (!canInteract || !useChangesMade[0])
@@ -76,7 +91,7 @@ export default function DashboardCategoryLayout({ children }: Props) {
 
                     useCurrentData[0].autoplay ??= false;
                     useCurrentData[0].twenty_four_seven_mode ??= false;
-                    dashboardInfo.robertifyGuild = useCurrentData[0];
+                    robertifyGuild = useCurrentData[0];
                     useChangesMade[1](false);
                     router.refresh()
                     sendToast({
@@ -96,7 +111,7 @@ export default function DashboardCategoryLayout({ children }: Props) {
     const discardChanges = () => {
         if (!canInteract || !useChangesMade[0])
             return;
-        useCurrentData[1](dashboardInfo.robertifyGuild);
+        useCurrentData[1](robertifyGuild);
         sendToast({
             description: 'Discarded all changes!',
             type: ButtonType.WARNING
@@ -120,7 +135,7 @@ export default function DashboardCategoryLayout({ children }: Props) {
                     fetchedData.autoplay ??= false;
                     fetchedData.twenty_four_seven_mode ??= false;
                     dashboardInfo.robertifyGuild = fetchedData;
-                    useCurrentData[1](dashboardInfo.robertifyGuild);
+                    useCurrentData[1](robertifyGuild);
                     useChangesMade[1](false);
                     router.refresh()
                     sendToast({
@@ -139,7 +154,7 @@ export default function DashboardCategoryLayout({ children }: Props) {
 
     return (
         <DashboardStateProvider initialData={dashboardState}>
-            <DashboardCategorySelector  canInteract={canInteract} isRefreshing={isRefreshing} refresh={refresh}/>
+            <DashboardCategorySelector canInteract={canInteract} isRefreshing={isRefreshing} refresh={refresh}/>
             <div className='relative'>
                 <DashboardUnsavedChangesPopup
                     isSaving={isSaving}
@@ -151,13 +166,12 @@ export default function DashboardCategoryLayout({ children }: Props) {
                 {children}
             </div>
         </DashboardStateProvider>
-
     )
 }
 
 const compareData = (cur?: RobertifyGuild, original?: RobertifyGuild) => {
     if (!cur && !original) return false;
-    if (cur&& "_id" in cur)
+    if (cur && "_id" in cur)
         // @ts-ignore
         delete cur._id;
     if (original && "_id" in original)

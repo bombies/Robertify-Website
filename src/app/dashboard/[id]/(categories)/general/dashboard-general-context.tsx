@@ -44,6 +44,9 @@ export default function DashboardGeneralContext() {
         useCurrentData,
         canInteract: stateCanInteract
     } = useDashboardState();
+    const [ discordGuild, discordGuildLoading ] = dashboardInfo.discordGuild;
+    const [ discordGuildChannels, discordGuildChannelsLoading ] = dashboardInfo.discordGuildChannels;
+    let [ robertifyGuild, robertifyGuildLoading ] = dashboardInfo.robertifyGuild;
     const router = useRouter();
     const [currentData, setCurrentData] = useCurrentData
     const [, startTransition] = useTransition();
@@ -62,8 +65,8 @@ export default function DashboardGeneralContext() {
     const canInteract = stateCanInteract && !isCreatingReqChannel && !isDeletingReqChannel;
     const handler = new DashboardGeneralHandler({
         robertifyGuild: currentData,
-        discordGuild: dashboardInfo.discordGuild,
-        guildChannels: dashboardInfo.discordGuildChannels,
+        discordGuild: discordGuild,
+        guildChannels: discordGuildChannels,
         setCurrentData,
         canInteract
     });
@@ -90,7 +93,7 @@ export default function DashboardGeneralContext() {
                                 },
                             });
 
-                            dashboardInfo.robertifyGuild = ret;
+                            robertifyGuild = ret;
                             return ret;
                         });
                         router.refresh();
@@ -148,7 +151,7 @@ export default function DashboardGeneralContext() {
                             },
                         });
 
-                        dashboardInfo.robertifyGuild = ret;
+                        robertifyGuild = ret;
                         return ret;
                     });
                     router.refresh();

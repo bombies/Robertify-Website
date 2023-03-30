@@ -13,7 +13,6 @@ class WebClient {
         this.instance = axios.create({
             headers: {
                 Accept: 'application/json',
-                "User-Agent": 'Robertify Website (https://github.com/bombies/Robertify-Website)'
             },
             timeout: 5 * 1000,
             ...options,
@@ -82,7 +81,6 @@ export class ExternalWebClient {
         this.instance = axios.create({
             headers: {
                 Accept: 'application/json',
-                "User-Agent": 'Robertify Website (https://github.com/bombies/Robertify-Website)'
             },
             timeout: 5 * 1000,
             ...options,
@@ -140,7 +138,6 @@ export class BotWebClient {
         this.instance = axios.create({
             headers: {
                 Accept: 'application/json',
-                "User-Agent": 'Robertify Website (https://github.com/bombies/Robertify-Website)',
                 'Authorization': process.env.BOT_API_MASTER_PASSWORD
             },
             timeout: 5 * 1000,
@@ -205,7 +202,6 @@ export class DiscordWebClient {
         this.instance = axios.create({
             headers: {
                 Accept: 'application/json',
-                "User-Agent": 'Robertify Website (https://github.com/bombies/Robertify-Website)',
                 'Authorization': accessToken ? 'Bearer ' + accessToken : 'Bot ' + process.env.DISCORD_BOT_TOKEN,
             },
             timeout: 5 * 1000,
