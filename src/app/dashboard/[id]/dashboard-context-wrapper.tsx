@@ -38,19 +38,19 @@ async function fetcher<T>([url, session]: [url: string, session: Session | null]
     }
 }
 
-const getDiscordGuildInfo = (id: string, session: Session | null) => {
+const useDiscordGuildInfo = (id: string, session: Session | null) => {
     return useSWR([`/api/discord/guilds/${id}`, session], fetcher<DiscordGuild>);
 }
 
-const getDiscordGuildChannels = (id: string, session: Session | null) => {
+const useDiscordGuildChannels = (id: string, session: Session | null) => {
     return useSWR([`/api/discord/guilds/${id}/channels`, session], fetcher<DiscordGuildChannel[]>);
 }
 
-const getBotGuildInfo = (id: string, session: Session | null) => {
+const useBotGuildInfo = (id: string, session: Session | null) => {
     return useSWR([`/api/bot/guilds/${id}`, session], fetcher<RobertifyGuild>);
 }
 
-const getGuildMember = (server_id: string, session: Session | null) => {
+const useGuildMember = (server_id: string, session: Session | null) => {
     return useSWR([`/api/discord/guilds/${server_id}/member`, session], fetcher<DiscordGuildMember>);
 }
 
@@ -72,25 +72,25 @@ export default function DashboardContextWrapper(props: Props) {
         error: discordGuildError,
         isLoading: discordGuildLoading,
         isValidating: discordGuildValidating
-    } = getDiscordGuildInfo(props.id, session.data);
+    } = useDiscordGuildInfo(props.id, session.data);
     let {
         data: discordGuildChannelInfo,
         error: discordGuildChannelError,
         isLoading: discordGuildChannelLoading,
         isValidating: discordGuildChannelValidating
-    } = getDiscordGuildChannels(props.id, session.data);
+    } = useDiscordGuildChannels(props.id, session.data);
     let {
         data: botGuildInfo,
         error: botGuildError,
         isLoading: botGuildLoading,
         isValidating: botGuildValidating
-    } = getBotGuildInfo(props.id, session.data);
+    } = useBotGuildInfo(props.id, session.data);
     const {
         data: guildMemberInfo,
         error: guildMemberError,
         isLoading: guildMemberLoading,
         isValidating: guildMemberValidating
-    } = getGuildMember(props.id, session.data);
+    } = useGuildMember(props.id, session.data);
 
     // @ts-ignore
     if (discordGuildInfo?.code === 10004)
