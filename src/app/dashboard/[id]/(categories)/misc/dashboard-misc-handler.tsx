@@ -190,7 +190,7 @@ export default class DashboardMiscHandler extends AbstractDashboardHandler {
     public addEightBallResponse(response: string) {
         if (!this.isUsable()) return;
 
-        this.opts.setCurrentData!(prevState => {
+        this.opts.setDashboardState!(prevState => {
             if (!prevState) return;
 
             return ({
@@ -203,7 +203,7 @@ export default class DashboardMiscHandler extends AbstractDashboardHandler {
     public removeEightBallResponse(response: string) {
         if (!this.isUsable()) return;
 
-        this.opts.setCurrentData!(prevState => {
+        this.opts.setDashboardState!(prevState => {
             if (!prevState) return;
 
             return ({

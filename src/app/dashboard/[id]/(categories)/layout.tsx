@@ -1,8 +1,6 @@
 'use client';
 
 import React, {useEffect, useState, useTransition} from "react";
-import DashboardStateProvider, {DashboardState} from "@/app/dashboard/[id]/(categories)/dashboard-state-context";
-import {useGuildDashboard} from "@/app/dashboard/[id]/dashboard-info-context";
 import {signIn, useSession} from "next-auth/react";
 import {useRouter} from "next/navigation";
 import {RobertifyGuild} from "@/utils/discord-types";
@@ -15,6 +13,8 @@ import useSWRMutation from "swr/mutation";
 import DashboardCategorySelector from "@/app/dashboard/[id]/dashboard-category-selector";
 import WebClient from "@/utils/api/web-client";
 import {Loading} from "@nextui-org/react";
+import {useGuildDashboard} from "@/app/dashboard/[id]/dashboard-context-wrapper";
+import {setDashboardState} from "@/utils/redux/slices/dashboard-slice";
 
 type Props = React.PropsWithChildren;
 
@@ -29,28 +29,50 @@ const GetCurrentBotInfo = (session: Session | null, id: string) => {
 }
 
 export default function DashboardCategoryLayout({children}: Props) {
-    const [dashboardInfo,] = useGuildDashboard();
-    const [discordGuild, discordGuildLoading] = dashboardInfo.discordGuild;
-    const [discordGuildChannels, discordGuildChannelsLoading] = dashboardInfo.discordGuildChannels;
-    let [robertifyGuild, robertifyGuildLoading] = dashboardInfo.robertifyGuild;
+    const [dashboardInfo, setDashboardInfo] = useGuildDashboard();
+    console.log('dash cat layout info', dashboardInfo);
+    const {value: discordGuild, loading: discordGuildLoading} = dashboardInfo.discordGuild;
+    const {value: discordGuildChannels, loading: discordGuildChannelsLoading} = dashboardInfo.discordGuildChannels;
+    let {value: robertifyGuild, loading: robertifyGuildLoading} = dashboardInfo.robertifyGuild;
     const session = useSession();
-    const useCurrentData = useState(robertifyGuild)
-    const useChangesMade = useState(false);
+    const {currentData, changesMade} = dashboardInfo;
     const router = useRouter();
     const [, startTransition] = useTransition();
     // @ts-ignore
     const {
         isMutating: isSaving,
         trigger: triggerSave
-    } = POSTChanges(session.data, dashboardInfo.id, useCurrentData[0]);
+    } = POSTChanges(session.data, dashboardInfo.id!, currentData);
     // @ts-ignore
     const {
         isMutating: isRefreshing,
         trigger: triggerRefresh
         // @ts-ignore
     } = GetCurrentBotInfo(session.data, robertifyGuild?.server_id);
-    const canInteract = dashboardInfo.userHasPermission && !isSaving && !isRefreshing;
-    const dashboardState: DashboardState = {dashboardInfo, session, useCurrentData, useChangesMade, canInteract}
+    const canInteract = (!!dashboardInfo.userHasPermission.value) && !isSaving && !isRefreshing;
+
+    const setChangesMade = (v: boolean) => {
+        setDashboardInfo(prev => ({
+            ...prev,
+            changesMade: v
+        }));
+    }
+
+    const setCurrentData = (cb: (prev?: RobertifyGuild) => RobertifyGuild | undefined) => {
+        setDashboardInfo(prev => {
+            const newData = cb(prev.currentData);
+            if (!newData)
+                return {
+                    ...prev,
+                    currentData: undefined
+                }
+            else return {
+                ...prev,
+                currentData: newData
+            }
+        })
+    }
+
     const inviteLink = `https://discord.com/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&permissions=269479308656&scope=bot%20applications.commands&redirect_uri=${encodeURI(`${process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME}/callback/discord/guild/invite`)}&response_type=code&scope=identify%20guilds%20bot%20applications.commands&guild_id=${dashboardInfo.id}&disable_guild_select=true`;
 
     useEffect(() => {
@@ -70,12 +92,11 @@ export default function DashboardCategoryLayout({children}: Props) {
     }, [discordGuild, robertifyGuild, discordGuildChannels, inviteLink, router, session.data, session.status])
 
     useEffect(() => {
-        const b = compareData(useCurrentData[0], robertifyGuild);
-        console.log(b, useCurrentData[0], robertifyGuild);
-        useChangesMade[1](b);
-    }, [useCurrentData[0], robertifyGuild, useChangesMade[1]]);
+        const b = compareData(currentData, robertifyGuild);
+        console.log(b, currentData, robertifyGuild);
+        setChangesMade(b);
+    }, [currentData, robertifyGuild]);
 
-    console.log("cat layout", discordGuildLoading, robertifyGuildLoading, discordGuildChannelsLoading)
     if (!discordGuild || !robertifyGuild || !discordGuildChannels)
         if (discordGuildLoading || robertifyGuildLoading || discordGuildChannelsLoading)
             return (
@@ -87,24 +108,28 @@ export default function DashboardCategoryLayout({children}: Props) {
             return (<div></div>);
 
     const saveChanges = () => {
-        if (!canInteract || !useChangesMade[0])
+        if (!canInteract || !changesMade)
             return;
         startTransition(() => {
             triggerSave()
                 .then(() => {
-                    if (!useCurrentData[0]) return;
+                    if (!currentData) return;
 
-                    useCurrentData[0].autoplay ??= false;
-                    useCurrentData[0].twenty_four_seven_mode ??= false;
-                    robertifyGuild = useCurrentData[0];
-                    useChangesMade[1](false);
+                    let currDataCopy = {...currentData};
+                    currDataCopy.autoplay ??= false;
+                    currDataCopy.twenty_four_seven_mode ??= false;
+                    setDashboardInfo(prev => ({
+                        ...prev,
+                        robertifyGuild: {...prev.robertifyGuild, value: currDataCopy},
+                        currentData: currDataCopy
+                    }));
                     router.refresh()
                     sendToast({
                         description: 'All changes made successfully.'
                     })
                 }, (e) => {
                     console.error(e);
-                    useChangesMade[1](true);
+                    setChangesMade(true)
                     sendToast({
                         description: 'Could not save your changes!',
                         type: ButtonType.DANGER
@@ -114,9 +139,9 @@ export default function DashboardCategoryLayout({children}: Props) {
     }
 
     const discardChanges = () => {
-        if (!canInteract || !useChangesMade[0])
+        if (!canInteract || !changesMade)
             return;
-        useCurrentData[1](robertifyGuild);
+        setCurrentData(() => robertifyGuild);
         sendToast({
             description: 'Discarded all changes!',
             type: ButtonType.WARNING
@@ -140,8 +165,8 @@ export default function DashboardCategoryLayout({children}: Props) {
                     fetchedData.autoplay ??= false;
                     fetchedData.twenty_four_seven_mode ??= false;
                     dashboardInfo.robertifyGuild = fetchedData;
-                    useCurrentData[1](robertifyGuild);
-                    useChangesMade[1](false);
+                    setCurrentData(() => robertifyGuild);
+                    setChangesMade(false);
                     router.refresh()
                     sendToast({
                         description: "Successfully refreshed this server's data!"
@@ -158,19 +183,19 @@ export default function DashboardCategoryLayout({children}: Props) {
     }
 
     return (
-        <DashboardStateProvider initialData={dashboardState}>
+        <div>
             <DashboardCategorySelector canInteract={canInteract} isRefreshing={isRefreshing} refresh={refresh}/>
             <div className='relative'>
                 <DashboardUnsavedChangesPopup
                     isSaving={isSaving}
-                    changesMade={useChangesMade[0]}
+                    changesMade={!!changesMade}
                     saveChanges={saveChanges}
                     discardChanges={discardChanges}
                     canInteract={canInteract}
                 />
                 {children}
             </div>
-        </DashboardStateProvider>
+        </div>
     )
 }
 

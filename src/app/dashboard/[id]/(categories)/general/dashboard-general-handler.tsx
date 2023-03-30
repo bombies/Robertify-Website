@@ -1,6 +1,5 @@
 import {
     RequestChannelConfig,
-    DiscordGuild,
     DiscordGuildChannel,
     DiscordRole,
     GuildDJToggles,
@@ -11,7 +10,6 @@ import {
     RobertifyGuild,
     ThemeString
 } from "@/utils/discord-types";
-import {Dispatch, SetStateAction} from "react";
 import {SelectMenuContent} from "@/components/SelectMenu";
 import discordVoiceChannelIcon from "../../../../../../public/discord-voice-channel.svg";
 import discordTextChannelIcon from "../../../../../../public/discord-text-channel.svg";
@@ -179,14 +177,14 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
     }
 
     public toggleReqChannelButton(button: RequestChannelButton) {
-        if (!this.opts.setCurrentData)
+        if (!this.setCurrentData)
             return;
         if (!this.opts.canInteract)
             return;
 
         const defaultButtonStates: RequestChannelConfig = this.getDefaultButtonStates();
 
-        return this.opts.setCurrentData(prev => {
+        return this.setCurrentData(prev => {
             if (!prev) return;
 
             const configToUse = this.opts.robertifyGuild?.dedicated_channel.config || defaultButtonStates;
@@ -308,7 +306,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
                 if (!obj) return;
 
                 if (!(innerToggle in obj.dj_toggles)) return;
-                return this.opts.setCurrentData!(prev => {
+                return this.setCurrentData(prev => {
                     if (!prev) return;
                     return ({
                         ...prev,
@@ -329,7 +327,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
                 if (!obj) return;
 
                 if (!(innerToggle in (obj.log_toggles ?? this.genDefaultLogTogglesObject()))) return;
-                return this.opts.setCurrentData!(prev => {
+                return this.setCurrentData(prev => {
                         if (!prev) return;
                         if (prev.toggles.log_toggles)
                             return ({
@@ -360,7 +358,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
                 );
             }
             case "autoplay": {
-                return this.opts.setCurrentData!(prev => {
+                return this.setCurrentData(prev => {
                     if (!prev) return;
                     return ({
                         ...prev,
@@ -369,7 +367,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
                 });
             }
             case "twenty_four_seven_mode": {
-                return this.opts.setCurrentData!(prev => {
+                return this.setCurrentData(prev => {
                     if (!prev) return;
 
                     return ({
@@ -379,7 +377,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
                 });
             }
             default: {
-                return this.opts.setCurrentData!(prev => {
+                return this.setCurrentData(prev => {
                     if (!prev) return;
                     return ({
                         ...prev,
@@ -394,10 +392,10 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
     }
 
     public addDJRole(id: string) {
-        if (!this.opts.setCurrentData) return;
+        if (!this.setCurrentData) return;
         if (!this.opts.canInteract) return;
 
-        this.opts.setCurrentData(prev => {
+        this.setCurrentData(prev => {
             if (!prev) return;
             return ({
                 ...prev,
@@ -410,10 +408,10 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
     }
 
     public removeDJRole(id: string) {
-        if (!this.opts.setCurrentData) return;
+        if (!this.setCurrentData) return;
         if (!this.opts.canInteract) return;
 
-        this.opts.setCurrentData(prev => {
+        this.setCurrentData(prev => {
             if (!prev) return;
             return ({
                 ...prev,
@@ -442,10 +440,10 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
     }
 
     public addLogChannel(id: string) {
-        if (!this.opts.setCurrentData) return;
+        if (!this.setCurrentData) return;
         if (!this.opts.canInteract) return;
 
-        this.opts.setCurrentData(prev => {
+        this.setCurrentData(prev => {
             if (!prev) return;
             return ({
                 ...prev,
@@ -455,10 +453,10 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
     }
 
     public setLocale(locale: LocaleString) {
-        if (!this.opts.setCurrentData) return;
+        if (!this.setCurrentData) return;
         if (!this.opts.canInteract) return;
 
-        this.opts.setCurrentData(prev => {
+        this.setCurrentData(prev => {
             if (!prev) return;
             return ({
                 ...prev,
@@ -468,10 +466,10 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
     }
 
     public setTheme(theme: ThemeString) {
-        if (!this.opts.setCurrentData) return;
+        if (!this.setCurrentData) return;
         if (!this.opts.canInteract) return;
 
-        this.opts.setCurrentData(prev => {
+        this.setCurrentData(prev => {
             if (!prev) return;
             return ({
                 ...prev,
@@ -485,12 +483,12 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
     }
 
     private addRestrictedChannel(id: string, channelType: 'text' | 'voice') {
-        if (!this.opts.setCurrentData) return;
+        if (!this.setCurrentData) return;
         if (!this.opts.canInteract) return;
 
         switch (channelType) {
             case "text": {
-                this.opts.setCurrentData(prev => {
+                this.setCurrentData(prev => {
                     if (!prev) return;
                     return ({
                         ...prev,
@@ -503,7 +501,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
                 break;
             }
             case "voice": {
-                this.opts.setCurrentData(prev => {
+                this.setCurrentData(prev => {
                     if (!prev) return;
                     return ({
                         ...prev,
@@ -519,12 +517,12 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
     }
 
     private removeRestrictedChannel(id: string, channelType: 'text' | 'voice') {
-        if (!this.opts.setCurrentData) return;
+        if (!this.setCurrentData) return;
         if (!this.opts.canInteract) return;
 
         switch (channelType) {
             case "text": {
-                this.opts.setCurrentData(prev => {
+                this.setCurrentData(prev => {
                     if (!prev) return;
                     return ({
                         ...prev,
@@ -537,7 +535,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
                 break;
             }
             case "voice": {
-                this.opts.setCurrentData(prev => {
+                this.setCurrentData(prev => {
                     if (!prev) return;
                     return ({
                         ...prev,

@@ -1,17 +1,11 @@
 import React from "react";
 import {getServerSession, Session} from "next-auth";
 import {AxiosError} from "axios";
-import Link from "next/link";
-import GenericImage from "@/app/_components/GenericImage";
-import backIcon from "../../../../public/go-back.svg";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 import {
-    fetchDiscordGuildChannels,
-    fetchDiscordGuildInfo, fetchDiscordGuildMember,
-    fetchRobertifyGuildInfo
+    fetchDiscordGuildInfo
 } from "@/utils/api/api-methods";
 import DashboardContextWrapper from "@/app/dashboard/[id]/dashboard-context-wrapper";
-import {GuildDashboardInfoProvider} from "@/app/dashboard/[id]/dashboard-info-context";
 
 interface Props extends React.PropsWithChildren {
     params: { id: string }
@@ -43,11 +37,9 @@ export async function generateMetadata({params}: { params: { id: string } }) {
 
 export default async function GuildDashboardLayout({children, params}: Props) {
     return (
-        <GuildDashboardInfoProvider initialDashboardInfo={undefined}>
-            <DashboardContextWrapper id={params.id}>
-                {children}
-            </DashboardContextWrapper>
-        </GuildDashboardInfoProvider>
+        <DashboardContextWrapper id={params.id}>
+            {children}
+        </DashboardContextWrapper>
 
     )
 }

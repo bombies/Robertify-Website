@@ -1,28 +1,19 @@
 'use client';
 
 import DashboardContainer from "@/app/dashboard/[id]/(categories)/dashboard-container";
-import {useDashboardState} from "@/app/dashboard/[id]/(categories)/dashboard-state-context";
-import {useRouter} from "next/navigation";
 import {useMemo, useState, useTransition} from "react";
-import DashboardSection from "@/app/dashboard/[id]/(categories)/dashboard-section";
 import DashboardMiscHandler from "@/app/dashboard/[id]/(categories)/misc/dashboard-misc-handler";
-import Button from "@/components/button/Button";
-import {ButtonType} from "@/components/button/ButtonType";
-import {Input, Modal, Text} from "@nextui-org/react";
-import {sendToast} from "@/utils/client-utils";
+import {useGuildDashboard} from "@/app/dashboard/[id]/dashboard-context-wrapper";
+import {RobertifyGuild} from "@/utils/discord-types";
 
 export default function DashboardMiscContext() {
-    const {
-        dashboardInfo,
-        session,
-        useCurrentData,
-        useChangesMade,
-        canInteract: stateCanInteract
-    } = useDashboardState();
-    const router = useRouter();
-    const [currentData, setCurrentData] = useCurrentData
-    const [, setChangesMade] = useChangesMade;
-    const [, startTransition] = useTransition();
+    const [dashboardInfo, setDashboardInfo] = useGuildDashboard();
+    const { currentData, canInteract: stateCanInteract } = dashboardInfo;
+
+    const setChangesMade = (val: boolean) => setDashboardInfo(prev => ({
+        ...prev,
+        changesMade: val
+    }));
 
     const [addEightBallResponse, setAddEightBallResponse] = useState(false);
     const [proposedResponse, setProposedResponse] = useState('');
@@ -53,10 +44,10 @@ export default function DashboardMiscContext() {
         },
         {
             robertifyGuild: currentData,
-            discordGuild: dashboardInfo.discordGuild,
-            guildChannels: dashboardInfo.discordGuildChannels,
-            setCurrentData,
-            canInteract: stateCanInteract
+            discordGuild: dashboardInfo.discordGuild.value,
+            guildChannels: dashboardInfo.discordGuildChannels.value,
+            setDashboardState: setDashboardInfo,
+            canInteract: (!!stateCanInteract)
         });
 
     return (

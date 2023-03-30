@@ -18,9 +18,8 @@ import useSWRMutation from 'swr/mutation';
 import {sendToast} from "@/utils/client-utils";
 import {AxiosError} from "axios";
 import DashboardContainer from "@/app/dashboard/[id]/(categories)/dashboard-container";
-import {useDashboardState} from "@/app/dashboard/[id]/(categories)/dashboard-state-context";
-import {createReqChannel, deleteReqChannel} from "@/utils/api/api-methods";
 import WebClient from "@/utils/api/web-client";
+import {useGuildDashboard} from "@/app/dashboard/[id]/dashboard-context-wrapper";
 
 const CreateReqChannel = (session: Session | null, id: string) => {
     const mutator = async (url: string) => await WebClient.getInstance(session?.user).post(url);
@@ -38,18 +37,28 @@ const hasReqChannel = (currentData?: RobertifyGuild): boolean => {
 }
 
 export default function DashboardGeneralContext() {
-    const {
-        dashboardInfo,
-        session,
-        useCurrentData,
-        canInteract: stateCanInteract
-    } = useDashboardState();
-    const [ discordGuild, discordGuildLoading ] = dashboardInfo.discordGuild;
-    const [ discordGuildChannels, discordGuildChannelsLoading ] = dashboardInfo.discordGuildChannels;
-    let [ robertifyGuild, robertifyGuildLoading ] = dashboardInfo.robertifyGuild;
+    const [dashboardInfo, setDashboardInfo] = useGuildDashboard();
+    const {value: discordGuild, loading: discordGuildLoading} = dashboardInfo.discordGuild;
+    const {value: discordGuildChannels, loading: discordGuildChannelsLoading} = dashboardInfo.discordGuildChannels;
+    let {value: robertifyGuild, loading: robertifyGuildLoading} = dashboardInfo.robertifyGuild;
     const router = useRouter();
-    const [currentData, setCurrentData] = useCurrentData
+    const {currentData, canInteract: stateCanInteract, session} = dashboardInfo
     const [, startTransition] = useTransition();
+
+    const setCurrentData = (cb: (prev?: RobertifyGuild) => RobertifyGuild | undefined) => {
+        setDashboardInfo(prev => {
+            const newData = cb(prev.currentData);
+            if (!newData)
+                return {
+                    ...prev,
+                    currentData: undefined
+                }
+            else return {
+                ...prev,
+                currentData: newData
+            }
+        })
+    }
 
     const {
         isMutating: isCreatingReqChannel,
@@ -62,12 +71,12 @@ export default function DashboardGeneralContext() {
         // @ts-ignore
     } = DeleteReqChannel(session.data, dashboardInfo.robertifyGuild?.server_id);
 
-    const canInteract = stateCanInteract && !isCreatingReqChannel && !isDeletingReqChannel;
+    const canInteract = (!!stateCanInteract) && !isCreatingReqChannel && !isDeletingReqChannel;
     const handler = new DashboardGeneralHandler({
         robertifyGuild: currentData,
         discordGuild: discordGuild,
         guildChannels: discordGuildChannels,
-        setCurrentData,
+        setDashboardState: setDashboardInfo,
         canInteract
     });
 
@@ -189,6 +198,8 @@ export default function DashboardGeneralContext() {
                 });
         })
     }
+
+    console.log('context info', currentData)
 
     return (
         <DashboardContainer>
