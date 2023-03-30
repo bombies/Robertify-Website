@@ -11,6 +11,7 @@ import {
     fetchRobertifyGuildInfo
 } from "@/utils/api/api-methods";
 import DashboardContextWrapper from "@/app/dashboard/[id]/dashboard-context-wrapper";
+import {GuildDashboardInfoProvider} from "@/app/dashboard/[id]/dashboard-info-context";
 
 interface Props extends React.PropsWithChildren {
     params: { id: string }
@@ -42,8 +43,11 @@ export async function generateMetadata({params}: { params: { id: string } }) {
 
 export default async function GuildDashboardLayout({children, params}: Props) {
     return (
-        <DashboardContextWrapper id={params.id}>
-            {children}
-        </DashboardContextWrapper>
+        <GuildDashboardInfoProvider initialDashboardInfo={undefined}>
+            <DashboardContextWrapper id={params.id}>
+                {children}
+            </DashboardContextWrapper>
+        </GuildDashboardInfoProvider>
+
     )
 }

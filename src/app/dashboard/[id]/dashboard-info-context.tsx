@@ -14,10 +14,15 @@ export type GuildDashboardInfo = {
 const DashboardInfoContext = React.createContext<[GuildDashboardInfo, React.Dispatch<React.SetStateAction<GuildDashboardInfo>>] | undefined>(undefined);
 
 interface Props extends React.PropsWithChildren {
-    initialDashboardInfo: GuildDashboardInfo
 }
-export function GuildDashboardInfoProvider({ children, initialDashboardInfo }: Props) {
-    const [ dashboardInfo, setDashboardInfo ] = useState(initialDashboardInfo);
+export function GuildDashboardInfoProvider({ children }: Props) {
+    const [ dashboardInfo, setDashboardInfo ] = useState<GuildDashboardInfo>({
+        id: '',
+        discordGuild: [undefined, true],
+        robertifyGuild: [undefined, true],
+        discordGuildChannels: [undefined, true],
+        userHasPermission: false
+    });
 
     useEffect(() => {
         console.log('info changed')

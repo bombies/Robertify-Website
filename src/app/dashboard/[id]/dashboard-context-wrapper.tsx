@@ -6,7 +6,7 @@ import {useSession} from "next-auth/react";
 import useSWR from 'swr';
 import GenericImage from "@/app/_components/GenericImage";
 import BadgeWrapper from "@/components/BadgeWrapper";
-import {GuildDashboardInfoProvider} from "@/app/dashboard/[id]/dashboard-info-context";
+import {GuildDashboardInfoProvider, useGuildDashboard} from "@/app/dashboard/[id]/dashboard-info-context";
 import {
     DiscordGuild,
     DiscordGuildChannel,
@@ -14,7 +14,7 @@ import {
     isGuildAdmin,
     RobertifyGuild
 } from "@/utils/discord-types";
-import React from "react";
+import React, {useEffect} from "react";
 import WebClient from "@/utils/api/web-client";
 import Link from "next/link";
 import backIcon from "../../../../public/go-back.svg";
@@ -52,6 +52,7 @@ const getGuildMember = (server_id: string, session: Session | null) => {
 }
 
 export default function DashboardContextWrapper(props: Props) {
+    const [, setDashboardInfo] = useGuildDashboard();
     const session = useSession();
     let {
         data: discordGuildInfo,
@@ -92,6 +93,16 @@ export default function DashboardContextWrapper(props: Props) {
 
     console.log(discordGuildLoading, botGuildLoading, discordGuildChannelLoading)
 
+    useEffect(() => {
+        setDashboardInfo({
+            id: props.id,
+            robertifyGuild: [botGuildInfo, botGuildLoading],
+            discordGuild: [discordGuildInfo, discordGuildLoading],
+            discordGuildChannels: [discordGuildChannelInfo, discordGuildChannelLoading],
+            userHasPermission: guildMemberInfo ? isGuildAdmin(guildMemberInfo, discordGuildInfo!) : false
+        })
+    }, [botGuildInfo, discordGuildInfo, discordGuildChannelInfo, guildMemberInfo, discordGuildLoading, botGuildLoading, discordGuildChannelLoading, guildMemberLoading])
+
     return (
         <div className='w-full min-h-screen desktop:p-36 p-24 tablet:px-6 phone:px-3'>
             <div className='tablet:px-6 px+-12'>
@@ -119,15 +130,7 @@ export default function DashboardContextWrapper(props: Props) {
                     <BadgeWrapper color='primary' size='sm'>BETA</BadgeWrapper>
                 </div>
             </div>
-            <GuildDashboardInfoProvider initialDashboardInfo={{
-                id: props.id,
-                discordGuild: [discordGuildInfo, discordGuildLoading],
-                discordGuildChannels: [discordGuildChannelInfo, discordGuildChannelLoading],
-                robertifyGuild: [botGuildInfo, botGuildLoading],
-                userHasPermission: guildMemberInfo ? isGuildAdmin(guildMemberInfo, discordGuildInfo!) : false
-            }}>
-                {props.children}
-            </GuildDashboardInfoProvider>
+            {props.children}
         </div>
     )
 }

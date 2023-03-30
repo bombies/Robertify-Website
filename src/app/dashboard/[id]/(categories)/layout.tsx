@@ -14,11 +14,11 @@ import {Session} from "next-auth";
 import useSWRMutation from "swr/mutation";
 import DashboardCategorySelector from "@/app/dashboard/[id]/dashboard-category-selector";
 import WebClient from "@/utils/api/web-client";
-import Spinner from "@/components/Spinner";
+import {Loading} from "@nextui-org/react";
 
 type Props = React.PropsWithChildren;
 
-const POSTChanges = (session: Session | null, guildId: string, guildInfo: RobertifyGuild) => {
+const POSTChanges = (session: Session | null, guildId: string, guildInfo?: RobertifyGuild) => {
     const mutator = async (url: string) => await WebClient.getInstance(session?.user).post(url, guildInfo);
     return useSWRMutation(`/api/bot/guilds/${guildId}`, mutator)
 }
@@ -42,7 +42,7 @@ export default function DashboardCategoryLayout({children}: Props) {
     const {
         isMutating: isSaving,
         trigger: triggerSave
-    } = POSTChanges(session.data, robertifyGuild?.server_id, useCurrentData[0]);
+    } = POSTChanges(session.data, dashboardInfo.id, useCurrentData[0]);
     // @ts-ignore
     const {
         isMutating: isRefreshing,
@@ -71,13 +71,18 @@ export default function DashboardCategoryLayout({children}: Props) {
 
     useEffect(() => {
         const b = compareData(useCurrentData[0], robertifyGuild);
+        console.log(b, useCurrentData[0], robertifyGuild);
         useChangesMade[1](b);
-    }, [useCurrentData[0], robertifyGuild]);
+    }, [useCurrentData[0], robertifyGuild, useChangesMade[1]]);
 
     console.log("cat layout", discordGuildLoading, robertifyGuildLoading, discordGuildChannelsLoading)
     if (!discordGuild || !robertifyGuild || !discordGuildChannels)
         if (discordGuildLoading || robertifyGuildLoading || discordGuildChannelsLoading)
-            return <Spinner size={4}/>
+            return (
+                <div className='flex justify-center'>
+                    <Loading size="xl"/>
+                </div>
+            )
         else
             return (<div></div>);
 
