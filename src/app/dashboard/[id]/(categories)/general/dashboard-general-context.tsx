@@ -31,7 +31,7 @@ const DeleteReqChannel = (session: Session | null, id: string) => {
     return useSWRMutation(`/api/bot/guilds/${id}/reqchannel`, mutator);
 }
 
-const hasReqChannel = (currentData?: RobertifyGuild): boolean => {
+const hasReqChannel = (currentData?: Partial<RobertifyGuild>): boolean => {
     if (!currentData) return false;
     return !!(currentData.dedicated_channel?.channel_id && currentData.dedicated_channel?.channel_id !== '-1');
 }
@@ -39,13 +39,15 @@ const hasReqChannel = (currentData?: RobertifyGuild): boolean => {
 export default function DashboardGeneralContext() {
     const [dashboardInfo, setDashboardInfo] = useGuildDashboard();
     const {value: discordGuild, loading: discordGuildLoading} = dashboardInfo.discordGuild;
+    const {value: robertifyGuild, loading: robertifyGuildLoading} = dashboardInfo.robertifyGuild;
     const {value: discordGuildChannels, loading: discordGuildChannelsLoading} = dashboardInfo.discordGuildChannels;
-    let {value: robertifyGuild, loading: robertifyGuildLoading} = dashboardInfo.robertifyGuild;
     const router = useRouter();
     const {currentData, canInteract: stateCanInteract, session} = dashboardInfo
     const [, startTransition] = useTransition();
 
-    const setCurrentData = (cb: (prev?: RobertifyGuild) => RobertifyGuild | undefined) => {
+    console.log('general context can interact', stateCanInteract);
+
+    const setCurrentData = (cb: (prev?: Partial<RobertifyGuild>) => Partial<RobertifyGuild> | undefined) => {
         setDashboardInfo(prev => {
             const newData = cb(prev.currentData);
             if (!newData)
@@ -73,7 +75,7 @@ export default function DashboardGeneralContext() {
 
     const canInteract = (!!stateCanInteract) && !isCreatingReqChannel && !isDeletingReqChannel;
     const handler = new DashboardGeneralHandler({
-        robertifyGuild: currentData,
+        robertifyGuild: currentData ?? robertifyGuild,
         discordGuild: discordGuild,
         guildChannels: discordGuildChannels,
         setDashboardState: setDashboardInfo,
@@ -102,7 +104,6 @@ export default function DashboardGeneralContext() {
                                 },
                             });
 
-                            robertifyGuild = ret;
                             return ret;
                         });
                         router.refresh();
@@ -151,7 +152,7 @@ export default function DashboardGeneralContext() {
                     setCurrentData(prevState => {
                         if (!prevState) return;
 
-                        const ret: RobertifyGuild = ({
+                        const ret: Partial<RobertifyGuild> = ({
                             ...prevState,
                             dedicated_channel: {
                                 ...prevState.dedicated_channel,
@@ -159,8 +160,6 @@ export default function DashboardGeneralContext() {
                                 message_id: '-1',
                             },
                         });
-
-                        robertifyGuild = ret;
                         return ret;
                     });
                     router.refresh();
@@ -199,7 +198,7 @@ export default function DashboardGeneralContext() {
         })
     }
 
-    console.log('context info', currentData)
+    console.log('context info', dashboardInfo)
 
     return (
         <DashboardContainer>

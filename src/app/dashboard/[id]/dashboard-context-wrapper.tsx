@@ -1,8 +1,8 @@
 'use client';
 
-import {Session} from "next-auth";
-import {AxiosError} from "axios";
-import {useSession} from "next-auth/react";
+import { Session } from "next-auth";
+import { AxiosError } from "axios";
+import { useSession } from "next-auth/react";
 import useSWR from 'swr';
 import GenericImage from "@/app/_components/GenericImage";
 import BadgeWrapper from "@/components/BadgeWrapper";
@@ -13,12 +13,14 @@ import {
     isGuildAdmin,
     RobertifyGuild
 } from "@/utils/discord-types";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import WebClient from "@/utils/api/web-client";
 import Link from "next/link";
 import backIcon from "../../../../public/go-back.svg";
-import {useAppDispatch, useAppSelector} from "@/utils/redux/redux-store";
-import {DashboardState, selectDashboardState, setDashboardState} from "@/utils/redux/slices/dashboard-slice";
+import { useAppDispatch, useAppSelector } from "@/utils/redux/redux-store";
+import { DashboardState, selectDashboardState, setDashboardState } from "@/utils/redux/slices/dashboard-slice";
+import { compare } from "@/utils/general-utils";
+import { Loading } from "@nextui-org/react";
 
 interface Props extends React.PropsWithChildren {
     id: string
@@ -57,7 +59,7 @@ const GuildDashboardContext = React.createContext<[DashboardState, React.Dispatc
 export default function DashboardContextWrapper(props: Props) {
     const appDispatch = useAppDispatch();
     const initialDashboardState = useAppSelector(selectDashboardState);
-    const [ guildDashboardState, setGuildGuildDashboardState ] = useState<DashboardState>(initialDashboardState)
+    const [guildDashboardState, setGuildGuildDashboardState] = useState<DashboardState>(initialDashboardState)
 
     useEffect(() => {
         appDispatch(setDashboardState(guildDashboardState));
@@ -104,36 +106,53 @@ export default function DashboardContextWrapper(props: Props) {
 
     useEffect(() => {
         console.log('got some info!');
-        setGuildGuildDashboardState({
-            id: props.id,
-            robertifyGuild: {
-                loading: botGuildLoading,
-                value: botGuildInfo
-            },
-            discordGuild: {
-                loading: discordGuildLoading,
-                value: discordGuildInfo
-            },
-            discordGuildChannels: {
-                loading: discordGuildChannelLoading,
-                value: discordGuildChannelInfo
-            },
-            userHasPermission: {
-                loading: guildMemberLoading,
-                value: guildMemberInfo ? isGuildAdmin(guildMemberInfo, discordGuildInfo!) : false
-            },
-            currentData: botGuildInfo,
-            session,
+        setGuildGuildDashboardState(prev => {
+            let validationOverrides: Partial<DashboardState> | undefined = undefined;
+
+            if (!prev.changesMade
+                && !botGuildLoading
+                && !compare(prev.robertifyGuild, botGuildInfo)
+                && prev.currentData
+            ) {
+                validationOverrides = {
+                    currentData: botGuildInfo
+                }
+            }
+
+            return ({
+                ...prev,
+                id: props.id,
+                robertifyGuild: {
+                    loading: botGuildLoading,
+                    value: botGuildInfo
+                },
+                discordGuild: {
+                    loading: discordGuildLoading,
+                    value: discordGuildInfo
+                },
+                discordGuildChannels: {
+                    loading: discordGuildChannelLoading,
+                    value: discordGuildChannelInfo
+                },
+                userHasPermission: {
+                    loading: guildMemberLoading,
+                    value: guildMemberInfo ? isGuildAdmin(guildMemberInfo, discordGuildInfo!) : false
+                },
+                currentData: prev.currentData ?? botGuildInfo,
+                session,
+                ...validationOverrides
+            })
         });
     }, [botGuildInfo, discordGuildInfo, discordGuildChannelInfo, guildMemberInfo, discordGuildLoading, botGuildLoading, discordGuildChannelLoading, guildMemberLoading, session, props.id])
 
+    const val = useMemo<[DashboardState, React.Dispatch<React.SetStateAction<DashboardState>>]>(() => ([guildDashboardState, setGuildGuildDashboardState]), [guildDashboardState])
     return (
-        <GuildDashboardContext.Provider value={[guildDashboardState, setGuildGuildDashboardState]}>
+        <GuildDashboardContext.Provider value={val}>
             <div className='w-full min-h-screen desktop:p-36 p-24 tablet:px-6 phone:px-3'>
                 <div className='tablet:px-6 px+-12'>
                     <Link href='/dashboard'>
                         <div className='flex gap-4 hover:scale-[100.25%] transition-fast mb-6'>
-                            <GenericImage src={backIcon} width={2}/>
+                            <GenericImage src={backIcon} width={2} />
                             <p className='relative self-center text-primary font-semibold text-xl phone:text-sm'>Return to
                                 your servers</p>
                         </div>
@@ -142,18 +161,22 @@ export default function DashboardContextWrapper(props: Props) {
                 <div
                     className='relative overflow-hidden mx-auto mb-12 tablet:p-6 p-8 bg-primary/10 shadow-md dark:bg-neutral-900 w-full h-42 rounded-2xl border-2 border-primary/90'
                 >
-                    <div className='flex gap-12 phone:gap-6'>
-                        <GenericImage
-                            className='relative w-20 h-20 phone:w-16 phone:h-16 rounded-full'
-                            imageClassName='rounded-full'
-                            src={guildIcon}
-                            style={{
-                                objectFit: 'cover'
-                            }}
-                        />
-                        <h1 className='text-4xl phone:text-xl font-black tracking-wider text-primary self-center z-10'>{discordGuildInfo?.name}</h1>
-                        <BadgeWrapper color='primary' size='sm'>BETA</BadgeWrapper>
-                    </div>
+                    {
+                        discordGuildLoading ? <Loading size='lg' /> :
+                            <div className='flex gap-12 phone:gap-6'>
+
+                                <GenericImage
+                                    className='relative w-20 h-20 phone:w-16 phone:h-16 rounded-full'
+                                    imageClassName='rounded-full'
+                                    src={guildIcon}
+                                    style={{
+                                        objectFit: 'cover'
+                                    }}
+                                />
+                                <h1 className='text-4xl phone:text-xl font-black tracking-wider text-primary self-center z-10'>{discordGuildInfo?.name}</h1>
+                                <BadgeWrapper color='primary' size='sm'>BETA</BadgeWrapper>
+                            </div>
+                    }
                 </div>
                 {props.children}
             </div>

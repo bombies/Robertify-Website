@@ -12,7 +12,7 @@ export interface DashboardState {
     id?: string,
     discordGuild: AsyncState<DiscordGuild>
     robertifyGuild: AsyncState<RobertifyGuild>
-    currentData?: RobertifyGuild,
+    currentData?: Partial<RobertifyGuild>,
     discordGuildChannels: AsyncState<DiscordGuildChannel[]>
     session?: SessionContextValue<boolean> | { readonly data: null, readonly status: "loading" },
     changesMade?: boolean,

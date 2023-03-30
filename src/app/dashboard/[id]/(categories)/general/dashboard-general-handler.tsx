@@ -138,7 +138,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
     }
 
     public generateReqChannelButtons() {
-        const config = this.opts.robertifyGuild?.dedicated_channel.config || this.getDefaultButtonStates();
+        const config = this.getRobertifyGuild()?.dedicated_channel?.config || this.getDefaultButtonStates();
 
         return Object.keys(config).map((key) => {
             const metaData = this.getButtonMetaData(key as RequestChannelButton);
@@ -147,7 +147,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
                 id: metaData.id,
                 element: <Button
                     key={key}
-                    disabled={!this.opts.canInteract}
+                    disabled={!this.canInteract()}
                     label={metaData.label}
                     icon={metaData.icon}
                     type={metaData.type}
@@ -179,7 +179,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
     public toggleReqChannelButton(button: RequestChannelButton) {
         if (!this.setCurrentData)
             return;
-        if (!this.opts.canInteract)
+        if (!this.canInteract())
             return;
 
         const defaultButtonStates: RequestChannelConfig = this.getDefaultButtonStates();
@@ -187,7 +187,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
         return this.setCurrentData(prev => {
             if (!prev) return;
 
-            const configToUse = this.opts.robertifyGuild?.dedicated_channel.config || defaultButtonStates;
+            const configToUse = this.getRobertifyGuild()?.dedicated_channel?.config || defaultButtonStates;
 
             return ({
                 ...prev,
@@ -203,7 +203,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
     }
 
     public generateDJToggleElements() {
-        const obj = this.opts.robertifyGuild?.toggles.dj_toggles;
+        const obj = this.getRobertifyGuild()?.toggles?.dj_toggles;
         if (!obj)
             return [];
 
@@ -217,7 +217,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
                     <Toggle
                         status={this.getToggle('dj_toggles', key)}
                         onClick={() => this.switchToggle('dj_toggles', key)}
-                        disabled={!this.opts.canInteract}
+                        disabled={!this.canInteract()}
                     />
                 </DashboardSectionContent>
             ));
@@ -248,7 +248,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
     }
 
     public generateLogToggleElements() {
-        let obj = this.opts.robertifyGuild?.toggles.log_toggles ?? this.genDefaultLogTogglesObject();
+        let obj = this.getRobertifyGuild()?.toggles?.log_toggles ?? this.genDefaultLogTogglesObject();
         return (Object.keys(obj) as (keyof GuildLogToggles)[])
             .sort((a, b) => a.localeCompare(b))
             .map(key => (
@@ -259,14 +259,14 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
                     <Toggle
                         status={this.getToggle('log_toggles', key)}
                         onClick={() => this.switchToggle('log_toggles', key)}
-                        disabled={!this.opts.canInteract}
+                        disabled={!this.canInteract()}
                     />
                 </DashboardSectionContent>
             ));
     }
 
     public getToggle(toggle: keyof GuildToggles | 'autoplay' | 'twenty_four_seven_mode', innerToggle?: keyof GuildDJToggles | keyof GuildLogToggles) {
-        const obj = this.opts.robertifyGuild?.toggles;
+        const obj = this.getRobertifyGuild()?.toggles;
         if (!obj)
             return false;
         switch (toggle) {
@@ -287,9 +287,9 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
                 return logToggles[innerToggle as keyof GuildLogToggles] || false;
             }
             case "autoplay":
-                return this.opts.robertifyGuild?.autoplay || false;
+                return this.getRobertifyGuild()?.autoplay || false;
             case "twenty_four_seven_mode":
-                return this.opts.robertifyGuild?.twenty_four_seven_mode || false;
+                return this.getRobertifyGuild()?.twenty_four_seven_mode || false;
             default:
                 return obj[toggle] || false;
         }
@@ -302,19 +302,19 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
             case "dj_toggles": {
                 if (!innerToggle) return;
 
-                const obj = this.opts.robertifyGuild?.toggles;
+                const obj = this.getRobertifyGuild()?.toggles;
                 if (!obj) return;
 
                 if (!(innerToggle in obj.dj_toggles)) return;
                 return this.setCurrentData(prev => {
-                    if (!prev) return;
+                    if (!prev?.toggles) return;
                     return ({
                         ...prev,
                         toggles: {
                             ...prev.toggles,
                             dj_toggles: {
-                                ...prev.toggles.dj_toggles,
-                                [innerToggle as keyof GuildDJToggles]: !prev.toggles.dj_toggles[innerToggle as keyof GuildDJToggles]
+                                ...prev.toggles?.dj_toggles,
+                                [innerToggle as keyof GuildDJToggles]: !prev.toggles?.dj_toggles[innerToggle as keyof GuildDJToggles]
                             }
                         }
                     })
@@ -323,12 +323,12 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
             case "log_toggles": {
                 if (!innerToggle) return;
 
-                const obj = this.opts.robertifyGuild?.toggles;
+                const obj = this.getRobertifyGuild()?.toggles;
                 if (!obj) return;
 
                 if (!(innerToggle in (obj.log_toggles ?? this.genDefaultLogTogglesObject()))) return;
                 return this.setCurrentData(prev => {
-                        if (!prev) return;
+                        if (!prev?.toggles) return;
                         if (prev.toggles.log_toggles)
                             return ({
                                 ...prev,
@@ -378,7 +378,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
             }
             default: {
                 return this.setCurrentData(prev => {
-                    if (!prev) return;
+                    if (!prev?.toggles) return;
                     return ({
                         ...prev,
                         toggles: {
@@ -393,10 +393,10 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
 
     public addDJRole(id: string) {
         if (!this.setCurrentData) return;
-        if (!this.opts.canInteract) return;
+        if (!this.canInteract()) return;
 
         this.setCurrentData(prev => {
-            if (!prev) return;
+            if (!prev?.permissions) return;
             return ({
                 ...prev,
                 permissions: {
@@ -409,10 +409,10 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
 
     public removeDJRole(id: string) {
         if (!this.setCurrentData) return;
-        if (!this.opts.canInteract) return;
+        if (!this.canInteract()) return;
 
         this.setCurrentData(prev => {
-            if (!prev) return;
+            if (!prev?.permissions) return;
             return ({
                 ...prev,
                 permissions: {
@@ -441,7 +441,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
 
     public addLogChannel(id: string) {
         if (!this.setCurrentData) return;
-        if (!this.opts.canInteract) return;
+        if (!this.canInteract()) return;
 
         this.setCurrentData(prev => {
             if (!prev) return;
@@ -454,7 +454,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
 
     public setLocale(locale: LocaleString) {
         if (!this.setCurrentData) return;
-        if (!this.opts.canInteract) return;
+        if (!this.canInteract()) return;
 
         this.setCurrentData(prev => {
             if (!prev) return;
@@ -467,7 +467,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
 
     public setTheme(theme: ThemeString) {
         if (!this.setCurrentData) return;
-        if (!this.opts.canInteract) return;
+        if (!this.canInteract()) return;
 
         this.setCurrentData(prev => {
             if (!prev) return;
@@ -484,12 +484,12 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
 
     private addRestrictedChannel(id: string, channelType: 'text' | 'voice') {
         if (!this.setCurrentData) return;
-        if (!this.opts.canInteract) return;
+        if (!this.canInteract()) return;
 
         switch (channelType) {
             case "text": {
                 this.setCurrentData(prev => {
-                    if (!prev) return;
+                    if (!prev?.restricted_channels) return;
                     return ({
                         ...prev,
                         restricted_channels: {
@@ -502,7 +502,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
             }
             case "voice": {
                 this.setCurrentData(prev => {
-                    if (!prev) return;
+                    if (!prev?.restricted_channels) return;
                     return ({
                         ...prev,
                         restricted_channels: {
@@ -518,12 +518,12 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
 
     private removeRestrictedChannel(id: string, channelType: 'text' | 'voice') {
         if (!this.setCurrentData) return;
-        if (!this.opts.canInteract) return;
+        if (!this.canInteract()) return;
 
         switch (channelType) {
             case "text": {
                 this.setCurrentData(prev => {
-                    if (!prev) return;
+                    if (!prev?.restricted_channels) return;
                     return ({
                         ...prev,
                         restricted_channels: {
@@ -536,7 +536,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
             }
             case "voice": {
                 this.setCurrentData(prev => {
-                    if (!prev) return;
+                    if (!prev?.restricted_channels) return;
                     return ({
                         ...prev,
                         restricted_channels: {
@@ -560,7 +560,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
 
     public generateThemesContent(): SelectMenuContent[] {
         const isThemeSelected = (theme: string): boolean => {
-            return this.opts.robertifyGuild?.theme === theme.toLowerCase().replaceAll(/\s/g, "_");
+            return this.getRobertifyGuild()?.theme === theme.toLowerCase().replaceAll(/\s/g, "_");
         }
 
         const themes = [
@@ -581,7 +581,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
         }
 
         const isSelected = (locale: Locale) => {
-            return this.opts.robertifyGuild?.locale === locale.locale;
+            return this.getRobertifyGuild()?.locale === locale.locale;
         }
 
         const locales: Locale[] = [
@@ -624,11 +624,11 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
     }
 
     public generateRolesContent(selectedKey?: keyof RobertifyGuild): SelectMenuContent[] {
-        if (!this.opts.discordGuild?.roles) return [];
+        if (!this.getDiscordGuild()?.roles) return [];
         const isRoleSelected = (role: DiscordRole): boolean => {
             if (!selectedKey) return false;
-            if (!this.opts.robertifyGuild) return false;
-            const obj = this.opts.robertifyGuild[selectedKey];
+            if (!this.getRobertifyGuild()) return false;
+            const obj = this.getRobertifyGuild()?.[selectedKey];
             if (!obj) return false;
 
             switch (selectedKey) {
@@ -641,11 +641,11 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
             }
         }
 
-        return this.opts.discordGuild?.roles.map<SelectMenuContent>(role => ({
+        return this.getDiscordGuild()?.roles.map<SelectMenuContent>(role => ({
             label: role.name,
             value: role.id,
             selected: isRoleSelected(role)
-        }));
+        })) ?? [];
     }
 
     private generateChannelContent(channelType: 'voice' | 'text', selectedKey?: keyof RobertifyGuild): SelectMenuContent[] {
@@ -654,7 +654,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
 
             switch (selectedKey) {
                 case "restricted_channels": {
-                    const obj = this.opts.robertifyGuild?.restricted_channels[channelType === 'voice' ? 'voice_channels' : 'text_channels'];
+                    const obj = this.getRobertifyGuild()?.restricted_channels?.[channelType === 'voice' ? 'voice_channels' : 'text_channels'];
                     if (!obj || obj.length === 0)
                         return false;
                     return obj.includes(channel.id);
@@ -662,7 +662,7 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
                 case "log_channel": {
                     if (channelType !== 'text')
                         return false;
-                    const obj = this.opts.robertifyGuild?.log_channel;
+                    const obj = this.getRobertifyGuild()?.log_channel;
                     if (!obj)
                         return false;
                     return obj === channel.id;
@@ -691,12 +691,12 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
     }
 
     private extractChannelsWithCategories(channelType: 'voice' | 'text') {
-        if (!this.opts.guildChannels) return [];
+        if (!this.getGuildChannels()) return [];
 
-        const noCategoryChannels = this.opts.guildChannels?.filter(channel => !channel.parent_id && (channel.type === (channelType === 'voice' ? 2 : 0)))
+        const noCategoryChannels = this.getGuildChannels()?.filter(channel => !channel.parent_id && (channel.type === (channelType === 'voice' ? 2 : 0))) ?? []
 
         return [
-            ...this.opts.guildChannels?.filter(channel => channel.type === 4)
+            ...this.getGuildChannels()?.filter(channel => channel.type === 4)
                 .map(category => {
                     return {
                         name: category.name,
@@ -706,10 +706,10 @@ export default class DashboardGeneralHandler extends AbstractDashboardHandler{
                 .map(category => {
                     return {
                         category: category.name,
-                        channels: this.opts.guildChannels?.filter(channel => (channel.type === (channelType === 'voice' ? 2 : 0)) && channel.parent_id === category.id)
+                        channels: this.getGuildChannels()?.filter(channel => (channel.type === (channelType === 'voice' ? 2 : 0)) && channel.parent_id === category.id)
                     }
                 })
-                .filter(categoryObj => categoryObj.channels?.length !== 0),
+                .filter(categoryObj => categoryObj.channels?.length !== 0) ?? [],
             {
                 category: undefined,
                 channels: [...noCategoryChannels]
