@@ -1,0 +1,45 @@
+import {
+    Callout
+} from "nextra-theme-docs";
+
+# Reminders
+
+Robertify implements an interface for the bot to regular give you reminders at the time you set it.
+
+<Callout type='warning'>
+    The timezone the bot uses is EST, so keep that in mind when making your reminders.
+</Callout>
+
+## Creating a Reminder
+
+Reminders can be sent in either a specific text channel in a server, or you cna have them sent in your direct messages.
+In order to create a reminder you must run the `reminders add` command with the reminder and the time the bot should remind you.
+If you would like the reminder to be sent in a specific channel, you must mention the channel in the command; if not you can leave the channel option blank.
+
+<Callout type='info'>
+    The format of the time is `HH:MM` where `HH` is the hour and `MM` is the minute.
+    You can provider either 12 or 24 hour time.
+</Callout>
+
+For example, if you wanted to be reminded at 12:00 PM in a specific channel you would run the following command:
+
+```txt
+> /reminders add [time:]12:00PM [reminder:]This is my reminder [channel:]#general
+```
+
+If you would like that same reminder to be in your direct messages you would run the following command:
+
+```txt
+> /reminders add [time:]12:00PM [reminder:]This is my reminder
+```
+
+## Viewing Reminders
+
+You can view all your reminders you've set in a server by running the `reminders list` command.
+It is from here you will be able to see your reminder IDs.
+
+## Removing Reminders
+
+You can delete a reminder by running the `reminders remove` command with the ID of the command passed as a required argument.
+
+If you would like to remove all your reminders you can run the `reminders clear` command.
