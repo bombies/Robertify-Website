@@ -71,7 +71,6 @@ export default function DashboardContextWrapper(props: Props) {
 
     useEffect(() => {
         appDispatch(setDashboardState(guildDashboardState));
-        console.log('redux state changed', guildDashboardState);
     }, [guildDashboardState, setDashboardState, appDispatch])
 
     const session = useSession();
@@ -113,7 +112,6 @@ export default function DashboardContextWrapper(props: Props) {
     const guildIcon = discordGuildInfo?.icon ? `https://cdn.discordapp.com/icons/${discordGuildInfo?.id}/${discordGuildInfo?.icon}.webp?size=512` : 'https://i.imgur.com/k14Qfh5.png';
 
     useEffect(() => {
-        console.log('got some info!');
         setGuildGuildDashboardState(prev => {
             let validationOverrides: Partial<DashboardState> | undefined = undefined;
 

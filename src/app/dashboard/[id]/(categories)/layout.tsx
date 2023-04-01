@@ -29,7 +29,6 @@ const GetCurrentBotInfo = (session: Session | null, id: string) => {
 
 export default function DashboardCategoryLayout({ children }: Props) {
     const [dashboardInfo, setDashboardInfo] = useGuildDashboard();
-    console.log('dash cat layout info', dashboardInfo);
     const { value: discordGuild, loading: discordGuildLoading } = dashboardInfo.discordGuild;
     const { value: discordGuildChannels, loading: discordGuildChannelsLoading } = dashboardInfo.discordGuildChannels;
     let { value: robertifyGuild, loading: robertifyGuildLoading } = dashboardInfo.robertifyGuild;
@@ -51,8 +50,6 @@ export default function DashboardCategoryLayout({ children }: Props) {
     const canInteract = (!!dashboardInfo.userHasPermission.value) && !isSaving && !isRefreshing;
 
     useEffect(() => {
-        console.log('canInteract changed, updating.');
-
         setDashboardInfo(prev => ({
             ...prev,
             canInteract
@@ -101,7 +98,6 @@ export default function DashboardCategoryLayout({ children }: Props) {
 
     useEffect(() => {
         const b = compareData(currentData, robertifyGuild);
-        console.log(b, currentData, robertifyGuild);
         setChangesMade(b);
     }, [currentData, robertifyGuild]);
 
@@ -215,8 +211,6 @@ export default function DashboardCategoryLayout({ children }: Props) {
                 })
         })
     }
-
-    console.log('can interact', canInteract);
 
     return (
         <div>

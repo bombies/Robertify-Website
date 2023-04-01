@@ -45,8 +45,6 @@ export default function DashboardGeneralContext() {
     const {currentData, canInteract: stateCanInteract, session} = dashboardInfo
     const [, startTransition] = useTransition();
 
-    console.log('general context can interact', stateCanInteract);
-
     const setCurrentData = (cb: (prev?: Partial<RobertifyGuild>) => Partial<RobertifyGuild> | undefined) => {
         setDashboardInfo(prev => {
             const newData = cb(prev.currentData);
@@ -197,8 +195,6 @@ export default function DashboardGeneralContext() {
                 });
         })
     }
-
-    console.log('context info', dashboardInfo)
 
     return (
         <DashboardContainer>
