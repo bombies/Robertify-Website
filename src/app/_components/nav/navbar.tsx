@@ -62,7 +62,7 @@ export default function NavBar() {
                         <HyperLink href={process.env.NEXT_PUBLIC_DISCORD_INVITE_LINK || ''} >INVITE</HyperLink>
                         <HyperLink href='/commands' newTab={false}>COMMANDS</HyperLink>
                         <HyperLink href='/vote' newTab={false}>VOTE</HyperLink>
-                        <HyperLink href='/support' newTab={false}>SUPPORT</HyperLink>
+                        <HyperLink href='/docs' newTab={false}>SUPPORT</HyperLink>
                     </div>
                     <div className='flex gap-4'>
                         <DarkModeSwitcher/>
