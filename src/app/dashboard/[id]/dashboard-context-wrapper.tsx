@@ -39,19 +39,27 @@ async function fetcher<T>([url, session]: [url: string, session: Session | null]
 }
 
 const useDiscordGuildInfo = (id: string, session: Session | null) => {
-    return useSWR([`/api/discord/guilds/${id}`, session], fetcher<DiscordGuild>);
+    return useSWR([`/api/discord/guilds/${id}`, session], fetcher<DiscordGuild>, {
+        revalidateOnFocus: false,
+    });
 }
 
 const useDiscordGuildChannels = (id: string, session: Session | null) => {
-    return useSWR([`/api/discord/guilds/${id}/channels`, session], fetcher<DiscordGuildChannel[]>);
+    return useSWR([`/api/discord/guilds/${id}/channels`, session], fetcher<DiscordGuildChannel[]>, {
+        revalidateOnFocus: false,
+    });
 }
 
 const useBotGuildInfo = (id: string, session: Session | null) => {
-    return useSWR([`/api/bot/guilds/${id}`, session], fetcher<RobertifyGuild>);
+    return useSWR([`/api/bot/guilds/${id}`, session], fetcher<RobertifyGuild>, {
+        revalidateOnFocus: false,
+    });
 }
 
 const useGuildMember = (server_id: string, session: Session | null) => {
-    return useSWR([`/api/discord/guilds/${server_id}/member`, session], fetcher<DiscordGuildMember>);
+    return useSWR([`/api/discord/guilds/${server_id}/member`, session], fetcher<DiscordGuildMember>, {
+        revalidateOnFocus: false,
+    });
 }
 
 const GuildDashboardContext = React.createContext<[DashboardState, React.Dispatch<React.SetStateAction<DashboardState>>] | undefined>(undefined);

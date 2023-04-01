@@ -28,7 +28,8 @@ export default function Providers({ children, session }: Props) {
             <GoogleAnalytics trackPageViews />
             <SWRConfig
                 value={{
-                    refreshInterval: 60 * 1000
+                    refreshInterval: 60 * 1000,
+                    revalidateOnFocus: false,
                 }}
             >
                 <SSRProvider>
