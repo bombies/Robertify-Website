@@ -12,14 +12,23 @@ Robertify implements an interface for the bot to regular give you reminders at t
 
 ## Creating a Reminder
 
-Reminders can be sent in either a specific text channel in a server, or you cna have them sent in your direct messages.
+Reminders can be sent in either a specific text channel in a server, or you can have them sent in your direct messages.
 In order to create a reminder you must run the `reminders add` command with the reminder and the time the bot should remind you.
-If you would like the reminder to be sent in a specific channel, you must mention the channel in the command; if not you can leave the channel option blank.
+- If you would like the reminder to be sent in a specific channel, you must mention the channel in the command; if not you can leave the channel option blank.
+
+- If you would like the reminder to be sent in a specific timezone, you may add the `timezone` option to your argument list.
 
 <Callout type='info'>
     The format of the time is `HH:MM` where `HH` is the hour and `MM` is the minute.
     You can provider either 12 or 24 hour time.
 </Callout>
+
+<Callout type='info'>
+    Valid timezones include: `UTC`, `EST`, `CST`, `MST`, `PST`, `GMT`, `BST`, `CET`, `EET`, `IST`, `JST`, `NZST`, `AEST`, `ACST`, `AWST`
+</Callout>
+
+
+
 
 For example, if you wanted to be reminded at 12:00 PM in a specific channel you would run the following command:
 
@@ -31,6 +40,12 @@ If you would like that same reminder to be in your direct messages you would run
 
 ```txt
 > /reminders add [time:]12:00PM [reminder:]This is my reminder
+```
+
+If you would like that same reminder to be in your direct messages in a different timezone you would run the following command:
+
+```txt
+> /reminders add [time:]12:00PM [reminder:]This is my reminder [timezone:]EST
 ```
 
 ## Viewing Reminders
