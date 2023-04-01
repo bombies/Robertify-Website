@@ -17,7 +17,7 @@ export default {
         key: 'docs-banner',
         text: 'Robertify Docs v.0.0.1 now available! 🎉'
     },
-    docsRepositoryBase: 'https://github.com/bombies/Robertify-Website/tree/features/docs',
+    docsRepositoryBase: 'https://github.com/bombies/Robertify-Website/tree/dev',
     darkMode: true,
     primaryHue: 136,
     footer: {
