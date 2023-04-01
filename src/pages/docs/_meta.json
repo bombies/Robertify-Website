@@ -29,9 +29,5 @@
   },
   "eightball": "8 Ball",
   "polls": "Polls",
-  "reminders":  "Reminders",
-  "-----": {
-    "type": "separator",
-    "title": "Other"
-  }
+  "reminders":  "Reminders"
 }

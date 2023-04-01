@@ -1,1 +1,23 @@
+import {
+    Callout
+} from "nextra-theme-docs";
+
 # Polls
+
+<Callout type='warning'>
+    All the commands in this section are restricted to people with the `ROBERTIFY_POLLS` command.
+</Callout>
+
+Robertify includes its own polls feature where you can create polls for your community to vote on. 
+
+## Starting a Poll
+
+You can start a poll by running the `polls` command and providing a question as the required argument.
+You are able to provided up to 9 different choices and an optional duration. So, for example, if you would like
+to start a poll asking the question with 3 choices and ends in 12 hours the command would be:
+
+```txt
+> /polls [question]:What is love? [choice1]:Baby don't hurt me [choice2]:Don't hurt me [choice3]:No more [duration]:12h
+```
+
+![Example](https://i.imgur.com/AjWXV1a.gif)

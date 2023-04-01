@@ -1,5 +1,3 @@
-import GenericImage from "./src/app/_components/GenericImage";
-
 export default {
     useNextSeoProps() {
         return {

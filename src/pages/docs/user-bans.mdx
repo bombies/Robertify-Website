@@ -1,1 +1,34 @@
+import {
+    Callout
+} from "nextra-theme-docs";
+
 # Ban Users
+
+If someone is abusing the bot in your server there isn't a need to worry. 
+You can ban them from using the bot with the `ban` command. You can unban them with the `unban` command.
+
+<Callout type='warning'>
+    All commands under this section are **admin-only**.
+</Callout>
+
+## Banning Users
+
+As was said above, you can ban a user using the `ban` command. This command accepts the `user` as the required argument.
+You can provide an optional duration for the ban. For example, if I would like to ban the user NaughtyUser#0000 **permanently** I would run the
+following command.
+
+```txt
+> /ban NaughtyUser#0000
+```
+
+If I would like to ban the user NaughtyUser#0000 for **1 day**, I would run the following command.
+
+```txt
+> /ban NaughtyUser#0000 1d
+```
+
+## Unbanning Users
+
+You can unban a user using the `unban` command. This command accepts the `user` as the required argument.
+
+![Example](https://i.imgur.com/z5SBGiW.gif)
