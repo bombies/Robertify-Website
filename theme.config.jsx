@@ -1,7 +1,9 @@
 export default {
     useNextSeoProps() {
         return {
-            titleTemplate: 'Robertify - %s'
+            titleTemplate: 'Robertify - %s',
+            description: 'The official documentation for the Robertify Discord bot.',
+            color: "green",
         }
     },
     logo: (
