@@ -71,11 +71,10 @@ export async function GET(request: Request) {
         paramName: 'requester',
     })
 
-    const isLiveStream = Boolean(getParamFromSearch({
+    const isLiveStream = getParamFromSearch({
         searchParams: searchParams,
         paramName: 'livestream',
-        defaultResult: 'false'
-    }))
+    }) === 'true';
 
     const userObj: Requester = user ? JSON.parse(user) : undefined;
 
@@ -148,7 +147,8 @@ export async function GET(request: Request) {
                                                 <div style={{ width: `${(Number(currentTime) / Number(duration)) * 100}%` }} tw='flex h-full bg-white rounded-full'></div>
                                             </div>
                                             <p style={{ fontFamily: '"InterRegular' }}>{new Date(Number(duration)).toISOString().slice(14, 19)}</p>
-                                        </div> :
+                                        </div>
+                                        :
                                         <div tw='flex w-full justify-between text-white'>
                                             <p style={{
                                                 fontFamily: '"InterRegular',
