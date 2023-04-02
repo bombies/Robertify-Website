@@ -94,7 +94,7 @@ export default function DashboardCategoryLayout({ children }: Props) {
         ) {
             return router.push(inviteLink);
         }
-    }, [discordGuild, robertifyGuild, discordGuildChannels, inviteLink, router, session.data, session.status])
+    }, [discordGuild, robertifyGuild, discordGuildChannels, discordGuildLoading, robertifyGuildLoading, discordGuildChannelsLoading,  inviteLink, router, session.data, session.status])
 
     useEffect(() => {
         const b = compareData(currentData, robertifyGuild);

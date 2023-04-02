@@ -31,6 +31,7 @@ async function fetcher<T>([url, session]: [url: string, session: Session | null]
         return (await WebClient.getInstance(session?.user).get(url)).data.data;
     } catch (e) {
         if (e instanceof AxiosError) {
+            console.error(e);
             if (e.response?.status === 404 || e.response?.status === 403)
                 return undefined;
         }
@@ -98,16 +99,6 @@ export default function DashboardContextWrapper(props: Props) {
         isLoading: guildMemberLoading,
         isValidating: guildMemberValidating
     } = useGuildMember(props.id, session.data);
-
-    // @ts-ignore
-    if (discordGuildInfo?.code === 10004)
-        discordGuildInfo = undefined;
-    // @ts-ignore
-    if (discordGuildChannelInfo?.code === 50001)
-        discordGuildChannelInfo = undefined;
-    // @ts-ignore
-    if (botGuildInfo?.statusCode === 404)
-        botGuildInfo = undefined
 
     const guildIcon = discordGuildInfo?.icon ? `https://cdn.discordapp.com/icons/${discordGuildInfo?.id}/${discordGuildInfo?.icon}.webp?size=512` : 'https://i.imgur.com/k14Qfh5.png';
 
