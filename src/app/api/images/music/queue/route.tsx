@@ -78,6 +78,11 @@ export async function GET(request: Request) {
         })}`,
     });
 
+    const nextUpImage = getParamFromSearch({
+        searchParams: searchParams,
+        paramName: 'next_img'
+    });
+
     try {
         const jsonTracks = JSON.parse(tracks);
 
@@ -125,11 +130,22 @@ export async function GET(request: Request) {
         return new ImageResponse(
             (
                 <div tw='flex flex-col bg-neutral-800 h-full w-full p-6'>
+                    {
+                        nextUpImage &&
+                        <img style={{
+                            objectFit: 'cover',
+                            filter: 'blur(15px) brightness(70%)',
+                            zIndex: '0',
+                            height: '200%',
+                            width: '200%',
+                        }} tw='absolute' src={nextUpImage} width='100%' height='200%' alt='' />
+                    }
+
                     <h1 tw='flex items-center mb-6'>
                         <span tw='text-6xl text-white mr-5'>Queue</span>
                         <span tw='text-3xl text-green-400'>{`(Page ${jsonTracks.page})`}</span>
                     </h1>
-                    <div tw='flex flex-col bg-neutral-900 rounded-2xl h-7/8 w-full p-6'>
+                    <div tw='flex flex-col bg-neutral-900/50 rounded-2xl h-7/8 w-full p-6'>
                         <table tw='text-white w-full h-full'>
                             <tbody tw='flex flex-col w-full'>
                             {generateTrackList}
