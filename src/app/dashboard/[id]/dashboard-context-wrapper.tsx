@@ -31,7 +31,7 @@ async function fetcher<T>([url, session]: [url: string, session: Session | null]
         return (await WebClient.getInstance(session?.user).get(url)).data.data;
     } catch (e) {
         if (e instanceof AxiosError) {
-            if (e.response?.status === 404)
+            if (e.response?.status === 404 || e.response?.status === 403)
                 return undefined;
         }
         console.error(e);

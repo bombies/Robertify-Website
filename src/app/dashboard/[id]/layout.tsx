@@ -16,7 +16,7 @@ const getDiscordGuildInfo = async (id: string, session: Session | null) => {
         return await fetchDiscordGuildInfo(id, session?.user);
     } catch (e) {
         if (e instanceof AxiosError) {
-            if (e.response?.status === 404)
+            if (e.response?.status === 404 || e.response?.status === 403)
                 return undefined;
         }
     }
