@@ -84,7 +84,7 @@ export default function DashboardCategoryLayout({ children }: Props) {
         if (session.status === 'loading')
             return;
 
-        if (session.status === 'unauthenticated' || !session.data)
+        if (session.status === 'unauthenticated')
             signIn('discord', {
                 callbackUrl: `/dashboard/${dashboardInfo.id}/general`
             })
