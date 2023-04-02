@@ -95,14 +95,14 @@ export type DiscordGuildChannel = {
     default_forum_layout?: number,
 }
 
-export type DedicatedChannel = {
+export type RequestChannel = {
     message_id?: string,
     channel_id?: string,
-    config?: DedicatedChannelConfig,
+    config?: RequestChannelConfig,
     og_announcement_toggle?: boolean,
 };
 
-export type DedicatedChannelConfig = {
+export type RequestChannelConfig = {
     disconnect: boolean,
     play_pause: boolean,
     previous: boolean,
@@ -230,7 +230,7 @@ export type ThemeString =
     | "baby_blue"
 
 export type RobertifyGuild = {
-    dedicated_channel: DedicatedChannel;
+    dedicated_channel: RequestChannel;
     restricted_channels: RestrictedChannels;
     prefix: string;
     permissions: GuildPermissions;
@@ -294,7 +294,7 @@ export function isServerAdmin(guild: DiscordUserGuild): boolean {
 }
 
 export function isGuildAdmin(member: DiscordGuildMember, guildInfo: DiscordGuild): boolean {
-    if (!member) return false;
+    if (!member || !guildInfo) return false;
 
     if (member.user && (member.user.id === guildInfo.owner_id))
         return true;
@@ -305,6 +305,9 @@ export function isGuildAdmin(member: DiscordGuildMember, guildInfo: DiscordGuild
 
     const memberRoles = member.roles
     if (!memberRoles || memberRoles.length == 0)
+        return false;
+
+    if (!guildInfo.roles)
         return false;
 
     const roleDetails = guildInfo.roles.filter(role => memberRoles.some(r => r === role.id));

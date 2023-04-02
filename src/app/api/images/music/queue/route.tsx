@@ -5,24 +5,18 @@ export const config = {
     runtime: 'edge',
 };
 
-const getInterBold = fetch(new URL('../../../../../../assets/fonts/inter/Inter-Bold.ttf', import.meta.url).toString())
+const getInterBold = fetch(new URL('../../../../../../public/fonts/inter/Inter-Bold.ttf', import.meta.url).toString())
     .then(res => res.arrayBuffer());
 
-const getInterRegular = fetch(new URL('../../../../../../assets/fonts/inter/Inter-Regular.ttf', import.meta.url).toString())
+const getInterRegular = fetch(new URL('../../../../../../public/fonts/inter/Inter-Regular.ttf', import.meta.url).toString())
     .then(res => res.arrayBuffer());
 
-const getInterLight = fetch(new URL('../../../../../../assets/fonts/inter/Inter-Light.ttf', import.meta.url).toString())
-    .then(res => res.arrayBuffer());
-
-const getInterMedium = fetch(new URL('../../../../../../assets/fonts/inter/Inter-Medium.ttf', import.meta.url).toString())
+const getInterMedium = fetch(new URL('../../../../../../public/fonts/inter/Inter-Medium.ttf', import.meta.url).toString())
     .then(res => res.arrayBuffer());
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url ?? '');
-    const InterBold = await getInterBold;
-    const InterRegular = await getInterRegular;
-    const InterMedium = await getInterMedium;
-    const InterLight = await getInterLight;
+    const [ InterBold, InterRegular, InterMedium ] = await Promise.all([getInterBold, getInterRegular, getInterMedium]);
 
     const tracks = getParamFromSearch({
         searchParams: searchParams,
@@ -152,22 +146,20 @@ export async function GET(request: Request) {
                     {
                         name: 'InterBold',
                         data: InterBold,
-                        style: 'normal'
+                        style: 'normal',
+                        weight: 700
                     },
                     {
                         name: 'InterRegular',
                         data: InterRegular,
-                        style: 'normal'
+                        style: 'normal',
+                        weight: 400
                     },
                     {
                         name: 'InterMedium',
                         data: InterMedium,
-                        style: 'normal'
-                    },
-                    {
-                        name: 'InterLight',
-                        data: InterLight,
-                        style: 'normal'
+                        style: 'normal',
+                        weight: 500
                     },
                 ]
             }

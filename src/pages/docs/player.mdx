@@ -1,0 +1,156 @@
+import {
+    Callout
+} from "nextra-theme-docs";
+
+# Controlling the Player
+
+With Robertify, you are given a wide range of commands to control the player. This is all for the purpose of making your experience with Robertify a true personal and customized once.
+
+<Callout type='info'>
+    All commands shown under this section are considered "Audio Commands". These commands can be toggled to be DJ only.
+</Callout>
+
+## Skipping a Track
+
+You can easily skip the current track being played by running the `/skip` command.
+
+### Skipping to a Specific Track
+
+You can skip to a specific track by running the `/skip` command with the ID of the track to skip to as the argument.
+
+<Callout type='info'>
+    You can find the ID of tracks by looking in the first column in the <b>queue</b>.
+</Callout>
+
+![Example](https://i.imgur.com/zOObz9l.gif)
+
+### Vote Skips
+
+To enable vote skips the `skip` command must be set to a DJ-only command and the `voteskips` toggle **must** be enabled.
+When a non-dj user attempts to skip a song, a prompt will come up requesting that users in the voice channel vote to skip.
+The track will be skipped when more than 50% of the channel has voted to do so.
+
+<Callout type='info'>
+    - To learn more about setting DJs, click [here](/docs/perms#the-dj-command).
+    - To learn more about setting DJ toggles, click [here](/docs/toggles#dj-toggles).
+    - To learn more about enabling the `voteskips` toggle, click [here](/docs/toggles#the-main-toggles).
+</Callout>
+<Callout type='info'>
+    DJs will be able to skip the tracks without the need for a vote.
+</Callout>
+
+## Stopping a Track
+
+You can stop a track by running the `/stop` command. This will not only stop the currently played track, but will also clear the queue.
+
+## Clearing the Queue
+
+You can clear the queue by running the `/clear` command.
+
+## Pausing Tracks
+
+You can pause the track being currently played by running the `/pause` command.
+
+## Resuming Tracks
+
+You can resume the currently paused track by running the `/resume` command.
+
+## Moving Tracks
+
+You can move tracks by locating the ID of the track you want to move, then the position you want to move it to in the queue. Once you have done this, you can run the `/move` command.
+
+<Callout type='warning'>
+    Please note that when you move tracks, the positioning of the queue will change, meaning the IDs will change. Please be wary of this when attempting to move another track.
+</Callout>
+
+![Example 2](https://i.imgur.com/HELcTZT.gif)
+
+## Rewinding Tracks
+
+You can rewind a track to the beginning by running the `/rewind` command.
+
+## Going to a Previous Track
+
+You can go back to the track previously played by running the `/previous` command.
+
+## Removing Tracks
+
+You can remove a specific track by running the `/remove` command with the ID of the track as the argument.
+For example, if you would like to remove a track with the ID 1 you would run the following command:
+
+```txt
+> /remove 1
+```
+
+## Fast-Forwarding Tracks
+
+You can jump to a specific place in the track by running the `/seek` or `/jump` command.
+
+### Seeking
+
+This command allows you to jump to a <b>time-specific position</b> in the current track. The arguments are in the form `hours minutes seconds`.
+
+For example, if you want to skip to the position 2:34 in a song, the command would look like: `/seek 0 2 34`.
+
+![Example](https://i.imgur.com/eDcF6BK.gif)
+
+### Jumping
+
+If you don't want to provide an absolute position, the `jump` command allows you to fast-forward relative to the current position. The argument it accepts are seconds.
+
+For example, if you want to jump 30 seconds from the current position in the song, the command would look like: `/jump 30`.
+
+![Example](https://i.imgur.com/CZKxnMe.gif)
+
+## Looping Tracks
+
+You can easily set a track to be looped by running the `/loop track` command. Once you have set a track to loop, it will continue looping until you have toggled it off, the player has been stopped, the bot has been disconnected or disabling the loop.
+You can disable the loop by running the `/loop track` command again.
+
+### Looping the Queue
+
+You can loop an entire queue by running the `/loop queue` command. Once you have set a queue to loop, it will continue looping until you have toggled it off, the player has been stopped, the bot has been disconnected or disabling the loop.
+You can disable the loop by running the `/loop queue` command again.
+
+## Force Joins
+
+You can force the bot to join your current voice channel by running the `/join` command.
+
+## Force Disconnects
+
+You can force the bot to leave your current voice channel by running the `/disconnect` command.
+
+## Changing Global Volume
+
+You can change the volume of the bot by running the `/volume` command. This command accepts an argument that accepts any number in the range `0-100`, with `0` being silent and `100` being the loudest.
+
+## Filters
+
+Robertify has a number of filters you can play around with. These include:
+- Karaoke
+- Tremolo
+- Vibrato
+- 8d
+- Nightcore
+
+Each one of these can be toggled on with the command format `/<filter>`.
+For example, if you would like to enable the 8d filter you would run the `/8d` command. You would run the same command to toggle the filter off.
+
+## 24/7 Mode
+
+By default, Robertify is set to disconnect from a voice channel after 5 minutes of inactivity. If you would like to turn this feature off, you can enable 24/7 mode which allows the bot to stay in a voice channel forever until it's disconnected.
+
+You can enable/disable 24/7 mode by running the `/247` command.
+<Callout type='warning'>
+    On restarts, the bot will be disconnected from your voice channel.
+</Callout>
+
+## Auto Play
+
+Auto Play enables the bot to add recommended tracks to your queue based off the last track it played. The bot will queue up to 10 tracks and keep doing so once it's reached the end of the queue.
+
+<Callout type='info'>
+    The feature is only enabled for **Spotify** tracks.
+</Callout>
+
+![Example](https://i.imgur.com/dvoIGj2.gif)

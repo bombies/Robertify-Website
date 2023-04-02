@@ -1,12 +1,14 @@
 'use client';
 
 type Props = {
-    size: number;
+    size: number,
+    className?: string,
+    centered?: boolean
 }
 
 export default function Spinner(props: Props) {
     return (
-        <div className="self-center" role="status">
+        <div className={`self-center ${props.centered ? 'mx-auto' : ''} ${props.className || ''}`} role="status">
             <div
                 style={{
                     width: props.size + 'rem',

@@ -1,0 +1,33 @@
+{
+  "index": "Introduction",
+  "discord-setup": "Discord Setup",
+  "web-setup": "Web Setup",
+  "-": {
+    "type": "separator",
+    "title": "Music Control"
+  },
+  "music": "Playing Music",
+  "player": "Controlling the Player",
+  "request-channel": "The Request Channel",
+  "--": {
+    "type": "separator",
+    "title": "Bot Control"
+  },
+  "logs": "Logging",
+  "toggles": "Toggles",
+  "restricted-channels": "Restricted Channels",
+  "locale": "Locale",
+  "---": {
+    "type": "separator",
+    "title": "User Management"
+  },
+  "perms": "Permissions",
+  "user-bans": "Ban Users",
+  "----": {
+    "type": "separator",
+    "title": "Miscellaneous Features"
+  },
+  "eightball": "8 Ball",
+  "polls": "Polls",
+  "reminders":  "Reminders"
+}

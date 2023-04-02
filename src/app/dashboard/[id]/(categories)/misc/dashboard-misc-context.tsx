@@ -1,34 +1,22 @@
 'use client';
 
 import DashboardContainer from "@/app/dashboard/[id]/(categories)/dashboard-container";
-import {useDashboardState} from "@/app/dashboard/[id]/(categories)/dashboard-state-context";
-import {useRouter} from "next/navigation";
-import {useMemo, useState, useTransition} from "react";
-import DashboardSection from "@/app/dashboard/[id]/(categories)/dashboard-section";
+import {useMemo, useState} from "react";
 import DashboardMiscHandler from "@/app/dashboard/[id]/(categories)/misc/dashboard-misc-handler";
-import Button from "@/components/button/Button";
-import {ButtonType} from "@/components/button/ButtonType";
-import {Input, Modal, Text} from "@nextui-org/react";
-import {sendToast} from "@/utils/client-utils";
+import {useGuildDashboard} from "@/app/dashboard/[id]/dashboard-context-wrapper";
 
 export default function DashboardMiscContext() {
-    const {
-        dashboardInfo,
-        session,
-        useCurrentData,
-        useChangesMade,
-        canInteract: stateCanInteract
-    } = useDashboardState();
-    const router = useRouter();
-    const [currentData, setCurrentData] = useCurrentData
-    const [, setChangesMade] = useChangesMade;
-    const [, startTransition] = useTransition();
+    const [dashboardInfo, setDashboardInfo] = useGuildDashboard();
+    const { currentData, canInteract: stateCanInteract } = dashboardInfo;
+    const {value: robertifyGuild, loading: robertifyGuildLoading} = dashboardInfo.robertifyGuild;
 
     const [addEightBallResponse, setAddEightBallResponse] = useState(false);
     const [proposedResponse, setProposedResponse] = useState('');
     const toggleEightBallModal = () => {
         setAddEightBallResponse(prev => !prev);
     }
+
+    const memoEightBallModalState = useMemo(() => addEightBallResponse, [addEightBallResponse]);
 
     const eightBallValidator = useMemo((): { text: string, color: 'primary' | 'error' | 'success' } => {
         if (!proposedResponse)
@@ -45,18 +33,18 @@ export default function DashboardMiscContext() {
 
     const handler = new DashboardMiscHandler({
             toggleEightBallModal,
-            addEightBallResponse,
+            addEightBallResponse: memoEightBallModalState,
             setAddEightBallResponse,
             proposedResponse,
             setProposedResponse,
             eightBallValidator
         },
         {
-            robertifyGuild: currentData,
-            discordGuild: dashboardInfo.discordGuild,
-            guildChannels: dashboardInfo.discordGuildChannels,
-            setCurrentData,
-            canInteract: stateCanInteract
+            robertifyGuild: currentData ?? robertifyGuild,
+            discordGuild: dashboardInfo.discordGuild.value,
+            guildChannels: dashboardInfo.discordGuildChannels.value,
+            setDashboardState: setDashboardInfo,
+            canInteract: (!!stateCanInteract)
         });
 
     return (

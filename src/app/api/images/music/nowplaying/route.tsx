@@ -1,14 +1,15 @@
-import {ImageResponse} from "@vercel/og";
+import { ImageResponse } from "@vercel/og";
 
 type ParamSearchObject = {
     searchParams: URLSearchParams,
     paramName: string,
     limit?: number,
-    defaultResult?: string
+    defaultResult?: string,
+    livestream?: boolean
 }
 
 export const getParamFromSearch = (options: ParamSearchObject): string => {
-    const {searchParams, paramName, limit, defaultResult} = options;
+    const { searchParams, paramName, limit, defaultResult } = options;
     const result = searchParams.get(paramName);
     return result?.slice(0, limit ?? result?.length) ?? (defaultResult ?? '');
 }
@@ -17,16 +18,13 @@ export const config = {
     runtime: 'edge',
 };
 
-const getInterBold = fetch(new URL('../../../../../../assets/fonts/inter/Inter-Bold.ttf', import.meta.url).toString())
+const getInterBold = fetch(new URL('../../../../../../public/fonts/inter/Inter-Bold.ttf', import.meta.url).toString())
     .then(res => res.arrayBuffer());
 
-const getInterRegular = fetch(new URL('../../../../../../assets/fonts/inter/Inter-Regular.ttf', import.meta.url).toString())
+const getInterRegular = fetch(new URL('../../../../../../public/fonts/inter/Inter-Regular.ttf', import.meta.url).toString())
     .then(res => res.arrayBuffer());
 
-const getInterLight = fetch(new URL('../../../../../../assets/fonts/inter/Inter-Light.ttf', import.meta.url).toString())
-    .then(res => res.arrayBuffer());
-
-const getInterMedium = fetch(new URL('../../../../../../assets/fonts/inter/Inter-Medium.ttf', import.meta.url).toString())
+const getInterMedium = fetch(new URL('../../../../../../public/fonts/inter/Inter-Medium.ttf', import.meta.url).toString())
     .then(res => res.arrayBuffer());
 
 type Requester = {
@@ -36,10 +34,7 @@ type Requester = {
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url ?? '');
-    const InterBold = await getInterBold;
-    const InterRegular = await getInterRegular;
-    const InterMedium = await getInterMedium;
-    const InterLight = await getInterLight;
+    const [InterBold, InterRegular, InterMedium] = await Promise.all([getInterBold, getInterRegular, getInterMedium]);
 
     const songTitle = getParamFromSearch({
         searchParams: searchParams,
@@ -76,6 +71,12 @@ export async function GET(request: Request) {
         paramName: 'requester',
     })
 
+    const isLiveStream = Boolean(getParamFromSearch({
+        searchParams: searchParams,
+        paramName: 'livestream',
+        defaultResult: 'false'
+    }))
+
     const userObj: Requester = user ? JSON.parse(user) : undefined;
 
     return new ImageResponse(
@@ -97,7 +98,7 @@ export async function GET(request: Request) {
                             }}
                             tw='flex flex-col text-white w-[78%]'
                         >
-                            <span style={{ fontFamily: '"InterRegular'}} tw='uppercase mb-2 text-lg'>Robertify is now playing</span>
+                            <span style={{ fontFamily: '"InterRegular' }} tw='uppercase mb-2 text-lg'>Robertify is now playing</span>
                             <span style={{
                                 fontFamily: '"InterBold"',
                                 textOverflow: 'ellipsis',
@@ -123,7 +124,7 @@ export async function GET(request: Request) {
                         userObj ?
                             <div tw='flex flex-col'>
                                 <div tw='flex'>
-                                    <p style={{ fontFamily: '"InterRegular'}} tw='text-white text-2xl mr-2'>Requested by {userObj.user_name}</p>
+                                    <p style={{ fontFamily: '"InterRegular' }} tw='text-white text-2xl mr-2'>Requested by {userObj.user_name}</p>
                                     <img
                                         style={{
                                             objectFit: 'cover',
@@ -138,12 +139,24 @@ export async function GET(request: Request) {
                                 </div>
                             </div>
                             :
-                            <div tw='flex w-full justify-between text-white'>
-                                <p style={{ fontFamily: '"InterRegular'}}>0:00</p>
-                                <div tw='flex w-3/4 self-center h-[.35rem] border-[0.25px] border-white rounded-full'>
-                                    <div style={{ width: `${(Number(currentTime) / Number(duration)) * 100}%`}} tw='flex h-full bg-white rounded-full'></div>
-                                </div>
-                                <p style={{ fontFamily: '"InterRegular'}}>{new Date(Number(duration)).toISOString().slice(14, 19)}</p>
+                            <div tw='flex'>
+                                {
+                                    !isLiveStream ?
+                                        <div tw='flex w-full justify-between text-white'>
+                                            <p style={{ fontFamily: '"InterRegular' }}>0:00</p>
+                                            <div tw='flex w-3/4 self-center h-[.35rem] border-[0.25px] border-white rounded-full'>
+                                                <div style={{ width: `${(Number(currentTime) / Number(duration)) * 100}%` }} tw='flex h-full bg-white rounded-full'></div>
+                                            </div>
+                                            <p style={{ fontFamily: '"InterRegular' }}>{new Date(Number(duration)).toISOString().slice(14, 19)}</p>
+                                        </div> :
+                                        <div tw='flex w-full justify-between text-white'>
+                                            <p style={{
+                                                fontFamily: '"InterRegular',
+                                                letterSpacing: '.75em'
+                                            }}>⏺️ LIVESTREAM</p>
+                                        </div>
+                                }
+
                             </div>
                     }
                 </div>
@@ -156,22 +169,20 @@ export async function GET(request: Request) {
                 {
                     name: 'InterBold',
                     data: InterBold,
-                    style: 'normal'
+                    style: 'normal',
+                    weight: 700
                 },
                 {
                     name: 'InterRegular',
                     data: InterRegular,
-                    style: 'normal'
+                    style: 'normal',
+                    weight: 400
                 },
                 {
                     name: 'InterMedium',
                     data: InterMedium,
-                    style: 'normal'
-                },
-                {
-                    name: 'InterLight',
-                    data: InterLight,
-                    style: 'normal'
+                    style: 'normal',
+                    weight: 500
                 },
             ]
         }

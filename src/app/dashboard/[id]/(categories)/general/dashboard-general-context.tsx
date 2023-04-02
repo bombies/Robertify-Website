@@ -18,9 +18,8 @@ import useSWRMutation from 'swr/mutation';
 import {sendToast} from "@/utils/client-utils";
 import {AxiosError} from "axios";
 import DashboardContainer from "@/app/dashboard/[id]/(categories)/dashboard-container";
-import {useDashboardState} from "@/app/dashboard/[id]/(categories)/dashboard-state-context";
-import {createReqChannel, deleteReqChannel} from "@/utils/api/api-methods";
 import WebClient from "@/utils/api/web-client";
+import {useGuildDashboard} from "@/app/dashboard/[id]/dashboard-context-wrapper";
 
 const CreateReqChannel = (session: Session | null, id: string) => {
     const mutator = async (url: string) => await WebClient.getInstance(session?.user).post(url);
@@ -32,21 +31,34 @@ const DeleteReqChannel = (session: Session | null, id: string) => {
     return useSWRMutation(`/api/bot/guilds/${id}/reqchannel`, mutator);
 }
 
-const hasReqChannel = (currentData?: RobertifyGuild): boolean => {
+const hasReqChannel = (currentData?: Partial<RobertifyGuild>): boolean => {
     if (!currentData) return false;
     return !!(currentData.dedicated_channel?.channel_id && currentData.dedicated_channel?.channel_id !== '-1');
 }
 
 export default function DashboardGeneralContext() {
-    const {
-        dashboardInfo,
-        session,
-        useCurrentData,
-        canInteract: stateCanInteract
-    } = useDashboardState();
+    const [dashboardInfo, setDashboardInfo] = useGuildDashboard();
+    const {value: discordGuild, loading: discordGuildLoading} = dashboardInfo.discordGuild;
+    const {value: robertifyGuild, loading: robertifyGuildLoading} = dashboardInfo.robertifyGuild;
+    const {value: discordGuildChannels, loading: discordGuildChannelsLoading} = dashboardInfo.discordGuildChannels;
     const router = useRouter();
-    const [currentData, setCurrentData] = useCurrentData
+    const {currentData, canInteract: stateCanInteract, session} = dashboardInfo
     const [, startTransition] = useTransition();
+
+    const setCurrentData = (cb: (prev?: Partial<RobertifyGuild>) => Partial<RobertifyGuild> | undefined) => {
+        setDashboardInfo(prev => {
+            const newData = cb(prev.currentData);
+            if (!newData)
+                return {
+                    ...prev,
+                    currentData: undefined
+                }
+            else return {
+                ...prev,
+                currentData: newData
+            }
+        })
+    }
 
     const {
         isMutating: isCreatingReqChannel,
@@ -59,12 +71,12 @@ export default function DashboardGeneralContext() {
         // @ts-ignore
     } = DeleteReqChannel(session.data, dashboardInfo.robertifyGuild?.server_id);
 
-    const canInteract = stateCanInteract && !isCreatingReqChannel && !isDeletingReqChannel;
+    const canInteract = (!!stateCanInteract) && !isCreatingReqChannel && !isDeletingReqChannel;
     const handler = new DashboardGeneralHandler({
-        robertifyGuild: currentData,
-        discordGuild: dashboardInfo.discordGuild,
-        guildChannels: dashboardInfo.discordGuildChannels,
-        setCurrentData,
+        robertifyGuild: currentData ?? robertifyGuild,
+        discordGuild: discordGuild,
+        guildChannels: discordGuildChannels,
+        setDashboardState: setDashboardInfo,
         canInteract
     });
 
@@ -90,7 +102,6 @@ export default function DashboardGeneralContext() {
                                 },
                             });
 
-                            dashboardInfo.robertifyGuild = ret;
                             return ret;
                         });
                         router.refresh();
@@ -139,7 +150,7 @@ export default function DashboardGeneralContext() {
                     setCurrentData(prevState => {
                         if (!prevState) return;
 
-                        const ret: RobertifyGuild = ({
+                        const ret: Partial<RobertifyGuild> = ({
                             ...prevState,
                             dedicated_channel: {
                                 ...prevState.dedicated_channel,
@@ -147,8 +158,6 @@ export default function DashboardGeneralContext() {
                                 message_id: '-1',
                             },
                         });
-
-                        dashboardInfo.robertifyGuild = ret;
                         return ret;
                     });
                     router.refresh();

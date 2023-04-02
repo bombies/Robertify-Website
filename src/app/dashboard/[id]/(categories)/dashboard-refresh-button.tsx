@@ -2,7 +2,7 @@
 
 import refreshIcon from "../../../../../public/refresh.svg";
 import Button from "@/components/button/Button";
-import {ButtonType} from "@/components/button/ButtonType";
+import { ButtonType } from "@/components/button/ButtonType";
 
 type Props = {
     refresh: () => void;
@@ -17,10 +17,14 @@ export default function DashboardRefreshButton(props: Props) {
             disabled={!props.canInteract}
             isWorking={props.isRefreshing}
             icon={refreshIcon}
+            cooldown={10}
             height={3}
             width={3}
             type={ButtonType.WARNING}
-            onClick={props.refresh}
+            onClick={() => {
+                if (!props.isRefreshing)
+                    props.refresh()
+            }}
         />
     )
 }

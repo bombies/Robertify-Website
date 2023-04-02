@@ -1,0 +1,113 @@
+import {Callout} from "nextra-theme-docs";
+
+# The Request Channel
+
+The request channel is the control panel for your player. From here you can have a dedicated channel that is kept clean to allow you to:
+- Play music
+- Control the player (Skip, pause, rewind tracks, disconnect the bot, etc...)
+- Easily set favourite tracks
+- Easily toggle filters
+
+<Callout type='error'>
+    Playing tracks by simply entering the link/name as a raw message in the request channel isn't supported with Robertify anymore. We are in the progress of restoring this feature.
+</Callout>
+
+![Request Channel](https://i.imgur.com/sSDPqig.png)
+
+## Setup
+
+Setting up the request channel takes minimal effort. You can do this through Discord or the [dashboard](https://robertify.me/dashboard).
+
+### Through Discord
+
+Setting up the request channel through discord can be done by running the `/setup` or `/requestchannel setup` command.
+This will create a channel titled `robertify-requests` at the top of your channel list. From this point you can move, rename and edit the permissions of the channel for other users.
+
+<Callout type='warning'>
+    Robertify **MUST** have access to the `Manage Channels` permission in order to create a request channel in your server.
+</Callout>
+
+![Example](https://i.imgur.com/qB3gemP.gif)
+
+### Through the Dashboard
+
+Setting up the request channel through the dashboard can be done through the simple click of a button.
+
+![Example](https://i.imgur.com/9J3xL5i.gif)
+
+## Using the Request Channel
+
+Using the request channel is as simple as clicking the buttons provided for you. The only time you have to touch your keyboard is when you want to play new music.
+
+The request channel buttons in sequential order are as follows:
+### Previous
+
+This buttons plays the previous track immediately.
+
+### Rewind
+
+This button rewinds the currently played track to the beginning.
+
+### Play and Pause
+
+This button resumes or pauses the currently played track.
+
+### Stop
+
+This button stops the currently played track and clears the queue.
+
+### Skip
+
+This buttons skips the currently played track.
+
+### Add Favourite Track
+
+This button adds the currently played track as a personal favourite song.
+
+### Loop Track / Queue
+
+This button loops the track or queue. The cycle is as follows:
+- Loop Track
+- Loop Queue
+- Disable loop
+
+Meaning on first click (loop disabled), the currently playing track will be looped. Another click will invoke the current queue being looped and disables the loop for the current track. Another click will disable looping in general.
+
+### Shuffle
+
+This button shuffles the current queue.
+
+### Disconnect
+
+This button disconnects the bot.
+
+
+![Example](https://i.imgur.com/gmI52KW.gif)
+
+## Configuring the Request Channel
+
+You are allowed to choose which buttons you want to be displayed in your request channel.
+This can either be done through commands or the dashboard
+
+### Through Commands
+
+You can edit your request channel by running the `/requestchannel edit` command.
+From here, you will be presented with a menu in which you can toggle which buttons you want to be visible.
+
+![Example](https://i.imgur.com/FFw8rKb.gif)
+
+### Through the Dashboard
+
+You can edit your request channel by clicking on the buttons you want to enable/disable in the `Request Channel` section.
+You must have an existing request channel to view this. Disabled buttons will be darker than enabled buttons.
+
+![Example](https://i.imgur.com/uAledfg.gif)
+
+## Deleting the Request Channel
+
+You can delete the request channel by either:
+- The default delete channel mechanism on discord
+- The "Delete Request Channel" button on the dashboard.
+
+![Example](https://i.imgur.com/hKV9t8k.png)
+![Example](https://i.imgur.com/o0Qo4Fd.png)

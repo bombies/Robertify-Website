@@ -13,7 +13,6 @@ class WebClient {
         this.instance = axios.create({
             headers: {
                 Accept: 'application/json',
-                "User-Agent": 'Robertify Website (https://github.com/bombies/Robertify-Website)'
             },
             timeout: 5 * 1000,
             ...options,
@@ -21,11 +20,13 @@ class WebClient {
         });
 
         this.instance.interceptors.response.use((config) => config, err => {
-            if (err.response?.status === 403 && typeof window !== 'undefined')
+            if (err.response?.status === 403 && typeof window !== 'undefined') {
+                if (err.response?.data?.data?.code === 50001)
+                    return Promise.reject(err);
                 signIn('discord', {
                     callbackUrl: '/'
-                });
-            else return Promise.reject(err);
+                })
+            } else return Promise.reject(err);
         });
     }
 
@@ -82,7 +83,6 @@ export class ExternalWebClient {
         this.instance = axios.create({
             headers: {
                 Accept: 'application/json',
-                "User-Agent": 'Robertify Website (https://github.com/bombies/Robertify-Website)'
             },
             timeout: 5 * 1000,
             ...options,
@@ -140,7 +140,6 @@ export class BotWebClient {
         this.instance = axios.create({
             headers: {
                 Accept: 'application/json',
-                "User-Agent": 'Robertify Website (https://github.com/bombies/Robertify-Website)',
                 'Authorization': process.env.BOT_API_MASTER_PASSWORD
             },
             timeout: 5 * 1000,
@@ -205,7 +204,6 @@ export class DiscordWebClient {
         this.instance = axios.create({
             headers: {
                 Accept: 'application/json',
-                "User-Agent": 'Robertify Website (https://github.com/bombies/Robertify-Website)',
                 'Authorization': accessToken ? 'Bearer ' + accessToken : 'Bot ' + process.env.DISCORD_BOT_TOKEN,
             },
             timeout: 5 * 1000,

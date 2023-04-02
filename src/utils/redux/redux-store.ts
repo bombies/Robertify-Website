@@ -4,6 +4,7 @@ import darkModeReducer from "@/utils/redux/slices/dark-mode-slice";
 import {FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER, persistReducer, persistStore} from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import {createWrapper} from "next-redux-wrapper";
+import dashboardReducer from "@/utils/redux/slices/dashboard-slice";
 
 const createNoopStorage = () => {
     return {
@@ -28,14 +29,19 @@ const persistConfig = {
 }
 
 const rootReducer = combineReducers({
-    darkMode: darkModeReducer
+    darkMode: darkModeReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
+const reducers = combineReducers({
+    persistedReducer,
+    guildDashboard: dashboardReducer
+})
+
 export function makeStore() {
     return configureStore({
-        reducer: persistedReducer,
+        reducer: reducers,
         devTools: process.env.NODE_ENV !== 'production',
         middleware: (getDefaultMiddleware) =>
             getDefaultMiddleware({

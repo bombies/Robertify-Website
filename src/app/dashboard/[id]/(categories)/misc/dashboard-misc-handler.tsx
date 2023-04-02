@@ -38,7 +38,7 @@ export default class DashboardMiscHandler extends AbstractDashboardHandler {
                     label='Add Response'
                     type={ButtonType.CTA}
                     width={8}
-                    disabled={!this.opts.canInteract}
+                    disabled={!this.canInteract()}
                     onClick={this.eightBall.toggleEightBallModal}
                 />
                 <Modal
@@ -63,7 +63,7 @@ export default class DashboardMiscHandler extends AbstractDashboardHandler {
                             onChange={(e) => {
                                 this.eightBall.setProposedResponse(e.target.value)
                             }}
-                            disabled={!this.opts.canInteract}
+                            disabled={!this.canInteract()}
                             bordered
                             fullWidth
                             color={this.eightBall.proposedResponse.length === 0 ? 'error' : this.eightBall.eightBallValidator.color}
@@ -82,7 +82,7 @@ export default class DashboardMiscHandler extends AbstractDashboardHandler {
                             type={this.eightBall.proposedResponse && this.eightBall.proposedResponse.length <= 3500 ? ButtonType.CTA : ButtonType.DANGER}
                             width={5}
                             height={3}
-                            disabled={!this.opts.canInteract}
+                            disabled={!this.canInteract()}
                             onClick={() => {
                                 if (!this.eightBall.proposedResponse) {
                                     sendToast({
@@ -114,12 +114,12 @@ export default class DashboardMiscHandler extends AbstractDashboardHandler {
     }
 
     public generateEightBallTable() {
-        if (!this.opts.robertifyGuild?.eight_ball)
+        if (!this.getRobertifyGuild()?.eight_ball)
             return;
-        const responses = this.opts.robertifyGuild.eight_ball.map((r, i) => ({
+        const responses = this.getRobertifyGuild()?.eight_ball?.map((r, i) => ({
             response: r,
             index: i
-        }));
+        })) ?? [];
 
         if (responses.length === 0)
             return <Card size='sm' title='No Responses'
@@ -146,7 +146,7 @@ export default class DashboardMiscHandler extends AbstractDashboardHandler {
             }
         }
 
-        const disabledKeys = !this.opts.canInteract ? responses.map(r => r.index) : [];
+        const disabledKeys = !this.canInteract() ? responses.map(r => r.index) : [];
 
         return (
             <Table
@@ -189,26 +189,26 @@ export default class DashboardMiscHandler extends AbstractDashboardHandler {
 
     public addEightBallResponse(response: string) {
         if (!this.isUsable()) return;
-
-        this.opts.setCurrentData!(prevState => {
+        
+        this.setCurrentData(prevState => {
             if (!prevState) return;
 
             return ({
                 ...prevState,
-                eight_ball: [...prevState.eight_ball, response]
+                eight_ball: prevState.eight_ball ? [...prevState.eight_ball, response] : [response]
             })
-        })
+        });
     }
 
     public removeEightBallResponse(response: string) {
         if (!this.isUsable()) return;
 
-        this.opts.setCurrentData!(prevState => {
+        this.setCurrentData(prevState => {
             if (!prevState) return;
 
             return ({
                 ...prevState,
-                eight_ball: prevState.eight_ball.filter(r => r !== response)
+                eight_ball: prevState.eight_ball?.filter(r => r !== response) ?? []
             })
         })
     }

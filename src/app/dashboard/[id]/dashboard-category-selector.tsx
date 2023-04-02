@@ -3,11 +3,10 @@
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import Button from "@/components/button/Button";
 import {usePathname} from "next/navigation";
-import {useGuildDashboard} from "@/app/dashboard/[id]/dashboard-info-context";
 import {ButtonType} from "@/components/button/ButtonType";
 import DashboardRefreshButton from "@/app/dashboard/[id]/(categories)/dashboard-refresh-button";
-import {Badge} from "@nextui-org/react";
 import BadgeWrapper from "@/components/BadgeWrapper";
+import {useGuildDashboard} from "@/app/dashboard/[id]/dashboard-context-wrapper";
 
 type Category = 'general' | 'misc';
 
@@ -19,7 +18,7 @@ type Props = {
 
 export default function DashboardCategorySelector(props: Props) {
     const [ selected, setSelected ] = useState<Category>('general');
-    const [ dashboardInfo, ] = useGuildDashboard();
+    const [ dashboardInfo, setDashboardInfo ] = useGuildDashboard();
     const pathName = usePathname();
 
     useEffect(() => {
@@ -31,7 +30,7 @@ export default function DashboardCategorySelector(props: Props) {
             setSelected('misc')
     }, [pathName])
 
-    const id = dashboardInfo.robertifyGuild?.server_id;
+    const id = dashboardInfo.id;
 
     return (
         <div className='flex gap-4 m-6 phone:mx-2 tablet:justify-center'>

@@ -1,14 +1,14 @@
 'use client';
 
-import React, {MouseEventHandler} from "react";
+import React, { MouseEventHandler, useState } from "react";
 import Link from "next/link";
-import Spinner from "@/components/Spinner";
-import {useDarkMode} from "@/app/_components/dark-mode-context";
-import {ButtonType} from "@/components/button/ButtonType";
-import {StaticImageData} from "next/image";
+import { useDarkMode } from "@/app/_components/dark-mode-context";
+import { ButtonType } from "@/components/button/ButtonType";
+import { StaticImageData } from "next/image";
 import GenericImage from "@/app/_components/GenericImage";
-import {ToastDataProps} from "@/components/ToastComponent";
-import {sendToast} from "@/utils/client-utils";
+import { ToastDataProps } from "@/components/ToastComponent";
+import { sendToast } from "@/utils/client-utils";
+import { Loading } from "@nextui-org/react";
 
 export const getButtonStyle = (type?: ButtonType): string => {
     switch (type) {
@@ -49,10 +49,21 @@ interface Props {
     isWorking?: boolean;
     centered?: boolean;
     toast?: ToastDataProps;
+    cooldown?: number;
 }
 
 export default function Button(props: Props) {
-    const [darkMode] = useDarkMode();
+    const [lastClick, setLastClick] = useState<number | undefined>(undefined);
+
+    const isOnCoolDown = (): boolean => {
+        if (props.cooldown === undefined)
+            return false;
+        if (lastClick === undefined)
+            return false;
+
+        const curTime = new Date().getTime();
+        return curTime - lastClick <= (props.cooldown * 1000);
+    }
 
     const className = '!cursor-pointer transition-fast hover:!scale-105 rounded-lg !text-white ' + getButtonStyle(props.type) + ' ' + (props.className || '') + (typeof props.centered !== 'undefined' ? ' flex mx-auto' : '');
     const styleObj = {
@@ -85,7 +96,7 @@ export default function Button(props: Props) {
                         }}
                         className={className + ' flex justify-center '}
                         href={props.href}
-                        target={props.newTab === false ?  undefined : "_blank"}
+                        target={props.newTab === false ? undefined : "_blank"}
                         rel={props.newTab !== false ? 'noopener noreferrer' : undefined}
                         onClick={props.hrefClick}
                     >
@@ -96,22 +107,32 @@ export default function Button(props: Props) {
                     </Link>
                     :
                     <button className={className}
-                            style={{
-                                ...styleObj,
-                            }}
-                            disabled={props.disabled}
-                            onClick={(e) => {
-                                e.preventDefault();
+                        style={{
+                            ...styleObj,
+                        }}
+                        disabled={props.disabled}
+                        onClick={(e) => {
+                            e.preventDefault();
+
+                            if (!isOnCoolDown()) {
                                 if (props.onClick)
                                     props.onClick(e);
                                 if (props.toast)
                                     sendToast(props.toast)
-                            }}
-                            type={props.submit === true ? 'submit' : 'button'}
+                                setLastClick(new Date().getTime());
+                            } else {
+                                sendToast({
+                                    type: ButtonType.WARNING,
+                                    title: "Slow down!",
+                                    description: `Woah there! This button is on cooldown. You may use it again in ${(Math.abs(new Date().getTime() - (lastClick! + (props.cooldown! * 1000))) / 1000).toFixed(0)} seconds!`
+                                })
+                            }
+                        }}
+                        type={props.submit === true ? 'submit' : 'button'}
                     >
                         <div
                             className={'flex justify-center p-2 gap-4 mx-auto' + ((props.type === ButtonType.INVERTED || props.type === ButtonType.SECONDARY) ? ' text-primary' : '')}>
-                            {props.isWorking ? <Spinner size={.75}/> : children}
+                            {props.isWorking ? <Loading size='xs' color='white' /> : children}
                         </div>
                     </button>
             }
