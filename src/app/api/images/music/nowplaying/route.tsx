@@ -1,6 +1,4 @@
 import {ImageResponse} from '@vercel/og';
-import {Tooltip} from '@nextui-org/react';
-import {ToolTipWrapper} from '@/components/ToolTipWrapper';
 
 export const config = {
     runtime: 'edge',
@@ -18,21 +16,21 @@ export const getParamFromSearch = (options: ParamSearchObject): string => {
     return searchParams.get(paramName) ?? defaultResult ?? '';
 };
 
-const getInterBold = fetch(
+export const getInterBold = fetch(
     new URL(
         '../../../../../../public/fonts/inter/Inter-Bold.ttf',
         import.meta.url,
     ).toString(),
 ).then((res) => res.arrayBuffer());
 
-const getInterRegular = fetch(
+export const getInterRegular = fetch(
     new URL(
         '../../../../../../public/fonts/inter/Inter-Regular.ttf',
         import.meta.url,
     ).toString(),
 ).then((res) => res.arrayBuffer());
 
-const getInterMedium = fetch(
+export const getInterMedium = fetch(
     new URL(
         '../../../../../../public/fonts/inter/Inter-Medium.ttf',
         import.meta.url,
@@ -87,13 +85,10 @@ export async function GET(request: Request) {
         paramName: 'requester',
     });
 
-    const isLiveStream = Boolean(
-        getParamFromSearch({
-            searchParams: searchParams,
-            paramName: 'livestream',
-            defaultResult: 'false',
-        }),
-    );
+    const isLiveStream = getParamFromSearch({
+        searchParams: searchParams,
+        paramName: 'livestream',
+    }) === 'true';
 
     const userObj: Requester = user ? JSON.parse(user) : undefined;
 
@@ -157,7 +152,7 @@ export async function GET(request: Request) {
                                 }}
                                 src={albumImage}
                                 alt=""
-                                tw="rounded-2xl border-2 border-opacity-50 border-neutral-200"
+                                tw="rounded-full border-2 border-opacity-50 border-neutral-200"
                                 width="150px"
                                 height="150px"
                             />
@@ -205,12 +200,11 @@ export async function GET(request: Request) {
                                                     tw="flex h-full bg-white rounded-full"
                                                 ></div>
                                             </div>
-                                            <p style={{fontFamily: '"InterRegular"'}}>
-                                                {new Date(Number(duration)).toISOString().slice(14, 19)}
-                                            </p>
+                                            <p style={{fontFamily: '"InterRegular"'}}>{new Date(Number(duration)).toISOString().slice(14, 19)}</p>
                                         </div>
                                         <div tw='flex justify-center'>
-                                            <ToolTipWrapper visible={true} content={'test'} />
+                                            <p tw='text-white'
+                                               style={{fontFamily: '"InterMedium"'}}>{`@ ${new Date(Number(currentTime)).toISOString().slice(14, 19)} | ${new Date(Number(duration) - Number(currentTime)).toISOString().slice(14, 19)} left `}</p>
                                         </div>
                                     </div>
                                 ) : (
