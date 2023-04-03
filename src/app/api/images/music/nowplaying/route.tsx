@@ -152,7 +152,7 @@ export async function GET(request: Request) {
                                 }}
                                 src={albumImage}
                                 alt=""
-                                tw="rounded-full border-2 border-opacity-50 border-neutral-200"
+                                tw="rounded-2xl border-2 border-opacity-50 border-neutral-200"
                                 width="150px"
                                 height="150px"
                             />
