@@ -1,5 +1,8 @@
 {
-  "docs": "Documentation",
+  "docs": {
+    "title": "Documentation",
+    "display": "children"
+  },
   "invite_link": {
     "title": "Invite ↗",
     "type": "page",

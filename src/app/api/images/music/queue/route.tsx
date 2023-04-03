@@ -135,11 +135,9 @@ export async function GET(request: Request) {
                         nextUpImage &&
                         <img style={{
                             objectFit: 'cover',
-                            filter: 'blur(15px) brightness(70%)',
+                            filter: 'blur(15px) brightness(50%)',
                             zIndex: '0',
-                            height: '200%',
-                            width: '200%',
-                        }} tw='absolute' src={nextUpImage} width='100%' height='200%' alt=''/>
+                        }} tw='absolute m-0 p-0' src={nextUpImage} width='110%' height='110%' alt='' />
                     }
 
                     <h1 tw='flex items-center mb-6'>
@@ -158,7 +156,6 @@ export async function GET(request: Request) {
             {
                 width: 1000,
                 height: 1000,
-                emoji: 'twemoji',
                 fonts: [
                     {
                         name: 'InterBold',
