@@ -15,8 +15,8 @@ const getInterMedium = fetch(new URL('../../../../../../public/fonts/inter/Inter
     .then(res => res.arrayBuffer());
 
 export async function GET(request: Request) {
-    const { searchParams } = new URL(request.url ?? '');
-    const [ InterBold, InterRegular, InterMedium ] = await Promise.all([getInterBold, getInterRegular, getInterMedium]);
+    const {searchParams} = new URL(request.url ?? '');
+    const [InterBold, InterRegular, InterMedium] = await Promise.all([getInterBold, getInterRegular, getInterMedium]);
 
     const tracks = getParamFromSearch({
         searchParams: searchParams,
@@ -164,11 +164,12 @@ export async function GET(request: Request) {
                 ]
             }
         )
-    } catch(err) {
+    } catch (err) {
+        console.error(err)
         return new ImageResponse(
             (
                 <div tw='flex h-full w-full'>
-                    <p>There was an error generating this image</p>
+                    <p>There was an error generating this image. Please contact the developers.</p>
                 </div>
             ),
             {
