@@ -1,4 +1,5 @@
 import {ImageResponse} from '@vercel/og';
+import { NextApiRequest } from 'next';
 
 export const config = {
     runtime: 'edge',
@@ -18,21 +19,21 @@ export const getParamFromSearch = (options: ParamSearchObject): string => {
 
 export const getInterBold = fetch(
     new URL(
-        '../../../../../../public/fonts/inter/Inter-Bold.ttf',
+        '/public/fonts/inter/Inter-Bold.ttf',
         import.meta.url,
     ).toString(),
 ).then((res) => res.arrayBuffer());
 
 export const getInterRegular = fetch(
     new URL(
-        '../../../../../../public/fonts/inter/Inter-Regular.ttf',
+        '/public/fonts/inter/Inter-Regular.ttf',
         import.meta.url,
     ).toString(),
 ).then((res) => res.arrayBuffer());
 
 export const getInterMedium = fetch(
     new URL(
-        '../../../../../../public/fonts/inter/Inter-Medium.ttf',
+        '/public/fonts/inter/Inter-Medium.ttf',
         import.meta.url,
     ).toString(),
 ).then((res) => res.arrayBuffer());
@@ -42,7 +43,7 @@ type Requester = {
     user_image: string;
 };
 
-export async function GET(request: Request) {
+export default async function(request: NextApiRequest) {
     const {searchParams} = new URL(request.url ?? '');
     const [InterBold, InterRegular, InterMedium] = await Promise.all([
         getInterBold,

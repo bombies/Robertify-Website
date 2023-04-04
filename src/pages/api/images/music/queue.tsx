@@ -1,11 +1,12 @@
 import { ImageResponse } from "@vercel/og";
-import { getInterBold, getInterMedium, getParamFromSearch } from "@/app/api/images/music/nowplaying/route";
+import { NextApiRequest } from "next";
+import { getInterBold, getInterMedium, getParamFromSearch } from "./nowplaying";
 
 export const config = {
     runtime: 'edge',
 };
 
-export async function GET(request: Request) {
+export default async function(request: NextApiRequest) {
     const { searchParams } = new URL(request.url ?? '');
     const [InterBold, InterMedium] = await Promise.all([getInterBold, getInterMedium]);
 
