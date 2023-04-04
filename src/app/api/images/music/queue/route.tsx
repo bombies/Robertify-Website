@@ -138,6 +138,8 @@ export async function GET(request: Request) {
                             filter: 'blur(70px) brightness(50%)',
                             opacity: '0.5',
                             zIndex: "-1",
+                            width: '100%',
+                            height: '100%',
                         }} tw='absolute m-0 p-0' src={nextUpImage} alt='' />
                     }
                     <div style={{
