@@ -19,7 +19,7 @@ export const getParamFromSearch = (options: ParamSearchObject): string => {
 
 export const getInterBold = fetch(
     new URL(
-        '/public/fonts/inter/Inter-Bold.ttf',
+        'public/fonts/inter/Inter-Bold.ttf',
         import.meta.url,
     ).toString(),
 ).then((res) => res.arrayBuffer());
@@ -43,13 +43,15 @@ type Requester = {
     user_image: string;
 };
 
-export default async function(request: NextApiRequest) {
+export default async function handler(request: NextApiRequest) {
     const {searchParams} = new URL(request.url ?? '');
     const [InterBold, InterRegular, InterMedium] = await Promise.all([
         getInterBold,
         getInterRegular,
         getInterMedium,
     ]);
+
+    console.log(InterBold, InterRegular, InterMedium);
 
     const songTitle = getParamFromSearch({
         searchParams: searchParams,
@@ -120,26 +122,23 @@ export default async function(request: NextApiRequest) {
                                 tw="flex flex-col text-white w-[78%]"
                             >
                 <span
-                    style={{fontFamily: '"InterRegular"'}}
-                    tw="uppercase mb-2 text-lg"
+                    tw="uppercase mb-2 text-lg font-normal"
                 >
                   Robertify is now playing
                 </span>
                                 <span
                                     style={{
-                                        fontFamily: '"InterBold"',
                                         textOverflow: 'ellipsis',
                                     }}
-                                    tw="text-6xl w-full"
+                                    tw="text-6xl w-full font-bold"
                                 >
                   {songTitle}
                 </span>
                                 <span
                                     style={{
-                                        fontFamily: '"InterMedium"',
                                         textOverflow: 'ellipsis',
                                     }}
-                                    tw="text-4xl text-green-500 w-full"
+                                    tw="text-4xl text-green-500 w-full font-medium"
                                 >
                   {artistName}
                 </span>
@@ -161,8 +160,7 @@ export default async function(request: NextApiRequest) {
                             <div tw="flex flex-col">
                                 <div tw="flex">
                                     <p
-                                        style={{fontFamily: '"InterRegular"'}}
-                                        tw="text-white text-2xl mr-2"
+                                        tw="text-white text-2xl mr-2 font-normal"
                                     >
                                         Requested by {userObj.user_name}
                                     </p>
@@ -188,7 +186,7 @@ export default async function(request: NextApiRequest) {
                                 {!isLiveStream ? (
                                     <div tw='flex flex-col'>
                                         <div tw="flex w-full justify-between text-white">
-                                            <p style={{fontFamily: '"InterRegular"'}}>0:00</p>
+                                            <p tw='font-normal'>0:00</p>
                                             <div
                                                 tw="flex w-3/4 self-center h-[.35rem] border-[0.25px] border-white rounded-full">
                                                 <div
@@ -200,18 +198,17 @@ export default async function(request: NextApiRequest) {
                                                     tw="flex h-full bg-white rounded-full"
                                                 ></div>
                                             </div>
-                                            <p style={{fontFamily: '"InterRegular"'}}>{new Date(Number(duration)).toISOString().slice(14, 19)}</p>
+                                            <p tw='font-normal'>{new Date(Number(duration)).toISOString().slice(14, 19)}</p>
                                         </div>
                                         <div tw='flex justify-center'>
-                                            <p tw='text-white'
-                                               style={{fontFamily: '"InterMedium"'}}>{`@ ${new Date(Number(currentTime)).toISOString().slice(14, 19)} | ${new Date(Number(duration) - Number(currentTime)).toISOString().slice(14, 19)} left `}</p>
+                                            <p tw='text-white font-medium'>{`@ ${new Date(Number(currentTime)).toISOString().slice(14, 19)} | ${new Date(Number(duration) - Number(currentTime)).toISOString().slice(14, 19)} left `}</p>
                                         </div>
                                     </div>
                                 ) : (
                                     <div tw="flex w-full justify-between text-white">
                                         <p
+                                            tw='font-normal'
                                             style={{
-                                                fontFamily: '"InterRegular"',
                                                 letterSpacing: '.75em',
                                             }}
                                         >
@@ -229,19 +226,19 @@ export default async function(request: NextApiRequest) {
                 height: 300,
                 fonts: [
                     {
-                        name: 'InterBold',
+                        name: 'Inter',
                         data: InterBold,
                         style: 'normal',
                         weight: 700,
                     },
                     {
-                        name: 'InterRegular',
+                        name: 'Inter',
                         data: InterRegular,
                         style: 'normal',
                         weight: 400,
                     },
                     {
-                        name: 'InterMedium',
+                        name: 'Inter',
                         data: InterMedium,
                         style: 'normal',
                         weight: 500,

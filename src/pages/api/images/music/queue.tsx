@@ -6,7 +6,7 @@ export const config = {
     runtime: 'edge',
 };
 
-export default async function(request: NextApiRequest) {
+export default async function handler(request: NextApiRequest) {
     const { searchParams } = new URL(request.url ?? '');
     const [InterBold, InterMedium] = await Promise.all([getInterBold, getInterMedium]);
 
@@ -109,22 +109,18 @@ export default async function(request: NextApiRequest) {
                     tw='w-full py-2'
                 >
                     <td style={{
-                        fontFamily: '"InterBold"',
                         textOverflow: 'ellipsis',
-                    }} tw=' w-1/6 text-2xl p-2'>{obj.track_index}</td>
+                    }} tw=' w-1/6 text-2xl p-2 font-bold'>{obj.track_index}</td>
                     <td style={{
-                        fontFamily: '"InterMedium"',
                         textOverflow: 'ellipsis',
-                    }} tw=' w-2/6 text-2xl p-2'>{obj.track_name}</td>
+                    }} tw=' w-2/6 text-2xl p-2 font-medium'>{obj.track_name}</td>
                     <td style={{
-                        fontFamily: '"InterMedium"',
                         textOverflow: 'ellipsis',
-                    }} tw='w-2/6 text-2xl p-2'>{obj.track_artist}</td>
+                    }} tw='w-2/6 text-2xl p-2 font-medium'>{obj.track_artist}</td>
                     <td style={{
-                        fontFamily: '"InterMedium"',
                         textOverflow: 'ellipsis',
                         textAlign: 'right'
-                    }} tw='w-1/6 text-2xl p-2'>{new Date(Number(obj.track_duration)).toISOString().slice(14, 19)}</td>
+                    }} tw='w-1/6 text-2xl p-2 font-medium'>{new Date(Number(obj.track_duration)).toISOString().slice(14, 19)}</td>
                 </tr>
             )
         })
@@ -165,18 +161,18 @@ export default async function(request: NextApiRequest) {
                 height: 800,
                 fonts: [
                     {
-                        name: 'InterBold',
+                        name: 'Inter',
                         data: InterBold,
                         style: 'normal',
-                        weight: 700
+                        weight: 700,
                     },
                     {
-                        name: 'InterMedium',
+                        name: 'Inter',
                         data: InterMedium,
                         style: 'normal',
-                        weight: 500
+                        weight: 500,
                     },
-                ]
+                ],
             }
         )
     } catch (err) {
