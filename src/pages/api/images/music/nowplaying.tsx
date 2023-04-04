@@ -51,8 +51,6 @@ export default async function handler(request: NextApiRequest) {
         getInterMedium,
     ]);
 
-    console.log(InterBold, InterRegular, InterMedium);
-
     const songTitle = getParamFromSearch({
         searchParams: searchParams,
         paramName: 'title',
