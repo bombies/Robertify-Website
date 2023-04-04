@@ -99,15 +99,12 @@ export async function GET(request: Request) {
                     <img
                         style={{
                             objectFit: 'cover',
-                            filter: 'blur(15px) brightness(70%)',
+                            filter: 'blur(20px)',
+                            opacity: '0.5',
                             zIndex: '0',
-                            height: '200%',
-                            width: '200%',
                         }}
                         tw="absolute"
                         src={albumImage}
-                        width="100%"
-                        height="200%"
                         alt=""
                     />
                     <div tw="flex flex-col px-16 py-12 w-full h-full">
@@ -225,7 +222,7 @@ export async function GET(request: Request) {
                 </div>
             ),
             {
-                width: 900,
+                width: 800,
                 height: 300,
                 fonts: [
                     {

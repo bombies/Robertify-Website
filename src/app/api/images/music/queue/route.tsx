@@ -1,12 +1,12 @@
-import {ImageResponse} from "@vercel/og";
-import {getInterBold, getInterMedium, getParamFromSearch} from "@/app/api/images/music/nowplaying/route";
+import { ImageResponse } from "@vercel/og";
+import { getInterBold, getInterMedium, getParamFromSearch } from "@/app/api/images/music/nowplaying/route";
 
 export const config = {
     runtime: 'edge',
 };
 
 export async function GET(request: Request) {
-    const {searchParams} = new URL(request.url ?? '');
+    const { searchParams } = new URL(request.url ?? '');
     const [InterBold, InterMedium] = await Promise.all([getInterBold, getInterMedium]);
 
     const tracks = getParamFromSearch({
@@ -130,32 +130,36 @@ export async function GET(request: Request) {
 
         return new ImageResponse(
             (
-                <div tw='flex flex-col bg-neutral-800 h-full w-full p-6'>
+                <div tw='flex flex-col bg-neutral-800 h-full w-full'>
                     {
                         nextUpImage &&
                         <img style={{
                             objectFit: 'cover',
-                            filter: 'blur(15px) brightness(50%)',
-                            zIndex: '0',
-                        }} tw='absolute m-0 p-0' src={nextUpImage} width='110%' height='110%' alt='' />
+                            filter: 'blur(70px) brightness(50%)',
+                            opacity: '0.5',
+                            zIndex: "-1",
+                        }} tw='absolute m-0 p-0' src={nextUpImage} alt='' />
                     }
-
-                    <h1 tw='flex items-center mb-6'>
-                        <span tw='text-6xl text-white mr-5'>Queue</span>
-                        <span tw='text-3xl text-green-400 self-center'>{`(Page ${jsonTracks.page})`}</span>
-                    </h1>
-                    <div tw='flex flex-col bg-neutral-900/50 rounded-2xl h-7/8 w-full p-6'>
-                        <table tw='text-white w-full h-full'>
-                            <tbody tw='flex flex-col w-full'>
-                            {generateTrackList}
-                            </tbody>
-                        </table>
+                    <div style={{
+                        zIndex: "10",
+                    }} tw="flex flex-col p-6">
+                        <h1 tw='flex items-center mb-6'>
+                            <span tw='text-6xl text-white mr-5'>Queue</span>
+                            <span tw='text-3xl text-green-400 self-center'>{`(Page ${jsonTracks.page})`}</span>
+                        </h1>
+                        <div tw='flex flex-col bg-neutral-900/50 rounded-2xl h-7/8 w-full p-6'>
+                            <table tw='text-white w-full h-full'>
+                                <tbody tw='flex flex-col w-full'>
+                                    {generateTrackList}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             ),
             {
-                width: 1000,
-                height: 1000,
+                width: 900,
+                height: 800,
                 fonts: [
                     {
                         name: 'InterBold',
