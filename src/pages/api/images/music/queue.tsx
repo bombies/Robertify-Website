@@ -146,13 +146,13 @@ export default async function(request: NextApiRequest) {
                     <div style={{
                         zIndex: "10",
                     }} tw="flex flex-col p-6">
-                        <h1 tw='flex items-center mb-6'>
-                            <span tw='text-6xl text-white mr-5'>Queue</span>
-                            <span tw='text-3xl text-green-400 self-center'>{`(Page ${jsonTracks.page})`}</span>
+                        <h1 tw='flex items-center'>
+                            <p tw='text-6xl text-white my-0 mr-5'>Queue</p>
+                            <p tw='text-2xl text-green-400 self-center align-middle my-0'>{`(Page ${jsonTracks.page})`}</p>
                         </h1>
-                        <div tw='flex flex-col bg-neutral-900/50 rounded-2xl h-7/8 w-full p-6'>
+                        <div tw='flex flex-col bg-neutral-900/80 rounded-2xl h-[90%] w-full py-3 px-6'>
                             <table tw='text-white w-full h-full'>
-                                <tbody tw='flex flex-col w-full'>
+                                <tbody tw='flex align-middle flex-col w-full'>
                                     {generateTrackList}
                                 </tbody>
                             </table>
