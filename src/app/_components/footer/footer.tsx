@@ -16,7 +16,8 @@ export default function Footer() {
             <div className='flex gap-16 phone:gap-4 phone:justify-center'>
                 <FooterGroup heading='Robertify'>
                     <HyperLink href={process.env.NEXT_PUBLIC_DISCORD_INVITE_LINK || ''}>Invite</HyperLink>
-                    <HyperLink href={'/support'} newTab={false}>Support Server</HyperLink>
+                    <HyperLink href={'/docs'} newTab={false}>Documentation</HyperLink>
+                    <HyperLink href={'/support-server'} newTab={false}>Support Server</HyperLink>
                 </FooterGroup>
                 <FooterGroup heading='Resources'>
                     <HyperLink href='/tos' newTab={false}>Terms of Service</HyperLink>
