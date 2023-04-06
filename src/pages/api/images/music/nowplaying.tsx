@@ -26,14 +26,14 @@ export const getInterBold = fetch(
 
 export const getInterRegular = fetch(
     new URL(
-        '/public/fonts/inter/Inter-Regular.ttf',
+        'public/fonts/inter/Inter-Regular.ttf',
         import.meta.url,
     ).toString(),
 ).then((res) => res.arrayBuffer());
 
 export const getInterMedium = fetch(
     new URL(
-        '/public/fonts/inter/Inter-Medium.ttf',
+        'public/fonts/inter/Inter-Medium.ttf',
         import.meta.url,
     ).toString(),
 ).then((res) => res.arrayBuffer());

@@ -6,6 +6,27 @@ export const config = {
     runtime: 'edge',
 };
 
+const parseTheme = (theme: string) => {
+    switch (theme.toLowerCase()) {
+        case "green": return "#2ce629";
+        case "mint": return "#4dffa0";
+        case "gold": return "#ffac38";
+        case "red": return "#e62929";
+        case "pastel_red": return "#ff9999";
+        case "pink": return "#f159ff";
+        case "purple": return "#8900de";
+        case "pastel_purple": return "#d199ff";
+        case "blue": return "#2b59ff";
+        case "light_blue": return "#2bd8ff";
+        case "baby_blue": return "#99fffa";
+        case "yellow": return "#ffea2b";
+        case "pastel_yellow": return "#faff99";
+        case "dark": return "#0f0f0f";
+        case "light": return "#f0f0f0";
+        default: return "#2ce629";
+    }
+}
+
 export default async function handler(request: NextApiRequest) {
     const { searchParams } = new URL(request.url ?? '');
     const [InterBold, InterMedium] = await Promise.all([getInterBold, getInterMedium]);
@@ -80,10 +101,10 @@ export default async function handler(request: NextApiRequest) {
         })}`,
     });
 
-    const nextUpImage = getParamFromSearch({
+    const theme = parseTheme(getParamFromSearch({
         searchParams: searchParams,
-        paramName: 'next_img'
-    });
+        paramName: 'theme'
+    }));
 
     try {
         const jsonTracks = JSON.parse(tracks);
@@ -127,26 +148,20 @@ export default async function handler(request: NextApiRequest) {
 
         return new ImageResponse(
             (
-                <div tw='flex flex-col bg-neutral-800 h-full w-full'>
-                    {
-                        nextUpImage &&
-                        <img style={{
-                            objectFit: 'cover',
-                            filter: 'blur(70px) brightness(50%)',
-                            opacity: '0.5',
-                            zIndex: "-1",
-                            width: '100%',
-                            height: '100%',
-                        }} tw='absolute m-0 p-0' src={nextUpImage} alt='' />
-                    }
+                <div
+                    tw='flex flex-col h-full w-full'
+                    style={{
+                        backgroundColor: theme
+                    }}
+                >
                     <div style={{
                         zIndex: "10",
                     }} tw="flex flex-col p-6">
-                        <h1 tw='flex items-center'>
+                        <h1 tw='flex items-center p-3 bg-neutral-900/80 rounded-2xl'>
                             <p tw='text-6xl text-white my-0 mr-5'>Queue</p>
                             <p tw='text-2xl text-green-400 self-center my-0'>{`(Page ${jsonTracks.page})`}</p>
                         </h1>
-                        <div tw='flex flex-col bg-neutral-900/80 rounded-2xl h-[90%] w-full py-3 px-6'>
+                        <div tw='flex flex-col bg-neutral-900/80 rounded-2xl h-[85%] w-full py-3 px-6'>
                             <table tw='text-white w-full h-full'>
                                 <tbody tw='flex flex-col w-full'>
                                     {generateTrackList}
@@ -158,7 +173,7 @@ export default async function handler(request: NextApiRequest) {
             ),
             {
                 width: 900,
-                height: 800,
+                height: 900,
                 fonts: [
                     {
                         name: 'Inter',
