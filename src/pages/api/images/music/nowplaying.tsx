@@ -220,7 +220,7 @@ export default async function handler(request: NextApiRequest) {
                 </div>
             ),
             {
-                width: 800,
+                width: 900,
                 height: 300,
                 fonts: [
                     {
