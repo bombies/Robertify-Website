@@ -15,10 +15,10 @@ import { GoogleAnalytics } from "nextjs-google-analytics";
 import { SWRConfig } from "swr";
 
 interface Props extends React.PropsWithChildren {
-    session: any
+
 }
 
-export default function Providers({ children, session }: Props) {
+export default function Providers({ children }: Props) {
     useServerInsertedHTML(() => {
         return <>{CssBaseline.flush()}</>;
     })
@@ -44,7 +44,7 @@ export default function Providers({ children, session }: Props) {
                         >
                             <NextUIProvider>
                                 <DarkModeProvider>
-                                    <SessionProvider session={session}>
+                                    <SessionProvider>
                                         <Toaster
                                             position="top-right"
                                             reverseOrder={false}
