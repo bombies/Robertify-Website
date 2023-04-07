@@ -13,7 +13,9 @@ export const metadata = {
     description: 'A next-gen music bot',
 }
 
-interface Props extends React.PropsWithChildren {}
+interface Props extends React.PropsWithChildren {
+    session: any
+}
 
 const inter = Inter({
     subsets: ['latin'],
@@ -21,27 +23,24 @@ const inter = Inter({
 
 export default function RootLayout(props: Props) {
     return (
-        <html lang="en" className={inter.className}>
-        <body>
-        {props.children}
-        </body>
-        {/*<Providers>*/}
-        {/*    <ProgressBar/>*/}
-        {/*    <GenericImage*/}
-        {/*        priority*/}
-        {/*        className='dark:visible opacity-50 blur-xl invisible !fixed w-screen h-screen z-[0]'*/}
-        {/*        style={{*/}
-        {/*            objectFit: 'cover'*/}
-        {/*        }}*/}
-        {/*        imageClassName='blur-xl z-[0]'*/}
-        {/*        src={glow}*/}
-        {/*    />*/}
-        {/*    <div className={'!z-[1] relative'}>*/}
-        {/*        <NavBar/>*/}
-        {/*        {props.children}*/}
-        {/*        <Footer/>*/}
-        {/*    </div>*/}
-        {/*</Providers>*/}
+        <html suppressHydrationWarning lang="en" className={inter.className}>
+        <Providers>
+            <ProgressBar/>
+            <GenericImage
+                priority
+                className='dark:visible opacity-50 blur-xl invisible !fixed w-screen h-screen z-[0]'
+                style={{
+                    objectFit: 'cover'
+                }}
+                imageClassName='blur-xl z-[0]'
+                src={glow}
+            />
+            <div className={'!z-[1] relative'}>
+                <NavBar/>
+                {props.children}
+                <Footer/>
+            </div>
+        </Providers>
         </html>
 
     )
