@@ -136,11 +136,10 @@ export default function DashboardContextWrapper(props: Props) {
                     value: guildMemberInfo ? isGuildAdmin(guildMemberInfo, discordGuildInfo!) : false
                 },
                 currentData: prev.currentData ?? botGuildInfo,
-                session,
                 ...validationOverrides
             })
         });
-    }, [botGuildInfo, discordGuildInfo, discordGuildChannelInfo, guildMemberInfo, discordGuildLoading, botGuildLoading, discordGuildChannelLoading, guildMemberLoading, session, props.id])
+    }, [botGuildInfo, discordGuildInfo, discordGuildChannelInfo, guildMemberInfo, discordGuildLoading, botGuildLoading, discordGuildChannelLoading, guildMemberLoading, props.id])
 
     const val = useMemo<[DashboardState, React.Dispatch<React.SetStateAction<DashboardState>>]>(() => ([guildDashboardState, setGuildGuildDashboardState]), [guildDashboardState])
     return (

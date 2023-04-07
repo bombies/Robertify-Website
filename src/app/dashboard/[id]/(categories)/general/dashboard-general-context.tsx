@@ -20,6 +20,7 @@ import {AxiosError} from "axios";
 import DashboardContainer from "@/app/dashboard/[id]/(categories)/dashboard-container";
 import WebClient from "@/utils/api/web-client";
 import {useGuildDashboard} from "@/app/dashboard/[id]/dashboard-context-wrapper";
+import {useSession} from 'next-auth/react';
 
 const CreateReqChannel = (session: Session | null, id: string) => {
     const mutator = async (url: string) => await WebClient.getInstance(session?.user).post(url);
@@ -42,8 +43,9 @@ export default function DashboardGeneralContext() {
     const {value: robertifyGuild, loading: robertifyGuildLoading} = dashboardInfo.robertifyGuild;
     const {value: discordGuildChannels, loading: discordGuildChannelsLoading} = dashboardInfo.discordGuildChannels;
     const router = useRouter();
-    const {currentData, canInteract: stateCanInteract, session} = dashboardInfo
+    const {currentData, canInteract: stateCanInteract} = dashboardInfo
     const [, startTransition] = useTransition();
+    const session = useSession().data;
 
     const setCurrentData = (cb: (prev?: Partial<RobertifyGuild>) => Partial<RobertifyGuild> | undefined) => {
         setDashboardInfo(prev => {

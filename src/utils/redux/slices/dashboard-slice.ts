@@ -2,6 +2,7 @@ import {DiscordGuild, DiscordGuildChannel, RobertifyGuild} from "@/utils/discord
 import {SessionContextValue} from "next-auth/react";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AppState} from "@/utils/redux/redux-store";
+import {Session} from 'next-auth';
 
 interface AsyncState<T> {
     loading: boolean,
@@ -14,7 +15,6 @@ export interface DashboardState {
     robertifyGuild: AsyncState<RobertifyGuild>
     currentData?: Partial<RobertifyGuild>,
     discordGuildChannels: AsyncState<DiscordGuildChannel[]>
-    session?: SessionContextValue<boolean> | { readonly data: null, readonly status: "loading" },
     changesMade?: boolean,
     canInteract?: boolean,
     userHasPermission: AsyncState<boolean>,
@@ -26,7 +26,6 @@ const initialState: DashboardState = {
     robertifyGuild: { loading: true },
     discordGuildChannels: { loading: true },
     userHasPermission: { loading: true },
-    session: undefined,
     currentData: undefined,
     changesMade: undefined,
     canInteract: undefined
@@ -57,12 +56,6 @@ export const dashboardSlice = createSlice({
         setCurrentData(state, action: PayloadAction<RobertifyGuild>) {
             state.currentData = action.payload
         },
-        setSession(state, action: PayloadAction<SessionContextValue<boolean> | {
-            readonly data: null,
-            readonly status: "loading"
-        }>) {
-            state.session = action.payload
-        },
         setChangesMade(state, action: PayloadAction<boolean>) {
             state.changesMade = action.payload;
         },
@@ -76,7 +69,6 @@ export const {
     setId,
     setChangesMade,
     setCurrentData,
-    setSession,
     setDiscordGuildChannels,
     setDiscordGuild,
     setRobertifyGuild,
@@ -88,7 +80,6 @@ export const {
 export const selectId = (state: AppState) => state.guildDashboard.id;
 export const selectChangesMade = (state: AppState) => state.guildDashboard.changesMade;
 export const selectCurrentData = (state: AppState) => state.guildDashboard.currentData;
-export const selectSession = (state: AppState) => state.guildDashboard.session;
 export const selectDiscordGuildChannels = (state: AppState) => state.guildDashboard.discordGuildChannels;
 export const selectDiscordGuild = (state: AppState) => state.guildDashboard.discordGuild;
 export const selectRobertifyGuild = (state: AppState) => state.guildDashboard.robertifyGuild;
