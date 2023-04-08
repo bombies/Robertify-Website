@@ -46,7 +46,7 @@ type RequestChannelButtonMetaData = {
     icon: string | StaticImageData,
     type: ButtonType.BLUE | ButtonType.GREY | ButtonType.DANGER
 }
-export default class DashboardGeneralHandler extends AbstractDashboardHandler{
+export default class DashboardGeneralHandler extends AbstractDashboardHandler {
 
     constructor(opts: AbstractDashboardFields) {
         super(opts);

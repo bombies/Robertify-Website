@@ -8,7 +8,7 @@ import DashboardRefreshButton from "@/app/dashboard/[id]/(categories)/dashboard-
 import BadgeWrapper from "@/components/BadgeWrapper";
 import {useGuildDashboard} from "@/app/dashboard/[id]/dashboard-context-wrapper";
 
-type Category = 'general' | 'misc';
+type Category = 'general' | 'misc' | 'permissions';
 
 type Props = {
     refresh: () => void,
@@ -51,11 +51,17 @@ export default function DashboardCategorySelector(props: Props) {
             >
                 <Selector
                     id={id}
-                    category={'misc'}
+                    category={'permissions'}
                     selected={selected}
                     setSelected={setSelected}
                 />
             </BadgeWrapper>
+            <Selector
+                id={id}
+                category={'misc'}
+                selected={selected}
+                setSelected={setSelected}
+            />
         </div>
     )
 }

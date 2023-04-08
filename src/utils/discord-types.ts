@@ -127,7 +127,7 @@ export type GuildPermissions = {
     3?: string[],
     4?: string[],
     5?: string[],
-    users?: Object
+    users?: { [key: string]: number[] }
 };
 
 export type GuildDJToggles = {
