@@ -10,7 +10,7 @@ interface Props extends React.PropsWithChildren {
     classname?: string
 }
 
-export default function BadgeWrapper(props: Props) {
+const BadgeWrapper = (props: Props) => {
     return (
         <div className={'self-center ' + (props.classname ?? '')}>
             <Badge
@@ -30,3 +30,5 @@ export default function BadgeWrapper(props: Props) {
         </div>
     )
 }
+
+export default BadgeWrapper

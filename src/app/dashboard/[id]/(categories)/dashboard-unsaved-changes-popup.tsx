@@ -13,7 +13,7 @@ type Props = {
     canInteract: boolean
 }
 
-export default function DashboardUnsavedChangesPopup(props: Props) {
+const DashboardUnsavedChangesPopup = (props: Props) => {
     return (
         <div
             className={'fixed rounded-xl w-full bottom-0 right-0 mx-auto bg-primary/20 dark:bg-neutral-900/80 backdrop-blur-sm h-20 z-[51] p-6 flex phone:gap-2 justify-between transition-faster' + (!props.changesMade ? ' bottom-[-100px]' : '')}>
@@ -41,3 +41,5 @@ export default function DashboardUnsavedChangesPopup(props: Props) {
         </div>
     )
 }
+
+export default DashboardUnsavedChangesPopup

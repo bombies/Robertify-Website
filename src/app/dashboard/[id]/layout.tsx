@@ -23,7 +23,7 @@ const getDiscordGuildInfo = async (id: string, session: Session | null) => {
 
 }
 
-export async function generateMetadata({params}: { params: { id: string } }) {
+export const generateMetadata = async ({params}: { params: { id: string } }) => {
     const {id} = params;
     let guildInfo = await getDiscordGuildInfo(id, await getServerSession(authOptions));
     // @ts-ignore
@@ -35,7 +35,7 @@ export async function generateMetadata({params}: { params: { id: string } }) {
     }
 }
 
-export default async function GuildDashboardLayout({children, params}: Props) {
+const GuildDashboardLayout = async ({children, params}: Props) => {
     return (
         <DashboardContextWrapper id={params.id}>
             {children}

@@ -6,7 +6,7 @@ type Props = {
     centered?: boolean
 }
 
-export default function Spinner(props: Props) {
+const Spinner = (props: Props) => {
     return (
         <div className={`self-center ${props.centered ? 'mx-auto' : ''} ${props.className || ''}`} role="status">
             <div
@@ -19,3 +19,5 @@ export default function Spinner(props: Props) {
         </div>
     )
 }
+
+export default Spinner

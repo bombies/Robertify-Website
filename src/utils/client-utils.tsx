@@ -5,11 +5,11 @@ import {MutableRefObject, useEffect, useState} from "react";
 import toast, {ToastOptions} from "react-hot-toast";
 import ToastComponent, {ToastDataProps} from "@/components/ToastComponent";
 
-export function getWindowSize(): [number, number] {
+export const getWindowSize = (): [number, number] => {
     return [window.innerWidth, window.innerHeight];
 }
 
-export function useVisible(ref: MutableRefObject<any>): boolean {
+export const useVisible = (ref: MutableRefObject<any>): boolean => {
     const [isVisible, setVisible] = useState(true);
 
     useEffect(() => {
@@ -28,6 +28,6 @@ export function useVisible(ref: MutableRefObject<any>): boolean {
     return isVisible;
 }
 
-export function sendToast(props: ToastDataProps, options?: ToastOptions) {
+export const sendToast = (props: ToastDataProps, options?: ToastOptions) => {
     toast.custom(t => (<ToastComponent toastObj={t} data={props} />), options);
 }

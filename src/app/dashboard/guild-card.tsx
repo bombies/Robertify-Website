@@ -12,7 +12,7 @@ type Props = {
     isAdmin?: boolean,
 }
 
-export default function GuildCard(props: Props) {
+const GuildCard = (props: Props) => {
     return props.isOwner || props.isAdmin ?
         <BadgeWrapper
             color={props.isOwner ? 'warning' : 'primary'}
@@ -59,3 +59,5 @@ export default function GuildCard(props: Props) {
             </div>
         </Card>
 }
+
+export default GuildCard

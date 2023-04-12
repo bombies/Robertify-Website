@@ -19,16 +19,22 @@ interface Props extends React.PropsWithChildren {
 
 export const parseCardSize = (size?: ComponentSize) => {
     switch (size) {
-        case 'xs': return 'w-[20rem] tablet:w-[15rem] phone:w-[10rem]';
-        case 'sm': return 'w-[30rem] tablet:w-[20rem] phone:w-[15rem]';
-        case 'md': return 'w-[40rem] tablet:w-[30rem] phone:w-[20rem]';
-        case 'lg': return 'w-[50rem] tablet:w-[40rem] phone:w-[25rem]';
-        case 'xl': return 'w-[70rem] tablet:w-[55rem] phone:w-[30rem]';
-        default: return 'w-[20rem] tablet:w-[15rem] phone:w-[10rem]';
+        case 'xs':
+            return 'w-[20rem] tablet:w-[15rem] phone:w-[10rem]';
+        case 'sm':
+            return 'w-[30rem] tablet:w-[20rem] phone:w-[15rem]';
+        case 'md':
+            return 'w-[40rem] tablet:w-[30rem] phone:w-[20rem]';
+        case 'lg':
+            return 'w-[50rem] tablet:w-[40rem] phone:w-[25rem]';
+        case 'xl':
+            return 'w-[70rem] tablet:w-[55rem] phone:w-[30rem]';
+        default:
+            return 'w-[20rem] tablet:w-[15rem] phone:w-[10rem]';
     }
 }
 
-export default function Card(props: Props) {
+const Card = (props: Props) => {
     const card = (
         <div
             ref={props.ref}
@@ -71,3 +77,5 @@ export default function Card(props: Props) {
 
     return card;
 }
+
+export default Card

@@ -6,9 +6,10 @@ interface Props extends React.PropsWithChildren {
     childrenAlign?: 'left' | 'right';
 }
 
-export default function BasicContent(props: Props) {
+const BasicContent = (props: Props) => {
     return (
-        <div className={'justify-center flex gap-16 laptop:gap-4 tablet:gap-2 phone:flex-col ' + (props.childrenAlign === 'left' ? ' flex-row-reverse' : '')}>
+        <div
+            className={'justify-center flex gap-16 laptop:gap-4 tablet:gap-2 phone:flex-col ' + (props.childrenAlign === 'left' ? ' flex-row-reverse' : '')}>
             <div className='self-center'>
                 {
                     props.title &&
@@ -20,3 +21,5 @@ export default function BasicContent(props: Props) {
         </div>
     )
 }
+
+export default BasicContent

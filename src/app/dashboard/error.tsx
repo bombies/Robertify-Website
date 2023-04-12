@@ -7,13 +7,7 @@ import Button from "@/components/button/Button";
 import refreshIcon from '/public/refresh.svg';
 import {ButtonType} from "@/components/button/ButtonType";
 
-export default function Error({
-                                  error,
-                                  reset,
-                              }: {
-    error: Error,
-    reset: () => void;
-}) {
+const Error = ({error, reset}: { error: Error, reset: () => void; }) => {
     const router = useRouter();
 
     useEffect(() => {
@@ -28,8 +22,11 @@ export default function Error({
                         {error.message}
                     </p>
                 </div>
-                <Button label='Refresh' type={ButtonType.DANGER} width={8} height={3} icon={refreshIcon} onClick={reset} />
+                <Button label='Refresh' type={ButtonType.DANGER} width={8} height={3} icon={refreshIcon}
+                        onClick={reset}/>
             </Card>
         </main>
     )
 }
+
+export default Error

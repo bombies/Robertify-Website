@@ -5,7 +5,7 @@ import {useGuildDashboard} from "@/app/dashboard/[id]/dashboard-context-wrapper"
 interface Props extends React.PropsWithChildren {
 }
 
-export default function DashboardContainer({children}: Props) {
+const DashboardContainer = ({children}: Props) => {
     const [dashboardInfo] = useGuildDashboard();
 
     return (
@@ -26,3 +26,5 @@ export default function DashboardContainer({children}: Props) {
         </div>
     )
 }
+
+export default DashboardContainer

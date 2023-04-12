@@ -2,16 +2,18 @@ import FooterGroup from "@/app/_components/footer/footer-group";
 import HyperLink from "@/components/hyperlink";
 import GenericImage from "@/app/_components/GenericImage";
 
-export default function Footer() {
+const Footer = () => {
     return (
-        <div className='bg-neutral-200 dark:bg-dark/50 p-24 tablet:p-16 phone:p-3 flex phone:flex-col justify-between gap-4'>
+        <div
+            className='bg-neutral-200 dark:bg-dark/50 p-24 tablet:p-16 phone:p-3 flex phone:flex-col justify-between gap-4'>
             <div>
                 <GenericImage
                     className='mb-6 phone:mb-2'
                     src='https://i.imgur.com/fwG8qA5.png'
                     width={4}
                 />
-                <p className='text-neutral-400 dark:text-neutral-500 max-w-xs phone:max-w-3/4 font-light text-sm phone:text-[.75rem]'>A discord music bot that with a multitude of features that will fit your liking.</p>
+                <p className='text-neutral-400 dark:text-neutral-500 max-w-xs phone:max-w-3/4 font-light text-sm phone:text-[.75rem]'>A
+                    discord music bot that with a multitude of features that will fit your liking.</p>
             </div>
             <div className='flex gap-16 phone:gap-4 phone:justify-center'>
                 <FooterGroup heading='Robertify'>
@@ -28,3 +30,5 @@ export default function Footer() {
         </div>
     )
 }
+
+export default Footer

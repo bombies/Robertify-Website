@@ -19,7 +19,7 @@ const getCommandData = async ()  => {
     return (await webClient.get('/api/commands')).data.data;
 }
 
-export default async function CommandsPage() {
+const CommandsPage = async () => {
     const data = await getCommandData();
 
     const columns: TableColumn[] = [
@@ -37,3 +37,5 @@ export default async function CommandsPage() {
         </main>
     )
 }
+
+export default CommandsPage

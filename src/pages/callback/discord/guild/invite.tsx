@@ -14,7 +14,7 @@ export const getQuery = (key: string, path: string) => {
     return keyTrimmed[1].split('&')[0];
 }
 
-export default function Callback() {
+const Callback = () => {
     const router = useRouter();
     const code = getQuery("code", router.asPath);
     const error = getQuery("error", router.asPath);
@@ -38,3 +38,5 @@ export default function Callback() {
         <main></main>
     )
 }
+
+export default Callback

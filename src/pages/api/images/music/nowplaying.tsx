@@ -1,5 +1,5 @@
 import {ImageResponse} from '@vercel/og';
-import { NextApiRequest } from 'next';
+import {NextApiRequest} from 'next';
 
 export const config = {
     runtime: 'edge',
@@ -43,7 +43,7 @@ type Requester = {
     user_image: string;
 };
 
-export default async function handler(request: NextApiRequest) {
+const Handler = async (request: NextApiRequest) => {
     const {searchParams} = new URL(request.url ?? '');
     const [InterBold, InterRegular, InterMedium] = await Promise.all([
         getInterBold,
@@ -262,3 +262,5 @@ export default async function handler(request: NextApiRequest) {
         );
     }
 }
+
+export default Handler

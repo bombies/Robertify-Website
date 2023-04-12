@@ -2,10 +2,10 @@ import HeadingSection from "@/components/heading-section";
 import Card from "@/components/card";
 import Button from "@/components/button/Button";
 
-export default function Vote() {
+const Vote = () => {
     return (
         <main>
-            <HeadingSection heading='Vote' subheading='Thank you for taking interest in supporting us!' />
+            <HeadingSection heading='Vote' subheading='Thank you for taking interest in supporting us!'/>
             <div className='p-12'>
                 <Card
                     title='Vote For Us!'
@@ -14,8 +14,9 @@ export default function Vote() {
                     className='mx-auto'
                 >
                     <div className='flex justify-center gap-6 mt-6'>
-                        <Button label='Top.gg' href='https://top.gg/bot/893558050504466482/vote' width={10} height={5} />
-                        <Button label='Discord Bot List' href='https://discordbotlist.com/bots/robertify/upvote' width={10} height={5} />
+                        <Button label='Top.gg' href='https://top.gg/bot/893558050504466482/vote' width={10} height={5}/>
+                        <Button label='Discord Bot List' href='https://discordbotlist.com/bots/robertify/upvote'
+                                width={10} height={5}/>
                     </div>
 
                 </Card>
@@ -23,3 +24,5 @@ export default function Vote() {
         </main>
     )
 }
+
+export default Vote

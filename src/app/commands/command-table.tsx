@@ -12,11 +12,11 @@ type Props = {
     columns: TableColumn[]
 }
 
-function removeDuplicates<T>(arr: T[]) {
+const removeDuplicates = <T,>(arr: T[]) => {
     return arr.filter((val, i) => arr.indexOf(val) === i);
 }
 
-export default function CommandTable(props: Props) {
+const CommandTable = (props: Props) => {
     props.data = removeDuplicates(props.data);
 
     const sort = (opts: { items: any[], sortDescriptor: SortDescriptor }) => {
@@ -24,7 +24,7 @@ export default function CommandTable(props: Props) {
             items: opts.items.sort((a, b) => {
                 let primString = "", secString = "";
 
-                switch(opts.sortDescriptor.column?.toString().toLowerCase()) {
+                switch (opts.sortDescriptor.column?.toString().toLowerCase()) {
                     case "command": {
                         primString = a.name;
                         secString = b.name;
@@ -112,3 +112,5 @@ export default function CommandTable(props: Props) {
         </Table>
     )
 }
+
+export default CommandTable

@@ -16,9 +16,9 @@ type Props = {
     canInteract: boolean
 }
 
-export default function DashboardCategorySelector(props: Props) {
-    const [ selected, setSelected ] = useState<Category>('general');
-    const [ dashboardInfo, setDashboardInfo ] = useGuildDashboard();
+const DashboardCategorySelector = (props: Props) => {
+    const [selected, setSelected] = useState<Category>('general');
+    const [dashboardInfo, setDashboardInfo] = useGuildDashboard();
     const pathName = usePathname();
 
     useEffect(() => {
@@ -60,6 +60,8 @@ export default function DashboardCategorySelector(props: Props) {
     )
 }
 
+export default DashboardCategorySelector
+
 type SelectorProps = {
     id?: string,
     category: Category,
@@ -67,7 +69,7 @@ type SelectorProps = {
     setSelected: Dispatch<SetStateAction<Category>>
 }
 
-function Selector(props: SelectorProps) {
+const Selector = (props: SelectorProps) => {
     return (
         <Button
             label={`${props.category.charAt(0).toUpperCase()}${props.category.substr(1)}`}

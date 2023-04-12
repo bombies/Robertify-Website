@@ -1,14 +1,13 @@
-'use client';
+"use client"
 
-import React, { MouseEventHandler, useState } from "react";
+import React, {MouseEventHandler, useState} from "react";
 import Link from "next/link";
-import { useDarkMode } from "@/app/_components/dark-mode-context";
-import { ButtonType } from "@/components/button/ButtonType";
-import { StaticImageData } from "next/image";
+import {ButtonType} from "@/components/button/ButtonType";
+import {StaticImageData} from "next/image";
 import GenericImage from "@/app/_components/GenericImage";
-import { ToastDataProps } from "@/components/ToastComponent";
-import { sendToast } from "@/utils/client-utils";
-import { Loading } from "@nextui-org/react";
+import {ToastDataProps} from "@/components/ToastComponent";
+import {sendToast} from "@/utils/client-utils";
+import {Loading} from "@nextui-org/react";
 
 export const getButtonStyle = (type?: ButtonType): string => {
     switch (type) {
@@ -52,7 +51,7 @@ interface Props {
     cooldown?: number;
 }
 
-export default function Button(props: Props) {
+const Button = (props: Props) => {
     const [lastClick, setLastClick] = useState<number | undefined>(undefined);
 
     const isOnCoolDown = (): boolean => {
@@ -107,35 +106,37 @@ export default function Button(props: Props) {
                     </Link>
                     :
                     <button className={className}
-                        style={{
-                            ...styleObj,
-                        }}
-                        disabled={props.disabled}
-                        onClick={(e) => {
-                            e.preventDefault();
+                            style={{
+                                ...styleObj,
+                            }}
+                            disabled={props.disabled}
+                            onClick={(e) => {
+                                e.preventDefault();
 
-                            if (!isOnCoolDown()) {
-                                if (props.onClick)
-                                    props.onClick(e);
-                                if (props.toast)
-                                    sendToast(props.toast)
-                                setLastClick(new Date().getTime());
-                            } else {
-                                sendToast({
-                                    type: ButtonType.WARNING,
-                                    title: "Slow down!",
-                                    description: `Woah there! This button is on cooldown. You may use it again in ${(Math.abs(new Date().getTime() - (lastClick! + (props.cooldown! * 1000))) / 1000).toFixed(0)} seconds!`
-                                })
-                            }
-                        }}
-                        type={props.submit === true ? 'submit' : 'button'}
+                                if (!isOnCoolDown()) {
+                                    if (props.onClick)
+                                        props.onClick(e);
+                                    if (props.toast)
+                                        sendToast(props.toast)
+                                    setLastClick(new Date().getTime());
+                                } else {
+                                    sendToast({
+                                        type: ButtonType.WARNING,
+                                        title: "Slow down!",
+                                        description: `Woah there! This button is on cooldown. You may use it again in ${(Math.abs(new Date().getTime() - (lastClick! + (props.cooldown! * 1000))) / 1000).toFixed(0)} seconds!`
+                                    })
+                                }
+                            }}
+                            type={props.submit === true ? 'submit' : 'button'}
                     >
                         <div
                             className={'flex justify-center p-2 gap-4 mx-auto' + ((props.type === ButtonType.INVERTED || props.type === ButtonType.SECONDARY) ? ' text-primary' : '')}>
-                            {props.isWorking ? <Loading size='xs' color='white' /> : children}
+                            {props.isWorking ? <Loading size='xs' color='white'/> : children}
                         </div>
                     </button>
             }
         </>
     )
 }
+
+export default Button

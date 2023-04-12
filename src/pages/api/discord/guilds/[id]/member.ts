@@ -12,7 +12,7 @@ class RouteHandler extends MethodHandler {
         return this.getResponseBuilder()
             .setAuthenticatedRoute()
             .setLogic(async (req, _, apiUtils) => {
-                const { id } = req.query;
+                const {id} = req.query;
                 const memberInfo = await fetchDiscordGuildMember(id as string, await apiUtils.getSession());
                 return this.prepareResponse(StatusCodes.OK, ReasonPhrases.OK, memberInfo);
             })
@@ -20,6 +20,8 @@ class RouteHandler extends MethodHandler {
     }
 }
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+const Handler = (req: NextApiRequest, res: NextApiResponse) => {
     return new RouteHandler(req, res).handle([HTTPMethod.GET]);
 }
+
+export default Handler

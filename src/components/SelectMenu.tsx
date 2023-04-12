@@ -67,40 +67,42 @@ const generateCategoryElement = (
     onItemSelect?: (item: SelectMenuContent) => void
 ) => {
     const isItemSelected = (item: SelectMenuContent) => {
-        return selectedItems ?  selectedItems.filter(i => i.value === item.value).length > 0 : false;
+        return selectedItems ? selectedItems.filter(i => i.value === item.value).length > 0 : false;
     }
 
     const itemElements = content.items.map(item => {
         return (
-        <div
-            key={`${content.category}#${item.label}#${item.value}`}
-            className='flex gap-4 cursor-pointer'
-            onClick={() => {
-                handleSelect(item);
-                if (onItemSelect)
-                    onItemSelect(item);
-            }}
-        >
-            {
-                item.icon && <GenericImage src={item.icon} width={1} className='self-center' />
-            }
-            <p className={'dark:text-neutral-400 text-neutral-700 hover:!text-primary transition-fast select-none whitespace-nowrap overflow-hidden text-ellipsis' + (isItemSelected(item) ? ' !text-primary' : '')}>{item.label}</p>
-        </div>
-    )})
+            <div
+                key={`${content.category}#${item.label}#${item.value}`}
+                className='flex gap-4 cursor-pointer'
+                onClick={() => {
+                    handleSelect(item);
+                    if (onItemSelect)
+                        onItemSelect(item);
+                }}
+            >
+                {
+                    item.icon && <GenericImage src={item.icon} width={1} className='self-center'/>
+                }
+                <p className={'dark:text-neutral-400 text-neutral-700 hover:!text-primary transition-fast select-none whitespace-nowrap overflow-hidden text-ellipsis' + (isItemSelected(item) ? ' !text-primary' : '')}>{item.label}</p>
+            </div>
+        )
+    })
 
     return (
         <div>
-            { displayCategories !== false && <h4 className='dark:text-neutral-600 text-neutral-700 text-center uppercase font-semibold text-sm my-3 select-none whitespace-nowrap overflow-hidden text-ellipsis'>{content.category || 'No Category'}</h4>}
+            {displayCategories !== false &&
+                <h4 className='dark:text-neutral-600 text-neutral-700 text-center uppercase font-semibold text-sm my-3 select-none whitespace-nowrap overflow-hidden text-ellipsis'>{content.category || 'No Category'}</h4>}
             {itemElements}
         </div>
     )
 }
 
-export default function SelectMenu(props: Props) {
+const SelectMenu = (props: Props) => {
     const [expanded, setExpanded] = useState(false);
     const [selected, setSelected] = useState<SelectMenuContent[] | undefined>(props.content?.filter(item => item.selected === true));
-    const [ searchValue, setSearchValue ] = useState('');
-    const [ visibleItems, setVisibleItems ] = useState(parseCategories(props.content));
+    const [searchValue, setSearchValue] = useState('');
+    const [visibleItems, setVisibleItems] = useState(parseCategories(props.content));
 
 
     useEffect(() => {
@@ -179,7 +181,7 @@ export default function SelectMenu(props: Props) {
                 <p unselectable='on'
                    className='text-neutral-700 select-none whitespace-nowrap overflow-hidden text-ellipsis'
                 >
-                    {selected ? ( selected.length > 0 ? selected.map(item => item.label).toLocaleString() : (props.placeholder || '') ) : (props.placeholder || '')}
+                    {selected ? (selected.length > 0 ? selected.map(item => item.label).toLocaleString() : (props.placeholder || '')) : (props.placeholder || '')}
                 </p>
                 <GenericImage
                     className={'self-center relative transition-fast select-none ' + (expanded ? 'rotate-180' : '')}
@@ -188,7 +190,7 @@ export default function SelectMenu(props: Props) {
                 />
             </div>
             <div
-                className={'absolute z-50 left-0 mt-4 transition-faster ' + (expanded ? 'opacity-100' : 'opacity-0 pointer-events-none') }
+                className={'absolute z-50 left-0 mt-4 transition-faster ' + (expanded ? 'opacity-100' : 'opacity-0 pointer-events-none')}
                 ref={optionsViewRef}
             >
                 <input type='text'
@@ -201,7 +203,8 @@ export default function SelectMenu(props: Props) {
                            setSearchValue(e.target.value);
                        }}
                 />
-                <div className={' max-h-48 overflow-auto p-4 bg-neutral-200 dark:bg-dark rounded-xl shadow-md transition-faster ' + parseMenuSize(props.size)}>
+                <div
+                    className={' max-h-48 overflow-auto p-4 bg-neutral-200 dark:bg-dark rounded-xl shadow-md transition-faster ' + parseMenuSize(props.size)}>
                     {categories.length !== 0 ? categories :
                         <p className='text-neutral-700 select-none'>There are no items...</p>}
                 </div>
@@ -209,3 +212,5 @@ export default function SelectMenu(props: Props) {
         </div>
     )
 }
+
+export default SelectMenu

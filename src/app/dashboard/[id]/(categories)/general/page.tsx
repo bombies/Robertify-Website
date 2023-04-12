@@ -1,7 +1,9 @@
 import DashboardGeneralContext from "@/app/dashboard/[id]/(categories)/general/dashboard-general-context";
 
-export default async function GuildDashboard() {
+const GuildDashboard = async () => {
     return (
         <DashboardGeneralContext/>
     )
 }
+
+export default GuildDashboard

@@ -46,7 +46,7 @@ const sortGuilds = (guilds: DiscordUserGuild[]) => {
     });
 }
 
-export default function GuildGrid(props: Props) {
+const GuildGrid = (props: Props) => {
     const { data: discordInfo, status } = useSession();
 
     useEffect(() => {
@@ -100,3 +100,5 @@ export default function GuildGrid(props: Props) {
         </div>
     )
 }
+
+export default GuildGrid

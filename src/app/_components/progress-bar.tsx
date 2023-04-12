@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import {useEffect} from "react";
 import NProgress from "nprogress";
 
 type PushStateInput = [
@@ -8,7 +8,7 @@ type PushStateInput = [
     url?: string | URL | null | undefined
 ];
 
-export default function ProgressBar() {
+const ProgressBar = () => {
     const height = "2px";
     const color = "#00D615";
 
@@ -45,7 +45,7 @@ export default function ProgressBar() {
     );
 
     useEffect(() => {
-        NProgress.configure({ showSpinner: false });
+        NProgress.configure({showSpinner: false});
 
         const handleAnchorClick = (event: MouseEvent) => {
             const targetUrl = (event.currentTarget as HTMLAnchorElement).href;
@@ -63,7 +63,7 @@ export default function ProgressBar() {
         };
 
         const mutationObserver = new MutationObserver(handleMutation);
-        mutationObserver.observe(document, { childList: true, subtree: true });
+        mutationObserver.observe(document, {childList: true, subtree: true});
 
         window.history.pushState = new Proxy(window.history.pushState, {
             apply: (target, thisArg, argArray: PushStateInput) => {
@@ -75,3 +75,5 @@ export default function ProgressBar() {
 
     return styles;
 }
+
+export default ProgressBar

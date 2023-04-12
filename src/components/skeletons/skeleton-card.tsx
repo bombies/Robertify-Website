@@ -8,22 +8,24 @@ type Props = {
     className?: string,
 }
 
-export default function SkeletonCard(props: Props) {
+const SkeletonCard = (props: Props) => {
     return (
         <SkeletonProvider centered={props.centered} className={parseCardSize(props.size) + ' ' + props.className}>
             <div className='space-y-6'>
-                <SkeletonContentProvider className='h-4 w-4/5' />
+                <SkeletonContentProvider className='h-4 w-4/5'/>
                 <div className='space-y-3'>
-                    <SkeletonContentProvider className='h-2 w-3/5' />
-                    <SkeletonContentProvider className='h-2 w-3/5' />
-                    <SkeletonContentProvider className='h-2 w-3/5' />
-                    <SkeletonContentProvider className='h-2 w-3/5' />
-                    <SkeletonContentProvider className='h-2 w-3/5' />
-                    <SkeletonContentProvider className='h-2 w-3/5' />
-                    <SkeletonContentProvider className='h-2 w-2/5' />
+                    <SkeletonContentProvider className='h-2 w-3/5'/>
+                    <SkeletonContentProvider className='h-2 w-3/5'/>
+                    <SkeletonContentProvider className='h-2 w-3/5'/>
+                    <SkeletonContentProvider className='h-2 w-3/5'/>
+                    <SkeletonContentProvider className='h-2 w-3/5'/>
+                    <SkeletonContentProvider className='h-2 w-3/5'/>
+                    <SkeletonContentProvider className='h-2 w-2/5'/>
 
                 </div>
             </div>
         </SkeletonProvider>
     )
 }
+
+export default SkeletonCard

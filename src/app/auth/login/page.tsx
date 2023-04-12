@@ -4,7 +4,7 @@ import {signIn, useSession} from "next-auth/react";
 import {redirect, useSearchParams} from "next/navigation";
 import {NextPageContext} from "next";
 
-export default function LoginPage() {
+const LoginPage = () => {
     const session = useSession();
     const searchParams =  useSearchParams();
 
@@ -15,7 +15,7 @@ export default function LoginPage() {
         callbackUrl: '/'
     });
 
-    return (
-        <main>{searchParams?.get("error")}</main>
-    )
+    return <main>{searchParams?.get("error")}</main>
 }
+
+export default LoginPage

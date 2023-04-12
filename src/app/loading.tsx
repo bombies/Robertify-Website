@@ -1,14 +1,18 @@
 import HeadingSection from "@/components/heading-section";
 import Button from "@/components/button/Button";
 import {ButtonType} from "@/components/button/ButtonType";
+import React from "react";
 
-export default function Loading() {
+const Loading = () => {
     return (
         <main className={'min-h-screen'}>
-            <HeadingSection heading='Robertify' subheading='A discord music bot that with a multitude of features that will fit your liking.'>
+            <HeadingSection heading='Robertify'
+                            subheading='A discord music bot that with a multitude of features that will fit your liking.'>
                 <div className='flex phone:flex-col gap-6 pointer-events-auto justify-center'>
-                    <Button label='INVITE' className='phone:mx-auto' type={ButtonType.INVERTED} width={10} height={3} href={process.env.NEXT_PUBLIC_DISCORD_INVITE_LINK} />
-                    <Button label='LEARN MORE' className='phone:mx-auto' type={ButtonType.INVERTED} width={10} height={3} href={process.env.NEXT_PUBLIC_DISCORD_INVITE_LINK} />
+                    <Button label='INVITE' className='phone:mx-auto' type={ButtonType.INVERTED} width={10} height={3}
+                            href={process.env.NEXT_PUBLIC_DISCORD_INVITE_LINK}/>
+                    <Button label='LEARN MORE' className='phone:mx-auto' type={ButtonType.INVERTED} width={10}
+                            height={3} href={process.env.NEXT_PUBLIC_DISCORD_INVITE_LINK}/>
                 </div>
             </HeadingSection>
 
@@ -16,3 +20,5 @@ export default function Loading() {
         </main>
     )
 }
+
+export default Loading

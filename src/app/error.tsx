@@ -2,13 +2,7 @@
 
 import {useEffect} from "react";
 
-export default function Error({
-                                  error,
-                                  reset,
-                              }: {
-    error: Error,
-    reset: () => void;
-}) {
+const Error = ({error, reset}: { error: Error, reset: () => void }) => {
     useEffect(() => {
         console.error(error)
     });
@@ -24,3 +18,5 @@ export default function Error({
         </div>
     )
 }
+
+export default Error

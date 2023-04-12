@@ -13,7 +13,7 @@ type Props = {
     toast?: ToastDataProps;
 }
 
-export default function IconButton(props: Props) {
+const IconButton = (props: Props) => {
     return (
         <GenericImage
             className='transition-faster hover:scale-105'
@@ -29,3 +29,5 @@ export default function IconButton(props: Props) {
         />
     )
 }
+
+export default IconButton

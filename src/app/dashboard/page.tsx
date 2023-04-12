@@ -15,7 +15,7 @@ const getUserGuilds = async (session: Session | null) => {
     return await fetchDiscordUserGuilds(session.user);
 }
 
-export default async function Dashboard() {
+const Dashboard = async () => {
     const guilds = (await getUserGuilds(await getServerSession(authOptions)));
 
     return (
@@ -33,3 +33,5 @@ export default async function Dashboard() {
         </main>
     )
 }
+
+export default Dashboard

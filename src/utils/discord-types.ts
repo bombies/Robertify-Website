@@ -288,12 +288,12 @@ export type DiscordGuildMember = {
     communication_disabled_until?: string,
 };
 
-export function isServerAdmin(guild: DiscordUserGuild): boolean {
+export const isServerAdmin = (guild: DiscordUserGuild): boolean => {
     if (!guild) return false;
     return permContainsAdmin(guild.permissions);
 }
 
-export function isGuildAdmin(member: DiscordGuildMember, guildInfo: DiscordGuild): boolean {
+export const isGuildAdmin = (member: DiscordGuildMember, guildInfo: DiscordGuild): boolean => {
     if (!member || !guildInfo) return false;
 
     if (member.user && (member.user.id === guildInfo.owner_id))
@@ -317,7 +317,7 @@ export function isGuildAdmin(member: DiscordGuildMember, guildInfo: DiscordGuild
     return false;
 }
 
-function permContainsAdmin(perm?: string) {
+const permContainsAdmin = (perm?: string) => {
     if (!perm) return false;
     return (Number(perm) & (1 << 5)) === (1 << 5) || (Number(perm) & (1 << 3)) === (1 << 3)
 }

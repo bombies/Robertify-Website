@@ -9,7 +9,7 @@ import {useSession} from "next-auth/react";
 import GenericImage from "@/app/_components/GenericImage";
 import BadgeWrapper from "@/components/BadgeWrapper";
 
-export default function NavUserProfile() {
+const NavUserProfile = () => {
     const [expanded, setExpanded] = useState(false);
     const discordInfo = useSession().data?.user;
     const wrapperRef = useRef<any>(null);
@@ -92,3 +92,5 @@ export default function NavUserProfile() {
         </div>
     )
 }
+
+export default NavUserProfile

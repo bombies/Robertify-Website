@@ -5,7 +5,7 @@ import moon from '/public/moon.svg';
 import sun from '/public/sun.svg';
 import GenericImage from "@/app/_components/GenericImage";
 
-export default function DarkModeSwitcher() {
+const DarkModeSwitcher = () => {
     const [ darkMode, setDarkMode ] = useDarkMode();
     const toggleDarkMode = () => {
         setDarkMode(prev => !prev);
@@ -24,3 +24,5 @@ export default function DarkModeSwitcher() {
         </div>
     )
 }
+
+export default DarkModeSwitcher

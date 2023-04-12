@@ -5,7 +5,7 @@ import {useMemo, useState} from "react";
 import DashboardMiscHandler from "@/app/dashboard/[id]/(categories)/misc/dashboard-misc-handler";
 import {useGuildDashboard} from "@/app/dashboard/[id]/dashboard-context-wrapper";
 
-export default function DashboardMiscContext() {
+const DashboardMiscContext = () => {
     const [dashboardInfo, setDashboardInfo] = useGuildDashboard();
     const { currentData, canInteract: stateCanInteract } = dashboardInfo;
     const {value: robertifyGuild, loading: robertifyGuildLoading} = dashboardInfo.robertifyGuild;
@@ -55,3 +55,5 @@ export default function DashboardMiscContext() {
         </div>
     )
 }
+
+export default DashboardMiscContext

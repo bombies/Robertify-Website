@@ -39,7 +39,7 @@ const reducers = combineReducers({
     guildDashboard: dashboardReducer
 })
 
-export function makeStore() {
+export const makeStore = () => {
     return configureStore({
         reducer: reducers,
         devTools: process.env.NODE_ENV !== 'production',

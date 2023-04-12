@@ -2,7 +2,7 @@
 
 import refreshIcon from "../../../../../public/refresh.svg";
 import Button from "@/components/button/Button";
-import { ButtonType } from "@/components/button/ButtonType";
+import {ButtonType} from "@/components/button/ButtonType";
 
 type Props = {
     refresh: () => void;
@@ -11,7 +11,7 @@ type Props = {
 
 }
 
-export default function DashboardRefreshButton(props: Props) {
+const DashboardRefreshButton = (props: Props) => {
     return (
         <Button
             disabled={!props.canInteract}
@@ -28,3 +28,5 @@ export default function DashboardRefreshButton(props: Props) {
         />
     )
 }
+
+export default DashboardRefreshButton

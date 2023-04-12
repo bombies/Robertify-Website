@@ -1,4 +1,3 @@
-import Button from "@/components/button/Button";
 import {ButtonType} from "@/components/button/ButtonType";
 import reqChannel from '/public/reqchannel.png';
 import features from '/public/features.png';
@@ -6,8 +5,10 @@ import dashboardImg from '/public/dashboard.png';
 import BasicContent from "@/components/baisc-content";
 import HeadingSection from "@/components/heading-section";
 import GenericImage from "@/app/_components/GenericImage";
+import React from "react";
+import Button from "@/components/button/Button";
 
-export default async function Home() {
+const Home = () => {
     return (
         <main className={'min-h-screen'}>
             <HeadingSection heading='Robertify'
@@ -60,3 +61,5 @@ export default async function Home() {
         </main>
     )
 }
+
+export default Home

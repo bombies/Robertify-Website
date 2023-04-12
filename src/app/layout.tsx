@@ -21,7 +21,7 @@ const inter = Inter({
     subsets: ['latin'],
 })
 
-export default function RootLayout(props: Props) {
+const RootLayout = (props: Props) => {
     return (
         <html suppressHydrationWarning lang="en" className={inter.className}>
         <Providers session={props.session}>
@@ -45,3 +45,5 @@ export default function RootLayout(props: Props) {
 
     )
 }
+
+export default RootLayout

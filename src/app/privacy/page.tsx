@@ -1,10 +1,10 @@
 import HeadingSection from "@/components/heading-section";
 import Card from "@/components/card";
 
-export default function Privacy() {
+const Privacy = () => {
     return (
         <main>
-            <HeadingSection heading='Privacy Policy' />
+            <HeadingSection heading='Privacy Policy'/>
             <div className='p-12 tablet:p-6 flex flex-col gap-y-6 mx-auto justify-center'>
                 <Card
                     centered
@@ -79,3 +79,5 @@ export default function Privacy() {
         </main>
     )
 }
+
+export default Privacy

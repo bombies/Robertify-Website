@@ -5,7 +5,7 @@ import {ClientSafeProvider, signIn} from "next-auth/react";
 import Button from "@/components/button/Button";
 import {redirect} from "next/navigation";
 
-export default function LoginButton() {
+const LoginButton = () => {
     return (
         <Button
             className='self-center mx-auto'
@@ -21,3 +21,5 @@ export default function LoginButton() {
         />
     );
 }
+
+export default LoginButton

@@ -33,6 +33,8 @@ class RouteHandler extends MethodHandler {
     }
 }
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-    return new RouteHandler(req,res).handle([HTTPMethod.POST, HTTPMethod.DELETE])
+const Handler = (req: NextApiRequest, res: NextApiResponse) => {
+    return new RouteHandler(req, res).handle([HTTPMethod.POST, HTTPMethod.DELETE])
 }
+
+export default Handler

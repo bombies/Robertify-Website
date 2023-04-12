@@ -2,7 +2,7 @@ import Card from "@/components/card";
 import HeadingSection from "@/components/heading-section";
 import SkeletonCard from "@/components/skeletons/skeleton-card";
 
-export default function TermsOfService() {
+const TermsOfService = () => {
     return (
         <main className='min-h-screen'>
             <HeadingSection heading='Terms of Service'>
@@ -67,3 +67,5 @@ export default function TermsOfService() {
         </main>
     )
 }
+
+export default TermsOfService

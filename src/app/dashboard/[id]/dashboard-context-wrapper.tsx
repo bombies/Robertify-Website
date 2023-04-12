@@ -1,8 +1,8 @@
 'use client';
 
-import { Session } from "next-auth";
-import { AxiosError } from "axios";
-import { useSession } from "next-auth/react";
+import {Session} from "next-auth";
+import {AxiosError} from "axios";
+import {useSession} from "next-auth/react";
 import useSWR from 'swr';
 import GenericImage from "@/app/_components/GenericImage";
 import BadgeWrapper from "@/components/BadgeWrapper";
@@ -13,20 +13,20 @@ import {
     isGuildAdmin,
     RobertifyGuild
 } from "@/utils/discord-types";
-import React, { useEffect, useMemo, useState } from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import WebClient from "@/utils/api/web-client";
 import Link from "next/link";
 import backIcon from "../../../../public/go-back.svg";
-import { useAppDispatch, useAppSelector } from "@/utils/redux/redux-store";
-import { DashboardState, selectDashboardState, setDashboardState } from "@/utils/redux/slices/dashboard-slice";
-import { compare } from "@/utils/general-utils";
-import { Loading } from "@nextui-org/react";
+import {useAppDispatch, useAppSelector} from "@/utils/redux/redux-store";
+import {DashboardState, selectDashboardState, setDashboardState} from "@/utils/redux/slices/dashboard-slice";
+import {compare} from "@/utils/general-utils";
+import {Loading} from "@nextui-org/react";
 
 interface Props extends React.PropsWithChildren {
     id: string
 }
 
-async function fetcher<T>([url, session]: [url: string, session: Session | null]): Promise<T | undefined> {
+const fetcher = async <T, >([url, session]: [url: string, session: Session | null]): Promise<T | undefined> => {
     try {
         return (await WebClient.getInstance(session?.user).get(url)).data.data;
     } catch (e) {
@@ -65,7 +65,7 @@ const useGuildMember = (server_id: string, session: Session | null) => {
 
 const GuildDashboardContext = React.createContext<[DashboardState, React.Dispatch<React.SetStateAction<DashboardState>>] | undefined>(undefined);
 
-export default function DashboardContextWrapper(props: Props) {
+const DashboardContextWrapper = (props: Props) => {
     const appDispatch = useAppDispatch();
     const initialDashboardState = useAppSelector(selectDashboardState);
     const [guildDashboardState, setGuildGuildDashboardState] = useState<DashboardState>(initialDashboardState)
@@ -149,8 +149,9 @@ export default function DashboardContextWrapper(props: Props) {
                 <div className='tablet:px-6 px+-12'>
                     <Link href='/dashboard'>
                         <div className='flex gap-4 hover:scale-[100.25%] transition-fast mb-6'>
-                            <GenericImage src={backIcon} width={2} />
-                            <p className='relative self-center text-primary font-semibold text-xl phone:text-sm'>Return to
+                            <GenericImage src={backIcon} width={2}/>
+                            <p className='relative self-center text-primary font-semibold text-xl phone:text-sm'>Return
+                                to
                                 your servers</p>
                         </div>
                     </Link>
@@ -159,7 +160,7 @@ export default function DashboardContextWrapper(props: Props) {
                     className='relative overflow-hidden mx-auto mb-12 tablet:p-6 p-8 bg-primary/10 shadow-md dark:bg-neutral-900 w-full h-42 rounded-2xl border-2 border-primary/90'
                 >
                     {
-                        discordGuildLoading ? <Loading size='lg' /> :
+                        discordGuildLoading ? <Loading size='lg'/> :
                             <div className='flex gap-12 phone:gap-6'>
 
                                 <GenericImage
@@ -181,7 +182,9 @@ export default function DashboardContextWrapper(props: Props) {
     )
 }
 
-export function useGuildDashboard() {
+export default DashboardContextWrapper
+
+export const useGuildDashboard = () => {
     const context = React.useContext(GuildDashboardContext);
     if (!context)
         throw new Error('useGuildDashboard must be used within a DashboardContextWrapper');

@@ -36,7 +36,7 @@ const hasReqChannel = (currentData?: Partial<RobertifyGuild>): boolean => {
     return !!(currentData.dedicated_channel?.channel_id && currentData.dedicated_channel?.channel_id !== '-1');
 }
 
-export default function DashboardGeneralContext() {
+const DashboardGeneralContext = () => {
     const [dashboardInfo, setDashboardInfo] = useGuildDashboard();
     const {value: discordGuild, loading: discordGuildLoading} = dashboardInfo.discordGuild;
     const {value: robertifyGuild, loading: robertifyGuildLoading} = dashboardInfo.robertifyGuild;
@@ -470,6 +470,8 @@ export default function DashboardGeneralContext() {
         </DashboardContainer>
     )
 }
+
+export default DashboardGeneralContext
 
 const compareData = (cur?: RobertifyGuild, original?: RobertifyGuild) => {
     if (!cur && !original) return false;

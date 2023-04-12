@@ -18,7 +18,7 @@ type Props = {
     onClick?: MouseEventHandler<HTMLDivElement>
 }
 
-export default function GenericImage(props: Props) {
+const GenericImage = (props: Props) => {
     const ref = useRef<any>();
     const isVisible = useVisible(ref);
 
@@ -49,3 +49,5 @@ export default function GenericImage(props: Props) {
         </div>
     )
 }
+
+export default GenericImage

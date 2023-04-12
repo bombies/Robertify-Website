@@ -9,7 +9,7 @@ import {useSession} from "next-auth/react";
 import LoginButton from "@/app/_components/nav/login-button";
 import GenericImage from "@/app/_components/GenericImage";
 
-export default function NavBar() {
+const NavBar = () => {
     const [isOpen, setOpen] = useState(false);
     const discordInfo = useSession().data?.user;
     const mobileNavRef = useRef<any>(null);
@@ -48,7 +48,8 @@ export default function NavBar() {
                 <div
                     ref={mobileNavRef}
                     className={`flex tablet:flex-col dark:bg-dark/50 backdrop-blur-lg w-full h-20 tablet:h-fit tablet:absolute bg-neutral-100 p-6 transition-fast ${isOpen ? 'tablet:visible' : 'tablet:invisible tablet:opacity-0'}`}>
-                    <Link href='/' className={'flex gap-4 justify-center cursor-pointer hover:scale-105 transition-fast'}>
+                    <Link href='/'
+                          className={'flex gap-4 justify-center cursor-pointer hover:scale-105 transition-fast'}>
                         <GenericImage
                             className='self-center'
                             src='https://i.imgur.com/fwG8qA5.png'
@@ -59,7 +60,7 @@ export default function NavBar() {
                     </Link>
                     <div
                         className='self-center mx-auto flex gap-16 tablet:gap-8 tablet:text-center tablet:flex-col tablet:mb-6 dark:text-white'>
-                        <HyperLink href={process.env.NEXT_PUBLIC_DISCORD_INVITE_LINK || ''} >INVITE</HyperLink>
+                        <HyperLink href={process.env.NEXT_PUBLIC_DISCORD_INVITE_LINK || ''}>INVITE</HyperLink>
                         <HyperLink href='/commands' newTab={false}>COMMANDS</HyperLink>
                         <HyperLink href='/vote' newTab={false}>VOTE</HyperLink>
                         <HyperLink href='/docs' newTab={false}>SUPPORT</HyperLink>
@@ -68,7 +69,7 @@ export default function NavBar() {
                         <DarkModeSwitcher/>
                         {
                             !discordInfo ?
-                                <LoginButton />
+                                <LoginButton/>
                                 :
                                 <NavUserProfile/>
                         }
@@ -79,3 +80,5 @@ export default function NavBar() {
         </nav>
     )
 }
+
+export default NavBar

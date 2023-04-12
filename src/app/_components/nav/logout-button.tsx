@@ -5,7 +5,7 @@ import logoutIcon from '/public/logout.svg';
 import {ButtonType} from "@/components/button/ButtonType";
 import {signOut} from "next-auth/react";
 
-export default function LogoutButton() {
+const LogoutButton = () => {
     return (
         <div className='flex justify-center'>
             <Button
@@ -22,3 +22,5 @@ export default function LogoutButton() {
         </div>
     )
 }
+
+export default LogoutButton

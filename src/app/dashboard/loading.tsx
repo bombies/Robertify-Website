@@ -4,7 +4,7 @@ import searchIcon from "../../../public/search.svg";
 import SkeletonCard from "@/components/skeletons/skeleton-card";
 import GenericImage from "@/app/_components/GenericImage";
 
-export default function Loading() {
+const Loading = () => {
     return (
         <main className='p-12 min-h-screen'>
             <h1 className='text-primary drop-shadow-glow-primary-lg text-center'>Welcome to your dashboard</h1>
@@ -14,7 +14,7 @@ export default function Loading() {
                         disabled={true}
                         size='xl'
                         placeholder='Search...'
-                        contentRight={<GenericImage src={searchIcon} width={1.5} />}
+                        contentRight={<GenericImage src={searchIcon} width={1.5}/>}
                         aria-label='search-input'
                     />
                 </div>
@@ -31,3 +31,5 @@ export default function Loading() {
         </main>
     )
 }
+
+export default Loading

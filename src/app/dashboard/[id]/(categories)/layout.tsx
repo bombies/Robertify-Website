@@ -1,19 +1,19 @@
 'use client';
 
-import React, { useEffect, useState, useTransition } from "react";
-import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { RobertifyGuild } from "@/utils/discord-types";
-import { compare } from "@/utils/general-utils";
+import React, {useEffect, useState, useTransition} from "react";
+import {signIn, useSession} from "next-auth/react";
+import {useRouter} from "next/navigation";
+import {RobertifyGuild} from "@/utils/discord-types";
+import {compare} from "@/utils/general-utils";
 import DashboardUnsavedChangesPopup from "@/app/dashboard/[id]/(categories)/dashboard-unsaved-changes-popup";
-import { sendToast } from "@/utils/client-utils";
-import { ButtonType } from "@/components/button/ButtonType";
-import { Session } from "next-auth";
+import {sendToast} from "@/utils/client-utils";
+import {ButtonType} from "@/components/button/ButtonType";
+import {Session} from "next-auth";
 import useSWRMutation from "swr/mutation";
 import DashboardCategorySelector from "@/app/dashboard/[id]/dashboard-category-selector";
 import WebClient from "@/utils/api/web-client";
-import { Loading } from "@nextui-org/react";
-import { useGuildDashboard } from "@/app/dashboard/[id]/dashboard-context-wrapper";
+import {Loading} from "@nextui-org/react";
+import {useGuildDashboard} from "@/app/dashboard/[id]/dashboard-context-wrapper";
 
 type Props = React.PropsWithChildren;
 
@@ -27,13 +27,13 @@ const GetCurrentBotInfo = (session: Session | null, id: string) => {
     return useSWRMutation(`/api/bot/guilds/${id}`, mutator)
 }
 
-export default function DashboardCategoryLayout({ children }: Props) {
+const DashboardCategoryLayout = ({children}: Props) => {
     const [dashboardInfo, setDashboardInfo] = useGuildDashboard();
-    const { value: discordGuild, loading: discordGuildLoading } = dashboardInfo.discordGuild;
-    const { value: discordGuildChannels, loading: discordGuildChannelsLoading } = dashboardInfo.discordGuildChannels;
-    let { value: robertifyGuild, loading: robertifyGuildLoading } = dashboardInfo.robertifyGuild;
+    const {value: discordGuild, loading: discordGuildLoading} = dashboardInfo.discordGuild;
+    const {value: discordGuildChannels, loading: discordGuildChannelsLoading} = dashboardInfo.discordGuildChannels;
+    let {value: robertifyGuild, loading: robertifyGuildLoading} = dashboardInfo.robertifyGuild;
     const session = useSession();
-    const { currentData, changesMade } = dashboardInfo;
+    const {currentData, changesMade} = dashboardInfo;
     const router = useRouter();
     const [, startTransition] = useTransition();
     // @ts-ignore
@@ -94,7 +94,7 @@ export default function DashboardCategoryLayout({ children }: Props) {
         ) {
             return router.push(inviteLink);
         }
-    }, [discordGuild, robertifyGuild, discordGuildChannels, discordGuildLoading, robertifyGuildLoading, discordGuildChannelsLoading,  inviteLink, router, session.data, session.status])
+    }, [discordGuild, robertifyGuild, discordGuildChannels, discordGuildLoading, robertifyGuildLoading, discordGuildChannelsLoading, inviteLink, router, session.data, session.status])
 
     useEffect(() => {
         const b = compareData(currentData, robertifyGuild);
@@ -105,7 +105,7 @@ export default function DashboardCategoryLayout({ children }: Props) {
         if (discordGuildLoading || robertifyGuildLoading || discordGuildChannelsLoading)
             return (
                 <div className='flex justify-center'>
-                    <Loading size="xl" />
+                    <Loading size="xl"/>
                 </div>
             )
         else
@@ -119,7 +119,7 @@ export default function DashboardCategoryLayout({ children }: Props) {
                 .then(() => {
                     if (!currentData) return;
 
-                    let currDataCopy = { ...currentData };
+                    let currDataCopy = {...currentData};
                     currDataCopy.autoplay ??= false;
                     currDataCopy.twenty_four_seven_mode ??= false;
                     setDashboardInfo(prev => {
@@ -233,6 +233,8 @@ export default function DashboardCategoryLayout({ children }: Props) {
     )
 }
 
+export default DashboardCategoryLayout
+
 const compareData = (cur?: Partial<RobertifyGuild>, original?: RobertifyGuild) => {
     if (!cur || !original) return false;
     if (cur && "_id" in cur)
@@ -244,7 +246,7 @@ const compareData = (cur?: Partial<RobertifyGuild>, original?: RobertifyGuild) =
 
     const originalKeys = (Object.keys(original) as (keyof RobertifyGuild)[]);
     const keysToExtract = (Object.keys(cur) as (keyof RobertifyGuild)[]);
-    let mutableOriginal = { ...original };
+    let mutableOriginal = {...original};
 
     originalKeys.forEach(key => {
         if (!keysToExtract.includes(key))
