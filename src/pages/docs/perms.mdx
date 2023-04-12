@@ -1,0 +1,62 @@
+import {
+    Callout
+} from "nextra-theme-docs";
+
+# Permissions
+
+Robertify has its own permission system where each member or role in your server can have a specific permission.
+
+<Callout type='warning'>
+    It goes without saying that everything in this section is **admin-only**.
+</Callout>
+
+| Permission         | Description                                                                                                                                                                          |
+|--------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `ROBERTIFY_ADMIN`  | This allows users to access every feature the bot has to offer. Users with this permission node can't be banned from anything. They will by pass restricted channels and DJ toggles. |
+| `ROBERTIFY_DJ`     | This allows users to access DJ only features.                                                                                                                                        |
+| `ROBERTIFY_THEMES` | This allows users to access the `theme` command.                                                                                                                                     |
+| `ROBERTIFY_BAN`    | This allows users to access the `ban` command. Users with this permission can't be banned.                                                                                           |
+| `ROBERTIFY_POLLS`  | This allows users to access the `poll` command.                                                                                                                                      |
+| `ROBERTIFY_8BALL`  | This allows users to add responses to the 8ball feature. It also allows the removal of responses.                                                                                    |
+
+## Managing Permissions
+
+You can manage permissions by using the `/permissions` command. However, there are other commands to simplify the process.
+
+### The `Permissions` Command
+
+#### Role Permissions
+
+Adding a permission to a role can be done with the `/permissions add role` command with the `role` and the `permission` as arguments.
+For example, if I want to add `ROBERTIFY_ADMIN` to my `Admin` role the command would be `/permissions add role Admin ROBERTIFY_ADMIN`.
+
+<Callout type='info'>
+    If you are a server admin you will already have access to the `ROBERTIFY_ADMIN` permission.
+</Callout>
+
+![Example](https://i.imgur.com/FekaWyS.gif)
+
+#### User Permissions
+
+Adding a permission to a user is similar to adding a permission to a role. The command that is to be used is the `/permission add user` command with the `user` and the `permission` as arguments.
+With Discord's slash commands, it's made easier than ever to select a user. All you have to do is enter their username and select them from the list provided.
+
+![Example](https://i.imgur.com/lkO3Gjr.gif)
+
+#### Removing Permissions
+
+You can remove a permission by executing the `/permissions remove role` or `/permissions remove user` commands with role `role` or `user` as the argument.
+
+#### Listing Permissions
+
+You can list all permissions granted to each role/user by executing the `/permissions list permissions` command. You can then narrow this down by running the `/permissions list role` or `/permissions list user` command.
+
+### The DJ Command
+
+The `setdj`, `listdj` and `removedj` commands are dedicated to managing DJ roles and users. It makes it easier to set your users as DJs or not.
+
+For the `setdj` and `removedj` there are two sub commands; `role` and `user`.
+Meaning, if you would like to set a new DJ role you would run the command `/setdj role` with the role being the argument. The same would apply to removing a DJ.
+The `listdj` command requires so additional subcommand or argument.
+
+![Example](https://i.imgur.com/Btj3CTd.gif)

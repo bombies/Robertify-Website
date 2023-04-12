@@ -10,9 +10,8 @@ class RouteHandler extends MethodHandler {
 
     protected async GET(): Promise<void> {
         return this.getResponseBuilder()
-            .setAdminRoute()
             .setLogic(async () => {
-                const externWebClient = await ExternalWebClient.getInstance();
+                const externWebClient = ExternalWebClient.getInstance();
                 if (!externWebClient)
                     return this.prepareResponse(StatusCodes.INTERNAL_SERVER_ERROR, "The external Web Client is null!");
                 const data = (await externWebClient.get('/commands')).data;
@@ -24,7 +23,7 @@ class RouteHandler extends MethodHandler {
     }
 }
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const routeHandler = new RouteHandler(req, res);
     return routeHandler.handle([HTTPMethod.GET]);
 }

@@ -2,25 +2,19 @@ import InputContext from "@/components/input-context";
 import Image from "next/image";
 import searchIcon from "../../../public/search.svg";
 import SkeletonCard from "@/components/skeletons/skeleton-card";
+import GenericImage from "@/app/_components/GenericImage";
 
 export default function Loading() {
     return (
         <main className='p-12 min-h-screen'>
-            <h1 className='text-primary dark:drop-shadow-glow-primary-lg text-center'>Welcome to your dashboard</h1>
+            <h1 className='text-primary drop-shadow-glow-primary-lg text-center'>Welcome to your dashboard</h1>
             <div>
                 <div className='flex justify-center'>
                     <InputContext
                         disabled={true}
                         size='xl'
                         placeholder='Search...'
-                        contentRight={<div className='relative w-6 h-6'>
-                            <Image
-                                src={searchIcon}
-                                alt=''
-                                fill={true}
-                                sizes='1.5rem'
-                            />
-                        </div>}
+                        contentRight={<GenericImage src={searchIcon} width={1.5} />}
                         aria-label='search-input'
                     />
                 </div>

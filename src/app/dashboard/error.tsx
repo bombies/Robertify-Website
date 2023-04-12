@@ -2,7 +2,6 @@
 
 import {useEffect} from "react";
 import Card from "@/components/card";
-import {useDiscordData} from "@/app/_components/discord-data-context";
 import {useRouter} from "next/navigation";
 import Button from "@/components/button/Button";
 import refreshIcon from '/public/refresh.svg';
@@ -15,18 +14,11 @@ export default function Error({
     error: Error,
     reset: () => void;
 }) {
-    const [ discordData ] = useDiscordData();
     const router = useRouter();
 
     useEffect(() => {
-        if (error.message.includes("not logged in"))
-            return router.push('/');
         console.error(error)
     }, [error, router]);
-
-    if (!discordData || error.message.includes("not logged in")) {
-        return (<main></main>)
-    }
 
     return (
         <main className='min-h-screen p-24'>

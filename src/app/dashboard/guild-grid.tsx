@@ -7,7 +7,8 @@ import InputContext from "@/components/input-context";
 import GuildCard from "@/app/dashboard/guild-card";
 import Card from "@/components/card";
 import {DiscordUserGuild, isServerAdmin} from "@/utils/discord-types";
-import {useDiscordDataRequired} from "@/app/_components/discord-data-context";
+import {signIn, useSession} from "next-auth/react";
+import GenericImage from "@/app/_components/GenericImage";
 
 type Props = {
     guilds?: DiscordUserGuild[],
@@ -46,6 +47,15 @@ const sortGuilds = (guilds: DiscordUserGuild[]) => {
 }
 
 export default function GuildGrid(props: Props) {
+    const { data: discordInfo, status } = useSession();
+
+    useEffect(() => {
+        if (status !== 'loading'  && (status === 'unauthenticated' || !discordInfo))
+            signIn('discord', {
+                callbackUrl: '/dashboard'
+            })
+    }, [discordInfo, status])
+
     const guildCards = useMemo(() => {
         return props.guilds ? sortGuilds(props.guilds)?.map(guild => <GuildCard
             key={guild.id}
@@ -63,9 +73,6 @@ export default function GuildGrid(props: Props) {
         setVisibleGuilds(filterGuilds(guildCards, searchValue));
     }, [searchValue, guildCards])
 
-    if (!useDiscordDataRequired())
-        return (<div></div>)
-
     return (
         <div>
             <div className='flex justify-center'>
@@ -76,7 +83,7 @@ export default function GuildGrid(props: Props) {
                     value={searchValue}
                     size='xl'
                     placeholder='Search...'
-                    contentRight={<div className='relative w-6 h-6'><Image src={searchIcon} alt='' fill={true}/></div>}
+                    contentRight={<GenericImage src={searchIcon} width={1.5} />}
                     aria-label='search-input'
                 />
             </div>

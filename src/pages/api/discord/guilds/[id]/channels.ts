@@ -1,7 +1,7 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {HTTPMethod, MethodHandler} from "@/utils/api/method-handler";
-import {DiscordWebClient} from "@/utils/api/web-client";
 import {ReasonPhrases, StatusCodes} from "http-status-codes";
+import {fetchDiscordGuildChannels} from "@/utils/api/api-methods";
 
 class RouteHandler extends MethodHandler {
     constructor(req: NextApiRequest, res: NextApiResponse) {
@@ -10,25 +10,16 @@ class RouteHandler extends MethodHandler {
 
     protected async GET(): Promise<void> {
         return this.getResponseBuilder()
-            .setAdminRoute()
-            .setLogic(async (req) => {
+            .setAuthenticatedRoute()
+            .setLogic(async (req, _, apiUtils) => {
                 const { id } = req.query;
-
-                const guildInfo = (
-                    await DiscordWebClient.getInstance()
-                        .get(`/guilds/${id}/channels`)
-                )?.data;
-
+                const guildInfo = await fetchDiscordGuildChannels(id as string, await apiUtils.getSession());
                 return this.prepareResponse(StatusCodes.OK, ReasonPhrases.OK, guildInfo);
             })
             .execute();
     }
-
-    protected async PATCH(): Promise<void> {
-        return super.PATCH();
-    }
 }
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-    return new RouteHandler(req, res).handle([HTTPMethod.GET, HTTPMethod.PATCH])
+    return new RouteHandler(req, res).handle([HTTPMethod.GET])
 }

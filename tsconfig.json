@@ -29,5 +29,6 @@
     "next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": [
     "robertify-website/node_modules"
-  ]
+  ],
+  "types": ["@edge-runtime/types"]
 }

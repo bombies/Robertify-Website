@@ -2,8 +2,10 @@
 module.exports = {
   content: [
     "src/app/**/*.{js,ts,jsx,tsx}",
-    "src/pages/**/*.{js,ts,jsx,tsx}",
-    "src/components/**/*.{js,ts,jsx,tsx}"
+    "src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "src/components/**/*.{js,ts,jsx,tsx}",
+    "./nextra-theme-docs/**/*.{js,tsx}",
+    "./theme.config.jsx",
   ],
   theme: {
     screens: {
@@ -26,9 +28,18 @@ module.exports = {
         "secondary-text": "rgb(115,115,115)",
       },
       animation: {
-        'wave-normal': 'wave 2s linear infinite'
+        'wave-normal': 'wave 2s linear infinite',
+        'gradient-normal': 'gradient 5s ease infinite',
+        enter: 'enter 200ms ease-out',
+        'slide-in': 'slide-in 1.2s cubic-bezier(.41,.73,.51,1.02)',
+        leave: 'leave 150ms ease-in forwards',
       },
       keyframes: {
+        gradient: {
+          '0%': { 'background-position': '0% 50%' },
+          '50%': { 'background-position': '100% 50%' },
+          '100%': { 'background-position': '0% 50%' }
+        },
         wave: {
           '0%': { transform: 'rotate(-10deg)' },
           '25%': { transform: 'rotate(0deg)' },
@@ -41,6 +52,18 @@ module.exports = {
             transform: 'translateX(100%)',
           },
         },
+        enter: {
+          '0%': { transform: 'scale(0.9)', opacity: 0 },
+          '100%': { transform: 'scale(1)', opacity: 1 },
+        },
+        leave: {
+          '0%': { transform: 'scale(1)', opacity: 1 },
+          '100%': { transform: 'scale(0.9)', opacity: 0 },
+        },
+        'slide-in': {
+          '0%': { transform: 'translateY(-100%)' },
+          '100%': { transform: 'translateY(0)' },
+        },
       },
       boxShadow: {
         'glow-primary-md': '0 0px 6px -1px #00D615, 0 2px 4px -2px #00D615)',
@@ -49,6 +72,9 @@ module.exports = {
       dropShadow: {
         'glow-primary-md': '0 4px 3px rgb(0 214 21 / 0.25)',
         'glow-primary-lg': '0 4px 10px rgb(0 214 21 / 0.25)'
+      },
+      backgroundSize: {
+        '400%': '400% 400%'
       }
     },
   },

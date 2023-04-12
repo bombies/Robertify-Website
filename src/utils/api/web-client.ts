@@ -1,72 +1,77 @@
 import axios, {AxiosInstance, CreateAxiosDefaults} from "axios";
-
-
+import {User} from "next-auth";
+import {signIn} from "next-auth/react";
+import {sign} from "jsonwebtoken";
+import axiosRetry from "axios-retry";
 
 class WebClient {
     protected readonly instance: AxiosInstance;
     protected static INSTANCE?: WebClient;
+    private static SESSION_INSTANCES: Map<string, WebClient> = new Map<string, WebClient>();
 
-    constructor(private options?: CreateAxiosDefaults<any>) {
+    constructor(private readonly session: User | undefined, private options?: CreateAxiosDefaults<any>) {
         this.instance = axios.create({
             headers: {
                 Accept: 'application/json',
-                "User-Agent": 'Robertify Website (https://github.com/bombies/Robertify-Website)'
             },
             timeout: 5 * 1000,
             ...options,
             baseURL: process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME
         });
-    }
 
-    private async getAccessToken(masterPassword?: string) {
-        try {
-            const data = (await this.instance.post('/api/auth/login', {
-                password: masterPassword ?? process.env.API_MASTER_PASSWORD
-            })).data
-            return data?.data.access_token;
-        } catch (ex) {
-            console.error("Couldn't get the access token for WebClient.", ex);
-        }
-
-    }
-
-    private startTokenRefresh(masterPassword?: string) {
-        setInterval(async () => {
-            await WebClient.setAccessToken(this, masterPassword);
-        }, 5 * 60 * 1000)
-    }
-
-    private static async setAccessToken(client: WebClient, masterPassword?: string) {
-        const accessToken = await client.getAccessToken(masterPassword);
-        client.instance.interceptors.request.use(config => {
-            config.headers['Authorization'] = "Bearer " + accessToken;
-            return config;
+        this.instance.interceptors.response.use((config) => config, err => {
+            if (err.response?.status === 403 && typeof window !== 'undefined') {
+                if (err.response?.data?.data?.code === 50001)
+                    return Promise.reject(err);
+                signIn('discord', {
+                    callbackUrl: '/'
+                })
+            } else return Promise.reject(err);
         });
     }
 
-    public static async getInstance(masterPassword?: string, options?: CreateAxiosDefaults<any>) {
+    public static getInstance(session: User | undefined, options?: CreateAxiosDefaults<any>) {
+
         if (!options) {
-            if (this.INSTANCE)
+            if (!session) {
+                if (this.INSTANCE)
+                    return this.INSTANCE.instance;
+                this.INSTANCE = new WebClient(session);
                 return this.INSTANCE.instance;
+            } else {
+                if (this.SESSION_INSTANCES.has(session.id) && !WebClient.SESSION_INSTANCES.get(session.id)?.sessionIsExpired())
+                    return this.SESSION_INSTANCES.get(session.id)!.instance;
 
-            const client = new WebClient();
-            this.INSTANCE = client;
+                // Browser client
+                if (typeof window !== 'undefined') {
+                    const client = new WebClient(session);
+                    return client.instance;
+                }
 
-            await WebClient.setAccessToken(client, masterPassword);
-            client.startTokenRefresh(masterPassword);
+                const client = new WebClient(session);
+                this.SESSION_INSTANCES.set(session.id, client);
 
+
+                const encryptedSession = sign(JSON.stringify(session), process.env.NEXTAUTH_SECRET!);
+                client.instance.interceptors.request.use(config => {
+                    config.headers.session = encryptedSession;
+                    return config;
+                })
+                return client.instance;
+            }
+        } else {
+            const client = new WebClient(session, {
+                ...options
+            });
             return client.instance;
         }
+    }
 
-        // Options provided
-        const client = new WebClient({
-            ...options
-        });
-
-        await WebClient.setAccessToken(client, masterPassword);
-        client.startTokenRefresh(masterPassword);
-
-        return client.instance;
+    public sessionIsExpired(): boolean {
+        if (!this.session?.user)
+            return true;
+        const { exp } = this.session.user;
+        return Number(exp) - new Date().getSeconds() <= 0;
     }
 }
 
@@ -78,13 +83,27 @@ export class ExternalWebClient {
         this.instance = axios.create({
             headers: {
                 Accept: 'application/json',
-                "User-Agent": 'Robertify Website (https://github.com/bombies/Robertify-Website)',
-                'Authorization': process.env.EXTERN_API_MASTER_PASSWORD
             },
             timeout: 5 * 1000,
             ...options,
             baseURL: process.env.EXTERN_API_HOSTNAME,
         });
+
+        this.instance.interceptors.response.use(
+            response => response,
+            async (error) => {
+                const originalRequest = error.config;
+
+                if ((error.response?.status === 403 || error.response?.status === 401) && !originalRequest._retry) {
+                    const token = await this.getAccessToken();
+                    originalRequest.headers['Authorization'] = `Bearer ${token}`;
+                    originalRequest._retry = true;
+                    return axios(originalRequest);
+                }
+
+                return Promise.reject(error);
+            }
+        )
     }
 
     private async getAccessToken() {
@@ -95,31 +114,13 @@ export class ExternalWebClient {
         return data?.access_token;
     }
 
-    private startTokenRefresh() {
-        setInterval(async () => {
-            await ExternalWebClient.setAccessToken(this);
-        }, 12 * 60 * 60 * 1000)
-    }
-
-    private static async setAccessToken(client: ExternalWebClient) {
-        const accessToken = await client.getAccessToken();
-        client.instance.interceptors.request.use(config => {
-            config.headers['Authorization'] = "Bearer " + accessToken;
-            return config;
-        });
-    }
-
-    public static async getInstance(options?: CreateAxiosDefaults<any>) {
+    public static getInstance(options?: CreateAxiosDefaults<any>) {
         if (!options) {
             if (this.INSTANCE)
                 return this.INSTANCE.instance;
 
             const client = new ExternalWebClient();
             this.INSTANCE = client;
-
-            await ExternalWebClient.setAccessToken(client);
-            client.startTokenRefresh();
-
             return client.instance;
         }
 
@@ -127,10 +128,6 @@ export class ExternalWebClient {
         const client = new ExternalWebClient({
             ...options
         });
-
-        await ExternalWebClient.setAccessToken(client);
-        client.startTokenRefresh();
-
         return client.instance;
     }
 }
@@ -143,7 +140,6 @@ export class BotWebClient {
         this.instance = axios.create({
             headers: {
                 Accept: 'application/json',
-                "User-Agent": 'Robertify Website (https://github.com/bombies/Robertify-Website)',
                 'Authorization': process.env.BOT_API_MASTER_PASSWORD
             },
             timeout: 5 * 1000,
@@ -208,13 +204,21 @@ export class DiscordWebClient {
         this.instance = axios.create({
             headers: {
                 Accept: 'application/json',
-                "User-Agent": 'Robertify Website (https://github.com/bombies/Robertify-Website)',
-                'Authorization':  accessToken ? 'Bearer ' + accessToken : 'Bot ' + process.env.DISCORD_BOT_TOKEN,
+                'Authorization': accessToken ? 'Bearer ' + accessToken : 'Bot ' + process.env.DISCORD_BOT_TOKEN,
             },
             timeout: 5 * 1000,
             ...options,
-            baseURL: 'https://discord.com/api/v10/',
+            baseURL: 'https://discord.com/api/v10',
         });
+
+        axiosRetry(this.instance, {
+            retries: 5,
+            retryDelay: () => {
+                return 1000;
+            },
+            // @ts-ignore
+            retryCondition: (err) => err.response?.data.retry_after !== undefined
+        })
     }
 
     public static getInstance(accessToken?: string, options?: CreateAxiosDefaults<any>) {

@@ -1,6 +1,8 @@
 import HeadingSection from "@/components/heading-section";
-import {ExternalWebClient} from "@/utils/api/web-client";
-import CommandTable from "@/app/commands/command-table";
+import WebClient, {ExternalWebClient} from "@/utils/api/web-client";
+import CommandTable, {TableColumn} from "@/app/commands/command-table";
+import {getServerSession} from "next-auth";
+import {authOptions} from "@/pages/api/auth/[...nextauth]";
 
 export type CommandData = {
     id: number | string,
@@ -10,17 +12,20 @@ export type CommandData = {
 }
 
 const getCommandData = async ()  => {
-    const externWebClient = await ExternalWebClient.getInstance();
+    const session = await getServerSession(authOptions);
+    const externWebClient = ExternalWebClient.getInstance();
     if (!externWebClient) return undefined
-    return (await externWebClient.get('/commands')).data;
+    const webClient = WebClient.getInstance(session?.user);
+    return (await webClient.get('/api/commands')).data.data;
 }
 
 export default async function CommandsPage() {
     const data = await getCommandData();
-    const columns = [
-        { name: 'COMMAND', uid: 'command'},
+
+    const columns: TableColumn[] = [
+        { name: 'COMMAND', uid: 'command', sortable: true},
         { name: 'DESCRIPTION', uid: 'description'},
-        { name: 'CATEGORY', uid: 'category'},
+        { name: 'CATEGORY', uid: 'category', sortable: true},
     ]
 
     return (

@@ -4,8 +4,6 @@ import React, {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "@/utils/redux/redux-store";
 import {selectDarkModeState, setDarkMode} from "@/utils/redux/slices/dark-mode-slice";
 import { useTheme as useNextTheme } from 'next-themes'
-import glow from '/public/rob-web-glow.svg';
-import Image from "next/image";
 
 const DarkModeContext = React.createContext<[boolean, React.Dispatch<React.SetStateAction<boolean>>] | undefined>(undefined);
 

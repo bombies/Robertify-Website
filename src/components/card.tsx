@@ -1,4 +1,4 @@
-import React, {CSSProperties, MouseEventHandler} from "react";
+import React, {CSSProperties, MouseEventHandler, MutableRefObject} from "react";
 import Link from "next/link";
 
 export type ComponentSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -14,6 +14,7 @@ interface Props extends React.PropsWithChildren {
     centered?: boolean;
     href?: string;
     style?: CSSProperties;
+    ref?: MutableRefObject<any>;
 }
 
 export const parseCardSize = (size?: ComponentSize) => {
@@ -30,30 +31,34 @@ export const parseCardSize = (size?: ComponentSize) => {
 export default function Card(props: Props) {
     const card = (
         <div
+            ref={props.ref}
             onClick={props.onClick}
-            className={'bg-neutral-200/50 dark:bg-neutral-900 rounded-xl shadow-lg p-6 phone:p-3 ' + (parseCardSize(props.size)) + ' ' + (props.className || '') + (typeof props.hoverable !== 'undefined' ? ' transition-fast hover:scale-105' : '') + (typeof props.centered !== 'undefined' ? ' mx-auto' : '')}
+            className={'bg-neutral-200/50 dark:bg-neutral-900 border-2 border-primary/5 rounded-xl shadow-lg p-6 phone:p-3 ' + (parseCardSize(props.size)) + ' ' + (props.className || '') + (typeof props.hoverable !== 'undefined' ? ' transition-fast hover:scale-105' : '') + (typeof props.centered !== 'undefined' ? ' mx-auto' : '')}
         >
             {props.title && (
-                <h3 className='font-semibold text-primary dark:drop-shadow-glow-primary-lg text-4xl phone:text-lg'>{props.title}</h3>
+                <h3 className='font-semibold text-primary drop-shadow-glow-primary-lg text-4xl phone:text-lg'>{props.title}</h3>
             )}
             {props.description && (
-                <p className='whitespace-pre-line overflow-hidden text-ellipsis'>{props.description.replaceAll(/(\\n)|(<br\s?\/>)/g, '\n')}</p>
+                <p className='whitespace-pre-line overflow-hidden text-ellipsis mt-3 dark:text-white'>{props.description.replaceAll(/(\\n)|(<br\s?\/>)/g, '\n')}</p>
             )}
-            {props.children && (
-                props.children
-            )}
+            <div className='mt-6'>
+                {props.children && (
+                    props.children
+                )}
+            </div>
         </div>
     )
 
     if (props.href)
         return (
             <Link
+                ref={props.ref}
                 href={props.href}
                 className={'bg-neutral-200/50 dark:bg-neutral-900/50 backdrop-blur-lg rounded-xl shadow-lg p-6 phone:p-3 ' + (parseCardSize(props.size)) + ' ' + (props.className || '') + (typeof props.hoverable !== 'undefined' ? ' transition-fast hover:scale-105' : '') + (typeof props.centered !== 'undefined' ? ' mx-auto' : '')}
                 style={props.style}
             >
                 {props.title && (
-                    <h3 className='font-semibold text-primary dark:drop-shadow-glow-primary-lg text-2xl phone:text-lg'>{props.title}</h3>
+                    <h3 className='font-semibold text-primary drop-shadow-glow-primary-lg text-2xl phone:text-lg'>{props.title}</h3>
                 )}
                 {props.description && (
                     <p className='whitespace-pre-line overflow-hidden text-ellipsis'>{props.description.replaceAll(/(\\n)|(<br\s?\/>)/g, '\n')}</p>

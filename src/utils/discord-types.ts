@@ -95,23 +95,25 @@ export type DiscordGuildChannel = {
     default_forum_layout?: number,
 }
 
-export type DedicatedChannel = {
+export type RequestChannel = {
     message_id?: string,
     channel_id?: string,
-    config?: {
-        disconnect: boolean,
-        play_pause: boolean,
-        previous: boolean,
-        rewind: boolean,
-        stop: boolean,
-        loop: boolean,
-        skip: boolean,
-        filters: boolean,
-        favourite: boolean,
-        shuffle: boolean
-    },
+    config?: RequestChannelConfig,
     og_announcement_toggle?: boolean,
 };
+
+export type RequestChannelConfig = {
+    disconnect: boolean,
+    play_pause: boolean,
+    previous: boolean,
+    rewind: boolean,
+    stop: boolean,
+    loop: boolean,
+    skip: boolean,
+    filters: boolean,
+    favourite: boolean,
+    shuffle: boolean
+}
 
 export type RestrictedChannels = {
     voice_channels?: string[],
@@ -207,11 +209,28 @@ type GuildBannedUser = {
     banned_at: String
 };
 
-export type LocaleString = "english"|"spanish"|"portuguese"|"russian"|"dutch"|"german"|"french";
-export type ThemeString = "green"|"gold"|"red"|"yellow"|"orange"|"dark"|"light"|"blue"|"light_blue"|"lightblue"|"pink"|"purple"|"mint"|"pastel_yellow"|"pastel_purple"|"pastel_red"|"baby_blue"
+export type LocaleString = "english" | "spanish" | "portuguese" | "russian" | "dutch" | "german" | "french";
+export type ThemeString =
+    "green"
+    | "gold"
+    | "red"
+    | "yellow"
+    | "orange"
+    | "dark"
+    | "light"
+    | "blue"
+    | "light_blue"
+    | "lightblue"
+    | "pink"
+    | "purple"
+    | "mint"
+    | "pastel_yellow"
+    | "pastel_purple"
+    | "pastel_red"
+    | "baby_blue"
 
 export type RobertifyGuild = {
-    dedicated_channel: DedicatedChannel;
+    dedicated_channel: RequestChannel;
     restricted_channels: RestrictedChannels;
     prefix: string;
     permissions: GuildPermissions;
@@ -225,7 +244,7 @@ export type RobertifyGuild = {
     log_channel: string;
     twenty_four_seven_mode: boolean;
     locale: LocaleString;
-}
+};
 
 export type DiscordUserGuild = {
     id: string,
@@ -234,9 +253,71 @@ export type DiscordUserGuild = {
     owner: boolean,
     permissions: string,
     features: string[]
+};
+
+export type DiscordUser = {
+    id: string,
+    username: string,
+    discriminator: string,
+    avatar?: string,
+    bot?: boolean,
+    system?: boolean,
+    mfa_enabled?: boolean,
+    banner?: string,
+    accent_color?: number,
+    locale?: string,
+    verified?: boolean,
+    email?: string,
+    flags?: number,
+    premium_type?: number,
+    public_flags?: number,
+};
+
+export type DiscordGuildMember = {
+    user?: DiscordUser,
+    nick?: string,
+    avatar?: string,
+    roles?: string[],
+    joined_at: string,
+    premium_since?: string,
+    deaf: boolean,
+    mute: boolean,
+    flags: number,
+    pending?: boolean,
+    permissions?: string,
+    communication_disabled_until?: string,
+};
+
+export function isServerAdmin(guild: DiscordUserGuild): boolean {
+    if (!guild) return false;
+    return permContainsAdmin(guild.permissions);
 }
 
-export const isServerAdmin = (guild: DiscordUserGuild) => {
-    if (!guild) return false;
-    return (Number(guild.permissions) & (1 << 5)) === (1 << 5) || (Number(guild.permissions) & (1 << 3)) === (1 << 3);
+export function isGuildAdmin(member: DiscordGuildMember, guildInfo: DiscordGuild): boolean {
+    if (!member || !guildInfo) return false;
+
+    if (member.user && (member.user.id === guildInfo.owner_id))
+        return true;
+
+    const userCheck = permContainsAdmin(member.permissions);
+    if (userCheck)
+        return true;
+
+    const memberRoles = member.roles
+    if (!memberRoles || memberRoles.length == 0)
+        return false;
+
+    if (!guildInfo.roles)
+        return false;
+
+    const roleDetails = guildInfo.roles.filter(role => memberRoles.some(r => r === role.id));
+    for (let i = 0; i < roleDetails.length; i++)
+        if (permContainsAdmin(roleDetails[i].permissions))
+            return true;
+    return false;
+}
+
+function permContainsAdmin(perm?: string) {
+    if (!perm) return false;
+    return (Number(perm) & (1 << 5)) === (1 << 5) || (Number(perm) & (1 << 3)) === (1 << 3)
 }

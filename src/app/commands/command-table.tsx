@@ -1,20 +1,56 @@
 'use client';
 
-import {Table} from "@nextui-org/react";
+import {SortDescriptor, Table, useAsyncList} from "@nextui-org/react";
 import React from "react";
 import {CommandData} from "@/app/commands/page";
+import {useListData} from "@react-stately/data";
+
+export type TableColumn = { name: string, uid: string, sortable?: boolean };
 
 type Props = {
     data: CommandData[],
-    columns: { name: string, uid: string }[]
+    columns: TableColumn[]
 }
 
-const removeDuplicates = (arr: any[]) => {
+function removeDuplicates<T>(arr: T[]) {
     return arr.filter((val, i) => arr.indexOf(val) === i);
 }
 
 export default function CommandTable(props: Props) {
     props.data = removeDuplicates(props.data);
+
+    const sort = (opts: { items: any[], sortDescriptor: SortDescriptor }) => {
+        return ({
+            items: opts.items.sort((a, b) => {
+                let primString = "", secString = "";
+
+                switch(opts.sortDescriptor.column?.toString().toLowerCase()) {
+                    case "command": {
+                        primString = a.name;
+                        secString = b.name;
+                        break;
+                    }
+                    case "category": {
+                        primString = a.category;
+                        secString = b.category;
+                        break;
+                    }
+                }
+
+                if (opts.sortDescriptor.direction === 'ascending') {
+                    return primString.localeCompare(secString);
+                } else if (opts.sortDescriptor.direction === 'descending') {
+                    return secString.localeCompare(primString);
+                } else return 0;
+            })
+        })
+    }
+
+    const list = useAsyncList({
+        load: async () => ({items: props.data}),
+        sort
+    })
+
     const renderCell = (command: CommandData, columnKey: React.Key) => {
         // @ts-ignore
         const cellValue = command[columnKey];
@@ -39,7 +75,8 @@ export default function CommandTable(props: Props) {
             bordered
             aria-label="Command table"
             color='primary'
-            selectionMode="none"
+            sortDescriptor={list.sortDescriptor}
+            onSortChange={list.sort}
             css={{
                 height: 'auto',
                 minWidth: "100%",
@@ -51,13 +88,13 @@ export default function CommandTable(props: Props) {
                 {(column) => (
                     <Table.Column
                         key={column.uid}
-                        align='start'
+                        allowsSorting={column.sortable}
                     >
                         {column.name}
                     </Table.Column>
                 )}
             </Table.Header>
-            <Table.Body items={props.data || []}>
+            <Table.Body items={list.items || []}>
                 {(command: CommandData) => (
                     <Table.Row>
                         {(columnKey) => (

@@ -1,0 +1,12 @@
+{
+  "docs": {
+    "title": "Documentation",
+    "display": "children"
+  },
+  "invite_link": {
+    "title": "Invite ↗",
+    "type": "page",
+    "href": "https://robertify.me/invite",
+    "newWindow": true
+  }
+}

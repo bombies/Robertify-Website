@@ -1,0 +1,30 @@
+import {Callout} from "nextra-theme-docs";
+
+# Restricted Channels
+
+Restricted channels provide, as the name suggests, restricted access to the bot. Meaning commands and/or features
+will only be available in channels you configure.
+
+<Callout type='info'>
+    Server admins and users with the `ROBERTIFY_ADMIN` permission will still be able to use commands anywhere and have the bot join whichever channel.
+</Callout>
+
+## Updating Restricted Channels
+
+<Callout type='warning'>
+    Before setting restricted voice or text channels you should ensure the `restrictedvoice` or `restrictedtext` toggle is enabled.
+    You can read more about how to do that [here](/docs/toggles#the-main-toggles).
+</Callout>
+
+You can set restricted channels by running the `/restricted channels add` command with the `channel` as the argument.
+Upon doing this, it will be made that Robertify will only be allowed to join the channel you set. You can set as many channels as you'd like.
+
+You can remove a restricted voice channel by running the `/restricted channels remove` command with the `channel` as the argument.
+
+You can list all your restricted voice channels by running the `/restricted channels list` command.
+
+<Callout type='info'>
+    This command works for both message and audio channels.
+</Callout>
+
+![Example](https://i.imgur.com/k0TDA9V.gif)

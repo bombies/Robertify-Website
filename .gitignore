@@ -38,3 +38,11 @@ next-env.d.ts
 
 #sentry
 sentry.*.config.js
+# Sentry
+.sentryclirc
+
+# Sentry
+next.config.original.js
+
+# Turbo Repo
+.turbo
