@@ -27,9 +27,7 @@ export default function DashboardPermissionsContext() {
 
     return (
         <DashboardContainer>
-            Hello, permissions.<br/>
-            {handler.getAllRolePermissions()}<br/>
-            {handler.getAllUserPermissions()}
+            {handler.generateTableForRolePermissions()}
         </DashboardContainer>
     )
 }
