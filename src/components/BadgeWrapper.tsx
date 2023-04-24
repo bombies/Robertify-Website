@@ -1,13 +1,15 @@
 'use client';
 
-import {Badge} from "@nextui-org/react";
-import React from "react";
+import {Badge, CSS} from "@nextui-org/react";
+import React, {MouseEventHandler} from "react";
 
 interface Props extends React.PropsWithChildren {
     color?: 'primary' | 'warning' | 'error' | 'success' | 'secondary',
     size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
     content?: string,
-    classname?: string
+    classname?: string,
+    onClick?: MouseEventHandler<HTMLDivElement>,
+    css?: CSS
 }
 
 export default function BadgeWrapper(props: Props) {
@@ -19,10 +21,12 @@ export default function BadgeWrapper(props: Props) {
                 color={props.color}
                 content={props.content}
                 size={props.size}
-                className={'!z-2 ' + (props.classname ?? '')}
+                className={props.classname}
+                onClick={props.onClick}
                 css={{
                     'color': 'white',
-                    zIndex: 2
+                    zIndex: 2,
+                    ...props.css
                 }}
             >
                 {props.children}
