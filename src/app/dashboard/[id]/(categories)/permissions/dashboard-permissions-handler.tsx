@@ -142,6 +142,7 @@ export default class DashboardPermissionsHandler extends AbstractDashboardHandle
                 }
                 case "perms_col": {
                     const permElements = response.permissions.map(permission => <BadgeWrapper
+                        key={permission.id}
                         onClick={() => {
                         }}
                         css={{
