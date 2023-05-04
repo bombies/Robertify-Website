@@ -13,12 +13,11 @@ export const metadata = {
     description: 'A next-gen music bot',
 }
 
-interface Props extends React.PropsWithChildren {
-    session: any
-}
+interface Props extends React.PropsWithChildren {}
 
 const inter = Inter({
     subsets: ['latin'],
+    display: 'swap'
 })
 
 export default function RootLayout(props: Props) {
