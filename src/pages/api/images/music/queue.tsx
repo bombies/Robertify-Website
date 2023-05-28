@@ -6,7 +6,7 @@ export const config = {
     runtime: 'edge',
 };
 
-const parseTheme = (theme: string) => {
+export const parseTheme = (theme: string) => {
     switch (theme.toLowerCase()) {
         case "green": return "#2ce629";
         case "mint": return "#4dffa0";
