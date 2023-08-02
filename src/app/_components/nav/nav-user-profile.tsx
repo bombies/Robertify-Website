@@ -46,7 +46,7 @@ export default function NavUserProfile() {
                         width={2}
                         imageClassName='self-center rounded-full'
                     />
-                    <p className='self-center text-primary font-semibold drop-shadow-glow-primary-lg'>{discordInfo?.username}#{discordInfo?.discriminator}</p>
+                    <p className='self-center text-primary font-semibold drop-shadow-glow-primary-lg'>{discordInfo?.username}</p>
                 </div>
                 <div
                     ref={miniViewRef}
@@ -64,7 +64,7 @@ export default function NavUserProfile() {
                                 src={avatar}
                                 width={6}
                             />
-                            <p className='self-center text-primary text-center text-xl drop-shadow-glow-primary-lg font-semibold pointer-events-none mb-6'>{discordInfo?.username}#{discordInfo?.discriminator}</p>
+                            <p className='self-center text-primary text-center text-xl drop-shadow-glow-primary-lg font-semibold pointer-events-none mb-6'>{discordInfo?.username}</p>
                         </div>
                     }
                     <div className='space-y-3'>
