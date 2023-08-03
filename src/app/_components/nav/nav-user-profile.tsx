@@ -35,7 +35,7 @@ export default function NavUserProfile() {
 
     return (
         <div ref={wrapperRef} className='mx-auto'>
-            <div className='relative'>
+            <div className=''>
                 <div
                     className='flex gap-4 cursor-pointer hover:scale-105 transition-faster'
                     onClick={toggleExpanded}
@@ -50,7 +50,7 @@ export default function NavUserProfile() {
                 </div>
                 <div
                     ref={miniViewRef}
-                    className='absolute dark:bg-dark/80 shadow-lg shadow-primary/50 mt-4 mr-2 left-[-3rem] z-50 w-56 p-6 h-fit bg-neutral-100/80 shadow-md backdrop-blur-xl rounded-xl transition-faster border-[1px] border-primary'
+                    className='absolute dark:bg-dark/80 right-0 mt-4 mr-2 z-50 w-56 p-6 h-fit bg-neutral-100/80 backdrop-blur-md rounded-xl transition-faster border-[1px] border-primary'
                     style={{
                         display: expanded ? 'inherit' : 'none'
                     }}
@@ -59,7 +59,7 @@ export default function NavUserProfile() {
                         discordInfo &&
                         <div>
                             <GenericImage
-                                className='mb-4 self-center border-2 border-primary rounded-full shadow-lg  shadow-primary/0 mx-auto mb-6'
+                                className='mb-4 self-center border-2 border-primary rounded-full shadow-lg  shadow-primary/0 mx-auto'
                                 imageClassName='rounded-full'
                                 src={avatar}
                                 width={6}
