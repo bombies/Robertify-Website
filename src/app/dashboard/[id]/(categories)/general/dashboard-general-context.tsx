@@ -1,6 +1,6 @@
 'use client';
 
-import {LocaleString, RobertifyGuild, ThemeString} from "@/utils/discord-types";
+import {LocaleString, RequestChannelConfig, RobertifyGuild, ThemeString} from "@/utils/discord-types";
 import {useRouter} from "next/navigation";
 import DashboardSection from "@/app/dashboard/[id]/(categories)/dashboard-section";
 import DashboardSectionContent from "@/app/dashboard/[id]/(categories)/dashboard-section-content";
@@ -88,7 +88,18 @@ export default function DashboardGeneralContext() {
                 .then((data) => {
                     if (data) {
                         const dataParsed = data.data.data;
-                        const configParsed = JSON.parse(dataParsed.config);
+                        const configParsed: RequestChannelConfig = dataParsed.config ? JSON.parse(dataParsed.config) : {
+                            disconnect: true,
+                            skip: true,
+                            play_pause: true,
+                            previous: true,
+                            favourite: true,
+                            loop: true,
+                            shuffle: true,
+                            filters: false,
+                            rewind: true,
+                            stop: true
+                        };
 
                         setCurrentData(prevState => {
                             if (!prevState) return;
