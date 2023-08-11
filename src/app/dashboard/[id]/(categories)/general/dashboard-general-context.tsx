@@ -87,8 +87,8 @@ export default function DashboardGeneralContext() {
             triggerReqChannelCreation()
                 .then((data) => {
                     if (data) {
-                        const dataParsed = data.data.data;
-                        const configParsed: RequestChannelConfig = dataParsed.config ? JSON.parse(dataParsed.config) : {
+                        const dataParsed = data.data.data.data;
+                        const configParsed: RequestChannelConfig = {
                             disconnect: true,
                             skip: true,
                             play_pause: true,
@@ -100,9 +100,18 @@ export default function DashboardGeneralContext() {
                             rewind: true,
                             stop: true
                         };
-
                         setCurrentData(prevState => {
-                            if (!prevState) return;
+                            if (!prevState && dashboardInfo.robertifyGuild.value)
+                                return ({
+                                    ...dashboardInfo.robertifyGuild.value,
+                                    dedicated_channel: {
+                                        ...dashboardInfo.robertifyGuild.value.dedicated_channel,
+                                        ...dataParsed,
+                                        config: configParsed
+                                    },
+                                })
+                            else if (!prevState)
+                                throw new Error("The current state is undefined and there is no guild info!")
 
                             return ({
                                 ...prevState,
@@ -113,7 +122,6 @@ export default function DashboardGeneralContext() {
                                 },
                             });
                         });
-                        router.refresh();
                         sendToast({
                             description: 'Request channel has been created!'
                         })

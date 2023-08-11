@@ -1,8 +1,8 @@
 'use client';
 
-import { Session } from "next-auth";
-import { AxiosError } from "axios";
-import { useSession } from "next-auth/react";
+import {Session} from "next-auth";
+import {AxiosError} from "axios";
+import {useSession} from "next-auth/react";
 import useSWR from 'swr';
 import GenericImage from "@/app/_components/GenericImage";
 import {
@@ -12,13 +12,13 @@ import {
     isGuildAdmin,
     RobertifyGuild
 } from "@/utils/discord-types";
-import React, { useEffect, useMemo, useState } from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import WebClient from "@/utils/api/web-client";
 import Link from "next/link";
 import backIcon from "../../../../public/go-back.svg";
-import { useAppDispatch, useAppSelector } from "@/utils/redux/redux-store";
-import { DashboardState, selectDashboardState, setDashboardState } from "@/utils/redux/slices/dashboard-slice";
-import { compare } from "@/utils/general-utils";
+import {useAppDispatch, useAppSelector} from "@/utils/redux/redux-store";
+import {DashboardState, selectDashboardState, setDashboardState} from "@/utils/redux/slices/dashboard-slice";
+import {compare} from "@/utils/general-utils";
 import {Spinner} from "@nextui-org/react";
 import {Chip} from "@nextui-org/chip";
 
@@ -142,15 +142,15 @@ export default function DashboardContextWrapper(props: Props) {
         });
     }, [botGuildInfo, discordGuildInfo, discordGuildChannelInfo, guildMemberInfo, discordGuildLoading, botGuildLoading, discordGuildChannelLoading, guildMemberLoading, session, props.id])
 
-    const val = useMemo<[DashboardState, React.Dispatch<React.SetStateAction<DashboardState>>]>(() => ([guildDashboardState, setGuildGuildDashboardState]), [guildDashboardState])
     return (
-        <GuildDashboardContext.Provider value={val}>
+        <GuildDashboardContext.Provider value={[guildDashboardState, setGuildGuildDashboardState]}>
             <div className='w-full min-h-screen desktop:p-36 p-24 tablet:px-6 phone:px-3'>
                 <div className='tablet:px-6 px+-12'>
                     <Link href='/dashboard'>
                         <div className='flex gap-4 hover:scale-[100.25%] transition-fast mb-6'>
-                            <GenericImage src={backIcon} width={2} />
-                            <p className='relative self-center text-primary font-semibold text-xl phone:text-sm'>Return to
+                            <GenericImage src={backIcon} width={2}/>
+                            <p className='relative self-center text-primary font-semibold text-xl phone:text-sm'>Return
+                                to
                                 your servers</p>
                         </div>
                     </Link>
@@ -159,7 +159,7 @@ export default function DashboardContextWrapper(props: Props) {
                     className='relative overflow-hidden mx-auto mb-12 tablet:p-6 p-8 bg-primary/10 shadow-md dark:bg-neutral-900 w-full h-42 rounded-2xl border-2 border-primary/90'
                 >
                     {
-                        discordGuildLoading ? <Spinner size='lg' /> :
+                        discordGuildLoading ? <Spinner size='lg'/> :
                             <div className='flex gap-12 phone:gap-6'>
 
                                 <GenericImage

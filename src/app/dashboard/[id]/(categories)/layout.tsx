@@ -95,6 +95,20 @@ export default function DashboardCategoryLayout({children}: Props) {
     }, [discordGuild, robertifyGuild, discordGuildChannels, discordGuildLoading, robertifyGuildLoading, discordGuildChannelsLoading, inviteLink, router, session.data, session.status, dashboardInfo.id])
 
     useEffect(() => {
+        if (!compare(currentData?.dedicated_channel, robertifyGuild?.dedicated_channel)) {
+            setDashboardInfo(prev => ({
+                ...prev,
+                robertifyGuild: {
+                    ...prev.robertifyGuild,
+                    value: {
+                        ...prev.robertifyGuild.value!!,
+                        dedicated_channel: currentData!!.dedicated_channel!!
+                    }
+                }
+            }))
+            return;
+        }
+
         const b = compareData(currentData, robertifyGuild);
         setChangesMade(b);
     }, [currentData, robertifyGuild, setChangesMade]);
