@@ -64,12 +64,12 @@ export default function DashboardGeneralContext() {
         isMutating: isCreatingReqChannel,
         trigger: triggerReqChannelCreation
         // @ts-ignore
-    } = CreateReqChannel(session.data, dashboardInfo.robertifyGuild?.server_id);
+    } = CreateReqChannel(session.data, dashboardInfo.id);
     const {
         isMutating: isDeletingReqChannel,
         trigger: triggerReqChannelDeletion
         // @ts-ignore
-    } = DeleteReqChannel(session.data, dashboardInfo.robertifyGuild?.server_id);
+    } = DeleteReqChannel(session.data, dashboardInfo.id);
 
     const canInteract = (!!stateCanInteract) && !isCreatingReqChannel && !isDeletingReqChannel;
     const handler = new DashboardGeneralHandler({
