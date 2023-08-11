@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useEffect, useState, useTransition} from "react";
+import React, {useCallback, useEffect, useTransition} from "react";
 import {signIn, useSession} from "next-auth/react";
 import {useRouter} from "next/navigation";
 import {RobertifyGuild} from "@/utils/discord-types";
@@ -12,8 +12,8 @@ import {Session} from "next-auth";
 import useSWRMutation from "swr/mutation";
 import DashboardCategorySelector from "@/app/dashboard/[id]/dashboard-category-selector";
 import WebClient from "@/utils/api/web-client";
-import {Loading} from "@nextui-org/react";
 import {useGuildDashboard} from "@/app/dashboard/[id]/dashboard-context-wrapper";
+import {Spinner} from "@nextui-org/react";
 
 type Props = React.PropsWithChildren;
 
@@ -54,14 +54,15 @@ export default function DashboardCategoryLayout({children}: Props) {
             ...prev,
             canInteract
         }))
-    }, [canInteract]);
+    }, [canInteract, setDashboardInfo]);
 
-    const setChangesMade = (v: boolean) => {
-        setDashboardInfo(prev => ({
-            ...prev,
-            changesMade: v
-        }));
-    }
+    const setChangesMade = useCallback((v: boolean) => {
+            setDashboardInfo(prev => ({
+                ...prev,
+                changesMade: v
+            }));
+        }, [setDashboardInfo]
+    )
 
     const setCurrentData = (cb: (prev?: Partial<RobertifyGuild>) => RobertifyGuild | undefined) => {
         setDashboardInfo(prev => {
@@ -91,18 +92,18 @@ export default function DashboardCategoryLayout({children}: Props) {
 
         else if (!robertifyGuild && !robertifyGuildLoading)
             return router.push(inviteLink);
-    }, [discordGuild, robertifyGuild, discordGuildChannels, discordGuildLoading, robertifyGuildLoading, discordGuildChannelsLoading, inviteLink, router, session.data, session.status])
+    }, [discordGuild, robertifyGuild, discordGuildChannels, discordGuildLoading, robertifyGuildLoading, discordGuildChannelsLoading, inviteLink, router, session.data, session.status, dashboardInfo.id])
 
     useEffect(() => {
         const b = compareData(currentData, robertifyGuild);
         setChangesMade(b);
-    }, [currentData, robertifyGuild]);
+    }, [currentData, robertifyGuild, setChangesMade]);
 
     if (!discordGuild || !robertifyGuild || !discordGuildChannels)
         if (discordGuildLoading || robertifyGuildLoading || discordGuildChannelsLoading)
             return (
                 <div className='flex justify-center'>
-                    <Loading size="xl"/>
+                    <Spinner size="lg"/>
                 </div>
             )
         else

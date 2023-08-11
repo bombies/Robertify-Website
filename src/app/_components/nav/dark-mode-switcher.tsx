@@ -1,26 +1,32 @@
 'use client';
 
-import {useDarkMode} from "@/app/_components/dark-mode-context";
 import moon from '/public/moon.svg';
 import sun from '/public/sun.svg';
 import GenericImage from "@/app/_components/GenericImage";
+import {useTheme} from "next-themes";
+import {useEffect, useState} from "react";
+import {Switch} from "@nextui-org/react";
+import MoonIcon from "@/app/_components/icons/moon-icon";
+import SunIcon from "@/app/_components/icons/sun-icon";
 
 export default function DarkModeSwitcher() {
-    const [ darkMode, setDarkMode ] = useDarkMode();
-    const toggleDarkMode = () => {
-        setDarkMode(prev => !prev);
-    }
+    const {theme, setTheme} = useTheme()
+    const [isSelected, setSelected] = useState(theme !== "light")
+
+    useEffect(() => {
+        setTheme(isSelected ? "dark" : "light")
+    }, [isSelected, setTheme])
 
     return (
-        <div
-            className='transition-fast hover:scale-105 self-center cursor-pointer'
-            onClick={toggleDarkMode}
-        >
-            <GenericImage
-                src={darkMode ? sun : moon}
-                alt='Dark mode toggle'
-                width={1.25}
-            />
-        </div>
+        <Switch
+            isSelected={isSelected}
+            onValueChange={setSelected}
+            thumbIcon={({isSelected}) => (
+                isSelected ?
+                    <MoonIcon fill="#00D615" width={12} />
+                    :
+                    <SunIcon  width={12}/>
+            )}
+        />
     )
 }

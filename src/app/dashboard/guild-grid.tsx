@@ -9,6 +9,7 @@ import Card from "@/components/card";
 import {DiscordUserGuild, isServerAdmin} from "@/utils/discord-types";
 import {signIn, useSession} from "next-auth/react";
 import GenericImage from "@/app/_components/GenericImage";
+import {Input} from "@nextui-org/react";
 
 type Props = {
     guilds?: DiscordUserGuild[],
@@ -47,10 +48,10 @@ const sortGuilds = (guilds: DiscordUserGuild[]) => {
 }
 
 export default function GuildGrid(props: Props) {
-    const { data: discordInfo, status } = useSession();
+    const {data: discordInfo, status} = useSession();
 
     useEffect(() => {
-        if (status !== 'loading'  && (status === 'unauthenticated' || !discordInfo))
+        if (status !== 'loading' && (status === 'unauthenticated' || !discordInfo))
             signIn('discord', {
                 callbackUrl: '/dashboard'
             })
@@ -75,16 +76,19 @@ export default function GuildGrid(props: Props) {
 
     return (
         <div>
-            <div className='flex justify-center'>
-                <InputContext
-                    onChange={(e) => {
-                        setSearchValue(e.target.value)
+            <div className='mx-auto w-1/2'>
+                <Input
+                    onValueChange={(value) => {
+                        setSearchValue(value)
                     }}
                     value={searchValue}
-                    size='xl'
+                    size='lg'
                     placeholder='Search...'
-                    contentRight={<GenericImage src={searchIcon} width={1.5} />}
-                    aria-label='search-input'
+                    startContent={<GenericImage src={searchIcon} width={1.5}/>}
+                    aria-label='Guild Search Input'
+                    classNames={{
+                       inputWrapper: "dark:bg-neutral-900/50 border-1 border-black/10 dark:border-white/10"
+                    }}
                 />
             </div>
             {

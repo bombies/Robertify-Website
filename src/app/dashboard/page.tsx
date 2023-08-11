@@ -2,8 +2,8 @@ import GuildGrid from "@/app/dashboard/guild-grid";
 import {getServerSession, Session} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 import {fetchDiscordUserGuilds} from "@/utils/api/api-methods";
-import BadgeWrapper from "@/components/BadgeWrapper";
 import React from "react";
+import {Chip} from "@nextui-org/chip";
 
 export const metadata = {
     title: 'Robertify - Guild List'
@@ -21,13 +21,15 @@ export default async function Dashboard() {
     return (
         <main className='p-12 phone:px-6 min-h-screen'>
             <div className='flex justify-center gap-4 mb-6'>
-                <h1 className='text-primary text-5xl phone:text-3xl drop-shadow-glow-primary-lg self-center !m-0'>
+                <h1 className='text-primary text-3xl phone:text-xl drop-shadow-glow-primary-lg self-center uppercase font-bold !m-0'>
                     Welcome to your dashboard
                 </h1>
-                <BadgeWrapper
+                <Chip
+                    variant="flat"
                     color='primary'
                     size='sm'
-                >BETA</BadgeWrapper>
+                    className="self-center"
+                >BETA</Chip>
             </div>
             <GuildGrid guilds={guilds}/>
         </main>

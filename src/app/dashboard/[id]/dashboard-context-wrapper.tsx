@@ -5,7 +5,6 @@ import { AxiosError } from "axios";
 import { useSession } from "next-auth/react";
 import useSWR from 'swr';
 import GenericImage from "@/app/_components/GenericImage";
-import BadgeWrapper from "@/components/BadgeWrapper";
 import {
     DiscordGuild,
     DiscordGuildChannel,
@@ -20,7 +19,8 @@ import backIcon from "../../../../public/go-back.svg";
 import { useAppDispatch, useAppSelector } from "@/utils/redux/redux-store";
 import { DashboardState, selectDashboardState, setDashboardState } from "@/utils/redux/slices/dashboard-slice";
 import { compare } from "@/utils/general-utils";
-import { Loading } from "@nextui-org/react";
+import {Spinner} from "@nextui-org/react";
+import {Chip} from "@nextui-org/chip";
 
 interface Props extends React.PropsWithChildren {
     id: string
@@ -72,7 +72,7 @@ export default function DashboardContextWrapper(props: Props) {
 
     useEffect(() => {
         appDispatch(setDashboardState(guildDashboardState));
-    }, [guildDashboardState, setDashboardState, appDispatch])
+    }, [guildDashboardState, appDispatch])
 
     const session = useSession();
     let {
@@ -159,7 +159,7 @@ export default function DashboardContextWrapper(props: Props) {
                     className='relative overflow-hidden mx-auto mb-12 tablet:p-6 p-8 bg-primary/10 shadow-md dark:bg-neutral-900 w-full h-42 rounded-2xl border-2 border-primary/90'
                 >
                     {
-                        discordGuildLoading ? <Loading size='lg' /> :
+                        discordGuildLoading ? <Spinner size='lg' /> :
                             <div className='flex gap-12 phone:gap-6'>
 
                                 <GenericImage
@@ -170,8 +170,10 @@ export default function DashboardContextWrapper(props: Props) {
                                         objectFit: 'cover'
                                     }}
                                 />
-                                <h1 className='text-4xl phone:text-xl font-black tracking-wider text-primary self-center z-10'>{discordGuildInfo?.name}</h1>
-                                <BadgeWrapper color='primary' size='sm'>BETA</BadgeWrapper>
+                                <div className="flex gap-4">
+                                    <h1 className='text-4xl phone:text-xl font-black tracking-wider text-primary self-center z-10'>{discordGuildInfo?.name}</h1>
+                                    <Chip color='primary' size='sm' variant="flat" className="self-center">BETA</Chip>
+                                </div>
                             </div>
                     }
                 </div>

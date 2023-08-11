@@ -93,7 +93,7 @@ export default function DashboardGeneralContext() {
                         setCurrentData(prevState => {
                             if (!prevState) return;
 
-                            const ret = ({
+                            return ({
                                 ...prevState,
                                 dedicated_channel: {
                                     ...prevState.dedicated_channel,
@@ -101,8 +101,6 @@ export default function DashboardGeneralContext() {
                                     config: configParsed
                                 },
                             });
-
-                            return ret;
                         });
                         router.refresh();
                         sendToast({
@@ -212,7 +210,7 @@ export default function DashboardGeneralContext() {
                                 label='Create Request Channel'
                                 type={ButtonType.CTA}
                                 height={3}
-                                width={12}
+                                width={15}
                                 onClick={createReqChannel}
                             />
                         </Card> :

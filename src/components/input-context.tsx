@@ -1,8 +1,7 @@
 'use client';
-import {Input} from "@nextui-org/react";
-import {Props} from "@nextui-org/react/types/input/input-props";
+import {Input, InputProps} from "@nextui-org/react";
 
-export default function InputContext(props: Props) {
+export default function InputContext(props: InputProps) {
     return (
         <Input {...props} />
     )

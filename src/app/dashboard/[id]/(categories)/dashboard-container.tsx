@@ -11,9 +11,9 @@ export default function DashboardContainer({children}: Props) {
     return (
         <div
             className='relative mx-auto space-y-6 mb-12 p-12 tablet:p-6 bg-primary/10 shadow-md dark:bg-neutral-900 w-full min-h-42 rounded-2xl border-2 border-primary/90'>
-            {!dashboardInfo.userHasPermission &&
+            {(!dashboardInfo.userHasPermission.loading && !dashboardInfo.userHasPermission.value) &&
                 <div
-                    className="absolute z-50 w-full h-full bg-dark/80 top-0 left-0 rounded-2xl p-12 tablet:p-6 phone:p-3">
+                    className="absolute z-50 w-full h-full bg-dark/95 backdrop-blur-sm top-0 left-0 rounded-2xl p-12 tablet:p-6 phone:p-3">
                     <Card
                         centered
                         hoverable

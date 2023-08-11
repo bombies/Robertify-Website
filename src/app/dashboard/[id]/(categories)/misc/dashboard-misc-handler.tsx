@@ -1,8 +1,20 @@
+"use client"
+
 import AbstractDashboardHandler, {
     AbstractDashboardFields
 } from "@/app/dashboard/[id]/(categories)/abstract-dashboard-handler";
-import {Modal, Spacer, Table, Text, Textarea, Tooltip} from "@nextui-org/react";
-import {TableColumn} from "@/app/commands/command-table";
+import {
+    Modal,
+    Spacer,
+    Table,
+    TableBody,
+    TableCell,
+    TableColumn,
+    TableHeader,
+    TableRow,
+    Textarea
+} from "@nextui-org/react";
+import {Column} from "@/app/commands/command-table";
 import React, {Dispatch, SetStateAction} from "react";
 import IconButton from "@/components/button/IconButton";
 import binIcon from '/public/red-bin.svg';
@@ -11,6 +23,8 @@ import Button from "@/components/button/Button";
 import {ButtonType} from "@/components/button/ButtonType";
 import {sendToast} from "@/utils/client-utils";
 import DashboardSection from "@/app/dashboard/[id]/(categories)/dashboard-section";
+import {ModalBody, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/modal";
+import clsx from "clsx";
 
 type EightBallFields = {
     toggleEightBallModal: () => void,
@@ -18,7 +32,7 @@ type EightBallFields = {
     setAddEightBallResponse: Dispatch<SetStateAction<boolean>>
     proposedResponse: string,
     setProposedResponse: Dispatch<SetStateAction<string>>,
-    eightBallValidator: {text: string, color: "primary" | "error" | "success"}
+    eightBallValidator: { text: string, color: "primary" | "danger" | "success" }
 }
 
 export default class DashboardMiscHandler extends AbstractDashboardHandler {
@@ -42,72 +56,78 @@ export default class DashboardMiscHandler extends AbstractDashboardHandler {
                     onClick={this.eightBall.toggleEightBallModal}
                 />
                 <Modal
-                    width="600px"
-                    closeButton
+                    placement="center"
+                    size="lg"
                     aria-labelledby="modal-title"
-                    open={this.eightBall.addEightBallResponse}
+                    isOpen={this.eightBall.addEightBallResponse}
                     onClose={() => {
                         this.eightBall.setAddEightBallResponse(false)
                         this.eightBall.setProposedResponse('');
                     }}
-                    css={{
-                        backgroundColor: '$background'
-                    }}
+                    backdrop="blur"
+                    className={clsx(
+                        "!bg-neutral-200/90 dark:!bg-neutral-950/90 backdrop-blur-md border-1 border-black/20 dark:border-white/20"
+                    )}
                 >
-                    <Modal.Header>
-                        <Text id='modal-title' size={18}>Add A Response</Text>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Textarea
-                            value={this.eightBall.proposedResponse}
-                            onChange={(e) => {
-                                this.eightBall.setProposedResponse(e.target.value)
-                            }}
-                            disabled={!this.canInteract()}
-                            bordered
-                            fullWidth
-                            color={this.eightBall.proposedResponse.length === 0 ? 'error' : this.eightBall.eightBallValidator.color}
-                            size="lg"
-                            placeholder="Enter a response..."
-                            aria-label='eightball-response-input'
-                            status={this.eightBall.proposedResponse.length === 0 ? 'error' : this.eightBall.eightBallValidator.color}
-                            helperColor={this.eightBall.eightBallValidator.color}
-                            helperText={this.eightBall.eightBallValidator.text}
-                        />
-                        <Spacer y={.5} />
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button
-                            label='Add'
-                            type={this.eightBall.proposedResponse && this.eightBall.proposedResponse.length <= 3500 ? ButtonType.CTA : ButtonType.DANGER}
-                            width={5}
-                            height={3}
-                            disabled={!this.canInteract()}
-                            onClick={() => {
-                                if (!this.eightBall.proposedResponse) {
-                                    sendToast({
-                                        description: "The response can't be empty!",
-                                        type: ButtonType.DANGER
-                                    });
-                                    return;
-                                } else if (this.eightBall.proposedResponse.length > 3500) {
-                                    sendToast({
-                                        description: "The response can't be more than 3500 characters!",
-                                        type: ButtonType.DANGER
-                                    });
-                                    return;
-                                }
+                    <ModalContent>
+                        <ModalHeader>
+                            <p className="text-xl">Add A Response</p>
+                        </ModalHeader>
+                        <ModalBody>
+                            <Textarea
+                                variant="faded"
+                                value={this.eightBall.proposedResponse}
+                                onChange={(e) => {
+                                    this.eightBall.setProposedResponse(e.target.value)
+                                }}
+                                disabled={!this.canInteract()}
+                                fullWidth
+                                color={this.eightBall.proposedResponse.length === 0 ? 'danger' : this.eightBall.eightBallValidator.color}
+                                size="lg"
+                                placeholder="Enter a response..."
+                                aria-label='eightball-response-input'
+                                validationState={this.eightBall.proposedResponse.length === 0 ? 'invalid' : 'valid'}
+                                errorMessage={this.eightBall.eightBallValidator.color === "danger" && this.eightBall.eightBallValidator.text}
+                                description={this.eightBall.eightBallValidator.color !== "danger" && this.eightBall.eightBallValidator.text}
+                                classNames={{
+                                    inputWrapper: "dark:bg-neutral-900/50"
+                                }}
+                            />
+                            <Spacer y={.5}/>
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button
+                                label='Add'
+                                type={this.eightBall.proposedResponse && this.eightBall.proposedResponse.length <= 3500 ? ButtonType.CTA : ButtonType.DANGER}
+                                width={5}
+                                height={3}
+                                disabled={!this.canInteract()}
+                                onClick={() => {
+                                    if (!this.eightBall.proposedResponse) {
+                                        sendToast({
+                                            description: "The response can't be empty!",
+                                            type: ButtonType.DANGER
+                                        });
+                                        return;
+                                    } else if (this.eightBall.proposedResponse.length > 3500) {
+                                        sendToast({
+                                            description: "The response can't be more than 3500 characters!",
+                                            type: ButtonType.DANGER
+                                        });
+                                        return;
+                                    }
 
-                                this.addEightBallResponse(this.eightBall.proposedResponse);
-                                this.eightBall.setAddEightBallResponse(false);
-                                this.eightBall.setProposedResponse('');
-                                sendToast({
-                                    description: "Added your response successfully!",
-                                    type: ButtonType.PRIMARY
-                                })
-                            }}
-                        />
-                    </Modal.Footer>
+                                    this.addEightBallResponse(this.eightBall.proposedResponse);
+                                    this.eightBall.setAddEightBallResponse(false);
+                                    this.eightBall.setProposedResponse('');
+                                    sendToast({
+                                        description: "Added your response successfully!",
+                                        type: ButtonType.PRIMARY
+                                    })
+                                }}
+                            />
+                        </ModalFooter>
+                    </ModalContent>
                 </Modal>
             </DashboardSection>
         )
@@ -125,7 +145,7 @@ export default class DashboardMiscHandler extends AbstractDashboardHandler {
             return <Card size='sm' title='No Responses'
                          description="You don't have any custom 8ball responses! Click on the button below to add some!"/>
 
-        const columns: TableColumn[] = [
+        const columns: Column[] = [
             {name: 'RESPONSE', uid: 'response_col'},
             {name: 'ACTIONS', uid: 'actions_col'},
         ]
@@ -136,12 +156,14 @@ export default class DashboardMiscHandler extends AbstractDashboardHandler {
                     return <p className='dark:text-white text-black'>{response.response}</p>
                 case "actions_col":
                     return <div className='flex gap-2'>
-                        <Tooltip content='Delete Response' color='error'>
-                            <IconButton
-                                icon={binIcon}
-                                onClick={() => this.removeEightBallResponse(response.response)}
-                            />
-                        </Tooltip>
+                        <IconButton
+                            icon={binIcon}
+                            onClick={() => this.removeEightBallResponse(response.response)}
+                            tooltipProps={{
+                                content: "Delete Response",
+                                color: "danger"
+                            }}
+                        />
                     </div>
             }
         }
@@ -150,46 +172,43 @@ export default class DashboardMiscHandler extends AbstractDashboardHandler {
 
         return (
             <Table
-                compact
-                sticked
-                bordered
+                isCompact
                 aria-label="Command table"
                 disabledKeys={disabledKeys}
                 color='primary'
-                css={{
-                    height: 'auto',
-                    minWidth: "50%",
+                className="min-w-[50%]"
+                classNames={{
+                    wrapper: "min-w-[100%] dark:bg-neutral-900/50 backdrop-blur-md border-1 border-black/20 dark:border-white/20",
+                    th: "dark:bg-black backdrop-blur-md dark:text-white uppercase"
                 }}
             >
-                <Table.Header columns={columns}>
+                <TableHeader columns={columns}>
                     {(column) => (
-                        <Table.Column key={column.uid}>
+                        <TableColumn key={column.uid}>
                             {column.name}
-                        </Table.Column>
+                        </TableColumn>
                     )}
-                </Table.Header>
-                <Table.Body items={responses}>
+                </TableHeader>
+                <TableBody items={responses}>
                     {(response) => (
-                        <Table.Row
+                        <TableRow
                             key={response.index}
                         >
                             {(columnKey) => (
-                                <Table.Cell
-                                    css={{
-                                        zIndex: 2
-                                    }}
-                                >{renderCell(response, columnKey)}</Table.Cell>
+                                <TableCell
+                                    className="z-[2]"
+                                >{renderCell(response, columnKey)}</TableCell>
                             )}
-                        </Table.Row>
+                        </TableRow>
                     )}
-                </Table.Body>
+                </TableBody>
             </Table>
         )
     }
 
     public addEightBallResponse(response: string) {
         if (!this.isUsable()) return;
-        
+
         this.setCurrentData(prevState => {
             if (!prevState) return;
 

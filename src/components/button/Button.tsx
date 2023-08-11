@@ -1,14 +1,13 @@
 'use client';
 
-import React, { MouseEventHandler, useState } from "react";
+import React, {MouseEventHandler, useState} from "react";
 import Link from "next/link";
-import { useDarkMode } from "@/app/_components/dark-mode-context";
-import { ButtonType } from "@/components/button/ButtonType";
-import { StaticImageData } from "next/image";
+import {ButtonType} from "@/components/button/ButtonType";
+import {StaticImageData} from "next/image";
 import GenericImage from "@/app/_components/GenericImage";
-import { ToastDataProps } from "@/components/ToastComponent";
-import { sendToast } from "@/utils/client-utils";
-import { Loading } from "@nextui-org/react";
+import {ToastDataProps} from "@/components/ToastComponent";
+import {sendToast} from "@/utils/client-utils";
+import {Spinner} from "@nextui-org/react";
 
 export const getButtonStyle = (type?: ButtonType): string => {
     switch (type) {
@@ -19,13 +18,13 @@ export const getButtonStyle = (type?: ButtonType): string => {
         case ButtonType.GREY:
             return "bg-[#50545c] shadow-lg shadow-[#50545c]/40";
         case ButtonType.SECONDARY:
-            return "bg-transparent border-[1px] border-primary text-primary shadow-lg shadow-primary/40";
+            return "bg-transparent border-[1px] border-primary text-primary dark:shadow-lg shadow-primary/40";
         case ButtonType.WARNING:
             return "bg-warning shadow-lg shadow-warning/40";
         case ButtonType.DANGER:
             return "bg-danger shadow-lg shadow-danger/40";
         case ButtonType.INVERTED:
-            return "bg-white dark:bg-dark text-primary shadow-lg shadow-neutral-800/40";
+            return "bg-white dark:bg-dark text-primary dark:shadow-lg shadow-neutral-800/40";
         case ButtonType.CTA:
             return "bg-gradient-to-br bg-[length:200%_200%] animate-gradient-normal from-green-400 via-lime-500 to-amber-500 text-white shadow-lg shadow-green-500/60"
         default:
@@ -65,7 +64,7 @@ export default function Button(props: Props) {
         return curTime - lastClick <= (props.cooldown * 1000);
     }
 
-    const className = '!cursor-pointer transition-fast hover:!scale-105 rounded-lg !text-white ' + getButtonStyle(props.type) + ' ' + (props.className || '') + (typeof props.centered !== 'undefined' ? ' flex mx-auto' : '');
+    const className = '!cursor-pointer transition-fast laptop:hover:!-translate-y-[1px] rounded-lg !text-white ' + getButtonStyle(props.type) + ' ' + (props.className || '') + (typeof props.centered !== 'undefined' ? ' flex mx-auto' : '');
     const styleObj = {
         width: props.width ? props.width + 'rem' : "inherit",
         height: props.height ? props.height + 'rem' : "inherit",
@@ -107,32 +106,32 @@ export default function Button(props: Props) {
                     </Link>
                     :
                     <button className={className}
-                        style={{
-                            ...styleObj,
-                        }}
-                        disabled={props.disabled}
-                        onClick={(e) => {
-                            e.preventDefault();
+                            style={{
+                                ...styleObj,
+                            }}
+                            disabled={props.disabled}
+                            onClick={(e) => {
+                                e.preventDefault();
 
-                            if (!isOnCoolDown()) {
-                                if (props.onClick)
-                                    props.onClick(e);
-                                if (props.toast)
-                                    sendToast(props.toast)
-                                setLastClick(new Date().getTime());
-                            } else {
-                                sendToast({
-                                    type: ButtonType.WARNING,
-                                    title: "Slow down!",
-                                    description: `Woah there! This button is on cooldown. You may use it again in ${(Math.abs(new Date().getTime() - (lastClick! + (props.cooldown! * 1000))) / 1000).toFixed(0)} seconds!`
-                                })
-                            }
-                        }}
-                        type={props.submit === true ? 'submit' : 'button'}
+                                if (!isOnCoolDown()) {
+                                    if (props.onClick)
+                                        props.onClick(e);
+                                    if (props.toast)
+                                        sendToast(props.toast)
+                                    setLastClick(new Date().getTime());
+                                } else {
+                                    sendToast({
+                                        type: ButtonType.WARNING,
+                                        title: "Slow down!",
+                                        description: `Woah there! This button is on cooldown. You may use it again in ${(Math.abs(new Date().getTime() - (lastClick! + (props.cooldown! * 1000))) / 1000).toFixed(0)} seconds!`
+                                    })
+                                }
+                            }}
+                            type={props.submit === true ? 'submit' : 'button'}
                     >
                         <div
                             className={'flex justify-center p-2 gap-4 mx-auto' + ((props.type === ButtonType.INVERTED || props.type === ButtonType.SECONDARY) ? ' text-primary' : '')}>
-                            {props.isWorking ? <Loading size='xs' color='white' /> : children}
+                            {props.isWorking ? <Spinner size='sm' color='white'/> : children}
                         </div>
                     </button>
             }

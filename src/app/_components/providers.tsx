@@ -1,62 +1,45 @@
 'use client';
 
-import React from "react";
-import { DarkModeProvider } from "@/app/_components/dark-mode-context";
+import React, {Fragment} from "react";
 import ReduxProvider from "@/app/_components/redux-provider";
-import { useServerInsertedHTML } from "next/navigation";
-import { CssBaseline, NextUIProvider } from "@nextui-org/react";
-import { SSRProvider } from "@react-aria/ssr";
-import darkTheme from "@/utils/ui/themes/default-dark";
-import lightTheme from "@/utils/ui/themes/default-light";
-import { ThemeProvider } from "next-themes";
-import { SessionProvider } from "next-auth/react";
-import { Toaster } from "react-hot-toast";
-import { GoogleAnalytics } from "nextjs-google-analytics";
-import { SWRConfig } from "swr";
+import {NextUIProvider} from "@nextui-org/react";
+import {ThemeProvider} from "next-themes";
+import {SessionProvider} from "next-auth/react";
+import {Toaster} from "react-hot-toast";
+import {GoogleAnalytics} from "nextjs-google-analytics";
+import {SWRConfig} from "swr";
 
 interface Props extends React.PropsWithChildren {
     session: any
 }
 
-export default function Providers({ children, session }: Props) {
-    useServerInsertedHTML(() => {
-        return <>{CssBaseline.flush()}</>;
-    })
-
+export default function Providers({children, session}: Props) {
     return (
-        <body>
-            <GoogleAnalytics trackPageViews />
+        <Fragment>
+            <GoogleAnalytics trackPageViews/>
             <SWRConfig
                 value={{
                     refreshInterval: 60 * 1000,
                     revalidateOnFocus: false,
                 }}
             >
-                <SSRProvider>
-                    <ReduxProvider>
+                <ReduxProvider>
+                    <NextUIProvider>
                         <ThemeProvider
                             defaultTheme="dark"
                             attribute='class'
-                            value={{
-                                light: lightTheme.className,
-                                dark: darkTheme.className,
-                            }}
                         >
-                            <NextUIProvider>
-                                <DarkModeProvider>
-                                    <SessionProvider session={session}>
-                                        <Toaster
-                                            position="top-right"
-                                            reverseOrder={false}
-                                        />
-                                        {children}
-                                    </SessionProvider>
-                                </DarkModeProvider>
-                            </NextUIProvider>
+                            <SessionProvider session={session}>
+                                <Toaster
+                                    position="top-right"
+                                    reverseOrder={false}
+                                />
+                                {children}
+                            </SessionProvider>
                         </ThemeProvider>
-                    </ReduxProvider>
-                </SSRProvider>
-            </SWRConfig >
-        </body >
+                    </NextUIProvider>
+                </ReduxProvider>
+            </SWRConfig>
+        </Fragment>
     );
 }

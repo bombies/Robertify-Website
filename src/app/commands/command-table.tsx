@@ -1,15 +1,23 @@
 'use client';
 
-import {SortDescriptor, Table, useAsyncList} from "@nextui-org/react";
-import React from "react";
+import {
+    Pagination,
+    SortDescriptor,
+    Table,
+    TableBody,
+    TableCell,
+    TableColumn,
+    TableHeader,
+    TableRow
+} from "@nextui-org/react";
+import {useMemo, useState} from "react";
 import {CommandData} from "@/app/commands/page";
-import {useListData} from "@react-stately/data";
 
-export type TableColumn = { name: string, uid: string, sortable?: boolean };
+export type Column = { name: string, uid: string, sortable?: boolean };
 
 type Props = {
     data: CommandData[],
-    columns: TableColumn[]
+    columns: Column[]
 }
 
 function removeDuplicates<T>(arr: T[]) {
@@ -17,39 +25,46 @@ function removeDuplicates<T>(arr: T[]) {
 }
 
 export default function CommandTable(props: Props) {
-    props.data = removeDuplicates(props.data);
+    const data = useMemo(() => removeDuplicates(props.data), [props.data]);
+    const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>();
+    const [page, setPage] = useState(1);
+    const rowsPerPage = 15;
 
-    const sort = (opts: { items: any[], sortDescriptor: SortDescriptor }) => {
-        return ({
-            items: opts.items.sort((a, b) => {
-                let primString = "", secString = "";
+    const pages = Math.ceil(data.length / rowsPerPage);
 
-                switch(opts.sortDescriptor.column?.toString().toLowerCase()) {
-                    case "command": {
-                        primString = a.name;
-                        secString = b.name;
-                        break;
-                    }
-                    case "category": {
-                        primString = a.category;
-                        secString = b.category;
-                        break;
-                    }
+    const sortedItems = useMemo(() => {
+        return data.sort((a, b) => {
+            if (!sortDescriptor)
+                return 0
+            let primString = "", secString = "";
+
+            switch (sortDescriptor.column?.toString().toLowerCase()) {
+                case "command": {
+                    primString = a.name;
+                    secString = b.name;
+                    break;
                 }
+                case "category": {
+                    primString = a.category;
+                    secString = b.category;
+                    break;
+                }
+            }
 
-                if (opts.sortDescriptor.direction === 'ascending') {
-                    return primString.localeCompare(secString);
-                } else if (opts.sortDescriptor.direction === 'descending') {
-                    return secString.localeCompare(primString);
-                } else return 0;
-            })
+            if (sortDescriptor.direction === 'ascending') {
+                return primString.localeCompare(secString);
+            } else if (sortDescriptor.direction === 'descending') {
+                return secString.localeCompare(primString);
+            } else return 0;
         })
-    }
+    }, [data, sortDescriptor])
 
-    const list = useAsyncList({
-        load: async () => ({items: props.data}),
-        sort
-    })
+    const items = useMemo(() => {
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+
+        return sortedItems.slice(start, end);
+    }, [page, sortedItems]);
 
     const renderCell = (command: CommandData, columnKey: React.Key) => {
         // @ts-ignore
@@ -71,44 +86,50 @@ export default function CommandTable(props: Props) {
 
     return (
         <Table
-            compact
-            bordered
+            isCompact
             aria-label="Command table"
             color='primary'
-            sortDescriptor={list.sortDescriptor}
-            onSortChange={list.sort}
-            css={{
-                height: 'auto',
-                minWidth: "100%",
+            bottomContent={
+                <div className="flex justify-center w-full">
+                    <Pagination
+                        isCompact
+                        showControls
+                        showShadow
+                        color="primary"
+                        page={page}
+                        total={pages}
+                        onChange={(page) => setPage(page)}
+                    />
+                </div>
+            }
+            sortDescriptor={sortDescriptor}
+            onSortChange={setSortDescriptor}
+            classNames={{
+                wrapper: "min-w-[100%] dark:bg-neutral-900/50 backdrop-blur-md border-1 border-black/20 dark:border-white/20",
+                th: "dark:bg-black backdrop-blur-md dark:text-white uppercase"
             }}
         >
-            <Table.Header
+            <TableHeader
                 columns={props.columns}
             >
                 {(column) => (
-                    <Table.Column
+                    <TableColumn
                         key={column.uid}
                         allowsSorting={column.sortable}
                     >
                         {column.name}
-                    </Table.Column>
+                    </TableColumn>
                 )}
-            </Table.Header>
-            <Table.Body items={list.items || []}>
+            </TableHeader>
+            <TableBody items={items}>
                 {(command: CommandData) => (
-                    <Table.Row>
+                    <TableRow key={command.id}>
                         {(columnKey) => (
-                            <Table.Cell key={command.id}>{renderCell(command, columnKey)}</Table.Cell>
+                            <TableCell>{renderCell(command, columnKey)}</TableCell>
                         )}
-                    </Table.Row>
+                    </TableRow>
                 )}
-            </Table.Body>
-            <Table.Pagination
-                shadow
-                noMargin
-                align='center'
-                rowsPerPage={15}
-            />
+            </TableBody>
         </Table>
     )
 }

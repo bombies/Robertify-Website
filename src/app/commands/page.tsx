@@ -1,6 +1,6 @@
 import HeadingSection from "@/components/heading-section";
 import WebClient, {ExternalWebClient} from "@/utils/api/web-client";
-import CommandTable, {TableColumn} from "@/app/commands/command-table";
+import CommandTable, {Column} from "@/app/commands/command-table";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 
@@ -22,7 +22,7 @@ const getCommandData = async ()  => {
 export default async function CommandsPage() {
     const data = await getCommandData();
 
-    const columns: TableColumn[] = [
+    const columns: Column[] = [
         { name: 'COMMAND', uid: 'command', sortable: true},
         { name: 'DESCRIPTION', uid: 'description'},
         { name: 'CATEGORY', uid: 'category', sortable: true},

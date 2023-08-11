@@ -16,7 +16,7 @@ type Props = {
 export default function DashboardUnsavedChangesPopup(props: Props) {
     return (
         <div
-            className={'fixed rounded-xl w-full bottom-0 right-0 mx-auto bg-primary/20 dark:bg-neutral-900/80 backdrop-blur-sm h-20 z-[51] p-6 flex phone:gap-2 justify-between transition-faster' + (!props.changesMade ? ' bottom-[-100px]' : '')}>
+            className={'fixed rounded-xl w-full bottom-0 right-0 mx-auto bg-primary/20 dark:bg-neutral-900/95 backdrop-blur-sm h-20 z-[51] p-6 flex phone:gap-2 justify-between transition-faster' + (!props.changesMade ? ' bottom-[-100px]' : '')}>
             <p className='text-black dark:text-primary drop-shadow-glow-primary-lg font-semibold text-2xl phone:text-sm self-center'>You
                 have unsaved changes!
             </p>

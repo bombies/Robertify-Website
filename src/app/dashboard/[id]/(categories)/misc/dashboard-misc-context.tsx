@@ -18,7 +18,7 @@ export default function DashboardMiscContext() {
 
     const memoEightBallModalState = useMemo(() => addEightBallResponse, [addEightBallResponse]);
 
-    const eightBallValidator = useMemo((): { text: string, color: 'primary' | 'error' | 'success' } => {
+    const eightBallValidator = useMemo((): { text: string, color: 'primary' | 'danger' | 'success' } => {
         if (!proposedResponse)
             return {
                 text: "",
@@ -27,7 +27,7 @@ export default function DashboardMiscContext() {
         const isValid = proposedResponse.length <= 3500;
         return {
             text: isValid ? 'Cool response!' : 'Your response must not be over 3500 characters.',
-            color: isValid ? 'success' : 'error',
+            color: isValid ? 'success' : 'danger',
         };
     }, [proposedResponse])
 

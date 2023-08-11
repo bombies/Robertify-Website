@@ -33,7 +33,7 @@ export default function Card(props: Props) {
         <div
             ref={props.ref}
             onClick={props.onClick}
-            className={'bg-neutral-200/50 dark:bg-neutral-900 border-2 border-primary/5 rounded-xl shadow-lg p-6 phone:p-3 ' + (parseCardSize(props.size)) + ' ' + (props.className || '') + (typeof props.hoverable !== 'undefined' ? ' transition-fast hover:scale-105' : '') + (typeof props.centered !== 'undefined' ? ' mx-auto' : '')}
+            className={'bg-neutral-200/50 dark:bg-neutral-900/50 border-1 dark:border-white/20 border-black/20 rounded-xl p-6 phone:p-3 ' + (parseCardSize(props.size)) + ' ' + (props.className || '') + (typeof props.hoverable !== 'undefined' ? ' transition-fast hover:scale-105' : '') + (typeof props.centered !== 'undefined' ? ' mx-auto' : '')}
         >
             {props.title && (
                 <h3 className='font-semibold text-primary drop-shadow-glow-primary-lg text-4xl phone:text-lg'>{props.title}</h3>
@@ -54,7 +54,7 @@ export default function Card(props: Props) {
             <Link
                 ref={props.ref}
                 href={props.href}
-                className={'bg-neutral-200/50 dark:bg-neutral-900/50 backdrop-blur-lg rounded-xl shadow-lg p-6 phone:p-3 ' + (parseCardSize(props.size)) + ' ' + (props.className || '') + (typeof props.hoverable !== 'undefined' ? ' transition-fast hover:scale-105' : '') + (typeof props.centered !== 'undefined' ? ' mx-auto' : '')}
+                className={'bg-neutral-200/50 dark:bg-neutral-900/50 border-1 dark:border-white/20 border-black/20 rounded-xl shadow-lg p-6 phone:p-3 ' + (parseCardSize(props.size)) + ' ' + (props.className || '') + (typeof props.hoverable !== 'undefined' ? ' transition-fast hover:scale-105' : '') + (typeof props.centered !== 'undefined' ? ' mx-auto' : '')}
                 style={props.style}
             >
                 {props.title && (

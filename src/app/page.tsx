@@ -1,3 +1,5 @@
+"use client"
+
 import Button from "@/components/button/Button";
 import {ButtonType} from "@/components/button/ButtonType";
 import reqChannel from '/public/reqchannel.png';
@@ -6,20 +8,37 @@ import dashboardImg from '/public/dashboard.png';
 import BasicContent from "@/components/baisc-content";
 import HeadingSection from "@/components/heading-section";
 import GenericImage from "@/app/_components/GenericImage";
+import {useRef} from "react";
 
-export default async function Home() {
+export default function Home() {
+    const contentRef = useRef<HTMLDivElement>(null)
+
     return (
         <main className={'min-h-screen'}>
             <HeadingSection heading='Robertify'
                             subheading='A discord music bot that with a multitude of features that will fit your liking.'>
                 <div className='flex phone:flex-col gap-6 pointer-events-auto justify-center'>
-                    <Button label='INVITE' className='phone:mx-auto' type={ButtonType.CTA} width={10} height={3}
-                            href={process.env.NEXT_PUBLIC_DISCORD_INVITE_LINK}/>
-                    <Button label='LEARN MORE' className='phone:mx-auto' type={ButtonType.INVERTED} width={10}
-                            height={3} href='#content'/>
+                    <Button
+                        label='INVITE'
+                        className='phone:mx-auto'
+                        type={ButtonType.CTA}
+                        width={10}
+                        height={3}
+                        href={process.env.NEXT_PUBLIC_DISCORD_INVITE_LINK}
+                    />
+                    <Button
+                        label='LEARN MORE'
+                        className='phone:mx-auto'
+                        type={ButtonType.INVERTED}
+                        width={10}
+                        height={3}
+                        onClick={() => contentRef.current?.scrollIntoView({
+                            behavior: "smooth"
+                        })}
+                    />
                 </div>
             </HeadingSection>
-            <div className='p-32 laptop:p-16 tablet:p-4' id='content'>
+            <div ref={contentRef} className='p-32 laptop:p-16 tablet:p-4' id='content'>
                 <BasicContent
                     title='Interactive Dashboard'
                     description="Easily manage the bot without ever running a command. You don't have to worry about digging through help menus and commands to customize the bot exactly how you want it to be for you and your server members."
