@@ -47,7 +47,7 @@ export class ResponseBuilder {
                 const userGuilds = await getUserGuilds(session)
                 return userGuilds ? isServerAdmin(userGuilds.filter((guild: DiscordUserGuild) => guild.id === serverId)[0]) : false;
             },
-            failOptions: {status: StatusCodes.FORBIDDEN, message: 'You do not have permission to do this!'}
+            failOptions: {status: StatusCodes.BAD_REQUEST, message: 'You do not have permission to do this!'}
         }
         return this;
     }
