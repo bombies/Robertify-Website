@@ -290,7 +290,7 @@ export type DiscordGuildMember = {
 
 export function isServerAdmin(guild: DiscordUserGuild): boolean {
     if (!guild) return false;
-    return permContainsAdmin(guild.permissions);
+    return guild.owner || permContainsAdmin(guild.permissions);
 }
 
 export function isGuildAdmin(member: DiscordGuildMember, guildInfo: DiscordGuild): boolean {
