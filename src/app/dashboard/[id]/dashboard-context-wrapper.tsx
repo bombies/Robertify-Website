@@ -101,6 +101,7 @@ export default function DashboardContextWrapper(props: Props) {
     } = useGuildMember(props.id, session.data);
 
     const guildIcon = discordGuildInfo?.icon ? `https://cdn.discordapp.com/icons/${discordGuildInfo?.id}/${discordGuildInfo?.icon}.webp?size=512` : 'https://i.imgur.com/k14Qfh5.png';
+    const {data, status} = session
 
     useEffect(() => {
         setGuildGuildDashboardState(prev => {
@@ -136,7 +137,7 @@ export default function DashboardContextWrapper(props: Props) {
                     value: guildMemberInfo ? isGuildAdmin(guildMemberInfo, discordGuildInfo!) : false
                 },
                 currentData: prev.currentData ?? botGuildInfo,
-                session,
+                session: {data, status},
                 ...validationOverrides
             })
         });

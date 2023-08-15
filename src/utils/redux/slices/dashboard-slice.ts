@@ -2,6 +2,7 @@ import {DiscordGuild, DiscordGuildChannel, RobertifyGuild} from "@/utils/discord
 import {SessionContextValue} from "next-auth/react";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AppState} from "@/utils/redux/redux-store";
+import {Session} from "next-auth";
 
 interface AsyncState<T> {
     loading: boolean,
@@ -14,7 +15,7 @@ export interface DashboardState {
     robertifyGuild: AsyncState<RobertifyGuild>
     currentData?: Partial<RobertifyGuild>,
     discordGuildChannels: AsyncState<DiscordGuildChannel[]>
-    session?: SessionContextValue<boolean> | { readonly data: null, readonly status: "loading" },
+    session?: {data: Session, status: "authenticated"} | {data: null, status: "loading" | "unauthenticated"} | {},
     changesMade?: boolean,
     canInteract?: boolean,
     userHasPermission: AsyncState<boolean>,

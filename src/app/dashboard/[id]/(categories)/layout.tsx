@@ -95,7 +95,9 @@ export default function DashboardCategoryLayout({children}: Props) {
     }, [discordGuild, robertifyGuild, discordGuildChannels, discordGuildLoading, robertifyGuildLoading, discordGuildChannelsLoading, inviteLink, router, session.data, session.status, dashboardInfo.id])
 
     useEffect(() => {
-        if (!compare(currentData?.dedicated_channel, robertifyGuild?.dedicated_channel)) {
+        if (
+            currentData?.dedicated_channel?.channel_id !== robertifyGuild?.dedicated_channel.channel_id
+        ) {
             setDashboardInfo(prev => ({
                 ...prev,
                 robertifyGuild: {
@@ -146,7 +148,7 @@ export default function DashboardCategoryLayout({children}: Props) {
                                     ...currDataCopy
                                 }
                             },
-                            currentData: undefined
+                            currentData: currDataCopy
                         })
                     });
                     router.refresh()
