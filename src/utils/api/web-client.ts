@@ -14,7 +14,7 @@ class WebClient {
             headers: {
                 Accept: 'application/json',
             },
-            timeout: 5 * 1000,
+            timeout: 10 * 1000,
             ...options,
             baseURL: process.env.NEXT_PUBLIC_LOCAL_API_HOSTNAME
         });
@@ -70,7 +70,7 @@ class WebClient {
     public sessionIsExpired(): boolean {
         if (!this.session?.user)
             return true;
-        const { exp } = this.session.user;
+        const {exp} = this.session.user;
         return Number(exp) - new Date().getSeconds() <= 0;
     }
 }
