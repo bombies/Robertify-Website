@@ -84,7 +84,7 @@ export class ExternalWebClient {
             headers: {
                 Accept: 'application/json',
             },
-            timeout: 5 * 1000,
+            timeout: 10 * 1000,
             ...options,
             baseURL: process.env.EXTERN_API_HOSTNAME,
         });
