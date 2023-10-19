@@ -18,7 +18,7 @@
     "@types/jsonwebtoken": "^9.0.2",
     "@types/node": "20.4.5",
     "@types/react": "18.2.18",
-    "@types/react-dom": "18.2.4",
+    "@types/react-dom": "18.2.14",
     "@vercel/og": "^0.5.11",
     "axios": "^1.4.0",
     "axios-retry": "^3.4.0",
