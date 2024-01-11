@@ -1,6 +1,6 @@
-import { ImageResponse } from "@vercel/og";
-import { NextApiRequest } from "next";
-import { getInterBold, getInterMedium, getParamFromSearch } from "./nowplaying";
+import {ImageResponse} from "@vercel/og";
+import {NextApiRequest} from "next";
+import {getInterBold, getInterMedium, getParamFromSearch} from "./nowplaying";
 
 export const config = {
     runtime: 'edge',
@@ -8,27 +8,43 @@ export const config = {
 
 const parseTheme = (theme: string) => {
     switch (theme.toLowerCase()) {
-        case "green": return "#2ce629";
-        case "mint": return "#4dffa0";
-        case "gold": return "#ffac38";
-        case "red": return "#e62929";
-        case "pastel_red": return "#ff9999";
-        case "pink": return "#f159ff";
-        case "purple": return "#8900de";
-        case "pastel_purple": return "#d199ff";
-        case "blue": return "#2b59ff";
-        case "light_blue": return "#2bd8ff";
-        case "baby_blue": return "#99fffa";
-        case "yellow": return "#ffea2b";
-        case "pastel_yellow": return "#faff99";
-        case "dark": return "#0f0f0f";
-        case "light": return "#f0f0f0";
-        default: return "#2ce629";
+        case "green":
+            return "#2ce629";
+        case "mint":
+            return "#4dffa0";
+        case "gold":
+            return "#ffac38";
+        case "red":
+            return "#e62929";
+        case "pastel_red":
+            return "#ff9999";
+        case "pink":
+            return "#f159ff";
+        case "purple":
+            return "#8900de";
+        case "pastel_purple":
+            return "#d199ff";
+        case "blue":
+            return "#2b59ff";
+        case "light_blue":
+            return "#2bd8ff";
+        case "baby_blue":
+            return "#99fffa";
+        case "yellow":
+            return "#ffea2b";
+        case "pastel_yellow":
+            return "#faff99";
+        case "dark":
+            return "#0f0f0f";
+        case "light":
+            return "#f0f0f0";
+        default:
+            return "#2ce629";
     }
 }
 
 export default async function handler(request: NextApiRequest) {
-    const { searchParams } = new URL(request.url ?? '');
+    const {searchParams} = new URL(request.url ?? '');
     const [InterBold, InterMedium] = await Promise.all([getInterBold, getInterMedium]);
 
     const tracks = getParamFromSearch({
@@ -124,24 +140,34 @@ export default async function handler(request: NextApiRequest) {
                 <tr
                     style={{
                         whiteSpace: 'nowrap',
-                        overflow: 'hidden'
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis,'
                     }}
                     key={`${obj.track_index}#${obj.track_name}#${obj.track_artist}`}
                     tw='w-full py-2'
                 >
                     <td style={{
                         textOverflow: 'ellipsis',
+                        overflow: "hidden",
+                        whiteSpace: "nowrap"
                     }} tw=' w-1/6 text-2xl p-2 font-bold'>{obj.track_index}</td>
                     <td style={{
                         textOverflow: 'ellipsis',
+                        overflow: "hidden",
+                        whiteSpace: "nowrap"
                     }} tw=' w-2/6 text-2xl p-2 font-medium'>{obj.track_name}</td>
                     <td style={{
                         textOverflow: 'ellipsis',
+                        overflow: "hidden",
+                        whiteSpace: "nowrap"
                     }} tw='w-2/6 text-2xl p-2 font-medium'>{obj.track_artist}</td>
                     <td style={{
                         textOverflow: 'ellipsis',
+                        overflow: "hidden",
+                        whiteSpace: "nowrap",
                         textAlign: 'right'
-                    }} tw='w-1/6 text-2xl p-2 font-medium'>{new Date(Number(obj.track_duration)).toISOString().slice(14, 19)}</td>
+                    }}
+                        tw='w-1/6 text-2xl p-2 font-medium'>{new Date(Number(obj.track_duration)).toISOString().slice(14, 19)}</td>
                 </tr>
             )
         })
@@ -180,7 +206,7 @@ export default async function handler(request: NextApiRequest) {
                         >
                             <table tw='text-white w-full h-full'>
                                 <tbody tw='flex flex-col w-full'>
-                                    {generateTrackList}
+                                {generateTrackList}
                                 </tbody>
                             </table>
                         </div>

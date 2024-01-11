@@ -1,5 +1,5 @@
 import {ImageResponse} from '@vercel/og';
-import { NextApiRequest } from 'next';
+import {NextApiRequest} from 'next';
 
 export const config = {
     runtime: 'edge',
@@ -102,7 +102,7 @@ export default async function handler(request: NextApiRequest) {
                             objectFit: 'cover',
                             filter: 'blur(20px)',
                             opacity: '0.5',
-                            zIndex: '0',
+                            zIndex: 0,
                             width: '100%',
                             height: '100%',
                         }}
@@ -110,7 +110,7 @@ export default async function handler(request: NextApiRequest) {
                         src={albumImage}
                         alt=""
                     />
-                    <div tw="flex flex-col px-16 py-12 w-full h-full">
+                    <div tw="flex flex-col px-16 py-6 w-full h-full">
                         <div tw="flex w-full justify-between px-6">
                             <h1
                                 style={{
@@ -127,6 +127,8 @@ export default async function handler(request: NextApiRequest) {
                                 <span
                                     style={{
                                         textOverflow: 'ellipsis',
+                                        overflow: "hidden",
+                                        whiteSpace: "nowrap"
                                     }}
                                     tw="text-6xl w-full font-bold"
                                 >
@@ -135,6 +137,8 @@ export default async function handler(request: NextApiRequest) {
                                 <span
                                     style={{
                                         textOverflow: 'ellipsis',
+                                        overflow: "hidden",
+                                        whiteSpace: "nowrap"
                                     }}
                                     tw="text-4xl text-green-500 w-full font-medium"
                                 >
@@ -149,7 +153,7 @@ export default async function handler(request: NextApiRequest) {
                                 }}
                                 src={albumImage}
                                 alt=""
-                                tw="rounded-2xl border-2 border-opacity-50 border-neutral-200"
+                                tw="rounded-2xl border border border-neutral-200"
                                 width="150px"
                                 height="150px"
                             />
