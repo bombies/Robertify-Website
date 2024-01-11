@@ -121,6 +121,10 @@ export default async function handler(request: NextApiRequest) {
                             >
                 <span
                     tw="uppercase mb-2 text-lg font-normal"
+                    style={{
+                        boxSizing: "border-box",
+                        margin: 0,
+                    }}
                 >
                   Robertify is now playing
                 </span>
@@ -128,7 +132,9 @@ export default async function handler(request: NextApiRequest) {
                                     style={{
                                         textOverflow: 'ellipsis',
                                         overflow: "hidden",
-                                        whiteSpace: "nowrap"
+                                        whiteSpace: "nowrap",
+                                        boxSizing: "border-box",
+                                        margin: 0,
                                     }}
                                     tw="text-6xl w-full font-bold"
                                 >
@@ -138,9 +144,11 @@ export default async function handler(request: NextApiRequest) {
                                     style={{
                                         textOverflow: 'ellipsis',
                                         overflow: "hidden",
-                                        whiteSpace: "nowrap"
+                                        whiteSpace: "nowrap",
+                                        boxSizing: "border-box",
+                                        margin: 0,
                                     }}
-                                    tw="text-4xl text-green-500 w-full font-medium"
+                                    tw="text-4xl text-green-500 w-full font-medium pb-2"
                                 >
                   {artistName}
                 </span>
@@ -150,6 +158,8 @@ export default async function handler(request: NextApiRequest) {
                                     objectFit: 'cover',
                                     width: '150px',
                                     height: '150px',
+                                    boxSizing: "border-box",
+                                    margin: 0,
                                 }}
                                 src={albumImage}
                                 alt=""
@@ -160,14 +170,19 @@ export default async function handler(request: NextApiRequest) {
                         </div>
                         {userObj ? (
                             <div tw="flex flex-col">
-                                <div tw="flex">
+                                <div tw="flex ml-6">
                                     <p
-                                        tw="text-white text-2xl mr-2 font-normal"
+                                        tw="text-white text-2xl font-normal"
+                                        style={{
+                                            boxSizing: "border-box",
+                                            margin: 0,
+                                        }}
                                     >
                                         Requested by {userObj.user_name}
                                     </p>
                                     <img
                                         style={{
+                                            marginLeft: "10px",
                                             objectFit: 'cover',
                                             width: '32px',
                                             height: '32px',
@@ -187,8 +202,13 @@ export default async function handler(request: NextApiRequest) {
                             <div tw="flex">
                                 {!isLiveStream ? (
                                     <div tw='flex flex-col'>
-                                        <div tw="flex w-full justify-between text-white">
-                                            <p tw='font-normal'>0:00</p>
+                                        <div tw="flex w-full justify-between text-white mb-3">
+                                            <p tw='font-normal'
+                                               style={{
+                                                   boxSizing: "border-box",
+                                                   margin: 0,
+                                               }}
+                                            >0:00</p>
                                             <div
                                                 tw="flex w-3/4 self-center h-[.35rem] border-[0.25px] border-white rounded-full">
                                                 <div
@@ -200,10 +220,33 @@ export default async function handler(request: NextApiRequest) {
                                                     tw="flex h-full bg-white rounded-full"
                                                 ></div>
                                             </div>
-                                            <p tw='font-normal'>{new Date(Number(duration)).toISOString().slice(14, 19)}</p>
+                                            <p tw='font-normal'
+                                               style={{
+                                                   boxSizing: "border-box",
+                                                   margin: 0,
+                                               }}
+                                            >{new Date(Number(duration)).toISOString().slice(14, 19)}</p>
                                         </div>
-                                        <div tw='flex justify-center'>
-                                            <p tw='text-white font-medium'>{`@ ${new Date(Number(currentTime)).toISOString().slice(14, 19)} | ${new Date(Number(duration) - Number(currentTime)).toISOString().slice(14, 19)} left `}</p>
+                                        <div tw='flex justify-center'
+                                             style={{
+                                                 gap: "6px"
+                                             }}
+                                        >
+                                            <p
+                                                style={{
+                                                    boxSizing: "border-box",
+                                                    margin: 0,
+                                                }}
+                                                tw='text-white font-medium bg-green-500 p-2 rounded-2xl'>{`Currently at ${new Date(Number(currentTime)).toISOString().slice(14, 19)}`}
+                                            </p>
+                                            <p
+                                                style={{
+                                                    boxSizing: "border-box",
+                                                    margin: 0,
+                                                }}
+                                                tw='text-white font-medium bg-green-500 p-2 rounded-2xl'>{`${new Date(Number(duration) - Number(currentTime)).toISOString().slice(14, 19)} left`}
+                                            </p>
+                                            {/*<p >{`@ ${new Date(Number(currentTime)).toISOString().slice(14, 19)} | ${new Date(Number(duration) - Number(currentTime)).toISOString().slice(14, 19)} left `}</p>*/}
                                         </div>
                                     </div>
                                 ) : (
