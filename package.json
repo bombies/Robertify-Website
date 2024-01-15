@@ -41,7 +41,7 @@
     "react-hot-toast": "^2.4.1",
     "react-redux": "^9.0.4",
     "redux-persist": "^6.0.0",
-    "sharp": "^0.33.1",
+    "sharp": "^0.33.2",
     "swr": "^2.2.4",
     "typescript": "5.3.3"
   },
