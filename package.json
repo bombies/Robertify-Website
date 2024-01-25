@@ -20,7 +20,7 @@
     "@types/react": "18.2.47",
     "@types/react-dom": "18.2.18",
     "@vercel/og": "^0.6.2",
-    "axios": "^1.6.5",
+    "axios": "^1.6.6",
     "axios-retry": "^4.0.0",
     "client-only": "^0.0.1",
     "eslint": "8.56.0",
