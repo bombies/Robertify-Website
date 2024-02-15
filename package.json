@@ -29,7 +29,7 @@
     "http-status-codes": "^2.3.0",
     "jsonwebtoken": "^9.0.2",
     "next": "^14.0.4",
-    "next-auth": "^4.24.5",
+    "next-auth": "^4.24.6",
     "next-redux-wrapper": "^8.1.0",
     "next-themes": "^0.2.1",
     "nextjs-google-analytics": "^2.3.3",
