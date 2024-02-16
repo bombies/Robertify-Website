@@ -42,7 +42,7 @@
     "react-redux": "^9.0.4",
     "redux-persist": "^6.0.0",
     "sharp": "^0.33.1",
-    "swr": "^2.2.4",
+    "swr": "^2.2.5",
     "typescript": "5.3.3"
   },
   "devDependencies": {
