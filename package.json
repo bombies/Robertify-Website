@@ -31,7 +31,7 @@
     "next": "^14.0.4",
     "next-auth": "^4.24.5",
     "next-redux-wrapper": "^8.1.0",
-    "next-themes": "^0.2.1",
+    "next-themes": "^0.3.0",
     "nextjs-google-analytics": "^2.3.3",
     "nextra": "^2.10.0",
     "nextra-theme-docs": "^2.13.2",
